@@ -1,0 +1,52 @@
+﻿
+
+CREATE VIEW latest_projects AS
+ SELECT latest_projects_int3.id,
+    latest_projects_int3.project_id,
+    latest_projects_int3.project_name,
+    latest_projects_int3.start_date,
+    latest_projects_int3.short_desc,
+    latest_projects_int3.phase,
+    latest_projects_int3.category,
+    latest_projects_int3.subcat,
+    latest_projects_int3.rag,
+    latest_projects_int3.[update],
+    latest_projects_int3.oddlead,
+    latest_projects_int3.oddlead_email,
+    latest_projects_int3.servicelead,
+    latest_projects_int3.servicelead_email,
+    latest_projects_int3.priority_main,
+    latest_projects_int3.funded,
+    latest_projects_int3.confidence,
+    latest_projects_int3.priorities,
+    latest_projects_int3.benefits,
+    latest_projects_int3.criticality,
+    latest_projects_int3.budget,
+    latest_projects_int3.spent,
+    latest_projects_int3.documents,
+    latest_projects_int3."timestamp",
+    latest_projects_int3.pgroup,
+    latest_projects_int3.link,
+    latest_projects_int3.toupdate,
+    latest_projects_int3.rels,
+    latest_projects_int3.team,
+    latest_projects_int3.onhold,
+    latest_projects_int3.expend,
+    latest_projects_int3.hardend,
+    latest_projects_int3.actstart,
+    latest_projects_int3.dependencies,
+    latest_projects_int3.project_size,
+    latest_projects_int3.oddlead_role,
+    latest_projects_int3.budgettype,
+    latest_projects_int3.direct,
+    latest_projects_int3.expendp,
+    latest_projects_int3.p_comp,
+    latest_projects_int3.max_time,
+    latest_projects_int3.min_time,
+    latest_projects_int3.g6team,
+        CASE
+            WHEN (latest_projects_int3.min_time > dateadd(DAY, -14, getdate())) THEN 'Y'
+            ELSE 'N'
+        END AS new_flag
+   FROM latest_projects_int3
+  WHERE (latest_projects_int3."timestamp" = latest_projects_int3.max_time);
