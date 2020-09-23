@@ -7,11 +7,17 @@ namespace FSAPortfolio.PostgreSQL
     using FSAPortfolio.Entites.Projects;
     using FSAPortfolio.Entites.Users;
     using FSAPortfolio.Entites;
+    using System.Configuration;
 
     public partial class MigratePortfolioContext : DbContext
     {
         public MigratePortfolioContext()
-            : base("name=MigratePortfolioContext")
+            : this(ConfigurationManager.ConnectionStrings["MigratePortfolioContext"])
+        {
+        }
+
+        public MigratePortfolioContext(ConnectionStringSettings cs)
+            : base(cs.ConnectionString)
         {
         }
 

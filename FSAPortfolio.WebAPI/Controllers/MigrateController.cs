@@ -15,14 +15,14 @@ namespace FSAPortfolio.WebAPI.Controllers
         // GET: api/Migrate
         public string Get()
         {
-            //using (var fromContext = new MigratePortfolioContext())
-            //{
-            //    var users = fromContext.users.ToArray();
-            //}
+            using (var fromContext = new MigratePortfolioContext())
+            {
+                var users = fromContext.users.ToArray();
+            }
 
-            return ConfigurationManager.ConnectionStrings["MigratePortfolioContext"].ConnectionString;
+            return "Success!";
         }
 
-   
+
     }
 }
