@@ -53,6 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Projects\latest_projects.cs" />
+    <Compile Include="PortfolioViewContext.cs" />
     <Compile Include="Projects\odd_people.cs" />
     <Compile Include="PortfolioContext.cs" />
     <Compile Include="Projects\project.cs" />

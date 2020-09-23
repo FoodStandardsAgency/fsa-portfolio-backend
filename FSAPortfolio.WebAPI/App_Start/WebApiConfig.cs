@@ -26,6 +26,13 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { controller = "User", action = nameof(UserController.GetADUser) }
             );
 
+            config.Routes.MapHttpRoute(
+                name: "GetCurrentProjects",
+                routeTemplate: "api/Project/Current",
+                defaults: new { controller = "Project", action = nameof(ProjectController.GetCurrent) }
+            );
+
+
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
