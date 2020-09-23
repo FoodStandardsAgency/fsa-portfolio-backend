@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "FSAPortfolioDatabase", "FSAPortfolioDatabase\FSAPortfolioDatabase.sqlproj", "{6B45E295-28DE-4003-8020-49E3A9F5EF1D}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "FSAPortfolio.Database", "FSAPortfolio.Database\FSAPortfolio.Database.sqlproj", "{6B45E295-28DE-4003-8020-49E3A9F5EF1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.WebAPI", "FSAPortfolio.WebAPI\FSAPortfolio.WebAPI.csproj", "{3E2DD0A5-FB11-4749-9DB6-159937E0DE08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.Entites", "FSAPortfolio.Entites\FSAPortfolio.Entites.csproj", "{D5026BA6-1EAF-43A5-8DF0-1A560DBA2460}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +21,14 @@ Global
 		{6B45E295-28DE-4003-8020-49E3A9F5EF1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B45E295-28DE-4003-8020-49E3A9F5EF1D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6B45E295-28DE-4003-8020-49E3A9F5EF1D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{3E2DD0A5-FB11-4749-9DB6-159937E0DE08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E2DD0A5-FB11-4749-9DB6-159937E0DE08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E2DD0A5-FB11-4749-9DB6-159937E0DE08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E2DD0A5-FB11-4749-9DB6-159937E0DE08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5026BA6-1EAF-43A5-8DF0-1A560DBA2460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5026BA6-1EAF-43A5-8DF0-1A560DBA2460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5026BA6-1EAF-43A5-8DF0-1A560DBA2460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5026BA6-1EAF-43A5-8DF0-1A560DBA2460}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
