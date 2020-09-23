@@ -1,5 +1,6 @@
 ﻿using FSAPortfolio.Entites;
 using FSAPortfolio.PostgreSQL;
+using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         public UserModel GetADUser(UserRequestModel userRequest)
         {
             UserModel result = null;
-            using (var context = new MigratePortfolioContext())
+            using (var context = ContextFactory.NewPortfolioContext())
             {
                 var user = context.users.FirstOrDefault(u => u.username == userRequest.UserName);
                 if (user != null)
@@ -37,7 +38,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         public UserModel GetUser(UserRequestModel userRequest)
         {
             UserModel result = null;
-            using (var context = new MigratePortfolioContext())
+            using (var context = ContextFactory.NewPortfolioContext())
             {
                 var user = context.users.FirstOrDefault(u => u.username == userRequest.UserName && u.pass_hash == userRequest.PasswordHash);
                 if (user != null)

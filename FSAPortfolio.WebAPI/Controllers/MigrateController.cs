@@ -1,11 +1,8 @@
-﻿using FSAPortfolio.Entites;
-using FSAPortfolio.PostgreSQL;
+﻿using FSAPortfolio.PostgreSQL;
+using FSAPortfolio.WebAPI.App;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace FSAPortfolio.WebAPI.Controllers
@@ -15,7 +12,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         // GET: api/Migrate
         public string Get()
         {
-            using (var fromContext = new MigratePortfolioContext())
+            using (var fromContext = ContextFactory.NewPostgresContext())
             {
                 var users = fromContext.users.ToArray();
             }

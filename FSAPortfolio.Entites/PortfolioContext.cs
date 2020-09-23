@@ -13,6 +13,10 @@ namespace FSAPortfolio.Entites
             : base("name=PortfolioContext")
         {
         }
+        public PortfolioContext(string connectionString)
+            : base(connectionString)
+        {
+        }
 
         public virtual DbSet<odd_people> odd_people { get; set; }
         public virtual DbSet<project> projects { get; set; }
