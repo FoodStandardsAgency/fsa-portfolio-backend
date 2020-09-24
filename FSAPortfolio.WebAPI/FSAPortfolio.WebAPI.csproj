@@ -138,6 +138,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="appSettings.config" />
     <None Include="connectionStrings.config" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
@@ -158,6 +159,10 @@
     <ProjectReference Include="..\FSAPortfolio.PostgreSQL\FSAPortfolio.PostgreSQL.csproj">
       <Project>{81700de3-5931-48bd-88d7-37f4e31d38b3}</Project>
       <Name>FSAPortfolio.PostgreSQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FSAPortfolio.Security\FSAPortfolio.Security.csproj">
+      <Project>{2C3DF415-DCF5-44A9-9A18-78554C12CD40}</Project>
+      <Name>FSAPortfolio.Security</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

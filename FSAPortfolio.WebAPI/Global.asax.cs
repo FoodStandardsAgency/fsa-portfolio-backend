@@ -1,3 +1,4 @@
+using FSAPortfolio.Security.ApiKey;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace FSAPortfolio.WebAPI
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            GlobalConfiguration.Configuration.MessageHandlers.Add(new ApiKeyMessageHandler());
         }
     }
 }

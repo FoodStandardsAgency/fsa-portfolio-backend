@@ -339,3 +339,4 @@ ASALocalRun/
 # BeatPulse healthcheck temp database
 healthchecksdb
 /FSAPortfolio.WebAPI/connectionStrings.config
+/FSAPortfolio.WebAPI/appSettings.config
