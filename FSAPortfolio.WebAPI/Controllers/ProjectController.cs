@@ -17,7 +17,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         public async Task<IEnumerable<latest_projects>> GetCurrent()
         {
             IEnumerable<latest_projects> result = null;
-            using (var context = ContextFactory.NewPortfolioContext())
+            using (var context = ContextFactory.NewMsSqlViewContext())
             {
                 result = await (from p in context.latest_projects
                                 where p.phase != "completed"

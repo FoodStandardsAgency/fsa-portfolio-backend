@@ -29,6 +29,7 @@ namespace FSAPortfolio.WebAPI.App
         }
         public static PortfolioContext NewPostgresContext() => new MigratePortfolioContext();
         public static PortfolioContext NewMsSqlContext() => new PortfolioContext();
+        public static PortfolioViewContext NewMsSqlViewContext() => new PortfolioViewContext();
 
     }
 }

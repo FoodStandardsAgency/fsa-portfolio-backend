@@ -1,4 +1,5 @@
 ﻿using FSAPortfolio.WebAPI.Controllers;
+using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,22 +18,22 @@ namespace FSAPortfolio.WebAPI
 
             config.Routes.MapHttpRoute(
                 name: "GetUserByNameAndHash",
-                routeTemplate: "api/User",
-                defaults: new { controller = "User", action = nameof(UserController.GetUser) }
+                routeTemplate: "api/Users",
+                defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetUser) }
             );
             config.Routes.MapHttpRoute(
                 name: "GetADUserByName",
-                routeTemplate: "api/ADUser",
-                defaults: new { controller = "User", action = nameof(UserController.GetADUser) }
+                routeTemplate: "api/ADUsers",
+                defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetADUser) }
             );
 
             config.Routes.MapHttpRoute(
                 name: "GetCurrentProjects",
-                routeTemplate: "api/Project/Current",
-                defaults: new { controller = "Project", action = nameof(ProjectController.GetCurrent) }
+                routeTemplate: "api/Projects/Current",
+                defaults: new { controller = ControllerName<ProjectController>(), action = nameof(ProjectController.GetCurrent) }
             );
 
-
+            
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
@@ -40,6 +41,18 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { id = RouteParameter.Optional }
             );
 
+        }
+
+        /// <summary>
+        /// Utility method to strip "Controller" from the type name to get the correct name for use with routing configuration.
+        /// </summary>
+        /// <typeparam name="T">The controller type</typeparam>
+        /// <returns>The name of the controller name with "Controller" stripped from the end.</returns>
+        private static string ControllerName<T>()
+        {
+            var name = typeof(T).Name;
+            string controllerName = name.EndsWith("Controller") ? name.Substring(0, name.Length - 10) : name;
+            return controllerName;
         }
     }
 }

@@ -14,10 +14,10 @@ using System.Web.Http;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
-    public class UserController : ApiController
+    public class UsersController : ApiController
     {
 
-        // POST: api/ADUser
+        // POST: api/ADUsers
         [AcceptVerbs("POST")]
         public UserModel GetADUser(UserRequestModel userRequest)
         {
@@ -33,7 +33,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             return result;
         }
 
-        // POST: api/User
+        // POST: api/Users
         [AcceptVerbs("POST")]
         public UserModel GetUser(UserRequestModel userRequest)
         {

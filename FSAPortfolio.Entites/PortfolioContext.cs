@@ -10,7 +10,7 @@ namespace FSAPortfolio.Entites
     public partial class PortfolioContext : DbContext
     {
         public PortfolioContext()
-            : base("name=PortfolioContext")
+            : base("PortfolioContext")
         {
         }
         public PortfolioContext(string connectionString)
@@ -21,8 +21,6 @@ namespace FSAPortfolio.Entites
         public virtual DbSet<odd_people> odd_people { get; set; }
         public virtual DbSet<project> projects { get; set; }
         public virtual DbSet<user> users { get; set; }
-        public virtual DbSet<latest_projects> latest_projects { get; set; }
-
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
