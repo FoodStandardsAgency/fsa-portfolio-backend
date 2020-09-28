@@ -126,9 +126,8 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App\ContextFactory.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\MigrateController.cs" />
+    <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -149,6 +148,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>

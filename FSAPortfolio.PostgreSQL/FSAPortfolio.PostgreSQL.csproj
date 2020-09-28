@@ -88,17 +88,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MigratePortfolioContext.cs" />
+    <Compile Include="Projects\latest_projects.cs" />
+    <Compile Include="Projects\odd_people.cs" />
+    <Compile Include="Projects\project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Users\user.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FSAPortfolio.Entites\FSAPortfolio.Entites.csproj">
-      <Project>{d5026ba6-1eaf-43a5-8df0-1a560dba2460}</Project>
-      <Name>FSAPortfolio.Entites</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

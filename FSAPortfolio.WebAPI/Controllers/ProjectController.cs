@@ -1,5 +1,5 @@
-﻿using FSAPortfolio.Entites.Projects;
-using FSAPortfolio.WebAPI.App;
+﻿using FSAPortfolio.PostgreSQL;
+using FSAPortfolio.PostgreSQL.Projects;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -17,7 +17,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         public async Task<IEnumerable<latest_projects>> GetCurrent()
         {
             IEnumerable<latest_projects> result = null;
-            using (var context = ContextFactory.NewMsSqlViewContext())
+            using (var context = new MigratePortfolioContext())
             {
                 result = await (from p in context.latest_projects
                                 where p.phase != "completed"

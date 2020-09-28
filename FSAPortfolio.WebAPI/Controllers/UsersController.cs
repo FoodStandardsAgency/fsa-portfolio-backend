@@ -1,6 +1,5 @@
 ﻿using FSAPortfolio.Entites;
 using FSAPortfolio.PostgreSQL;
-using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -22,12 +21,18 @@ namespace FSAPortfolio.WebAPI.Controllers
         public UserModel GetADUser(UserRequestModel userRequest)
         {
             UserModel result = null;
-            using (var context = ContextFactory.NewPortfolioContext())
+            using (var context = new PortfolioContext())
             {
-                var user = context.users.FirstOrDefault(u => u.username == userRequest.UserName);
+                var user = context.Users
+                    .Include(u => u.AccessGroup)
+                    .FirstOrDefault(u => u.UserName == userRequest.UserName);
+
                 if (user != null)
                 {
-                    result = new UserModel() { UserName = user.username, AccessGroup = user.access_group };
+                    result = new UserModel() { 
+                        UserName = user.UserName, 
+                        AccessGroup = user.AccessGroup.Name 
+                    };
                 }
             }
             return result;
@@ -38,12 +43,18 @@ namespace FSAPortfolio.WebAPI.Controllers
         public UserModel GetUser(UserRequestModel userRequest)
         {
             UserModel result = null;
-            using (var context = ContextFactory.NewPortfolioContext())
+            using (var context = new PortfolioContext())
             {
-                var user = context.users.FirstOrDefault(u => u.username == userRequest.UserName && u.pass_hash == userRequest.PasswordHash);
+                var user = context.Users
+                    .Include(u => u.AccessGroup)
+                    .FirstOrDefault(u => u.UserName == userRequest.UserName && u.PasswordHash == userRequest.PasswordHash);
+
                 if (user != null)
                 {
-                    result = new UserModel() { UserName = user.username, AccessGroup = user.access_group };
+                    result = new UserModel() { 
+                        UserName = user.UserName, 
+                        AccessGroup = user.AccessGroup.Name 
+                    };
                 }
             }
             return result;

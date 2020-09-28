@@ -60,6 +60,7 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Views\" />
+    <Folder Include="Deployment" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\projects.sql" />
@@ -78,5 +79,6 @@
     <Build Include="dbo\Views\latest_projects.sql" />
     <Build Include="dbo\Views\latest_project_with_update_date.sql" />
     <Build Include="dbo\Views\completed_time.sql" />
+    <None Include="Deployment\202009281307554_InitialCreate.sql" />
   </ItemGroup>
 </Project>

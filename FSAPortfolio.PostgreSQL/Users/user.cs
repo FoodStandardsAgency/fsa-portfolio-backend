@@ -1,4 +1,4 @@
-namespace FSAPortfolio.Entites.Users
+namespace FSAPortfolio.PostgreSQL.Users
 {
     using System;
     using System.Collections.Generic;

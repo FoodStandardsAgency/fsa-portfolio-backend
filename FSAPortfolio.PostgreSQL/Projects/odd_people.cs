@@ -1,4 +1,4 @@
-namespace FSAPortfolio.Entites
+namespace FSAPortfolio.PostgreSQL.Projects
 {
     using System;
     using System.Collections.Generic;
