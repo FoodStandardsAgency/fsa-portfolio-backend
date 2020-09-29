@@ -230,9 +230,9 @@ namespace FSAPortfolio.WebAPI.Controllers
                     var phaseName = phaseMap[sourceUpdate.phase];
 
                     // Apply changes
-                    if (lastUpdate?.RAGStatus?.Name != ragStatusName) destUpdate.RAGStatus = dest.ProjectRAGStatuses.Single(s => s.Name == ragStatusName);
-                    if (lastUpdate?.OnHoldStatus?.Name != onHoldStatusName) destUpdate.OnHoldStatus = dest.ProjectOnHoldStatuses.Single(s => s.Name == onHoldStatusName);
-                    if (lastUpdate?.Phase?.Name != phaseName) destUpdate.Phase = dest.ProjectPhases.Single(s => s.Name == phaseName);
+                    destUpdate.RAGStatus = dest.ProjectRAGStatuses.Single(s => s.Name == ragStatusName);
+                    destUpdate.OnHoldStatus = dest.ProjectOnHoldStatuses.Single(s => s.Name == onHoldStatusName);
+                    destUpdate.Phase = dest.ProjectPhases.Single(s => s.Name == phaseName);
 
                     lastUpdate = destUpdate;
                 }
