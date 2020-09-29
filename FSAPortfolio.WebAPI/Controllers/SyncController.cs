@@ -235,10 +235,10 @@ namespace FSAPortfolio.WebAPI.Controllers
                     if (lastUpdate?.Phase?.Name != phaseName) destUpdate.Phase = dest.ProjectPhases.Single(s => s.Name == phaseName);
 
                     lastUpdate = destUpdate;
-                    destProject.LatestUpdate = lastUpdate;
-                    
                 }
 
+                dest.SaveChanges();
+                destProject.LatestUpdate = lastUpdate;
                 dest.SaveChanges();
                 messages.Add($"Syncing project {id} complete.");
             }
