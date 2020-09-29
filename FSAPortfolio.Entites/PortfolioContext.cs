@@ -36,9 +36,9 @@ namespace FSAPortfolio.Entites
 
             modelBuilder.Entity<AccessGroup>().HasKey(u => u.Id);
 
-            modelBuilder.Entity<Project>().HasKey(u => u.Id);
-            modelBuilder.Entity<Project>().HasMany(u => u.Updates).WithRequired();
-            modelBuilder.Entity<Project>().HasOptional(u => u.LatestUpdate);
+            modelBuilder.Entity<Project>().HasKey(p => p.Id);
+            modelBuilder.Entity<Project>().HasMany(p => p.Updates).WithRequired(u => u.Project).HasForeignKey(u => u.Project_Id);
+            modelBuilder.Entity<Project>().HasOptional(p => p.LatestUpdate).WithMany().HasForeignKey(p => p.LatestUpdate_Id);
 
             modelBuilder.Entity<ProjectUpdateItem>().HasKey(u => u.Id);
             modelBuilder.Entity<ProjectUpdateItem>().HasOptional(u => u.RAGStatus).WithMany();

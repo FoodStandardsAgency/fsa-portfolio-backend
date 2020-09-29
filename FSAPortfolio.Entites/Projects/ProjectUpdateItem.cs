@@ -11,6 +11,9 @@ namespace FSAPortfolio.Entites.Projects
     {
         public int Id { get; set; }
 
+        public virtual Project Project { get; set; }
+        public int Project_Id { get; set; }
+
         public virtual Person Person { get; set; }
         public DateTime Timestamp { get; set; }
 

@@ -190,11 +190,7 @@ namespace FSAPortfolio.WebAPI.Controllers
 
                 if(projectDetails.Count() != 1)
                 {
-                    foreach(var d in projectDetails)
-                    {
-                        messages.Add($"{d.Key.project_id}, {d.Key.project_name}");
-                    }
-                    return messages;
+                    throw new Exception("Cannot sync project: project_name is not consistent.");
                 }
                 var sourceProjectDetail = projectDetails.Single();
 
@@ -222,10 +218,12 @@ namespace FSAPortfolio.WebAPI.Controllers
                     {
                         destUpdate = new ProjectUpdateItem()
                         {
-                            SyncId = sourceUpdate.id
+                            SyncId = sourceUpdate.id,
+                            Timestamp = sourceUpdate.timestamp
                         };
                         destProject.Updates.Add(destUpdate);
                     }
+
                     // Translate field lookups
                     var ragStatusName = ragMap[sourceUpdate.rag];
                     var onHoldStatusName = onholdMap[sourceUpdate.onhold];
@@ -235,7 +233,6 @@ namespace FSAPortfolio.WebAPI.Controllers
                     if (lastUpdate?.RAGStatus?.Name != ragStatusName) destUpdate.RAGStatus = dest.ProjectRAGStatuses.Single(s => s.Name == ragStatusName);
                     if (lastUpdate?.OnHoldStatus?.Name != onHoldStatusName) destUpdate.OnHoldStatus = dest.ProjectOnHoldStatuses.Single(s => s.Name == onHoldStatusName);
                     if (lastUpdate?.Phase?.Name != phaseName) destUpdate.Phase = dest.ProjectPhases.Single(s => s.Name == phaseName);
-
 
                     lastUpdate = destUpdate;
                     destProject.LatestUpdate = lastUpdate;
