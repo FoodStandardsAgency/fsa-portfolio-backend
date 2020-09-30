@@ -27,6 +27,7 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetADUser) }
             );
 
+
             config.Routes.MapHttpRoute(
                 name: "GetCurrentProjects",
                 routeTemplate: "api/Projects/Current",
@@ -52,6 +53,13 @@ namespace FSAPortfolio.WebAPI
                 routeTemplate: "api/Projects/ODDLeads",
                 defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetODDLeads) }
             );
+            config.Routes.MapHttpRoute(
+                name: "GetUnmatchedODDLeads",
+                routeTemplate: "api/Projects/UnmatchedODDLeads",
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetUnmatchedODDLeads) }
+            );
+
+            
 
             config.Routes.MapHttpRoute(
                 name: "SyncUsers",

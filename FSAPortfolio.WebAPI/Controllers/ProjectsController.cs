@@ -1,5 +1,6 @@
 ﻿using FSAPortfolio.PostgreSQL;
 using FSAPortfolio.PostgreSQL.Projects;
+using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -74,15 +75,31 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         // GET: api/Projects/ODDLeads
-        public async Task<IEnumerable<string>> GetODDLeads()
+        public async Task<IEnumerable<ODDLead>> GetODDLeads()
         {
-            IEnumerable<string> result = null;
+            IEnumerable<ODDLead> result = null;
             using (var context = new MigratePortfolioContext())
             {
                 result = await (from p in context.latest_projects
                                 where p.phase != "completed"
                                 orderby p.oddlead
-                                select p.oddlead)
+                                select new ODDLead() { Name = p.oddlead })
+                                .Distinct()
+                                .ToListAsync();
+            }
+            return result;
+        }
+
+        // GET: api/Projects/UnmatchedODDLeads
+        public async Task<IEnumerable<ODDLead>> GetUnmatchedODDLeads()
+        {
+            IEnumerable<ODDLead> result = null;
+            using (var context = new MigratePortfolioContext())
+            {
+                result = await (from p in context.latest_projects
+                                where p.g6team == null && p.oddlead != string.Empty
+                                orderby p.oddlead_email
+                                select new ODDLead() { Name = p.oddlead, Email = p.oddlead_email })
                                 .Distinct()
                                 .ToListAsync();
             }
