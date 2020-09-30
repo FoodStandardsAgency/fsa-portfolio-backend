@@ -9,6 +9,8 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.UI.WebControls;
 using System.Data.Entity;
+using FSAPortfolio.WebAPI.Models;
+using System.Net;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -167,80 +169,83 @@ namespace FSAPortfolio.WebAPI.Controllers
             return messages;
         }
 
-
-    // GET: api/Sync/SyncProject/{id}
-    [AcceptVerbs("GET")]
-        public IEnumerable<string> SyncProject(string id)
+        // GET: api/Sync/SyncProject
+        [AcceptVerbs("PUT")]
+        public IEnumerable<string> SyncProject([FromBody]SyncRequestModel syncRequest)
         {
-            List<string> messages = new List<string>() { $"Syncing project {id}..." };
+            List<string> messages = new List<string>() { $"Syncing project {syncRequest.ProjectId}..." };
 
             using (var source = new MigratePortfolioContext())
             using (var dest = new PortfolioContext())
             {
-                var sourceProjectItems = source.projects.Where(p => p.project_id == id);
+                var sourceProjectItems = source.projects.Where(p => p.project_id == syncRequest.ProjectId);
                 messages.Add($"{sourceProjectItems.Count()} project items");
 
                 var projectDetails = from pi in sourceProjectItems
-                                     group pi by new { 
-                                         pi.project_id, 
+                                     group pi by new
+                                     {
+                                         pi.project_id,
                                          pi.project_name
                                      }
                                      into projectDetailGroup
                                      select projectDetailGroup;
 
-                if(projectDetails.Count() != 1)
+                if (projectDetails.Count() == 1)
                 {
-                    throw new Exception("Cannot sync project: project_name is not consistent.");
-                }
-                var sourceProjectDetail = projectDetails.Single();
+                    var sourceProjectDetail = projectDetails.Single();
 
-                // First sync the project
-                var destProject = dest.Projects.Include(p => p.Updates).SingleOrDefault(p => p.ProjectId == sourceProjectDetail.Key.project_id);
-                if (destProject == null)
-                {
-                    destProject = new Project()
+                    // First sync the project
+                    var destProject = dest.Projects.Include(p => p.Updates).SingleOrDefault(p => p.ProjectId == sourceProjectDetail.Key.project_id);
+                    if (destProject == null)
                     {
-                        ProjectId = sourceProjectDetail.Key.project_id,
-                        Name = sourceProjectDetail.Key.project_name,
-                        StartDate = GetPostgresDate(sourceProjectDetail.Max(u => u.start_date)), // Take the latest date
-                        Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc, // Take the last description
-                        Updates = new List<ProjectUpdateItem>()
-                    };
-                    dest.Projects.Add(destProject);
-                }
-
-                // Now sync the updates
-                ProjectUpdateItem lastUpdate = null;
-                foreach(var sourceUpdate in sourceProjectDetail.OrderBy(u => u.timestamp))
-                {
-                    var destUpdate = destProject.Updates.SingleOrDefault(u => u.SyncId == sourceUpdate.id);
-                    if (destUpdate == null)
-                    {
-                        destUpdate = new ProjectUpdateItem()
+                        destProject = new Project()
                         {
-                            SyncId = sourceUpdate.id,
-                            Timestamp = sourceUpdate.timestamp
+                            ProjectId = sourceProjectDetail.Key.project_id,
+                            Name = sourceProjectDetail.Key.project_name,
+                            StartDate = GetPostgresDate(sourceProjectDetail.Max(u => u.start_date)), // Take the latest date
+                            Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc, // Take the last description
+                            Updates = new List<ProjectUpdateItem>()
                         };
-                        destProject.Updates.Add(destUpdate);
+                        dest.Projects.Add(destProject);
                     }
 
-                    // Translate field lookups
-                    var ragStatusName = ragMap[sourceUpdate.rag];
-                    var onHoldStatusName = onholdMap[sourceUpdate.onhold];
-                    var phaseName = phaseMap[sourceUpdate.phase];
+                    // Now sync the updates
+                    ProjectUpdateItem lastUpdate = null;
+                    foreach (var sourceUpdate in sourceProjectDetail.OrderBy(u => u.timestamp))
+                    {
+                        var destUpdate = destProject.Updates.SingleOrDefault(u => u.SyncId == sourceUpdate.id);
+                        if (destUpdate == null)
+                        {
+                            destUpdate = new ProjectUpdateItem()
+                            {
+                                SyncId = sourceUpdate.id,
+                                Timestamp = sourceUpdate.timestamp
+                            };
+                            destProject.Updates.Add(destUpdate);
+                        }
 
-                    // Apply changes
-                    destUpdate.RAGStatus = dest.ProjectRAGStatuses.Single(s => s.Name == ragStatusName);
-                    destUpdate.OnHoldStatus = dest.ProjectOnHoldStatuses.Single(s => s.Name == onHoldStatusName);
-                    destUpdate.Phase = dest.ProjectPhases.Single(s => s.Name == phaseName);
+                        // Translate field lookups
+                        var ragStatusName = ragMap[sourceUpdate.rag];
+                        var onHoldStatusName = onholdMap[sourceUpdate.onhold];
+                        var phaseName = phaseMap[sourceUpdate.phase];
 
-                    lastUpdate = destUpdate;
+                        // Apply changes
+                        destUpdate.RAGStatus = dest.ProjectRAGStatuses.Single(s => s.Name == ragStatusName);
+                        destUpdate.OnHoldStatus = dest.ProjectOnHoldStatuses.Single(s => s.Name == onHoldStatusName);
+                        destUpdate.Phase = dest.ProjectPhases.Single(s => s.Name == phaseName);
+
+                        lastUpdate = destUpdate;
+                    }
+
+                    dest.SaveChanges();
+                    destProject.LatestUpdate = lastUpdate;
+                    dest.SaveChanges();
+                    messages.Add($"Syncing project {syncRequest.ProjectId} complete.");
                 }
-
-                dest.SaveChanges();
-                destProject.LatestUpdate = lastUpdate;
-                dest.SaveChanges();
-                messages.Add($"Syncing project {id} complete.");
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
             }
 
             return messages;

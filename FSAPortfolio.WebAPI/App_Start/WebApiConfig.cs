@@ -30,7 +30,27 @@ namespace FSAPortfolio.WebAPI
             config.Routes.MapHttpRoute(
                 name: "GetCurrentProjects",
                 routeTemplate: "api/Projects/Current",
-                defaults: new { controller = ControllerName<ProjectController>(), action = nameof(ProjectController.GetCurrent) }
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetCurrent) }
+            );
+            config.Routes.MapHttpRoute(
+                name: "GetNewProjects",
+                routeTemplate: "api/Projects/New",
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetNew) }
+            );
+            config.Routes.MapHttpRoute(
+                name: "GetCompletedProjects",
+                routeTemplate: "api/Projects/Completed",
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetCompleted) }
+            );
+            config.Routes.MapHttpRoute(
+                name: "GetLatestProjects",
+                routeTemplate: "api/Projects/Latest",
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetLatest) }
+            );
+            config.Routes.MapHttpRoute(
+                name: "GetODDLeads",
+                routeTemplate: "api/Projects/ODDLeads",
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetODDLeads) }
             );
 
             config.Routes.MapHttpRoute(
@@ -47,7 +67,7 @@ namespace FSAPortfolio.WebAPI
 
             config.Routes.MapHttpRoute(
                 name: "SyncProject",
-                routeTemplate: "api/Sync/SyncProject/{id}",
+                routeTemplate: "api/Sync/SyncProject",
                 defaults: new { controller = ControllerName<SyncController>(), action = nameof(SyncController.SyncProject) }
             );
 
