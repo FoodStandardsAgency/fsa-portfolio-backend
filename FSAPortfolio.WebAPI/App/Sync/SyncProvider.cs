@@ -272,6 +272,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
 
                     // Now sync the updates
+                    ProjectUpdateItem firstUpdate = null;
                     ProjectUpdateItem lastUpdate = null;
                     foreach (var sourceUpdate in sourceProjectDetail.OrderBy(u => u.timestamp))
                     {
@@ -296,13 +297,15 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         destUpdate.OnHoldStatus = dest.ProjectOnHoldStatuses.Single(s => s.Name == onHoldStatusName);
                         destUpdate.Phase = dest.ProjectPhases.Single(s => s.Name == phaseName);
 
-                        lastUpdate = destUpdate;
+                        if (firstUpdate == null) firstUpdate = destUpdate;
+                         lastUpdate = destUpdate;
                     }
 
                     dest.SaveChanges();
 
                     // Set the latest update
                     destProject.LatestUpdate = lastUpdate;
+                    destProject.FirstUpdate = firstUpdate;
                     dest.SaveChanges();
                     log.Add($"Syncing project {projectId} complete.");
                 }

@@ -66,6 +66,10 @@
     <Compile Include="Migrations\202010010929586_Projects2.designer.cs">
       <DependentUpon>202010010929586_Projects2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010011629278_Projects3.cs" />
+    <Compile Include="Migrations\202010011629278_Projects3.designer.cs">
+      <DependentUpon>202010011629278_Projects3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
     <Compile Include="PortfolioContext.cs" />
@@ -97,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202010010929586_Projects2.resx">
       <DependentUpon>202010010929586_Projects2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010011629278_Projects3.resx">
+      <DependentUpon>202010011629278_Projects3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

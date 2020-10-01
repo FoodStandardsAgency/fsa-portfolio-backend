@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Data.Entity;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.Mapping;
+using FSAPortfolio.Entites.Projects;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -54,20 +55,45 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 // latest_projects_int1: use latest update for max time, calculate min time
                 // latest_projects_int3: left join to odd_people and get g6team
-                var projects = await (from p in context.Projects
-                                .Include(p => p.LatestUpdate.OnHoldStatus)
-                                .Include(p => p.LatestUpdate.RAGStatus)
-                                .Include(p => p.LatestUpdate.Phase)
+                // latest_projects: only takes the one with latest update timestamp 
+                var projects = await (from p in ProjectWithIncludes(context)
                                       where p.LatestUpdate.Phase.Id != directorate.CompletedPhase.Id
                                       orderby p.Priority descending, p.Name
-                                      select new {
-                                          p,
-                                          firstUpdate = p.Updates.Min(u => u.Timestamp)
-                                          })
+                                      select p)
                                 .ToListAsync();
+                result = PortfolioMapper.Mapper.Map<IEnumerable<ProjectModel>>(projects);
             }
             return result;
         }
 
+        // GET: api/Projects/New
+        public async Task<IEnumerable<ProjectModel>> GetNew()
+        {
+            IEnumerable<ProjectModel> result = null;
+            var directorate = DirectorateContext.Current;
+            using (var context = new PortfolioContext())
+            {
+                var newCutoff = DateTime.Now.AddDays(-PortfolioSettings.NewProjectLimitDays);
+                var projects = await (from p in ProjectWithIncludes(context)
+                                      where p.LatestUpdate.Phase.Id != directorate.CompletedPhase.Id && p.FirstUpdate.Timestamp > newCutoff
+                                      orderby p.Priority descending, p.Name
+                                      select p)
+                                .ToListAsync();
+                result = PortfolioMapper.Mapper.Map<IEnumerable<ProjectModel>>(projects);
+            }
+            return result;
+        }
+
+        private static IQueryable<Project> ProjectWithIncludes(PortfolioContext context)
+        {
+            return context.Projects
+                .Include(p => p.FirstUpdate.OnHoldStatus)
+                .Include(p => p.FirstUpdate.RAGStatus)
+                .Include(p => p.FirstUpdate.Phase)
+                .Include(p => p.LatestUpdate.OnHoldStatus)
+                .Include(p => p.LatestUpdate.RAGStatus)
+                .Include(p => p.LatestUpdate.Phase)
+                .Include(p => p.Lead);
+        }
     }
 }

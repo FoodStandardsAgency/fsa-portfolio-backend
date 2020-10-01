@@ -33,5 +33,7 @@ namespace FSAPortfolio.Entites.Projects
         public virtual ICollection<ProjectUpdateItem> Updates { get; set; }
         public virtual ProjectUpdateItem LatestUpdate { get; set; }
         public int? LatestUpdate_Id { get; set; }
+        public virtual ProjectUpdateItem FirstUpdate { get; set; }
+        public int? FirstUpdate_Id { get; set; }
     }
 }
