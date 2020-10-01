@@ -60,13 +60,26 @@ namespace FSAPortfolio.WebAPI.Controllers
             return messages;
         }
 
-        // GET: api/Sync/SyncProject
+        // PUT: api/Sync/SyncProject
         [AcceptVerbs("PUT")]
-        public IEnumerable<string> SyncProject([FromBody]SyncRequestModel syncRequest)
+        public IEnumerable<string> SyncProject([FromBody] SyncRequestModel syncRequest)
         {
             List<string> messages = new List<string>();
             var sync = new SyncProvider(messages);
-            sync.SyncProject(syncRequest.ProjectId);
+            if (!sync.SyncProject(syncRequest.ProjectId))
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+            return messages;
+        }
+
+        // GET: api/Sync/SyncAllProjects
+        [AcceptVerbs("GET")]
+        public IEnumerable<string> SyncAllProjects()
+        {
+            List<string> messages = new List<string>();
+            var sync = new SyncProvider(messages);
+            sync.SyncAllProjects();
             return messages;
         }
     }

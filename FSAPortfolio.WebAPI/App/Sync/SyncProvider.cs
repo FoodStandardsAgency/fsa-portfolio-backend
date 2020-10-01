@@ -94,8 +94,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
-
-        public void SyncPeople()
+        internal void SyncPeople()
         {
             log.Add("Syncing people...");
 
@@ -126,7 +125,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
-        public void SyncStatuses()
+        internal void SyncStatuses()
         {
             log.Add("Syncing statuses...");
             using (var source = new MigratePortfolioContext())
@@ -194,9 +193,30 @@ namespace FSAPortfolio.WebAPI.App.Sync
             log.Add($"Syncing statuses complete.");
         }
 
-        public void SyncProject(string projectId)
+        internal void SyncAllProjects()
+        {
+            IEnumerable<string> projectIds;
+            using (var source = new MigratePortfolioContext())
+            {
+                projectIds = source.projects.Select(p => p.project_id).Distinct().ToArray();
+            }
+
+            foreach(var id in projectIds)
+            {
+                try
+                {
+                    SyncProject(id);
+                }
+                catch(Exception e)
+                {
+                    log.Add($"Project {id} failed to sync: {e.Message}");
+                }
+            }
+        }
+        internal bool SyncProject(string projectId)
         {
             log.Add("Syncing project {syncRequest.ProjectId}...");
+            bool synched = false;
 
             using (var source = new MigratePortfolioContext())
             using (var dest = new PortfolioContext())
@@ -213,8 +233,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
                                      into projectDetailGroup
                                      select projectDetailGroup;
 
+                // Only proceed if have a project with a single name throughout its history
                 if (projectDetails.Count() == 1)
                 {
+                    synched = true;
                     var sourceProjectDetail = projectDetails.Single();
 
                     // First sync the project
@@ -239,6 +261,15 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
                     destProject.Priority = int.Parse(latestSourceUpdate.priority_main);
 
+                    // Sync the lead
+                    if (!string.IsNullOrWhiteSpace(latestSourceUpdate.oddlead_email))
+                    {
+                        destProject.Lead = dest.People.SingleOrDefault(p => p.Email == latestSourceUpdate.oddlead_email);
+                    }
+                    else
+                    {
+                        destProject.Lead = null;
+                    }
 
                     // Now sync the updates
                     ProjectUpdateItem lastUpdate = null;
@@ -269,15 +300,14 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
 
                     dest.SaveChanges();
+
+                    // Set the latest update
                     destProject.LatestUpdate = lastUpdate;
                     dest.SaveChanges();
                     log.Add($"Syncing project {projectId} complete.");
                 }
-                else
-                {
-                    throw new HttpResponseException(HttpStatusCode.NotFound);
-                }
             }
+            return synched;
         }
 
         private DateTime? GetPostgresDate(string date)
