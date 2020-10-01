@@ -30,7 +30,7 @@ namespace FSAPortfolio.Entites
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            Database.SetInitializer<PortfolioContext>(null);
+            //Database.SetInitializer<PortfolioContext>(null);
 
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
