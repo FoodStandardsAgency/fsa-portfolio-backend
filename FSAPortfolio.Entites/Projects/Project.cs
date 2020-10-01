@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FSAPortfolio.Entites.Users;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,8 +21,14 @@ namespace FSAPortfolio.Entites.Projects
         [StringLength(1000)]
         public string Description { get; set; }
 
+        public virtual Person Lead { get; set; }
+        public int? Lead_Id { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public int Priority { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? ActualStartDate { get; set; }
+        public DateTime? ExpectedEndDate { get; set; }
+        public DateTime? HardEndDate { get; set; }
 
         public virtual ICollection<ProjectUpdateItem> Updates { get; set; }
         public virtual ProjectUpdateItem LatestUpdate { get; set; }

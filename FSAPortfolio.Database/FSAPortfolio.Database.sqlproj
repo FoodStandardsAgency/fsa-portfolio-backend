@@ -79,7 +79,7 @@
     <Build Include="dbo\Views\latest_projects.sql" />
     <Build Include="dbo\Views\latest_project_with_update_date.sql" />
     <Build Include="dbo\Views\completed_time.sql" />
-    <None Include="Deployment\InitialCreate.sql" />
-    <None Include="Deployment\InitialCreate_to_Projects.sql" />
+    <None Include="Deployment\Create.sql" />
+    <None Include="Deployment\Create_Projects1.sql" />
   </ItemGroup>
 </Project>

@@ -36,43 +36,51 @@ namespace FSAPortfolio.WebAPI
             config.Routes.MapHttpRoute(
                 name: "GetNewProjects",
                 routeTemplate: "api/Projects/New",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetNew) }
+                defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetNew) }
             );
             config.Routes.MapHttpRoute(
                 name: "GetCompletedProjects",
                 routeTemplate: "api/Projects/Completed",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetCompleted) }
+                defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetCompleted) }
             );
             config.Routes.MapHttpRoute(
                 name: "GetLatestProjects",
                 routeTemplate: "api/Projects/Latest",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetLatest) }
+                defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetLatest) }
             );
             config.Routes.MapHttpRoute(
                 name: "GetODDLeads",
                 routeTemplate: "api/Projects/ODDLeads",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetODDLeads) }
+                defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetODDLeads) }
             );
             config.Routes.MapHttpRoute(
                 name: "GetUnmatchedODDLeads",
                 routeTemplate: "api/Projects/UnmatchedODDLeads",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetUnmatchedODDLeads) }
+                defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetUnmatchedODDLeads) }
             );
 
-            
 
+
+            config.Routes.MapHttpRoute(
+                name: "SyncAll",
+                routeTemplate: "api/Sync/SyncAll",
+                defaults: new { controller = ControllerName<SyncController>(), action = nameof(SyncController.SyncAll) }
+            );
+            config.Routes.MapHttpRoute(
+                name: "SyncPeople",
+                routeTemplate: "api/Sync/SyncPeople",
+                defaults: new { controller = ControllerName<SyncController>(), action = nameof(SyncController.SyncPeople) }
+            );
             config.Routes.MapHttpRoute(
                 name: "SyncUsers",
                 routeTemplate: "api/Sync/SyncUsers",
                 defaults: new { controller = ControllerName<SyncController>(), action = nameof(SyncController.SyncUsers) }
             );
-
             config.Routes.MapHttpRoute(
                 name: "SyncStatuses",
                 routeTemplate: "api/Sync/SyncStatuses",
                 defaults: new { controller = ControllerName<SyncController>(), action = nameof(SyncController.SyncStatuses) }
             );
-
             config.Routes.MapHttpRoute(
                 name: "SyncProject",
                 routeTemplate: "api/Sync/SyncProject",
