@@ -31,4 +31,14 @@ namespace FSAPortfolio.WebAPI.App
         public static string GreenName = ConfigurationManager.AppSettings["Rag.Green.Name"] ?? "Green";
         public static string NoneName = ConfigurationManager.AppSettings["Rag.None.Name"] ?? "Undecided";
     }
+    public static class CategoryConstants
+    {
+        public static string CapabilityName = ConfigurationManager.AppSettings["Category.Capability.Name"] ?? "Developing our digital capability";
+        public static string DataName = ConfigurationManager.AppSettings["Category.Data.Name"] ?? "Data driven FSA";
+        public static string ServiceMgmtName = ConfigurationManager.AppSettings["Category.Service.Name"] ?? "IT Service management";
+        public static string SupportName = ConfigurationManager.AppSettings["Category.Support.Name"] ?? "Digital services development and support";
+        public static string ITName = ConfigurationManager.AppSettings["Category.IT.Name"] ?? "Evergreen IT";
+        public static string ResilienceName = ConfigurationManager.AppSettings["Category.Resilience.Name"] ?? "Protecting data and business resilience";
+        public static string NotSetName = ConfigurationManager.AppSettings["Category.NotSet.Name"] ?? "Not set";
+    }
 }

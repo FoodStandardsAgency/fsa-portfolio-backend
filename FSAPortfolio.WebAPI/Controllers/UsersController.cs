@@ -1,4 +1,4 @@
-﻿using FSAPortfolio.Entites;
+﻿using FSAPortfolio.Entities;
 using FSAPortfolio.PostgreSQL;
 using FSAPortfolio.WebAPI.Models;
 using System;

@@ -30,7 +30,12 @@ namespace FSAPortfolio.WebAPI
 
             config.Routes.MapHttpRoute(
                 name: "GetCurrentProjects",
-                routeTemplate: "api/Projects/Current",
+                routeTemplate: "api/Projects/Current/{portfolio}",
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetCurrent) }
+            );
+            config.Routes.MapHttpRoute(
+                name: "Legacy_GetCurrentProjects",
+                routeTemplate: "api/Projects/CurrentLegacy",
                 defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetCurrent) }
             );
             config.Routes.MapHttpRoute(

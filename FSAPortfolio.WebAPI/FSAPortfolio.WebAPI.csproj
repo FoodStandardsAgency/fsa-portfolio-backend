@@ -130,7 +130,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\DirectorateContext.cs" />
-    <Compile Include="App\PortfolioSettings.cs" />
     <Compile Include="App\ProjectConstants.cs" />
     <Compile Include="App\Sync\SyncProvider.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -164,9 +163,9 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FSAPortfolio.Entites\FSAPortfolio.Entites.csproj">
+    <ProjectReference Include="..\FSAPortfolio.Entites\FSAPortfolio.Entities.csproj">
       <Project>{D5026BA6-1EAF-43A5-8DF0-1A560DBA2460}</Project>
-      <Name>FSAPortfolio.Entites</Name>
+      <Name>FSAPortfolio.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\FSAPortfolio.PostgreSQL\FSAPortfolio.PostgreSQL.csproj">
       <Project>{81700de3-5931-48bd-88d7-37f4e31d38b3}</Project>

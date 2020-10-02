@@ -1,19 +1,19 @@
-﻿namespace FSAPortfolio.Entites.Migrations
+﻿namespace FSAPortfolio.Entities.Migrations
 {
-    using FSAPortfolio.Entites.Projects;
+    using FSAPortfolio.Entities.Projects;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<FSAPortfolio.Entites.PortfolioContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<FSAPortfolio.Entities.PortfolioContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(FSAPortfolio.Entites.PortfolioContext context)
+        protected override void Seed(FSAPortfolio.Entities.PortfolioContext context)
         {
             //  This method will be called after migrating to the latest version.
 

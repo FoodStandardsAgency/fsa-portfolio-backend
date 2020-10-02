@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.Entites.Users;
+﻿using FSAPortfolio.Entities.Organisation;
+using FSAPortfolio.Entities.Users;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FSAPortfolio.Entites.Projects
+namespace FSAPortfolio.Entities.Projects
 {
     public class Project
     {
@@ -21,8 +22,15 @@ namespace FSAPortfolio.Entites.Projects
         [StringLength(1000)]
         public string Description { get; set; }
 
+        public virtual ProjectCategory Category { get; set; }
+        public int? ProjectCategory_Id { get; set; }
+
+        public virtual ICollection<Portfolio> Portfolios { get; set; }
+
         public virtual Person Lead { get; set; }
         public int? Lead_Id { get; set; }
+        public virtual Person ServiceLead { get; set; }
+        public int? ServiceLead_Id { get; set; }
 
         public int Priority { get; set; }
         public DateTime? StartDate { get; set; }
@@ -35,5 +43,7 @@ namespace FSAPortfolio.Entites.Projects
         public int? LatestUpdate_Id { get; set; }
         public virtual ProjectUpdateItem FirstUpdate { get; set; }
         public int? FirstUpdate_Id { get; set; }
+
+        public bool IsNew => FirstUpdate == null ? true : FirstUpdate.Timestamp >= DateTime.Today.AddDays(-PortfolioSettings.NewProjectLimitDays);
     }
 }

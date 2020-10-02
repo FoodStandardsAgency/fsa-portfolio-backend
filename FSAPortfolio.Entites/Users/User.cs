@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FSAPortfolio.Entites.Users
+namespace FSAPortfolio.Entities.Users
 {
     public class User
     {

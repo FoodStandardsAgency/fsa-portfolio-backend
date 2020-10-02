@@ -8,8 +8,8 @@
     <ProjectGuid>{D5026BA6-1EAF-43A5-8DF0-1A560DBA2460}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FSAPortfolio.Entites</RootNamespace>
-    <AssemblyName>FSAPortfolio.Entites</AssemblyName>
+    <RootNamespace>FSAPortfolio.Entities</RootNamespace>
+    <AssemblyName>FSAPortfolio.Entities</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -70,10 +70,36 @@
     <Compile Include="Migrations\202010011629278_Projects3.designer.cs">
       <DependentUpon>202010011629278_Projects3.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010020815221_Portfolio1.cs" />
+    <Compile Include="Migrations\202010020815221_Portfolio1.designer.cs">
+      <DependentUpon>202010020815221_Portfolio1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202010020946342_Portfolio2.cs" />
+    <Compile Include="Migrations\202010020946342_Portfolio2.designer.cs">
+      <DependentUpon>202010020946342_Portfolio2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202010021202072_Portfolio3.cs" />
+    <Compile Include="Migrations\202010021202072_Portfolio3.designer.cs">
+      <DependentUpon>202010021202072_Portfolio3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202010021208248_Portfolio4.cs" />
+    <Compile Include="Migrations\202010021208248_Portfolio4.designer.cs">
+      <DependentUpon>202010021208248_Portfolio4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202010021215174_Portfolio5.cs" />
+    <Compile Include="Migrations\202010021215174_Portfolio5.designer.cs">
+      <DependentUpon>202010021215174_Portfolio5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202010021256080_Portfolio6.cs" />
+    <Compile Include="Migrations\202010021256080_Portfolio6.designer.cs">
+      <DependentUpon>202010021256080_Portfolio6.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Organisation\Directorate.cs" />
+    <Compile Include="Organisation\Portfolio.cs" />
     <Compile Include="PortfolioContext.cs" />
+    <Compile Include="PortfolioSettings.cs" />
     <Compile Include="Projects\Project.cs" />
+    <Compile Include="Projects\ProjectCategory.cs" />
     <Compile Include="Projects\ProjectStatus.cs" />
     <Compile Include="Projects\ProjectStatusItem.cs" />
     <Compile Include="Projects\ProjectUpdateItem.cs" />
@@ -104,6 +130,24 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202010011629278_Projects3.resx">
       <DependentUpon>202010011629278_Projects3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010020815221_Portfolio1.resx">
+      <DependentUpon>202010020815221_Portfolio1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010020946342_Portfolio2.resx">
+      <DependentUpon>202010020946342_Portfolio2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010021202072_Portfolio3.resx">
+      <DependentUpon>202010021202072_Portfolio3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010021208248_Portfolio4.resx">
+      <DependentUpon>202010021208248_Portfolio4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010021215174_Portfolio5.resx">
+      <DependentUpon>202010021215174_Portfolio5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010021256080_Portfolio6.resx">
+      <DependentUpon>202010021256080_Portfolio6.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

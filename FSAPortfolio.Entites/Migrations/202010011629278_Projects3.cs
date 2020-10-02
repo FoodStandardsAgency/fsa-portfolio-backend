@@ -1,4 +1,4 @@
-﻿namespace FSAPortfolio.Entites.Migrations
+﻿namespace FSAPortfolio.Entities.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;

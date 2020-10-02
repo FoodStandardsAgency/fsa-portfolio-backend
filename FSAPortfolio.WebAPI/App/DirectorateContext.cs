@@ -1,5 +1,5 @@
-﻿using FSAPortfolio.Entites;
-using FSAPortfolio.Entites.Projects;
+﻿using FSAPortfolio.Entities;
+using FSAPortfolio.Entities.Projects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

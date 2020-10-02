@@ -1,6 +1,6 @@
-﻿using FSAPortfolio.Entites;
-using FSAPortfolio.Entites.Projects;
-using FSAPortfolio.Entites.Users;
+﻿using FSAPortfolio.Entities;
+using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.Entities.Users;
 using FSAPortfolio.PostgreSQL;
 using System;
 using System.Collections.Generic;
@@ -27,6 +27,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             sync.SyncUsers();
             sync.SyncStatuses();
             sync.SyncPeople();
+            sync.SyncPortfolios();
             return messages;
         }
 

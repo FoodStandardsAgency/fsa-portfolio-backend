@@ -1,4 +1,4 @@
-﻿using FSAPortfolio.Entites;
+﻿using FSAPortfolio.Entities;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -10,33 +10,32 @@ using System.Web.Http;
 using System.Data.Entity;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.Mapping;
-using FSAPortfolio.Entites.Projects;
+using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.PostgreSQL.Projects;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
     public class ProjectsController : ApiController
     {
 
-        // GET: api/Projects/Current
-        public async Task<IEnumerable<ProjectModel>> GetCurrent()
+        // GET: api/Projects/Current/{portfolio}
+        public async Task<IEnumerable<latest_projects>> GetCurrent(string portfolio)
         {
             try
             {
-                IEnumerable<ProjectModel> result = null;
+                IEnumerable<latest_projects> result = null;
                 var directorate = DirectorateContext.Current;
                 using (var context = new PortfolioContext())
                 {
 
-                    var projects = await (from p in context.Projects
-                                    .Include(p => p.LatestUpdate.OnHoldStatus)
-                                    .Include(p => p.LatestUpdate.RAGStatus)
-                                    .Include(p => p.LatestUpdate.Phase)
-                                          where p.LatestUpdate.Phase.Id != directorate.CompletedPhase.Id
+                    var projects = await (from p in ProjectWithIncludes(context)
+                                          where p.Portfolios.Any(po => po.Route == portfolio) &&
+                                            p.LatestUpdate.Phase.Id != directorate.CompletedPhase.Id
                                           orderby p.Priority descending, p.Name
                                           select p)
                                     .ToListAsync();
 
-                    result = PortfolioMapper.Mapper.Map<IEnumerable<ProjectModel>>(projects);
+                    result = PortfolioMapper.Mapper.Map<IEnumerable<latest_projects>>(projects);
                 }
                 return result;
             }
@@ -87,6 +86,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         private static IQueryable<Project> ProjectWithIncludes(PortfolioContext context)
         {
             return context.Projects
+                .Include(p => p.Category)
                 .Include(p => p.FirstUpdate.OnHoldStatus)
                 .Include(p => p.FirstUpdate.RAGStatus)
                 .Include(p => p.FirstUpdate.Phase)

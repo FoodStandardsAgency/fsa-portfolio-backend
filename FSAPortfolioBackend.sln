@@ -7,7 +7,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "FSAPortfolio.Database", "FS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.WebAPI", "FSAPortfolio.WebAPI\FSAPortfolio.WebAPI.csproj", "{3E2DD0A5-FB11-4749-9DB6-159937E0DE08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.Entites", "FSAPortfolio.Entites\FSAPortfolio.Entites.csproj", "{D5026BA6-1EAF-43A5-8DF0-1A560DBA2460}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.Entities", "FSAPortfolio.Entites\FSAPortfolio.Entities.csproj", "{D5026BA6-1EAF-43A5-8DF0-1A560DBA2460}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.PostgreSQL", "FSAPortfolio.PostgreSQL\FSAPortfolio.PostgreSQL.csproj", "{81700DE3-5931-48BD-88D7-37F4E31D38B3}"
 EndProject
