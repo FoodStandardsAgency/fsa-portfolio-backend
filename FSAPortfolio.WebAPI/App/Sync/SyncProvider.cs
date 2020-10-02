@@ -397,9 +397,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         destUpdate.OnHoldStatus = dest.ProjectOnHoldStatuses.SingleOrDefault(s => s.ViewKey == sourceUpdate.onhold);
                         destUpdate.Phase = dest.ProjectPhases.SingleOrDefault(s => s.ViewKey == sourceUpdate.phase);
 
+                        decimal bud;
                         destUpdate.PercentageComplete = sourceUpdate.p_comp;
-                        destUpdate.Budget = decimal.Parse(sourceUpdate.budget);
-                        destUpdate.Spent = decimal.Parse(sourceUpdate.spent);
+                        destUpdate.Budget = decimal.TryParse(sourceUpdate.budget, out bud) ? bud : 0m ;
+                        destUpdate.Spent = decimal.TryParse(sourceUpdate.spent, out bud) ? bud : 0m ;
                         destUpdate.ExpectedCurrentPhaseEnd = GetPostgresDate(sourceUpdate.expendp);
 
                         if (firstUpdate == null) firstUpdate = destUpdate;
