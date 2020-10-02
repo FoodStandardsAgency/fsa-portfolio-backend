@@ -28,9 +28,8 @@ namespace FSAPortfolio.WebAPI.Controllers
                 using (var context = new PortfolioContext())
                 {
 
-                    var projects = await (from p in ProjectWithIncludes(context)
-                                          where p.Portfolios.Any(po => po.Route == portfolio) &&
-                                            p.LatestUpdate.Phase.Id != directorate.CompletedPhase.Id
+                    var projects = await (from p in ProjectWithIncludes(context, portfolio)
+                                          where p.LatestUpdate.Phase.Id != directorate.CompletedPhase.Id
                                           orderby p.Priority descending, p.Name
                                           select p)
                                     .ToListAsync();
@@ -45,45 +44,63 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
-        // GET: api/Projects/Latest
-        public async Task<IEnumerable<ProjectModel>> GetLatest()
+        // GET: api/Projects/Latest/{portfolio}
+        public async Task<IEnumerable<latest_projects>> GetLatest(string portfolio)
         {
-            IEnumerable<ProjectModel> result = null;
+            IEnumerable<latest_projects> result = null;
             var directorate = DirectorateContext.Current;
             using (var context = new PortfolioContext())
             {
                 // latest_projects_int1: use latest update for max time, calculate min time
                 // latest_projects_int3: left join to odd_people and get g6team
                 // latest_projects: only takes the one with latest update timestamp 
-                var projects = await (from p in ProjectWithIncludes(context)
+                var projects = await (from p in ProjectWithIncludes(context, portfolio)
                                       where p.LatestUpdate.Phase.Id != directorate.CompletedPhase.Id
                                       orderby p.Priority descending, p.Name
                                       select p)
                                 .ToListAsync();
-                result = PortfolioMapper.Mapper.Map<IEnumerable<ProjectModel>>(projects);
+                result = PortfolioMapper.Mapper.Map<IEnumerable<latest_projects>>(projects);
             }
             return result;
         }
 
-        // GET: api/Projects/New
-        public async Task<IEnumerable<ProjectModel>> GetNew()
+        // GET: api/Projects/New/{portfolio}
+        public async Task<IEnumerable<latest_projects>> GetNew(string portfolio)
         {
-            IEnumerable<ProjectModel> result = null;
+            IEnumerable<latest_projects> result = null;
             var directorate = DirectorateContext.Current;
             using (var context = new PortfolioContext())
             {
                 var newCutoff = DateTime.Now.AddDays(-PortfolioSettings.NewProjectLimitDays);
-                var projects = await (from p in ProjectWithIncludes(context)
+                var projects = await (from p in ProjectWithIncludes(context, portfolio)
                                       where p.LatestUpdate.Phase.Id != directorate.CompletedPhase.Id && p.FirstUpdate.Timestamp > newCutoff
                                       orderby p.Priority descending, p.Name
                                       select p)
                                 .ToListAsync();
-                result = PortfolioMapper.Mapper.Map<IEnumerable<ProjectModel>>(projects);
+                result = PortfolioMapper.Mapper.Map<IEnumerable<latest_projects>>(projects);
             }
             return result;
         }
 
-        private static IQueryable<Project> ProjectWithIncludes(PortfolioContext context)
+        // GET: api/Projects/Completed/{portfolio}
+        public async Task<IEnumerable<latest_projects>> GetCompleted(string portfolio)
+        {
+            IEnumerable<latest_projects> result = null;
+            var directorate = DirectorateContext.Current;
+            using (var context = new PortfolioContext())
+            {
+                var projects = await (from p in ProjectWithIncludes(context, portfolio)
+                                      where p.LatestUpdate.Phase.Id == directorate.CompletedPhase.Id
+                                      orderby p.LatestUpdate.Timestamp descending, p.Name
+                                      select p)
+                                .ToListAsync();
+                result = PortfolioMapper.Mapper.Map<IEnumerable<latest_projects>>(projects);
+            }
+            return result;
+        }
+
+
+        private static IQueryable<Project> ProjectWithIncludes(PortfolioContext context, string portfolio)
         {
             return context.Projects
                 .Include(p => p.Category)
@@ -97,7 +114,8 @@ namespace FSAPortfolio.WebAPI.Controllers
                 .Include(p => p.Size)
                 .Include(p => p.BudgetType)
                 .Include(p => p.RelatedProjects)
-                .Include(p => p.Lead);
+                .Include(p => p.Lead)
+                .Where(p => p.Portfolios.Any(po => po.Route == portfolio));
         }
     }
 }
