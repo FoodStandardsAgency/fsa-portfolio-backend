@@ -252,6 +252,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 catch(Exception e)
                 {
                     log.Add($"Project {id} failed to sync: {e.Message}");
+                    throw e;
                 }
             }
 
