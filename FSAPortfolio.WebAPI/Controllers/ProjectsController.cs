@@ -93,6 +93,10 @@ namespace FSAPortfolio.WebAPI.Controllers
                 .Include(p => p.LatestUpdate.OnHoldStatus)
                 .Include(p => p.LatestUpdate.RAGStatus)
                 .Include(p => p.LatestUpdate.Phase)
+                .Include(p => p.Category)
+                .Include(p => p.Size)
+                .Include(p => p.BudgetType)
+                .Include(p => p.RelatedProjects)
                 .Include(p => p.Lead);
         }
     }

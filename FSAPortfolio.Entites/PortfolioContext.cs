@@ -27,6 +27,9 @@ namespace FSAPortfolio.Entities
         public virtual DbSet<Portfolio> Portfolios { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<ProjectCategory> ProjectCategories { get; set; }
+        public virtual DbSet<ProjectSize> ProjectSizes { get; set; }
+        public virtual DbSet<BudgetType> BudgetTypes { get; set; }
+
         public virtual DbSet<ProjectRAGStatus> ProjectRAGStatuses { get; set; }
         public virtual DbSet<ProjectOnHoldStatus> ProjectOnHoldStatuses { get; set; }
         public virtual DbSet<ProjectPhase> ProjectPhases { get; set; }
@@ -52,23 +55,39 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Project>().HasKey(p => p.Id);
             modelBuilder.Entity<Project>().HasIndex(p => p.ProjectId).IsUnique();
             modelBuilder.Entity<Project>().HasMany(p => p.Updates).WithRequired(u => u.Project).HasForeignKey(u => u.Project_Id);
+            modelBuilder.Entity<Project>().HasMany(p => p.RelatedProjects).WithMany();
             modelBuilder.Entity<Project>().HasOptional(p => p.LatestUpdate).WithMany().HasForeignKey(p => p.LatestUpdate_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.FirstUpdate).WithMany().HasForeignKey(p => p.FirstUpdate_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.Lead).WithMany().HasForeignKey(p => p.Lead_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.ServiceLead).WithMany().HasForeignKey(p => p.ServiceLead_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.Category).WithMany().HasForeignKey(p => p.ProjectCategory_Id);
+            modelBuilder.Entity<Project>().HasOptional(p => p.Size).WithMany().HasForeignKey(p => p.ProjectSize_Id);
+            modelBuilder.Entity<Project>().HasOptional(p => p.BudgetType).WithMany().HasForeignKey(p => p.BudgetType_Id);
 
             modelBuilder.Entity<ProjectCategory>().HasKey(p => p.Id);
             modelBuilder.Entity<ProjectCategory>().HasIndex(p => p.Name).IsUnique();
+            modelBuilder.Entity<ProjectCategory>().HasIndex(p => p.ViewKey).IsUnique();
 
+            modelBuilder.Entity<ProjectSize>().HasKey(p => p.Id);
+            modelBuilder.Entity<ProjectSize>().HasIndex(p => p.Name).IsUnique();
+            modelBuilder.Entity<ProjectSize>().HasIndex(p => p.ViewKey).IsUnique();
+
+            modelBuilder.Entity<BudgetType>().HasKey(p => p.Id);
+            modelBuilder.Entity<BudgetType>().HasIndex(p => p.Name).IsUnique();
+            modelBuilder.Entity<BudgetType>().HasIndex(p => p.ViewKey).IsUnique();
+
+            // Status updates
             modelBuilder.Entity<ProjectRAGStatus>().HasKey(p => p.Id);
             modelBuilder.Entity<ProjectRAGStatus>().HasIndex(p => p.Name).IsUnique();
+            modelBuilder.Entity<ProjectRAGStatus>().HasIndex(p => p.ViewKey).IsUnique();
 
             modelBuilder.Entity<ProjectOnHoldStatus>().HasKey(p => p.Id);
             modelBuilder.Entity<ProjectOnHoldStatus>().HasIndex(p => p.Name).IsUnique();
+            modelBuilder.Entity<ProjectOnHoldStatus>().HasIndex(p => p.ViewKey).IsUnique();
 
             modelBuilder.Entity<ProjectPhase>().HasKey(p => p.Id);
             modelBuilder.Entity<ProjectPhase>().HasIndex(p => p.Name).IsUnique();
+            modelBuilder.Entity<ProjectPhase>().HasIndex(p => p.ViewKey).IsUnique();
 
 
             modelBuilder.Entity<ProjectUpdateItem>().HasKey(u => u.Id);

@@ -22,15 +22,31 @@ namespace FSAPortfolio.Entities.Projects
         [StringLength(1000)]
         public string Description { get; set; }
 
+        [StringLength(150)]
+        public string Directorate { get; set; }
         public virtual ProjectCategory Category { get; set; }
         public int? ProjectCategory_Id { get; set; }
+        public virtual ProjectSize Size { get; set; }
+        public int? ProjectSize_Id { get; set; }
+        public virtual BudgetType BudgetType { get; set; }
+        public int? BudgetType_Id { get; set; }
+        public int Funded { get; set; }
+        public int Confidence { get; set; }
+        public int Priorities { get; set; }
+        public int Benefits { get; set; }
+        public int Criticality { get; set; }
 
         public virtual ICollection<Portfolio> Portfolios { get; set; }
+        public virtual ICollection<Project> RelatedProjects { get; set; }
 
         public virtual Person Lead { get; set; }
         public int? Lead_Id { get; set; }
         public virtual Person ServiceLead { get; set; }
         public int? ServiceLead_Id { get; set; }
+
+        [StringLength(500)]
+        public string Team { get; set; }
+
 
         public int Priority { get; set; }
         public DateTime? StartDate { get; set; }

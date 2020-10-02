@@ -41,4 +41,22 @@ namespace FSAPortfolio.WebAPI.App
         public static string ResilienceName = ConfigurationManager.AppSettings["Category.Resilience.Name"] ?? "Protecting data and business resilience";
         public static string NotSetName = ConfigurationManager.AppSettings["Category.NotSet.Name"] ?? "Not set";
     }
+
+    public static class ProjectSizeConstants
+    {
+        public static string SmallName = ConfigurationManager.AppSettings["Size.Small.Name"] ?? "Small";
+        public static string MediumName = ConfigurationManager.AppSettings["Size.Medium.Name"] ?? "Medium";
+        public static string LargeName = ConfigurationManager.AppSettings["Size.Large.Name"] ?? "Large";
+        public static string ExtraLargeName = ConfigurationManager.AppSettings["Size.ExtraLarge.Name"] ?? "Extra Large";
+        public static string NotSetName = ConfigurationManager.AppSettings["Size.NotSet.Name"] ?? "Not set";
+    }
+
+    public static class BudgetTypeConstants
+    {
+        public static string AdminName = ConfigurationManager.AppSettings["BudgetType.Admin.Name"] ?? "Admin";
+        public static string ProgrammeName = ConfigurationManager.AppSettings["BudgetType.Programme.Name"] ?? "Programme";
+        public static string CapitalName = ConfigurationManager.AppSettings["BudgetType.Capital.Name"] ?? "Capital";
+        public static string NotSetName = ConfigurationManager.AppSettings["BudgetType.NotSet.Name"] ?? "Not set";
+    }
+
 }

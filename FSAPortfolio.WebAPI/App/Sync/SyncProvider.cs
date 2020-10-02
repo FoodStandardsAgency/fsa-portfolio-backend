@@ -52,6 +52,19 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "it", CategoryConstants.ITName },
             { "res", CategoryConstants.ResilienceName }
         };
+        private static readonly Dictionary<string, string> sizeMap = new Dictionary<string, string>()
+        {
+            { "s", ProjectSizeConstants.SmallName },
+            { "m", ProjectSizeConstants.MediumName },
+            { "l", ProjectSizeConstants.LargeName },
+            { "x", ProjectSizeConstants.ExtraLargeName }
+        };
+        private static readonly Dictionary<string, string> budgetTypeMap = new Dictionary<string, string>()
+        {
+            { "admin", BudgetTypeConstants.AdminName },
+            { "progr", BudgetTypeConstants.ProgrammeName },
+            { "capit", BudgetTypeConstants.CapitalName }
+        };
 
         internal SyncProvider(ICollection<string> log)
         {
@@ -145,6 +158,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Func<string, ProjectOnHoldStatus> onHoldFactory = (k) => new ProjectOnHoldStatus() { Name = onholdMap[k], ViewKey = k };
                 Func<string, ProjectRAGStatus> ragFactory = (k) => new ProjectRAGStatus() { Name = ragMap[k], ViewKey = k };
                 Func<string, ProjectCategory> categoryFactory = (k) => new ProjectCategory() { Name = categoryMap[k], ViewKey = k };
+                Func<string, ProjectSize> sizeFactory = (k) => new ProjectSize() { Name = sizeMap[k], ViewKey = k };
+                Func<string, BudgetType> budgetTypeFactory = (k) => new BudgetType() { Name = budgetTypeMap[k], ViewKey = k };
                 dest.ProjectPhases.AddOrUpdate(p => p.Name,
                     phaseFactory("backlog"),
                     phaseFactory("discovery"),
@@ -173,6 +188,19 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     categoryFactory("it"),
                     categoryFactory("res"),
                     new ProjectCategory() { Name = CategoryConstants.NotSetName }
+                    );
+                dest.ProjectSizes.AddOrUpdate(p => p.Name,
+                    sizeFactory("s"),
+                    sizeFactory("m"),
+                    sizeFactory("l"),
+                    sizeFactory("x"),
+                    new ProjectSize() { Name = ProjectSizeConstants.NotSetName }
+                    );
+                dest.BudgetTypes.AddOrUpdate(p => p.Name,
+                    budgetTypeFactory("admin"),
+                    budgetTypeFactory("progr"),
+                    budgetTypeFactory("capit"),
+                    new BudgetType() { Name = BudgetTypeConstants.NotSetName }
                     );
                 dest.SaveChanges();
             }
@@ -226,6 +254,43 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     log.Add($"Project {id} failed to sync: {e.Message}");
                 }
             }
+
+            using (var source = new MigratePortfolioContext())
+            using (var dest = new PortfolioContext())
+            {
+                foreach (var sourceProject in source.projects.Where(p => !string.IsNullOrEmpty(p.rels)))
+                {
+                    try
+                    {
+                        var destProject = dest.Projects.Include(p => p.RelatedProjects).SingleOrDefault(p => p.ProjectId == sourceProject.project_id);
+                        if (destProject != null)
+                        {
+                            var relatedProjectIds = sourceProject.rels.Split(',');
+                            foreach (var relatedProjectId in relatedProjectIds)
+                            {
+                                var trimmedId = relatedProjectId.Trim();
+                                if (trimmedId.Length == 10)
+                                {
+                                    if (!destProject.RelatedProjects.Any(p => p.ProjectId == trimmedId))
+                                    {
+                                        var relatedProject = dest.Projects.SingleOrDefault(p => p.ProjectId == trimmedId);
+                                        if(relatedProject != null)
+                                        {
+                                            destProject.RelatedProjects.Add(relatedProject);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log.Add($"Project {sourceProject.project_id} failed to sync related projects: {e.Message}");
+                    }
+                }
+                dest.SaveChanges();
+            }
+
         }
         internal bool SyncProject(string projectId, string portfolioShortName = null)
         {
@@ -259,6 +324,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         .Include(p => p.Updates.Select(u => u.OnHoldStatus))
                         .Include(p => p.Updates.Select(u => u.RAGStatus))
                         .Include(p => p.Updates.Select(u => u.Phase))
+                        .Include(p => p.Category)
+                        .Include(p => p.Size)
+                        .Include(p => p.BudgetType)
+                        .Include(p => p.RelatedProjects)
                         .SingleOrDefault(p => p.ProjectId == sourceProjectDetail.Key.project_id);
 
                     var latestSourceUpdate = sourceProjectDetail.OrderBy(d => d.timestamp).Last();
@@ -274,12 +343,24 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         dest.Projects.Add(destProject);
                     }
                     destProject.StartDate = GetPostgresDate(latestSourceUpdate.start_date); // Take the latest date
+                    destProject.ActualStartDate = GetPostgresDate(latestSourceUpdate.actstart);
+                    destProject.ExpectedEndDate = GetPostgresDate(latestSourceUpdate.expend);
+                    destProject.HardEndDate = GetPostgresDate(latestSourceUpdate.hardend);
+
                     destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
                     destProject.Priority = int.Parse(latestSourceUpdate.priority_main);
+                    destProject.Directorate = latestSourceUpdate.direct;
                     destProject.Category = dest.ProjectCategories.SingleOrDefault(c => c.ViewKey == latestSourceUpdate.category);
+                    destProject.Size = dest.ProjectSizes.SingleOrDefault(c => c.ViewKey == latestSourceUpdate.project_size);
+                    destProject.BudgetType = dest.BudgetTypes.SingleOrDefault(c => c.ViewKey == latestSourceUpdate.budgettype);
+                    destProject.Funded = int.Parse(latestSourceUpdate.funded);
+                    destProject.Confidence = int.Parse(latestSourceUpdate.confidence);
+                    destProject.Benefits = int.Parse(latestSourceUpdate.benefits);
+                    destProject.Criticality = int.Parse(latestSourceUpdate.criticality);
+                    destProject.Team = latestSourceUpdate.team;
 
                     // Sync the portfolio
-                    if(!string.IsNullOrEmpty(portfolioShortName) && destProject.Portfolios.Count == 0)
+                    if (!string.IsNullOrEmpty(portfolioShortName) && destProject.Portfolios.Count == 0)
                     {
                         destProject.Portfolios.Add(dest.Portfolios.Single(p => p.ShortName == portfolioShortName));
                     }
@@ -314,6 +395,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         destUpdate.RAGStatus = dest.ProjectRAGStatuses.SingleOrDefault(s => s.ViewKey == sourceUpdate.rag);
                         destUpdate.OnHoldStatus = dest.ProjectOnHoldStatuses.SingleOrDefault(s => s.ViewKey == sourceUpdate.onhold);
                         destUpdate.Phase = dest.ProjectPhases.SingleOrDefault(s => s.ViewKey == sourceUpdate.phase);
+
+                        destUpdate.PercentageComplete = sourceUpdate.p_comp;
+                        destUpdate.Budget = decimal.Parse(sourceUpdate.budget);
+                        destUpdate.Spent = decimal.Parse(sourceUpdate.spent);
+                        destUpdate.ExpectedCurrentPhaseEnd = GetPostgresDate(sourceUpdate.expendp);
 
                         if (firstUpdate == null) firstUpdate = destUpdate;
                          lastUpdate = destUpdate;

@@ -88,6 +88,7 @@
     <None Include="Deployment\07_Portfolio2_Portfolio3.sql" />
     <None Include="Deployment\08_Portfolio3_Portfolio4.sql" />
     <None Include="Deployment\09_Portfolio4_Portfolio5.sql" />
-    <None Include="Deployment\10_Portfolio5_Portfolio5.sql" />
+    <None Include="Deployment\10_Portfolio5_Portfolio6.sql" />
+    <None Include="Deployment\11_Portfolio6_Portfolio7.sql" />
   </ItemGroup>
 </Project>

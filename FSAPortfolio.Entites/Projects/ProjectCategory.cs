@@ -19,4 +19,31 @@ namespace FSAPortfolio.Entities.Projects
 
         public int Order { get; set; }
     }
+
+    public class ProjectSize
+    {
+        public int Id { get; set; }
+
+        [StringLength(20)]
+        public string ViewKey { get; set; }
+
+        [StringLength(250)]
+        public string Name { get; set; }
+
+        public int Order { get; set; }
+    }
+
+    public class BudgetType
+    {
+        public int Id { get; set; }
+
+        [StringLength(20)]
+        public string ViewKey { get; set; }
+
+        [StringLength(250)]
+        public string Name { get; set; }
+
+        public int Order { get; set; }
+
+    }
 }

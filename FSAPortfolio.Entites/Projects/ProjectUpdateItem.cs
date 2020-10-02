@@ -22,6 +22,12 @@ namespace FSAPortfolio.Entities.Projects
         public virtual ProjectOnHoldStatus OnHoldStatus { get; set; }
         public virtual ProjectPhase Phase { get; set; }
 
+        public float? PercentageComplete { get; set; }
+        public decimal Budget { get; set; }
+        public decimal Spent { get; set; }
+
+        public DateTime? ExpectedCurrentPhaseEnd { get; set; }
+
         /// <summary>
         /// The update key in the source postgres database.
         /// </summary>
