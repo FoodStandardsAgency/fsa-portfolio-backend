@@ -29,12 +29,17 @@ namespace FSAPortfolio.WebAPI
 
 
             config.Routes.MapHttpRoute(
-                name: "Projects",
+                name: "Project",
                 routeTemplate: "api/Projects/{projectId}",
                 defaults: new { controller = ControllerName<ProjectsController>(), projectId = RouteParameter.Optional }
             );
+            config.Routes.MapHttpRoute(
+                name: "ProjectUpdates",
+                routeTemplate: "api/Projects/{projectId}/Updates",
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetUpdates) }
+            );
 
-
+            #region Legacy
             config.Routes.MapHttpRoute(
                 name: "Legacy_GetCurrentProjects",
                 routeTemplate: "api/Projects/Legacy/Current",
@@ -65,7 +70,7 @@ namespace FSAPortfolio.WebAPI
                 routeTemplate: "api/Projects/Legacy/UnmatchedODDLeads",
                 defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetUnmatchedODDLeads) }
             );
-
+            #endregion
 
 
             config.Routes.MapHttpRoute(

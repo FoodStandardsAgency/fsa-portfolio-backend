@@ -97,14 +97,46 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<latest_projects> Get(string projectId)
+        public async Task<ProjectUpdateModel> Get(string projectId)
         {
             try
             {
                 using (var context = new PortfolioContext())
                 {
                     var project = (from p in ProjectWithIncludes(context) where p.ProjectId == projectId select p).Single();
-                    var result = PortfolioMapper.Mapper.Map<latest_projects>(project);
+                    var result = PortfolioMapper.Mapper.Map<ProjectUpdateModel>(project);
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        /// <summary>
+        /// Gets text for non-empty updates with timestamps and dates.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IEnumerable<ProjectUpdateModel>> GetUpdates(string projectId)
+        {
+            try
+            {
+                using (var context = new PortfolioContext())
+                {
+                    var project = (from u in context.Projects
+                                   .Include(p => p.Updates)
+                                   .Include(p => p.LatestUpdate)
+                                   where u.ProjectId == projectId
+                                   select u)
+                                   .Single();
+                    var updates = (from u in project.Updates
+                                   where !string.IsNullOrEmpty(u.Text)
+                                   orderby u.Timestamp descending
+                                   select u).ToList();
+                    var result = PortfolioMapper.Mapper.Map<IEnumerable<ProjectUpdateModel>>(updates);
                     return result;
                 }
             }

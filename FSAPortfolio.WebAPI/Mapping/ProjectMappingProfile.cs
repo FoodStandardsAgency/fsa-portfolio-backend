@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Configuration.Annotations;
 using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
@@ -17,14 +18,19 @@ namespace FSAPortfolio.WebAPI.Mapping
     public class ProjectMappingProfile : Profile
     {
         public const string PortfolioContextKey = "portfolioContext";
+        public const string PortfolioConfigKey = "portfolioConfig";
+        internal const string TimeOutputFormat = "dd/MM/yyyy hh:mm";
+        private const string DateOutputFormat = "dd/MM/yyyy";
 
         public ProjectMappingProfile()
         {
-            CreateMap<DateTime, string>().ConvertUsing(d => d.ToString("dd/mm/yyyy"));
-            CreateMap<DateTime?, string>().ConvertUsing(d => d.HasValue ? d.Value.ToString("dd/mm/yyyy") : "00/00/00");
+            CreateMap<DateTime, string>().ConvertUsing(d => d.ToString(DateOutputFormat));
+            CreateMap<DateTime?, string>().ConvertUsing(d => d.HasValue ? d.Value.ToString(DateOutputFormat) : "00/00/00");
 
             // Outbound
             Project__latest_projects();
+            Project__ProjectModel();
+            ProjectUpdateItem__ProjectUpdateModel();
 
             // Inbound
             project__Project();
@@ -141,6 +147,77 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.G6team))
                 .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
                 ;
+        }
+
+        private void Project__ProjectModel()
+        {
+            CreateMap<Project, ProjectModel>()
+                .ForMember(p => p.id, o => o.MapFrom(s => s.LatestUpdate.SyncId))
+                .ForMember(p => p.project_id, o => o.MapFrom(s => s.ProjectId))
+                .ForMember(p => p.project_name, o => o.MapFrom(s => s.Name))
+                .ForMember(p => p.start_date, o => o.MapFrom(s => s.StartDate))
+                .ForMember(p => p.short_desc, o => o.MapFrom(s => s.Description))
+                .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.ViewKey))
+                .ForMember(p => p.category, o => o.MapFrom(s => s.Category.ViewKey))
+                .ForMember(p => p.subcat, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.rag, o => o.MapFrom(s => s.LatestUpdate.RAGStatus.ViewKey))
+                .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Text))
+                .ForMember(p => p.oddlead, o => o.Ignore()) // TODO: add a field for the lead name
+                .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email))
+                .ForMember(p => p.servicelead, o => o.Ignore()) // TODO: add a field for the lead name
+                .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
+                .ForMember(p => p.priority_main, o => o.MapFrom(s => s.Priority.HasValue ? s.Priority.Value.ToString("D2") : string.Empty))
+                .ForMember(p => p.funded, o => o.MapFrom(s => s.Funded.ToString()))
+                .ForMember(p => p.confidence, o => o.MapFrom(s => s.Confidence.ToString()))
+                .ForMember(p => p.priorities, o => o.MapFrom(s => s.Priorities.ToString()))
+                .ForMember(p => p.benefits, o => o.MapFrom(s => s.Benefits.ToString()))
+                .ForMember(p => p.criticality, o => o.MapFrom(s => s.Criticality.ToString()))
+                .ForMember(p => p.budget, o => o.MapFrom(s => s.LatestUpdate.Budget))
+                .ForMember(p => p.spent, o => o.MapFrom(s => s.LatestUpdate.Spent))
+                .ForMember(p => p.documents, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.timestamp, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
+
+                .ForMember(p => p.pgroup, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.toupdate, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.ProjectId))))
+                .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
+                .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
+                .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
+                .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
+                .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
+                .ForMember(p => p.dependencies, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey))
+                .ForMember(p => p.oddlead_role, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.ViewKey))
+                .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate))
+                .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
+                .ForMember(p => p.p_comp, o => o.MapFrom(s => s.LatestUpdate.PercentageComplete))
+                .ForMember(p => p.max_time, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
+                .ForMember(p => p.min_time, o => o.MapFrom(s => s.FirstUpdate.Timestamp))
+                .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.G6team))
+                .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
+                .ForMember(p => p.firstCompleted, o => o.Ignore()) // TODO: need portfolio config so can get completed phase to get this.
+                ;
+        }
+
+        private void ProjectUpdateItem__ProjectUpdateModel()
+        {
+            CreateMap<ProjectUpdateItem, ProjectUpdateModel>()
+                .ForMember(d => d.project_id, o => o.MapFrom(s => s.Project.ProjectId))
+                .ForMember(d => d.timestamp, o => o.MapFrom<OutputTimestampResolver, DateTime>(s => s.Timestamp))
+                .ForMember(d => d.max_timestamp, o => o.MapFrom<OutputTimestampResolver, DateTime>(s => s.Project.LatestUpdate.Timestamp))
+                .ForMember(d => d.date, o => o.MapFrom(s => s.Timestamp.Date))
+                .ForMember(d => d.update, o => o.MapFrom(s => s.Text))
+                ;
+        }
+    }
+
+    public class OutputTimestampResolver : IMemberValueResolver<object, object, DateTime, string>
+    {
+        public string Resolve(object source, object destination, DateTime sourceMember, string destMember, ResolutionContext context)
+        {
+            return sourceMember.ToString(ProjectMappingProfile.TimeOutputFormat);
         }
     }
 
