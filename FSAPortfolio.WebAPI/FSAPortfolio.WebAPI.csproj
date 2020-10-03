@@ -129,8 +129,6 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App\DirectorateContext.cs" />
-    <Compile Include="App\ProjectConstants.cs" />
     <Compile Include="App\Sync\SyncProvider.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />

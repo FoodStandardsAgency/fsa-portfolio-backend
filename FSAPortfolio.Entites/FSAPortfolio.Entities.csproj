@@ -103,12 +103,14 @@
       <DependentUpon>202010022012200_Portfolio8.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Organisation\PortfolioConfiguration.cs" />
     <Compile Include="Organisation\Portfolio.cs" />
     <Compile Include="PortfolioContext.cs" />
     <Compile Include="PortfolioSettings.cs" />
     <Compile Include="Projects\Project.cs" />
     <Compile Include="Projects\ProjectAuditLog.cs" />
     <Compile Include="Projects\ProjectCategory.cs" />
+    <Compile Include="Projects\ProjectConstants.cs" />
     <Compile Include="Projects\ProjectStatus.cs" />
     <Compile Include="Projects\ProjectStatusItem.cs" />
     <Compile Include="Projects\ProjectUpdateItem.cs" />

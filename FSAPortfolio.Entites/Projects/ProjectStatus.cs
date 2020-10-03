@@ -17,6 +17,7 @@ namespace FSAPortfolio.Entities.Projects
         [StringLength(20)]
         public string Name { get; set; }
         public int Order { get; set; }
+        public virtual PortfolioConfiguration Configuration { get; set; }
     }
 
     public class ProjectOnHoldStatus
@@ -30,6 +31,7 @@ namespace FSAPortfolio.Entities.Projects
         public string Name { get; set; }
 
         public int Order { get; set; }
+        public virtual PortfolioConfiguration Configuration { get; set; }
     }
     public class ProjectPhase
     {
@@ -41,6 +43,8 @@ namespace FSAPortfolio.Entities.Projects
         [StringLength(50)]
         public string Name { get; set; }
         public int Order { get; set; }
+
+        public virtual PortfolioConfiguration Configuration { get; set; }
 
     }
 }

@@ -28,12 +28,12 @@ namespace FSAPortfolio.WebAPI.Controllers
                 {
                     // Load and map the project
                     var project = await ProjectWithIncludes(context).SingleAsync(p => p.ProjectId == update.project_id);
-                    PortfolioMapper.Mapper.Map(update, project, opt => opt.Items["portfolioContext"] = context);
+                    PortfolioMapper.Mapper.Map(update, project, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = context);
                     LogChanges(context, project);
 
                     // Create a new update
                     var projectUpdate = new ProjectUpdateItem();
-                    PortfolioMapper.Mapper.Map(update, projectUpdate, opt => opt.Items["portfolioContext"] = context);
+                    PortfolioMapper.Mapper.Map(update, projectUpdate, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = context);
                     projectUpdate.Timestamp = DateTime.Now;
                     project.Updates.Add(projectUpdate);
                     project.LatestUpdate = projectUpdate;
@@ -55,7 +55,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             try
             {
                 IEnumerable<latest_projects> result = null;
-                var directorate = DirectorateContext.Current;
+                var directorate = PortfolioConfiguration.Current;
                 using (var context = new PortfolioContext())
                 {
                     IQueryable<Project> query = ProjectWithIncludes(context, portfolio);

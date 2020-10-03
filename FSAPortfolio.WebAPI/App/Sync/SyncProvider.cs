@@ -214,7 +214,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             using (var dest = new PortfolioContext())
             {
                 dest.Portfolios.AddOrUpdate(p => p.ShortName,
-                    new Portfolio() { Name = "Open Data and Digital", ShortName = "ODD", Route = "odd" },
+                    new Portfolio() { Name = "Open Data and Digital", ShortName = "ODD", Route = "odd", Configuration = new PortfolioConfiguration() },
                     new Portfolio() { Name = "SERD", ShortName = "SERD", Route = "serd" },
                     new Portfolio() { Name = "ABC", ShortName = "ABC", Route = "abc" },
                     new Portfolio() { Name = "Test1", ShortName = "Test1", Route = "test1" },
@@ -344,7 +344,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         dest.Projects.Add(destProject);
                     }
 
-                    PortfolioMapper.Mapper.Map(latestSourceUpdate, destProject, opt => opt.Items["portfolioContext"] = dest);
+                    PortfolioMapper.Mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = dest);
 
                     destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
 
@@ -367,7 +367,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                             };
                             destProject.Updates.Add(destUpdate);
                         }
-                        PortfolioMapper.Mapper.Map(sourceUpdate, destUpdate, opt => opt.Items["portfolioContext"] = dest);
+                        PortfolioMapper.Mapper.Map(sourceUpdate, destUpdate, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = dest);
                     }
 
                     dest.SaveChanges();

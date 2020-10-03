@@ -53,6 +53,14 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Portfolio>().HasKey(p => p.Id);
             modelBuilder.Entity<Portfolio>().HasIndex(p => p.ShortName).IsUnique();
             modelBuilder.Entity<Portfolio>().HasMany(p => p.Projects).WithMany(p => p.Portfolios);
+            modelBuilder.Entity<Portfolio>().HasRequired(p => p.Configuration).WithRequiredPrincipal();
+
+            modelBuilder.Entity<PortfolioConfiguration>().HasKey(p => p.Id);
+            modelBuilder.Entity<PortfolioConfiguration>().HasMany(p => p.Phases).WithRequired(p => p.Configuration);
+            modelBuilder.Entity<PortfolioConfiguration>().HasMany(p => p.Labels).WithRequired(p => p.Configuration);
+            modelBuilder.Entity<PortfolioConfiguration>().HasOptional(p => p.CompletedPhase);
+
+            modelBuilder.Entity<PortfolioLabelConfig>().HasKey(p => p.Id);
 
             modelBuilder.Entity<Project>().HasKey(p => p.Id);
             modelBuilder.Entity<Project>().HasIndex(p => p.ProjectId).IsUnique();
