@@ -256,43 +256,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     throw e;
                 }
             }
-
-            using (var source = new MigratePortfolioContext())
-            using (var dest = new PortfolioContext())
-            {
-                foreach (var sourceProject in source.projects.Where(p => !string.IsNullOrEmpty(p.rels)))
-                {
-                    try
-                    {
-                        var destProject = dest.Projects.Include(p => p.RelatedProjects).SingleOrDefault(p => p.ProjectId == sourceProject.project_id);
-                        if (destProject != null)
-                        {
-                            var relatedProjectIds = sourceProject.rels.Split(',');
-                            foreach (var relatedProjectId in relatedProjectIds)
-                            {
-                                var trimmedId = relatedProjectId.Trim();
-                                if (trimmedId.Length == 10)
-                                {
-                                    if (!destProject.RelatedProjects.Any(p => p.ProjectId == trimmedId))
-                                    {
-                                        var relatedProject = dest.Projects.SingleOrDefault(p => p.ProjectId == trimmedId);
-                                        if(relatedProject != null)
-                                        {
-                                            destProject.RelatedProjects.Add(relatedProject);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        log.Add($"Project {sourceProject.project_id} failed to sync related projects: {e.Message}");
-                    }
-                }
-                dest.SaveChanges();
-            }
-
         }
         internal bool SyncProject(string projectId, string portfolioShortName = null)
         {

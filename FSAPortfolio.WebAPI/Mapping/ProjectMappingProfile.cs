@@ -70,7 +70,7 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.Team, o => o.MapFrom(s => s.team))
                 .ForMember(p => p.Lead, o => o.MapFrom<PostgresProjectLeadResolver, string>(s => s.oddlead_email))
                 .ForMember(p => p.ServiceLead, o => o.MapFrom<PostgresProjectLeadResolver, string>(s => s.servicelead_email))
-                .ForMember(p => p.RelatedProjects, o => o.Ignore())
+                .ForMember(p => p.RelatedProjects, o => o.MapFrom<RelatedProjectResolver, string>(s => s.rels))
                 .ForMember(p => p.Category, o => o.MapFrom<PostgresCategoryResolver, string>(s => s.category))
                 .ForMember(p => p.Size, o => o.MapFrom<PostgresSizeResolver, string>(s => s.project_size))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<PostgresBudgetTypeResolver, string>(s => s.budgettype))
@@ -95,19 +95,19 @@ namespace FSAPortfolio.WebAPI.Mapping
         private void Project__latest_projects()
         {
             CreateMap<Project, latest_projects>()
-                .ForMember(p => p.id, o => o.MapFrom(s => s.Id))
+                .ForMember(p => p.id, o => o.MapFrom(s => s.LatestUpdate.SyncId))
                 .ForMember(p => p.project_id, o => o.MapFrom(s => s.ProjectId))
                 .ForMember(p => p.project_name, o => o.MapFrom(s => s.Name))
                 .ForMember(p => p.start_date, o => o.MapFrom(s => s.StartDate))
                 .ForMember(p => p.short_desc, o => o.MapFrom(s => s.Description))
                 .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.ViewKey))
                 .ForMember(p => p.category, o => o.MapFrom(s => s.Category.ViewKey))
-                .ForMember(p => p.subcat, o => o.Ignore())
+                .ForMember(p => p.subcat, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.rag, o => o.MapFrom(s => s.LatestUpdate.RAGStatus.ViewKey))
                 .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Text))
-                .ForMember(p => p.oddlead, o => o.Ignore())
+                .ForMember(p => p.oddlead, o => o.Ignore()) // TODO: add a field for the lead name
                 .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email))
-                .ForMember(p => p.servicelead, o => o.Ignore())
+                .ForMember(p => p.servicelead, o => o.Ignore()) // TODO: add a field for the lead name
                 .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
                 .ForMember(p => p.priority_main, o => o.MapFrom(s => s.Priority.HasValue ? s.Priority.Value.ToString("D2") : string.Empty))
                 .ForMember(p => p.funded, o => o.MapFrom(s => s.Funded.ToString()))
@@ -117,21 +117,21 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.criticality, o => o.MapFrom(s => s.Criticality.ToString()))
                 .ForMember(p => p.budget, o => o.MapFrom(s => s.LatestUpdate.Budget))
                 .ForMember(p => p.spent, o => o.MapFrom(s => s.LatestUpdate.Spent))
-                .ForMember(p => p.documents, o => o.Ignore())
+                .ForMember(p => p.documents, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.timestamp, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
 
-                .ForMember(p => p.pgroup, o => o.Ignore())
-                .ForMember(p => p.link, o => o.Ignore())
-                .ForMember(p => p.toupdate, o => o.Ignore())
+                .ForMember(p => p.pgroup, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.toupdate, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.ProjectId))))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
                 .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
                 .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
                 .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
                 .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
-                .ForMember(p => p.dependencies, o => o.Ignore())
+                .ForMember(p => p.dependencies, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey))
-                .ForMember(p => p.oddlead_role, o => o.Ignore())
+                .ForMember(p => p.oddlead_role, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.ViewKey))
                 .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate))
                 .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
@@ -233,6 +233,48 @@ namespace FSAPortfolio.WebAPI.Mapping
         {
             var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
             return portfolioContext.ProjectOnHoldStatuses.SingleOrDefault(c => c.ViewKey == sourceMember);
+        }
+    }
+
+    public class RelatedProjectResolver : IMemberValueResolver<object, object, string, ICollection<Project>>
+    {
+        public ICollection<Project> Resolve(object source, object destination, string sourceMember, ICollection<Project> destMember, ResolutionContext context)
+        {
+            var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+            var relatedProjects = destMember ?? new List<Project>();
+            if (string.IsNullOrEmpty(sourceMember))
+            {
+                relatedProjects.Clear();
+            }
+            else
+            {
+                // Add missing related projects
+                var relatedProjectIds = sourceMember.Split(',');
+                foreach (var relatedProjectId in relatedProjectIds)
+                {
+                    var trimmedId = relatedProjectId.Trim();
+                    if (!relatedProjects.Any(p => p.ProjectId == trimmedId))
+                    {
+                        var relatedProject = portfolioContext.Projects.SingleOrDefault(p => p.ProjectId == trimmedId);
+                        if (relatedProject != null)
+                        {
+                            relatedProjects.Add(relatedProject);
+                        }
+                    }
+                }
+
+                // Remove unrequired related projects
+                foreach(var p in relatedProjects.ToArray())
+                {
+                    if(!relatedProjectIds.Any(id => id == p.ProjectId))
+                    {
+                        relatedProjects.Remove(p);
+                    }
+                }
+            }
+
+
+            return relatedProjects;
         }
     }
 
