@@ -26,15 +26,17 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 using (var context = new PortfolioContext())
                 {
+                    var timestamp = DateTime.Now;
+
                     // Load and map the project
                     var project = await ProjectWithIncludes(context).SingleAsync(p => p.ProjectId == update.project_id);
                     PortfolioMapper.Mapper.Map(update, project, opt => opt.Items["portfolioContext"] = context);
-                    LogChanges(context, project);
+                    LogChanges(context, project, timestamp);
 
                     // Create a new update
                     var projectUpdate = new ProjectUpdateItem();
                     PortfolioMapper.Mapper.Map(update, projectUpdate, opt => opt.Items["portfolioContext"] = context);
-                    projectUpdate.Timestamp = DateTime.Now;
+                    projectUpdate.Timestamp = timestamp;
                     project.Updates.Add(projectUpdate);
                     project.LatestUpdate = projectUpdate;
 
@@ -135,13 +137,13 @@ namespace FSAPortfolio.WebAPI.Controllers
                 .Include(p => p.Lead);
         }
 
-        private static void LogChanges(PortfolioContext context, Project project)
+        private static void LogChanges(PortfolioContext context, Project project, DateTime timestamp)
         {
             var changes = context.ChangeTracker.Entries().Where(c => c.State == EntityState.Modified);
             if (changes.Count() > 0)
             {
-                var log = new ProjectAuditLog();
-                var logText = new StringBuilder();
+                var log = new ProjectAuditLog() { Timestamp = timestamp };
+                var logText = new List<string>();
                 foreach (var change in changes)
                 {
                     var originalValues = change.OriginalValues;
@@ -152,11 +154,11 @@ namespace FSAPortfolio.WebAPI.Controllers
                         var currentValue = currentValues[pname];
                         if (!Equals(originalValue, currentValue))
                         {
-                            logText.Append($"{pname}: [{originalValue}] to [{currentValue}];");
+                            logText.Add($"{pname}: [{originalValue}] to [{currentValue}]");
                         }
                     }
                 }
-                log.Text = logText.ToString();
+                log.Text = string.Join("; ", logText);
                 project.AuditLogs.Add(log);
             }
         }
