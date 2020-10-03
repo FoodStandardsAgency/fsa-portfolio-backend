@@ -34,6 +34,8 @@ namespace FSAPortfolio.Entities
         public virtual DbSet<ProjectOnHoldStatus> ProjectOnHoldStatuses { get; set; }
         public virtual DbSet<ProjectPhase> ProjectPhases { get; set; }
 
+        public virtual DbSet<ProjectAuditLog> ProjectAuditLogs { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             //Database.SetInitializer<PortfolioContext>(null);
@@ -56,6 +58,7 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Project>().HasIndex(p => p.ProjectId).IsUnique();
             modelBuilder.Entity<Project>().HasMany(p => p.Updates).WithRequired(u => u.Project).HasForeignKey(u => u.Project_Id);
             modelBuilder.Entity<Project>().HasMany(p => p.RelatedProjects).WithMany();
+            modelBuilder.Entity<Project>().HasMany(p => p.AuditLogs).WithRequired(l => l.Project).HasForeignKey(u => u.Project_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.LatestUpdate).WithMany().HasForeignKey(p => p.LatestUpdate_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.FirstUpdate).WithMany().HasForeignKey(p => p.FirstUpdate_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.Lead).WithMany().HasForeignKey(p => p.Lead_Id);
@@ -76,6 +79,8 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<BudgetType>().HasIndex(p => p.Name).IsUnique();
             modelBuilder.Entity<BudgetType>().HasIndex(p => p.ViewKey).IsUnique();
 
+            modelBuilder.Entity<ProjectAuditLog>().HasKey(p => p.Id);
+
             // Status updates
             modelBuilder.Entity<ProjectRAGStatus>().HasKey(p => p.Id);
             modelBuilder.Entity<ProjectRAGStatus>().HasIndex(p => p.Name).IsUnique();
@@ -94,6 +99,9 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<ProjectUpdateItem>().HasOptional(u => u.RAGStatus).WithMany();
             modelBuilder.Entity<ProjectUpdateItem>().HasOptional(u => u.OnHoldStatus).WithMany();
             modelBuilder.Entity<ProjectUpdateItem>().HasOptional(u => u.Phase).WithMany();
+
+
+
         }
     }
 }

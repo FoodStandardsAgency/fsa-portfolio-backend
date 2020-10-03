@@ -29,24 +29,9 @@ namespace FSAPortfolio.WebAPI
 
 
             config.Routes.MapHttpRoute(
-                name: "GetCurrentProjects",
-                routeTemplate: "api/Projects/Current/{portfolio}",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetCurrent) }
-            );
-            config.Routes.MapHttpRoute(
-                name: "GetNewProjects",
-                routeTemplate: "api/Projects/New/{portfolio}",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetNew) }
-            );
-            config.Routes.MapHttpRoute(
-                name: "GetCompletedProjects",
-                routeTemplate: "api/Projects/Completed/{portfolio}",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetCompleted) }
-            );
-            config.Routes.MapHttpRoute(
-                name: "GetLatestProjects",
-                routeTemplate: "api/Projects/Latest/{portfolio}",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetLatest) }
+                name: "Projects",
+                routeTemplate: "api/Projects/{projectId}",
+                defaults: new { controller = ControllerName<ProjectsController>(), projectId = RouteParameter.Optional }
             );
 
 

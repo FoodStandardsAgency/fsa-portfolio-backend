@@ -3,6 +3,7 @@ using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.PostgreSQL;
+using FSAPortfolio.WebAPI.Mapping;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -337,48 +338,24 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         destProject = new Project()
                         {
                             ProjectId = sourceProjectDetail.Key.project_id,
-                            Name = sourceProjectDetail.Key.project_name,
                             Updates = new List<ProjectUpdateItem>(),
                             Portfolios = new List<Portfolio>()
                         };
                         dest.Projects.Add(destProject);
                     }
-                    destProject.StartDate = GetPostgresDate(latestSourceUpdate.start_date); // Take the latest date
-                    destProject.ActualStartDate = GetPostgresDate(latestSourceUpdate.actstart);
-                    destProject.ExpectedEndDate = GetPostgresDate(latestSourceUpdate.expend);
-                    destProject.HardEndDate = GetPostgresDate(latestSourceUpdate.hardend);
+
+                    PortfolioMapper.Mapper.Map(latestSourceUpdate, destProject, opt => opt.Items["portfolioContext"] = dest);
 
                     destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
-                    destProject.Priority = int.Parse(latestSourceUpdate.priority_main);
-                    destProject.Directorate = latestSourceUpdate.direct;
-                    destProject.Category = dest.ProjectCategories.SingleOrDefault(c => c.ViewKey == latestSourceUpdate.category);
-                    destProject.Size = dest.ProjectSizes.SingleOrDefault(c => c.ViewKey == latestSourceUpdate.project_size);
-                    destProject.BudgetType = dest.BudgetTypes.SingleOrDefault(c => c.ViewKey == latestSourceUpdate.budgettype);
-                    destProject.Funded = int.Parse(latestSourceUpdate.funded);
-                    destProject.Confidence = int.Parse(latestSourceUpdate.confidence);
-                    destProject.Benefits = int.Parse(latestSourceUpdate.benefits);
-                    destProject.Criticality = int.Parse(latestSourceUpdate.criticality);
-                    destProject.Team = latestSourceUpdate.team;
 
-                    // Sync the portfolio
+                    // Add to the given portfolio if not already in one
                     if (!string.IsNullOrEmpty(portfolioShortName) && destProject.Portfolios.Count == 0)
                     {
                         destProject.Portfolios.Add(dest.Portfolios.Single(p => p.ShortName == portfolioShortName));
                     }
 
-                    // Sync the lead
-                    if (!string.IsNullOrWhiteSpace(latestSourceUpdate.oddlead_email))
-                    {
-                        destProject.Lead = dest.People.SingleOrDefault(p => p.Email == latestSourceUpdate.oddlead_email);
-                    }
-                    else
-                    {
-                        destProject.Lead = null;
-                    }
 
                     // Now sync the updates
-                    ProjectUpdateItem firstUpdate = null;
-                    ProjectUpdateItem lastUpdate = null;
                     foreach (var sourceUpdate in sourceProjectDetail.OrderBy(u => u.timestamp))
                     {
                         var destUpdate = destProject.Updates.SingleOrDefault(u => u.SyncId == sourceUpdate.id);
@@ -386,50 +363,24 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         {
                             destUpdate = new ProjectUpdateItem()
                             {
-                                SyncId = sourceUpdate.id,
-                                Timestamp = sourceUpdate.timestamp
+                                SyncId = sourceUpdate.id
                             };
                             destProject.Updates.Add(destUpdate);
                         }
-
-                        // Apply changes
-                        destUpdate.RAGStatus = dest.ProjectRAGStatuses.SingleOrDefault(s => s.ViewKey == sourceUpdate.rag);
-                        destUpdate.OnHoldStatus = dest.ProjectOnHoldStatuses.SingleOrDefault(s => s.ViewKey == sourceUpdate.onhold);
-                        destUpdate.Phase = dest.ProjectPhases.SingleOrDefault(s => s.ViewKey == sourceUpdate.phase);
-
-                        decimal bud;
-                        destUpdate.PercentageComplete = sourceUpdate.p_comp;
-                        destUpdate.Budget = decimal.TryParse(sourceUpdate.budget, out bud) ? bud : 0m ;
-                        destUpdate.Spent = decimal.TryParse(sourceUpdate.spent, out bud) ? bud : 0m ;
-                        destUpdate.ExpectedCurrentPhaseEnd = GetPostgresDate(sourceUpdate.expendp);
-
-                        if (firstUpdate == null) firstUpdate = destUpdate;
-                         lastUpdate = destUpdate;
+                        PortfolioMapper.Mapper.Map(sourceUpdate, destUpdate, opt => opt.Items["portfolioContext"] = dest);
                     }
 
                     dest.SaveChanges();
 
                     // Set the latest update
-                    destProject.LatestUpdate = lastUpdate;
-                    destProject.FirstUpdate = firstUpdate;
+                    var updates = destProject.Updates.OrderBy(u => u.Timestamp);
+                    destProject.FirstUpdate = updates.First();
+                    destProject.LatestUpdate = updates.Last();
                     dest.SaveChanges();
                     log.Add($"Syncing project {projectId} complete.");
                 }
             }
             return synched;
-        }
-
-        private DateTime? GetPostgresDate(string date)
-        {
-            DateTime result;
-            if (DateTime.TryParseExact(date, "dd/mm/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
-            {
-                return result;
-            }
-            else
-            {
-                return null;
-            }
         }
 
     }

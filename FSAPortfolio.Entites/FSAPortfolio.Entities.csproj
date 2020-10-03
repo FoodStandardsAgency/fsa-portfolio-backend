@@ -98,11 +98,16 @@
     <Compile Include="Migrations\202010021517443_Portfolio7.designer.cs">
       <DependentUpon>202010021517443_Portfolio7.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010022012200_Portfolio8.cs" />
+    <Compile Include="Migrations\202010022012200_Portfolio8.designer.cs">
+      <DependentUpon>202010022012200_Portfolio8.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Portfolio.cs" />
     <Compile Include="PortfolioContext.cs" />
     <Compile Include="PortfolioSettings.cs" />
     <Compile Include="Projects\Project.cs" />
+    <Compile Include="Projects\ProjectAuditLog.cs" />
     <Compile Include="Projects\ProjectCategory.cs" />
     <Compile Include="Projects\ProjectStatus.cs" />
     <Compile Include="Projects\ProjectStatusItem.cs" />
@@ -155,6 +160,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202010021517443_Portfolio7.resx">
       <DependentUpon>202010021517443_Portfolio7.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010022012200_Portfolio8.resx">
+      <DependentUpon>202010022012200_Portfolio8.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,7 +8,7 @@ namespace FSAPortfolio.WebAPI.Mapping
 {
     internal class PortfolioMapper
     {
-        private static MapperConfiguration config;
+        internal static MapperConfiguration config;
 
         internal static IMapper Mapper { get; private set; }
         internal static void Configure()

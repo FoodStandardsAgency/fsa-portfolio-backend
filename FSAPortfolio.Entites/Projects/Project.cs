@@ -48,7 +48,7 @@ namespace FSAPortfolio.Entities.Projects
         public string Team { get; set; }
 
 
-        public int Priority { get; set; }
+        public int? Priority { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? ActualStartDate { get; set; }
         public DateTime? ExpectedEndDate { get; set; }
@@ -59,6 +59,8 @@ namespace FSAPortfolio.Entities.Projects
         public int? LatestUpdate_Id { get; set; }
         public virtual ProjectUpdateItem FirstUpdate { get; set; }
         public int? FirstUpdate_Id { get; set; }
+
+        public virtual ICollection<ProjectAuditLog> AuditLogs { get; set; }
 
         public bool IsNew => FirstUpdate == null ? true : FirstUpdate.Timestamp >= DateTime.Today.AddDays(-PortfolioSettings.NewProjectLimitDays);
     }
