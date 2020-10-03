@@ -150,10 +150,31 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
-        internal void SyncStatuses()
+        internal void SyncPortfolios()
         {
-            log.Add("Syncing statuses...");
-            using (var dest = new PortfolioContext())
+            using (var context = new PortfolioContext())
+            {
+                AddPortfolio(context, "Open Data and Digital", "ODD", "odd");
+                AddPortfolio(context, "SERD", "SERD", "serd");
+                AddPortfolio(context, "ABC", "ABC", "abc");
+                AddPortfolio(context, "Test1", "Test1", "test1");
+                AddPortfolio(context, "Test2", "Test2", "test2");
+                AddPortfolio(context, "Test3", "Test3", "test3");
+                AddPortfolio(context, "Test4", "Test4", "test4");
+                context.SaveChanges();
+
+                foreach (var portfolio in context.Portfolios)
+                {
+                    portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == "completed");
+                }
+                context.SaveChanges();
+
+            }
+        }
+
+        private void AddPortfolio(PortfolioContext context, string name, string shortName, string viewKey)
+        {
+            if (!context.Portfolios.Any(p => p.ViewKey == viewKey))
             {
                 Func<string, ProjectPhase> phaseFactory = (k) => new ProjectPhase() { Name = phaseMap[k], ViewKey = k };
                 Func<string, ProjectOnHoldStatus> onHoldFactory = (k) => new ProjectOnHoldStatus() { Name = onholdMap[k], ViewKey = k };
@@ -161,68 +182,65 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Func<string, ProjectCategory> categoryFactory = (k) => new ProjectCategory() { Name = categoryMap[k], ViewKey = k };
                 Func<string, ProjectSize> sizeFactory = (k) => new ProjectSize() { Name = sizeMap[k], ViewKey = k };
                 Func<string, BudgetType> budgetTypeFactory = (k) => new BudgetType() { Name = budgetTypeMap[k], ViewKey = k };
-                dest.ProjectPhases.AddOrUpdate(p => p.Name,
-                    phaseFactory("backlog"),
-                    phaseFactory("discovery"),
-                    phaseFactory("alpha"),
-                    phaseFactory("beta"),
-                    phaseFactory("live"),
-                    phaseFactory("completed")
-                    );
-                dest.ProjectOnHoldStatuses.AddOrUpdate(p => p.Name,
-                    onHoldFactory("n"),
-                    onHoldFactory("y"),
-                    onHoldFactory("b"),
-                    onHoldFactory("c")
-                    );
-                dest.ProjectRAGStatuses.AddOrUpdate(p => p.Name,
-                    ragFactory("red"),
-                    ragFactory("amb"),
-                    ragFactory("gre"),
-                    ragFactory("nor")
-                    );
-                dest.ProjectCategories.AddOrUpdate(p => p.Name,
-                    categoryFactory("cap"),
-                    categoryFactory("data"),
-                    categoryFactory("sm"),
-                    categoryFactory("ser"),
-                    categoryFactory("it"),
-                    categoryFactory("res"),
-                    new ProjectCategory() { Name = CategoryConstants.NotSetName }
-                    );
-                dest.ProjectSizes.AddOrUpdate(p => p.Name,
-                    sizeFactory("s"),
-                    sizeFactory("m"),
-                    sizeFactory("l"),
-                    sizeFactory("x"),
-                    new ProjectSize() { Name = ProjectSizeConstants.NotSetName }
-                    );
-                dest.BudgetTypes.AddOrUpdate(p => p.Name,
-                    budgetTypeFactory("admin"),
-                    budgetTypeFactory("progr"),
-                    budgetTypeFactory("capit"),
-                    new BudgetType() { Name = BudgetTypeConstants.NotSetName }
-                    );
-                dest.SaveChanges();
-            }
 
-            log.Add($"Syncing statuses complete.");
-        }
-
-        internal void SyncPortfolios()
-        {
-            using (var dest = new PortfolioContext())
-            {
-                dest.Portfolios.AddOrUpdate(p => p.ShortName,
-                    new Portfolio() { Name = "Open Data and Digital", ShortName = "ODD", Route = "odd", Configuration = new PortfolioConfiguration() },
-                    new Portfolio() { Name = "SERD", ShortName = "SERD", Route = "serd" },
-                    new Portfolio() { Name = "ABC", ShortName = "ABC", Route = "abc" },
-                    new Portfolio() { Name = "Test1", ShortName = "Test1", Route = "test1" },
-                    new Portfolio() { Name = "Test2", ShortName = "Test2", Route = "test2" },
-                    new Portfolio() { Name = "Test3", ShortName = "Test3", Route = "test3" },
-                    new Portfolio() { Name = "Test4", ShortName = "Test4", Route = "test4" }
-                    );
-                dest.SaveChanges();
+                var portfolio = new Portfolio()
+                {
+                    Name = name,
+                    ShortName = shortName,
+                    ViewKey = viewKey,
+                    Configuration = new PortfolioConfiguration()
+                    {
+                        Phases = new List<ProjectPhase>()
+                        {
+                            phaseFactory("backlog"),
+                            phaseFactory("discovery"),
+                            phaseFactory("alpha"),
+                            phaseFactory("beta"),
+                            phaseFactory("live"),
+                            phaseFactory("completed")
+                        },
+                        RAGStatuses = new List<ProjectRAGStatus>()
+                        {
+                            ragFactory("red"),
+                            ragFactory("amb"),
+                            ragFactory("gre"),
+                            ragFactory("nor")
+                        },
+                        OnHoldStatuses = new List<ProjectOnHoldStatus>()
+                        {
+                            onHoldFactory("n"),
+                            onHoldFactory("y"),
+                            onHoldFactory("b"),
+                            onHoldFactory("c")
+                        },
+                        Categories = new List<ProjectCategory>()
+                        {
+                            categoryFactory("cap"),
+                            categoryFactory("data"),
+                            categoryFactory("sm"),
+                            categoryFactory("ser"),
+                            categoryFactory("it"),
+                            categoryFactory("res"),
+                            new ProjectCategory() { Name = CategoryConstants.NotSetName }
+                        },
+                        ProjectSizes = new List<ProjectSize>()
+                        {
+                            sizeFactory("s"),
+                            sizeFactory("m"),
+                            sizeFactory("l"),
+                            sizeFactory("x"),
+                            new ProjectSize() { Name = ProjectSizeConstants.NotSetName }
+                        },
+                        BudgetTypes = new List<BudgetType>()
+                        {
+                            budgetTypeFactory("admin"),
+                            budgetTypeFactory("progr"),
+                            budgetTypeFactory("capit"),
+                            new BudgetType() { Name = BudgetTypeConstants.NotSetName }
+                        }
+                    }
+                };
+                context.Portfolios.Add(portfolio);
             }
         }
 
@@ -256,43 +274,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     throw e;
                 }
             }
-
-            using (var source = new MigratePortfolioContext())
-            using (var dest = new PortfolioContext())
-            {
-                foreach (var sourceProject in source.projects.Where(p => !string.IsNullOrEmpty(p.rels)))
-                {
-                    try
-                    {
-                        var destProject = dest.Projects.Include(p => p.RelatedProjects).SingleOrDefault(p => p.ProjectId == sourceProject.project_id);
-                        if (destProject != null)
-                        {
-                            var relatedProjectIds = sourceProject.rels.Split(',');
-                            foreach (var relatedProjectId in relatedProjectIds)
-                            {
-                                var trimmedId = relatedProjectId.Trim();
-                                if (trimmedId.Length == 10)
-                                {
-                                    if (!destProject.RelatedProjects.Any(p => p.ProjectId == trimmedId))
-                                    {
-                                        var relatedProject = dest.Projects.SingleOrDefault(p => p.ProjectId == trimmedId);
-                                        if(relatedProject != null)
-                                        {
-                                            destProject.RelatedProjects.Add(relatedProject);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        log.Add($"Project {sourceProject.project_id} failed to sync related projects: {e.Message}");
-                    }
-                }
-                dest.SaveChanges();
-            }
-
         }
         internal bool SyncProject(string projectId, string portfolioShortName = null)
         {
@@ -330,6 +311,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         .Include(p => p.Size)
                         .Include(p => p.BudgetType)
                         .Include(p => p.RelatedProjects)
+                        .Include(p => p.DependantProjects)
                         .SingleOrDefault(p => p.ProjectId == sourceProjectDetail.Key.project_id);
 
                     var latestSourceUpdate = sourceProjectDetail.OrderBy(d => d.timestamp).Last();
@@ -344,15 +326,18 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         dest.Projects.Add(destProject);
                     }
 
-                    PortfolioMapper.Mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = dest);
-
-                    destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
-
                     // Add to the given portfolio if not already in one
                     if (!string.IsNullOrEmpty(portfolioShortName) && destProject.Portfolios.Count == 0)
                     {
-                        destProject.Portfolios.Add(dest.Portfolios.Single(p => p.ShortName == portfolioShortName));
+                        var portfolio = dest.Portfolios.Single(p => p.ShortName == portfolioShortName);
+                        destProject.OwningPortfolio = portfolio;
+                        destProject.Portfolios.Add(portfolio);
                     }
+
+
+                    PortfolioMapper.Mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = dest);
+
+                    destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
 
 
                     // Now sync the updates
@@ -363,7 +348,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         {
                             destUpdate = new ProjectUpdateItem()
                             {
-                                SyncId = sourceUpdate.id
+                                SyncId = sourceUpdate.id,
+                                Project = destProject
                             };
                             destProject.Updates.Add(destUpdate);
                         }

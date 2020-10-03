@@ -24,6 +24,9 @@ namespace FSAPortfolio.Entities.Projects
 
         [StringLength(150)]
         public string Directorate { get; set; }
+
+        public int OwningPortfolio_Id { get; internal set; }
+        public virtual Portfolio OwningPortfolio { get; set; }
         public virtual ProjectCategory Category { get; set; }
         public int? ProjectCategory_Id { get; set; }
         public virtual ProjectSize Size { get; set; }
@@ -38,6 +41,7 @@ namespace FSAPortfolio.Entities.Projects
 
         public virtual ICollection<Portfolio> Portfolios { get; set; }
         public virtual ICollection<Project> RelatedProjects { get; set; }
+        public virtual ICollection<Project> DependantProjects { get; set; }
 
         public virtual Person Lead { get; set; }
         public int? Lead_Id { get; set; }
@@ -63,5 +67,6 @@ namespace FSAPortfolio.Entities.Projects
         public virtual ICollection<ProjectAuditLog> AuditLogs { get; set; }
 
         public bool IsNew => FirstUpdate == null ? true : FirstUpdate.Timestamp >= DateTime.Today.AddDays(-PortfolioSettings.NewProjectLimitDays);
+
     }
 }

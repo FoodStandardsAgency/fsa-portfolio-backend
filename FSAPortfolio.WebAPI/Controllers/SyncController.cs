@@ -25,8 +25,8 @@ namespace FSAPortfolio.WebAPI.Controllers
             List<string> messages = new List<string>();
             var sync = new SyncProvider(messages);
             sync.SyncUsers();
-            sync.SyncStatuses();
             sync.SyncPeople();
+
             sync.SyncPortfolios();
             return messages;
         }
@@ -48,16 +48,6 @@ namespace FSAPortfolio.WebAPI.Controllers
             List<string> messages = new List<string>();
             var sync = new SyncProvider(messages);
             sync.SyncPeople();
-            return messages;
-        }
-
-        // GET: api/Sync/SyncStatuses
-        [AcceptVerbs("GET")]
-        public IEnumerable<string> SyncStatuses()
-        {
-            List<string> messages = new List<string>();
-            var sync = new SyncProvider(messages);
-            sync.SyncStatuses();
             return messages;
         }
 

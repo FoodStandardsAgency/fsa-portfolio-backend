@@ -18,6 +18,9 @@ namespace FSAPortfolio.Entities.Projects
         public string Name { get; set; }
 
         public int Order { get; set; }
+        public virtual PortfolioConfiguration Configuration { get; set; }
+        public int Configuration_Id { get; set; }
+
     }
 
     public class ProjectSize
@@ -31,6 +34,8 @@ namespace FSAPortfolio.Entities.Projects
         public string Name { get; set; }
 
         public int Order { get; set; }
+        public virtual PortfolioConfiguration Configuration { get; set; }
+        public int Configuration_Id { get; set; }
     }
 
     public class BudgetType
@@ -45,5 +50,7 @@ namespace FSAPortfolio.Entities.Projects
 
         public int Order { get; set; }
 
+        public virtual PortfolioConfiguration Configuration { get; set; }
+        public int Configuration_Id { get; set; }
     }
 }

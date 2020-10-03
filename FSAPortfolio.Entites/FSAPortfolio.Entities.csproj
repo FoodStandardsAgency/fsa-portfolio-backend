@@ -54,53 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\202009302115568_Create.cs" />
-    <Compile Include="Migrations\202009302115568_Create.designer.cs">
-      <DependentUpon>202009302115568_Create.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010010728571_Projects1.cs" />
-    <Compile Include="Migrations\202010010728571_Projects1.designer.cs">
-      <DependentUpon>202010010728571_Projects1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010010929586_Projects2.cs" />
-    <Compile Include="Migrations\202010010929586_Projects2.designer.cs">
-      <DependentUpon>202010010929586_Projects2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010011629278_Projects3.cs" />
-    <Compile Include="Migrations\202010011629278_Projects3.designer.cs">
-      <DependentUpon>202010011629278_Projects3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010020815221_Portfolio1.cs" />
-    <Compile Include="Migrations\202010020815221_Portfolio1.designer.cs">
-      <DependentUpon>202010020815221_Portfolio1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010020946342_Portfolio2.cs" />
-    <Compile Include="Migrations\202010020946342_Portfolio2.designer.cs">
-      <DependentUpon>202010020946342_Portfolio2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010021202072_Portfolio3.cs" />
-    <Compile Include="Migrations\202010021202072_Portfolio3.designer.cs">
-      <DependentUpon>202010021202072_Portfolio3.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010021208248_Portfolio4.cs" />
-    <Compile Include="Migrations\202010021208248_Portfolio4.designer.cs">
-      <DependentUpon>202010021208248_Portfolio4.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010021215174_Portfolio5.cs" />
-    <Compile Include="Migrations\202010021215174_Portfolio5.designer.cs">
-      <DependentUpon>202010021215174_Portfolio5.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010021256080_Portfolio6.cs" />
-    <Compile Include="Migrations\202010021256080_Portfolio6.designer.cs">
-      <DependentUpon>202010021256080_Portfolio6.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010021517443_Portfolio7.cs" />
-    <Compile Include="Migrations\202010021517443_Portfolio7.designer.cs">
-      <DependentUpon>202010021517443_Portfolio7.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010022012200_Portfolio8.cs" />
-    <Compile Include="Migrations\202010022012200_Portfolio8.designer.cs">
-      <DependentUpon>202010022012200_Portfolio8.cs</DependentUpon>
+    <Compile Include="Migrations\202010031809064_Create.cs" />
+    <Compile Include="Migrations\202010031809064_Create.designer.cs">
+      <DependentUpon>202010031809064_Create.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
@@ -130,41 +86,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202009302115568_Create.resx">
-      <DependentUpon>202009302115568_Create.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010010728571_Projects1.resx">
-      <DependentUpon>202010010728571_Projects1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010010929586_Projects2.resx">
-      <DependentUpon>202010010929586_Projects2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010011629278_Projects3.resx">
-      <DependentUpon>202010011629278_Projects3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010020815221_Portfolio1.resx">
-      <DependentUpon>202010020815221_Portfolio1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010020946342_Portfolio2.resx">
-      <DependentUpon>202010020946342_Portfolio2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010021202072_Portfolio3.resx">
-      <DependentUpon>202010021202072_Portfolio3.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010021208248_Portfolio4.resx">
-      <DependentUpon>202010021208248_Portfolio4.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010021215174_Portfolio5.resx">
-      <DependentUpon>202010021215174_Portfolio5.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010021256080_Portfolio6.resx">
-      <DependentUpon>202010021256080_Portfolio6.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010021517443_Portfolio7.resx">
-      <DependentUpon>202010021517443_Portfolio7.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010022012200_Portfolio8.resx">
-      <DependentUpon>202010022012200_Portfolio8.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202010031809064_Create.resx">
+      <DependentUpon>202010031809064_Create.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

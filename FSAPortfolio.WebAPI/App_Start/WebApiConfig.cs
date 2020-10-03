@@ -27,14 +27,30 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetADUser) }
             );
 
-
+            #region Projects
             config.Routes.MapHttpRoute(
-                name: "Projects",
+                name: "Project",
                 routeTemplate: "api/Projects/{projectId}",
-                defaults: new { controller = ControllerName<ProjectsController>(), projectId = RouteParameter.Optional }
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.Get) }
             );
+            config.Routes.MapHttpRoute(
+                name: "ProjectUpdates",
+                routeTemplate: "api/Projects/{projectId}/updates",
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetUpdates) }
+            );
+            config.Routes.MapHttpRoute(
+                name: "RelatedProjects",
+                routeTemplate: "api/Projects/{projectId}/related",
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetRelatedProjects) }
+            );
+            config.Routes.MapHttpRoute(
+                name: "DependantProjects",
+                routeTemplate: "api/Projects/{projectId}/dependant",
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetDependantProjects) }
+            );
+            #endregion
 
-
+            #region Legacy
             config.Routes.MapHttpRoute(
                 name: "Legacy_GetCurrentProjects",
                 routeTemplate: "api/Projects/Legacy/Current",
@@ -65,9 +81,9 @@ namespace FSAPortfolio.WebAPI
                 routeTemplate: "api/Projects/Legacy/UnmatchedODDLeads",
                 defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetUnmatchedODDLeads) }
             );
+            #endregion
 
-
-
+            #region Sync
             config.Routes.MapHttpRoute(
                 name: "SyncAll",
                 routeTemplate: "api/Sync/SyncAll",
@@ -84,11 +100,6 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { controller = ControllerName<SyncController>(), action = nameof(SyncController.SyncUsers) }
             );
             config.Routes.MapHttpRoute(
-                name: "SyncStatuses",
-                routeTemplate: "api/Sync/SyncStatuses",
-                defaults: new { controller = ControllerName<SyncController>(), action = nameof(SyncController.SyncStatuses) }
-            );
-            config.Routes.MapHttpRoute(
                 name: "SyncProject",
                 routeTemplate: "api/Sync/SyncProject",
                 defaults: new { controller = ControllerName<SyncController>(), action = nameof(SyncController.SyncProject) }
@@ -98,8 +109,7 @@ namespace FSAPortfolio.WebAPI
                 routeTemplate: "api/Sync/SyncAllProjects",
                 defaults: new { controller = ControllerName<SyncController>(), action = nameof(SyncController.SyncAllProjects) }
             );
-
-
+            #endregion
 
 
             config.Routes.MapHttpRoute(

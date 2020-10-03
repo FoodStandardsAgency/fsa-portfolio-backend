@@ -26,13 +26,15 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 using (var context = new PortfolioContext())
                 {
+                    var timestamp = DateTime.Now;
+
                     // Load and map the project
                     var project = await ProjectWithIncludes(context).SingleAsync(p => p.ProjectId == update.project_id);
                     PortfolioMapper.Mapper.Map(update, project, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = context);
-                    LogChanges(context, project);
+                    LogChanges(context, project, timestamp);
 
                     // Create a new update
-                    var projectUpdate = new ProjectUpdateItem();
+                    var projectUpdate = new ProjectUpdateItem() { Project = project };
                     PortfolioMapper.Mapper.Map(update, projectUpdate, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = context);
                     projectUpdate.Timestamp = DateTime.Now;
                     project.Updates.Add(projectUpdate);
@@ -55,22 +57,27 @@ namespace FSAPortfolio.WebAPI.Controllers
             try
             {
                 IEnumerable<latest_projects> result = null;
-                var directorate = PortfolioConfiguration.Current;
                 using (var context = new PortfolioContext())
                 {
+                    var config = await context.Portfolios
+                        .Where(p => p.ViewKey == portfolio)
+                        .Select(p => p.Configuration)
+                        .Include(c => c.CompletedPhase)
+                        .SingleAsync();
+
                     IQueryable<Project> query = ProjectWithIncludes(context, portfolio);
                     switch (filter)
                     {
                         case "new":
                             var newCutoff = DateTime.Now.AddDays(-PortfolioSettings.NewProjectLimitDays);
                             query = from p in query
-                                    where p.LatestUpdate.Phase.Id != directorate.CompletedPhase.Id && p.FirstUpdate.Timestamp > newCutoff
+                                    where p.LatestUpdate.Phase.Id != config.CompletedPhase.Id && p.FirstUpdate.Timestamp > newCutoff
                                     orderby p.Priority descending, p.Name
                                     select p;
                             break;
                         case "complete":
                             query = from p in query
-                                    where p.LatestUpdate.Phase.Id == directorate.CompletedPhase.Id
+                                    where p.LatestUpdate.Phase.Id == config.CompletedPhase.Id
                                     orderby p.LatestUpdate.Timestamp descending, p.Name
                                     select p;
                             break;
@@ -78,7 +85,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                         case "latest":
                         default:
                             query = from p in query
-                                    where p.LatestUpdate.Phase.Id != directorate.CompletedPhase.Id
+                                    where p.LatestUpdate.Phase.Id != config.CompletedPhase.Id
                                     orderby p.Priority descending, p.Name
                                     select p;
                             break;
@@ -95,14 +102,102 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<latest_projects> Get(string projectId)
+        public async Task<ProjectModel> Get(string projectId)
         {
             try
             {
                 using (var context = new PortfolioContext())
                 {
                     var project = (from p in ProjectWithIncludes(context) where p.ProjectId == projectId select p).Single();
-                    var result = PortfolioMapper.Mapper.Map<latest_projects>(project);
+                    var result = PortfolioMapper.Mapper.Map<ProjectModel>(project);
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        [HttpGet]
+        public Task<IEnumerable<ProjectModel>> GetFiltered(string projectId, [FromUri] string filter)
+        {
+            switch(filter)
+            {
+                case "related":
+                    return GetRelatedProjects(projectId);
+                case "dependent":
+                    return GetDependantProjects(projectId);
+                default:
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<ProjectModel>> GetRelatedProjects(string projectId)
+        {
+            try
+            {
+                using (var context = new PortfolioContext())
+                {
+                    var projects = await ProjectWithIncludes(context)
+                        .Where(p => p.ProjectId == projectId)
+                        .SelectMany(p => p.RelatedProjects)
+                        .ToListAsync();
+                    var result = PortfolioMapper.Mapper.Map<IEnumerable<ProjectModel>>(projects);
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<ProjectModel>> GetDependantProjects(string projectId)
+        {
+            try
+            {
+                using (var context = new PortfolioContext())
+                {
+                    var projects = await ProjectWithIncludes(context)
+                        .Where(p => p.ProjectId == projectId)
+                        .SelectMany(p => p.RelatedProjects)
+                        .ToListAsync(); ;
+                    var result = PortfolioMapper.Mapper.Map<IEnumerable<ProjectModel>>(projects);
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        /// <summary>
+        /// Gets text for non-empty updates with timestamps and dates.
+        /// </summary>
+        /// <param name="projectId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<IEnumerable<ProjectUpdateModel>> GetUpdates(string projectId)
+        {
+            try
+            {
+                using (var context = new PortfolioContext())
+                {
+                    var project = (from u in context.Projects
+                                   .Include(p => p.Updates)
+                                   .Include(p => p.LatestUpdate)
+                                   where u.ProjectId == projectId
+                                   select u)
+                                   .Single();
+                    var updates = (from u in project.Updates
+                                   where !string.IsNullOrEmpty(u.Text)
+                                   orderby u.Timestamp descending
+                                   select u).ToList();
+                    var result = PortfolioMapper.Mapper.Map<IEnumerable<ProjectUpdateModel>>(updates);
                     return result;
                 }
             }
@@ -115,7 +210,7 @@ namespace FSAPortfolio.WebAPI.Controllers
 
         private static IQueryable<Project> ProjectWithIncludes(PortfolioContext context, string portfolio)
         {
-            return ProjectWithIncludes(context).Where(p => p.Portfolios.Any(po => po.Route == portfolio));
+            return ProjectWithIncludes(context).Where(p => p.Portfolios.Any(po => po.ViewKey == portfolio));
         }
 
         private static IQueryable<Project> ProjectWithIncludes(PortfolioContext context)
@@ -132,16 +227,18 @@ namespace FSAPortfolio.WebAPI.Controllers
                 .Include(p => p.Size)
                 .Include(p => p.BudgetType)
                 .Include(p => p.RelatedProjects)
+                .Include(p => p.DependantProjects)
                 .Include(p => p.Lead);
         }
 
-        private static void LogChanges(PortfolioContext context, Project project)
+
+        private static void LogChanges(PortfolioContext context, Project project, DateTime timestamp)
         {
             var changes = context.ChangeTracker.Entries().Where(c => c.State == EntityState.Modified);
             if (changes.Count() > 0)
             {
-                var log = new ProjectAuditLog();
-                var logText = new StringBuilder();
+                var log = new ProjectAuditLog() { Timestamp = timestamp };
+                var logText = new List<string>();
                 foreach (var change in changes)
                 {
                     var originalValues = change.OriginalValues;
@@ -152,11 +249,11 @@ namespace FSAPortfolio.WebAPI.Controllers
                         var currentValue = currentValues[pname];
                         if (!Equals(originalValue, currentValue))
                         {
-                            logText.Append($"{pname}: [{originalValue}] to [{currentValue}];");
+                            logText.Add($"{pname}: [{originalValue}] to [{currentValue}]");
                         }
                     }
                 }
-                log.Text = logText.ToString();
+                log.Text = string.Join("; ", logText);
                 project.AuditLogs.Add(log);
             }
         }

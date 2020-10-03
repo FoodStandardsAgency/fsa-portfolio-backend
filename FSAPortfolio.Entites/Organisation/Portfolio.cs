@@ -13,7 +13,7 @@ namespace FSAPortfolio.Entities.Organisation
         public int Id { get; set; }
 
         [StringLength(10)]
-        public string Route { get; set; }
+        public string ViewKey { get; set; }
 
         [StringLength(20)]
         public string ShortName{ get; set; }
@@ -26,7 +26,7 @@ namespace FSAPortfolio.Entities.Organisation
 
         public virtual PortfolioConfiguration Configuration { get; set; }
 
-        public ICollection<Project> Projects { get; set; }
+        public virtual ICollection<Project> Projects { get; set; }
 
     }
 }

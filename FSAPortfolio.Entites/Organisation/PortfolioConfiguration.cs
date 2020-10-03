@@ -1,4 +1,5 @@
 ﻿using FSAPortfolio.Entities;
+using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using System;
 using System.Collections.Generic;
@@ -10,26 +11,17 @@ namespace FSAPortfolio.Entities
 {
     public class PortfolioConfiguration
     {
-        private static Lazy<PortfolioConfiguration> context;
-        static PortfolioConfiguration()
-        {
-            context = new Lazy<PortfolioConfiguration>(() => {
-                using (var db = new PortfolioContext())
-                {
-                    var ctx = new PortfolioConfiguration()
-                    {
-                        CompletedPhase = db.ProjectPhases.Single(ph => ph.Name == PhaseConstants.CompletedName)
-                    };
-                    return ctx;
-                }
-            });
-        }
-        public static PortfolioConfiguration Current => context.Value;
-
         public int Id { get; set; }
 
+        public virtual Portfolio Portfolio { get; set; }
         public virtual ICollection<ProjectPhase> Phases { get; set; }
         public virtual ProjectPhase CompletedPhase { get; set; }
+        public virtual ICollection<ProjectRAGStatus> RAGStatuses { get; set; }
+        public virtual ICollection<ProjectOnHoldStatus> OnHoldStatuses { get; set; }
+
+        public virtual ICollection<ProjectCategory> Categories { get; set; }
+        public virtual ICollection<ProjectSize> ProjectSizes { get; set; }
+        public virtual ICollection<BudgetType> BudgetTypes { get; set; }
 
         public virtual ICollection<PortfolioLabelConfig> Labels { get; set; }
         public PortfolioLabelConfig ProjectIdLabel { get; set; }
@@ -48,5 +40,6 @@ namespace FSAPortfolio.Entities
 
         [StringLength(50)]
         public string Label { get; set; }
+        public int Configuration_Id { get; set; }
     }
 }

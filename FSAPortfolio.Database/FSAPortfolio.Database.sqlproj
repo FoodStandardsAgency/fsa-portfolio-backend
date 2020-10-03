@@ -80,16 +80,5 @@
     <Build Include="dbo\Views\latest_project_with_update_date.sql" />
     <Build Include="dbo\Views\completed_time.sql" />
     <None Include="Deployment\01_Create.sql" />
-    <None Include="Deployment\02_Create_Projects1.sql" />
-    <None Include="Deployment\03_Projects1_Projects2.sql" />
-    <None Include="Deployment\04_Projects2_Projects3.sql" />
-    <None Include="Deployment\05_Projects3_Portfolio1.sql" />
-    <None Include="Deployment\06_Portfolio1_Portfolio2.sql" />
-    <None Include="Deployment\07_Portfolio2_Portfolio3.sql" />
-    <None Include="Deployment\08_Portfolio3_Portfolio4.sql" />
-    <None Include="Deployment\09_Portfolio4_Portfolio5.sql" />
-    <None Include="Deployment\10_Portfolio5_Portfolio6.sql" />
-    <None Include="Deployment\11_Portfolio6_Portfolio7.sql" />
-    <None Include="Deployment\12_Portfolio7_Portfolio8.sql" />
   </ItemGroup>
 </Project>
