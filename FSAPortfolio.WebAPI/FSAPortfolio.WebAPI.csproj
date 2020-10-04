@@ -131,6 +131,7 @@
   <ItemGroup>
     <Compile Include="App\Sync\SyncProvider.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\PortfolioConfigurationController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\LegacyProjectsController.cs" />
@@ -139,7 +140,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Mapping\PortfolioMapper.cs" />
+    <Compile Include="Mapping\PortfolioConfigurationMappingProfile.cs" />
     <Compile Include="Mapping\ProjectMappingProfile.cs" />
+    <Compile Include="Models\PortfolioConfigLabelRequest.cs" />
+    <Compile Include="Models\PortfolioConfigModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\SyncRequestModel.cs" />
     <Compile Include="Models\ODDLeadResponse.cs" />

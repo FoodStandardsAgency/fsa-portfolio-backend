@@ -27,6 +27,20 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetADUser) }
             );
 
+            #region Portfolio Configuration
+            config.Routes.MapHttpRoute(
+                name: "PortfolioConfigurationLabel",
+                routeTemplate: "api/PortfolioConfiguration/Label",
+                defaults: new { controller = ControllerName<PortfolioConfigurationController>() }
+            );
+            config.Routes.MapHttpRoute(
+                name: "PortfolioConfiguration",
+                routeTemplate: "api/PortfolioConfiguration",
+                defaults: new { controller = ControllerName<PortfolioConfigurationController>(), action = nameof(PortfolioConfigurationController.Get) }
+            );
+
+            #endregion
+
             #region Projects
             config.Routes.MapHttpRoute(
                 name: "Project",

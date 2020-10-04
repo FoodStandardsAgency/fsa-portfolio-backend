@@ -16,6 +16,7 @@ namespace FSAPortfolio.WebAPI.Mapping
             config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<ProjectMappingProfile>();
+                cfg.AddProfile<PortfolioConfigurationMappingProfile>();
             });
             Mapper = config.CreateMapper();
         }

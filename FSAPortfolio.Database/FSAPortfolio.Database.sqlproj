@@ -83,5 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Deployment\01_RenameRelatedProjects.sql" />
+    <None Include="Deployment\02_RemoveConfigurationLabels.sql" />
   </ItemGroup>
 </Project>

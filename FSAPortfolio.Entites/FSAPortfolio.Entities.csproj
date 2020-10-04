@@ -62,9 +62,14 @@
     <Compile Include="Migrations\202010041024167_RenameRelatedProjects.designer.cs">
       <DependentUpon>202010041024167_RenameRelatedProjects.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010041143411_RemoveConfigurationLabels.cs" />
+    <Compile Include="Migrations\202010041143411_RemoveConfigurationLabels.designer.cs">
+      <DependentUpon>202010041143411_RemoveConfigurationLabels.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
     <Compile Include="Organisation\Portfolio.cs" />
+    <Compile Include="Organisation\PortfolioLabelConfig.cs" />
     <Compile Include="PortfolioContext.cs" />
     <Compile Include="PortfolioSettings.cs" />
     <Compile Include="Projects\Project.cs" />
@@ -95,6 +100,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202010041024167_RenameRelatedProjects.resx">
       <DependentUpon>202010041024167_RenameRelatedProjects.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010041143411_RemoveConfigurationLabels.resx">
+      <DependentUpon>202010041143411_RemoveConfigurationLabels.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

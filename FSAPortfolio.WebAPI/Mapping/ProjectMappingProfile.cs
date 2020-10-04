@@ -212,6 +212,7 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(d => d.update, o => o.MapFrom(s => s.Text))
                 ;
         }
+
     }
 
     public class FirstCompletedResolver : IMemberValueResolver<Project, ProjectModel, Project, DateTime?>
