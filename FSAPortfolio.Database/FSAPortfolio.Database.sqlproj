@@ -81,4 +81,7 @@
     <Build Include="dbo\Views\completed_time.sql" />
     <None Include="Deployment\01_Create.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Deployment\01_RenameRelatedProjects.sql" />
+  </ItemGroup>
 </Project>

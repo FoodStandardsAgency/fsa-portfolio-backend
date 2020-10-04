@@ -40,7 +40,18 @@ namespace FSAPortfolio.Entities.Projects
         public int Criticality { get; set; }
 
         public virtual ICollection<Portfolio> Portfolios { get; set; }
-        public virtual ICollection<Project> RelatedProjects { get; set; }
+        private ICollection<Project> relatedProjects;
+        public virtual ICollection<Project> RelatedProjects
+        {
+            get
+            {
+                return relatedProjects;
+            }
+            set
+            {
+                relatedProjects = value;
+            }
+        }
         public virtual ICollection<Project> DependantProjects { get; set; }
 
         public virtual Person Lead { get; set; }

@@ -58,6 +58,10 @@
     <Compile Include="Migrations\202010031809064_Create.designer.cs">
       <DependentUpon>202010031809064_Create.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010041024167_RenameRelatedProjects.cs" />
+    <Compile Include="Migrations\202010041024167_RenameRelatedProjects.designer.cs">
+      <DependentUpon>202010041024167_RenameRelatedProjects.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
     <Compile Include="Organisation\Portfolio.cs" />
@@ -88,6 +92,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202010031809064_Create.resx">
       <DependentUpon>202010031809064_Create.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010041024167_RenameRelatedProjects.resx">
+      <DependentUpon>202010041024167_RenameRelatedProjects.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

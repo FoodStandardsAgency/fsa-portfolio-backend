@@ -37,8 +37,11 @@ namespace FSAPortfolio.WebAPI.Controllers
                     var projectUpdate = new ProjectUpdateItem() { Project = project };
                     PortfolioMapper.Mapper.Map(update, projectUpdate, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = context);
                     projectUpdate.Timestamp = DateTime.Now;
-                    project.Updates.Add(projectUpdate);
-                    project.LatestUpdate = projectUpdate;
+                    if (!projectUpdate.IsDuplicate(project.LatestUpdate))
+                    {
+                        project.Updates.Add(projectUpdate);
+                        project.LatestUpdate = projectUpdate;
+                    }
 
                     // Save
                     await context.SaveChangesAsync();
@@ -163,7 +166,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 {
                     var projects = await ProjectWithIncludes(context)
                         .Where(p => p.ProjectId == projectId)
-                        .SelectMany(p => p.RelatedProjects)
+                        .SelectMany(p => p.DependantProjects)
                         .ToListAsync(); ;
                     var result = PortfolioMapper.Mapper.Map<IEnumerable<ProjectModel>>(projects);
                     return result;
@@ -187,12 +190,12 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 using (var context = new PortfolioContext())
                 {
-                    var project = (from u in context.Projects
-                                   .Include(p => p.Updates)
-                                   .Include(p => p.LatestUpdate)
-                                   where u.ProjectId == projectId
-                                   select u)
-                                   .Single();
+                    var project = await (from u in context.Projects
+                                         .Include(p => p.Updates)
+                                         .Include(p => p.LatestUpdate)
+                                         where u.ProjectId == projectId
+                                         select u)
+                                   .SingleAsync();
                     var updates = (from u in project.Updates
                                    where !string.IsNullOrEmpty(u.Text)
                                    orderby u.Timestamp descending

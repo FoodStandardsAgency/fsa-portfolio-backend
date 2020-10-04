@@ -32,5 +32,19 @@ namespace FSAPortfolio.Entities.Projects
         /// The update key in the source postgres database.
         /// </summary>
         public int SyncId { get; set; }
+
+        public bool IsDuplicate(ProjectUpdateItem update)
+        {
+            return 
+                RAGStatus.ViewKey.Equals(update.RAGStatus.ViewKey) &&
+                OnHoldStatus.ViewKey.Equals(update.OnHoldStatus.ViewKey) &&
+                Phase.ViewKey.Equals(update.Phase.ViewKey) &&
+                PercentageComplete.Equals(update.PercentageComplete) &&
+                Budget.Equals(update.Budget) &&
+                Spent.Equals(update.Spent) &&
+                ExpectedCurrentPhaseEnd.Equals(update.ExpectedCurrentPhaseEnd) &&
+                (string.IsNullOrWhiteSpace(Text) || string.Equals(Text, update.Text, StringComparison.OrdinalIgnoreCase))
+                ;
+        }
     }
 }

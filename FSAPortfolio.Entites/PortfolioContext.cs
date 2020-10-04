@@ -78,8 +78,18 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Project>().HasIndex(p => p.ProjectId).IsUnique();
             modelBuilder.Entity<Project>().HasRequired(p => p.OwningPortfolio).WithMany().HasForeignKey(p => p.OwningPortfolio_Id);
             modelBuilder.Entity<Project>().HasMany(p => p.Updates).WithRequired(u => u.Project).HasForeignKey(u => u.Project_Id);
-            modelBuilder.Entity<Project>().HasMany(p => p.RelatedProjects).WithMany();
-            modelBuilder.Entity<Project>().HasMany(p => p.DependantProjects).WithMany();
+            modelBuilder.Entity<Project>().HasMany(p => p.RelatedProjects).WithMany().Map(mc =>
+            {
+                mc.MapLeftKey("Project_Id");
+                mc.MapRightKey("RelatedProject_Id");
+                mc.ToTable("RelatedProjects");
+            });
+            modelBuilder.Entity<Project>().HasMany(p => p.DependantProjects).WithMany().Map(mc =>
+            {
+                mc.MapLeftKey("Project_Id");
+                mc.MapRightKey("DependantProject_Id");
+                mc.ToTable("DependantProjects");
+            }); ;
             modelBuilder.Entity<Project>().HasMany(p => p.AuditLogs).WithRequired(l => l.Project).HasForeignKey(u => u.Project_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.LatestUpdate).WithMany().HasForeignKey(p => p.LatestUpdate_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.FirstUpdate).WithMany().HasForeignKey(p => p.FirstUpdate_Id);

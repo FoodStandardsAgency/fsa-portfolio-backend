@@ -76,7 +76,8 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.Team, o => o.MapFrom(s => s.team))
                 .ForMember(p => p.Lead, o => o.MapFrom<PostgresProjectLeadResolver, string>(s => s.oddlead_email))
                 .ForMember(p => p.ServiceLead, o => o.MapFrom<PostgresProjectLeadResolver, string>(s => s.servicelead_email))
-                .ForMember(p => p.RelatedProjects, o => o.MapFrom<RelatedProjectResolver, string>(s => s.rels))
+                .ForMember(p => p.RelatedProjects, o => o.MapFrom<ProjectCollectionResolver, string>(s => s.rels))
+                .ForMember(p => p.DependantProjects, o => o.MapFrom<ProjectCollectionResolver, string>(s => s.dependencies))
                 .ForMember(p => p.Category, o => o.MapFrom<PostgresCategoryResolver, string>(s => s.category))
                 .ForMember(p => p.Size, o => o.MapFrom<PostgresSizeResolver, string>(s => s.project_size))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<PostgresBudgetTypeResolver, string>(s => s.budgettype))
@@ -130,12 +131,12 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.toupdate, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.ProjectId))))
+                .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.ProjectId))))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
                 .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
                 .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
                 .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
                 .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
-                .ForMember(p => p.dependencies, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey))
                 .ForMember(p => p.oddlead_role, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.ViewKey))
@@ -181,12 +182,12 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.toupdate, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.ProjectId))))
+                .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.ProjectId))))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
                 .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
                 .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
                 .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
                 .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
-                .ForMember(p => p.dependencies, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey))
                 .ForMember(p => p.oddlead_role, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.ViewKey))
@@ -323,45 +324,30 @@ namespace FSAPortfolio.WebAPI.Mapping
         }
     }
 
-    public class RelatedProjectResolver : IMemberValueResolver<object, object, string, ICollection<Project>>
+    public class ProjectCollectionResolver : IMemberValueResolver<project, Project, string, ICollection<Project>>
     {
-        public ICollection<Project> Resolve(object source, object destination, string sourceMember, ICollection<Project> destMember, ResolutionContext context)
+        public ICollection<Project> Resolve(project source, Project destination, string sourceMember, ICollection<Project> destMember, ResolutionContext context)
         {
             var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
-            var relatedProjects = destMember ?? new List<Project>();
-            if (string.IsNullOrEmpty(sourceMember))
-            {
-                relatedProjects.Clear();
-            }
-            else
+            var result = new List<Project>();
+            if (!string.IsNullOrEmpty(sourceMember))
             {
                 // Add missing related projects
-                var relatedProjectIds = sourceMember.Split(',');
-                foreach (var relatedProjectId in relatedProjectIds)
+                var projectIds = sourceMember.Split(',');
+                foreach (var relatedProjectId in projectIds)
                 {
                     var trimmedId = relatedProjectId.Trim();
-                    if (!relatedProjects.Any(p => p.ProjectId == trimmedId))
+                    if (!result.Any(p => p.ProjectId == trimmedId))
                     {
-                        var relatedProject = portfolioContext.Projects.SingleOrDefault(p => p.ProjectId == trimmedId);
-                        if (relatedProject != null)
+                        var project = portfolioContext.Projects.SingleOrDefault(p => p.ProjectId == trimmedId);
+                        if (project != null)
                         {
-                            relatedProjects.Add(relatedProject);
+                            result.Add(project);
                         }
                     }
                 }
-
-                // Remove unrequired related projects
-                foreach(var p in relatedProjects.ToArray())
-                {
-                    if(!relatedProjectIds.Any(id => id == p.ProjectId))
-                    {
-                        relatedProjects.Remove(p);
-                    }
-                }
             }
-
-
-            return relatedProjects;
+            return result;
         }
     }
 
