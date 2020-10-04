@@ -38,6 +38,11 @@ namespace FSAPortfolio.WebAPI
                 routeTemplate: "api/PortfolioConfiguration",
                 defaults: new { controller = ControllerName<PortfolioConfigurationController>(), action = nameof(PortfolioConfigurationController.Get) }
             );
+            config.Routes.MapHttpRoute(
+                name: "PortfolioConfigurationMaxId",
+                routeTemplate: "api/PortfolioConfiguration/MaxId",
+                defaults: new { controller = ControllerName<PortfolioConfigurationController>(), action = nameof(PortfolioConfigurationController.GetMaxId) }
+            );
 
             #endregion
 
