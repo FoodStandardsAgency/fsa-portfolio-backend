@@ -20,13 +20,13 @@ namespace FSAPortfolio.WebAPI.Mapping
 
         public PortfolioConfigurationMappingProfile()
         {
-            CreateMap<PortfolioConfigLabelRequest, PortfolioLabelConfig>()
+            CreateMap<PortfolioConfigAddLabelRequest, PortfolioLabelConfig>()
                 .ForMember(d => d.Id, o => o.Ignore())
                 .ForMember(d => d.Configuration_Id, o => o.Ignore())
                 .ForMember(d => d.Configuration, o => o.Ignore())
-                .ForMember(d => d.FieldName, o => o.MapFrom(s => s.field))
-                .ForMember(d => d.Included, o => o.MapFrom(s => s.included))
-                .ForMember(d => d.Label, o => o.MapFrom(s => s.label))
+                .ForMember(d => d.FieldName, o => o.MapFrom(s => s.FieldName))
+                .ForMember(d => d.Included, o => o.MapFrom(s => s.Included))
+                .ForMember(d => d.Label, o => o.MapFrom(s => s.FieldLabel))
                 ;
 
             CreateMap<PortfolioConfiguration, PortfolioConfigModel>()

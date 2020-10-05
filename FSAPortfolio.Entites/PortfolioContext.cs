@@ -26,6 +26,7 @@ namespace FSAPortfolio.Entities
         public virtual DbSet<AccessGroup> AccessGroups { get; set; }
         public virtual DbSet<Portfolio> Portfolios { get; set; }
         public virtual DbSet<PortfolioConfiguration> PortfolioConfigurations { get; set; }
+        public virtual DbSet<PortfolioLabelConfig> PortfolioConfigurationLabels { get; set; }
 
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<ProjectCategory> ProjectCategories { get; set; }

@@ -142,7 +142,7 @@
     <Compile Include="Mapping\PortfolioMapper.cs" />
     <Compile Include="Mapping\PortfolioConfigurationMappingProfile.cs" />
     <Compile Include="Mapping\ProjectMappingProfile.cs" />
-    <Compile Include="Models\PortfolioConfigLabelRequest.cs" />
+    <Compile Include="Models\PortfolioConfigLabelRequests.cs" />
     <Compile Include="Models\PortfolioConfigModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\SyncRequestModel.cs" />
