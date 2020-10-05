@@ -87,6 +87,7 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.FirstUpdate, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate, o => o.Ignore())
                 .ForMember(p => p.AuditLogs, o => o.Ignore())
+                .ForMember(p => p.OwningPortfolio, o => o.Ignore())
                 // Ignore the keys
                 .ForMember(p => p.Id, o => o.Ignore())
                 .ForMember(p => p.ProjectCategory_Id, o => o.Ignore())
@@ -96,6 +97,7 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.ServiceLead_Id, o => o.Ignore())
                 .ForMember(p => p.FirstUpdate_Id, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate_Id, o => o.Ignore())
+                .ForMember(p => p.OwningPortfolio_Id, o => o.Ignore())
             ;
         }
 

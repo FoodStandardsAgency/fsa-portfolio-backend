@@ -170,6 +170,14 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 context.SaveChanges();
 
             }
+            using (var context = new PortfolioContext())
+            {
+                foreach (var config in context.PortfolioConfigurations)
+                {
+                    context.PortfolioConfigurationLabels.AddOrUpdate(l => new { l.Configuration_Id, l.FieldName },  DefaultFieldLabels.GetDefaultLabels(config.Id).ToArray());
+                }
+                context.SaveChanges();
+            }
         }
 
         private void AddPortfolio(PortfolioContext context, string name, string shortName, string viewKey)

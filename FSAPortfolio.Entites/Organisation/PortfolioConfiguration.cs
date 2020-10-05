@@ -1,12 +1,10 @@
-﻿using FSAPortfolio.Entities;
-using FSAPortfolio.Entities.Organisation;
-using FSAPortfolio.Entities.Projects;
+﻿using FSAPortfolio.Entities.Projects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.Entities
+namespace FSAPortfolio.Entities.Organisation
 {
     public class PortfolioConfiguration
     {
@@ -23,5 +21,8 @@ namespace FSAPortfolio.Entities
         public virtual ICollection<BudgetType> BudgetTypes { get; set; }
 
         public virtual ICollection<PortfolioLabelConfig> Labels { get; set; }
+
+        public virtual ICollection<PortfolioConfigAuditLog> AuditLogs { get; set; }
+
     }
 }

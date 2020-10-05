@@ -12,6 +12,7 @@ namespace FSAPortfolio.UnitTests
         {
             PortfolioMapper.Configure();
             PortfolioMapper.config.AssertConfigurationIsValid();
+            PortfolioMapper.updateConfig.AssertConfigurationIsValid();
         }
     }
 }

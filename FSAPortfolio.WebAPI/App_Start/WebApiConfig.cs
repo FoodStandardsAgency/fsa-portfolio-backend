@@ -28,16 +28,7 @@ namespace FSAPortfolio.WebAPI
             );
 
             #region Portfolio Configuration
-            config.Routes.MapHttpRoute(
-                name: "PortfolioConfigurationLabel",
-                routeTemplate: "api/PortfolioConfiguration/Label",
-                defaults: new { controller = ControllerName<PortfolioConfigurationController>() }
-            );
-            config.Routes.MapHttpRoute(
-                name: "PortfolioConfiguration",
-                routeTemplate: "api/PortfolioConfiguration",
-                defaults: new { controller = ControllerName<PortfolioConfigurationController>(), action = nameof(PortfolioConfigurationController.Get) }
-            );
+
             config.Routes.MapHttpRoute(
                 name: "PortfolioConfigurationMaxId",
                 routeTemplate: "api/PortfolioConfiguration/MaxId",

@@ -1,0 +1,18 @@
+﻿namespace FSAPortfolio.Entities.Migrations
+{
+    using System;
+    using System.Data.Entity.Migrations;
+    
+    public partial class PortfolioConfig2 : DbMigration
+    {
+        public override void Up()
+        {
+            AddColumn("dbo.PortfolioLabelConfigs", "FieldTypeLocked", c => c.Boolean(nullable: false));
+        }
+        
+        public override void Down()
+        {
+            DropColumn("dbo.PortfolioLabelConfigs", "FieldTypeLocked");
+        }
+    }
+}

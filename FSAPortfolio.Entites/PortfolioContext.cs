@@ -38,6 +38,7 @@ namespace FSAPortfolio.Entities
         public virtual DbSet<ProjectPhase> ProjectPhases { get; set; }
 
         public virtual DbSet<ProjectAuditLog> ProjectAuditLogs { get; set; }
+        public virtual DbSet<PortfolioConfigAuditLog> PortfolioConfigAuditLogs { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -61,6 +62,8 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Portfolio>().HasRequired(p => p.Configuration).WithRequiredPrincipal(c => c.Portfolio);
 
             modelBuilder.Entity<PortfolioConfiguration>().HasKey(p => p.Id);
+            modelBuilder.Entity<PortfolioConfiguration>().HasMany(p => p.AuditLogs).WithRequired(l => l.PortfolioConfiguration).HasForeignKey(u => u.PortfolioConfiguration_Id);
+
             modelBuilder.Entity<PortfolioConfiguration>().HasMany(p => p.Phases).WithRequired(p => p.Configuration).HasForeignKey(p => p.Configuration_Id);
             modelBuilder.Entity<PortfolioConfiguration>().HasMany(p => p.RAGStatuses).WithRequired(p => p.Configuration).HasForeignKey(p => p.Configuration_Id);
             modelBuilder.Entity<PortfolioConfiguration>().HasMany(p => p.OnHoldStatuses).WithRequired(p => p.Configuration).HasForeignKey(p => p.Configuration_Id);
@@ -74,6 +77,7 @@ namespace FSAPortfolio.Entities
 
             modelBuilder.Entity<PortfolioLabelConfig>().HasKey(p => p.Id);
             modelBuilder.Entity<PortfolioLabelConfig>().HasIndex(p => new { p.Configuration_Id, p.FieldName }).IsUnique();
+            modelBuilder.Entity<PortfolioLabelConfig>().HasIndex(p => new { p.Configuration_Id, p.FieldTitle }).IsUnique();
 
             modelBuilder.Entity<Project>().HasKey(p => p.Id);
             modelBuilder.Entity<Project>().HasIndex(p => p.ProjectId).IsUnique();

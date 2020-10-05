@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FSAPortfolio.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,33 @@ namespace FSAPortfolio.WebAPI.Models
     {
         [JsonProperty("field")]
         public string FieldName { get; set; }
+
+        [JsonProperty("fieldgroup")]
+        public string FieldGroup { get; set; }
+
+        [JsonProperty("order")]
+        public int FieldOrder { get; set; }
+
+        [JsonProperty("fieldtitle")]
+        public string FieldTitle { get; set; }
+
         [JsonProperty("included")]
         public bool Included { get; set; }
+
+        [JsonProperty("admin")]
+        public bool AdminOnly { get; set; }
+
+        [JsonProperty("readonly")]
+        public bool ReadOnly { get; set; }
+
         [JsonProperty("label")]
         public string Label { get; set; }
+
+        [JsonProperty("inputtype")]
+        public string FieldType { get; set; }
+
+        [JsonProperty("inputtype_locked")]
+        public bool FieldTypeLocked { get; set; }
 
     }
 }

@@ -1,17 +1,6 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration.Annotations;
-using FSAPortfolio.Entities;
-using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.Entities.Users;
-using FSAPortfolio.PostgreSQL.Projects;
-using FSAPortfolio.WebAPI.App.Sync;
-using FSAPortfolio.WebAPI.Controllers;
+using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.WebAPI.Models;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web;
 
 namespace FSAPortfolio.WebAPI.Mapping
 {
@@ -25,8 +14,15 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(d => d.Configuration_Id, o => o.Ignore())
                 .ForMember(d => d.Configuration, o => o.Ignore())
                 .ForMember(d => d.FieldName, o => o.MapFrom(s => s.FieldName))
+                .ForMember(d => d.FieldGroup, o => o.MapFrom(s => s.FieldGroup))
+                .ForMember(d => d.FieldOrder, o => o.MapFrom(s => s.FieldOrder))
+                .ForMember(d => d.FieldTitle, o => o.MapFrom(s => s.FieldTitle))
                 .ForMember(d => d.Included, o => o.MapFrom(s => s.Included))
+                .ForMember(d => d.AdminOnly, o => o.MapFrom(s => s.AdminOnly))
+                .ForMember(d => d.ReadOnly, o => o.MapFrom(s => s.ReadOnly))
                 .ForMember(d => d.Label, o => o.MapFrom(s => s.FieldLabel))
+                .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType))
+                .ForMember(d => d.FieldTypeLocked, o => o.MapFrom(s => s.FieldTypeLocked))
                 ;
 
             CreateMap<PortfolioConfiguration, PortfolioConfigModel>()
@@ -36,8 +32,16 @@ namespace FSAPortfolio.WebAPI.Mapping
 
             CreateMap<PortfolioLabelConfig, PortfolioLabelModel>()
                 .ForMember(d => d.FieldName, o => o.MapFrom(s => s.FieldName))
+                .ForMember(d => d.FieldGroup, o => o.MapFrom(s => s.FieldGroup))
+                .ForMember(d => d.FieldOrder, o => o.MapFrom(s => s.FieldOrder))
+                .ForMember(d => d.FieldTitle, o => o.MapFrom(s => s.FieldTitle))
                 .ForMember(d => d.Included, o => o.MapFrom(s => s.Included))
+                .ForMember(d => d.AdminOnly, o => o.MapFrom(s => s.AdminOnly))
+                .ForMember(d => d.ReadOnly, o => o.MapFrom(s => s.ReadOnly))
                 .ForMember(d => d.Label, o => o.MapFrom(s => s.Label))
+                .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType.ToString().ToLower()))
+                .ForMember(d => d.FieldTypeLocked, o => o.MapFrom(s => s.FieldTypeLocked))
+                .ReverseMap()
                 ;
         }
 

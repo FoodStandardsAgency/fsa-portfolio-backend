@@ -9,8 +9,10 @@ namespace FSAPortfolio.WebAPI.Mapping
     internal class PortfolioMapper
     {
         internal static MapperConfiguration config;
+        internal static MapperConfiguration updateConfig;
 
         internal static IMapper Mapper { get; private set; }
+        internal static IMapper UpdateMapper { get; private set; }
         internal static void Configure()
         {
             config = new MapperConfiguration(cfg =>
@@ -19,6 +21,11 @@ namespace FSAPortfolio.WebAPI.Mapping
                 cfg.AddProfile<PortfolioConfigurationMappingProfile>();
             });
             Mapper = config.CreateMapper();
+            updateConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<PortfolioConfigUpdateProfile>();
+            });
+            UpdateMapper = updateConfig.CreateMapper();
         }
     }
 }
