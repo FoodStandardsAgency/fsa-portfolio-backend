@@ -28,6 +28,8 @@ namespace FSAPortfolio.WebAPI.Controllers
             sync.SyncPeople();
 
             sync.SyncPortfolios();
+
+            sync.SyncAllProjects();
             return messages;
         }
 
