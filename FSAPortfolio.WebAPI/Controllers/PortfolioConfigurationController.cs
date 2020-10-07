@@ -11,6 +11,7 @@ using System.Data.Entity;
 using FSAPortfolio.WebAPI.Mapping;
 using Newtonsoft.Json.Linq;
 using FSAPortfolio.Entities.Organisation;
+using FSAPortfolio.WebAPI.App;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -42,7 +43,11 @@ namespace FSAPortfolio.WebAPI.Controllers
                     }
 
                     // Record changes
-                    LogChanges(context, config, nameof(PortfolioLabelConfig), DateTime.Now);
+                    AuditProvider.LogChanges(
+                        context, 
+                        (ts, txt) => auditLogFactory(config, nameof(PortfolioLabelConfig), ts, txt), 
+                        context.PortfolioConfigAuditLogs, 
+                        DateTime.Now);
 
                     await context.SaveChangesAsync();
 
@@ -84,35 +89,15 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
-        private static void LogChanges(PortfolioContext context, PortfolioConfiguration con, string type, DateTime timestamp)
+        private PortfolioConfigAuditLog auditLogFactory(PortfolioConfiguration con, string type, DateTime timestamp, string text)
         {
-            var changes = context.ChangeTracker.Entries().Where(c => c.State == EntityState.Modified);
-            if (changes.Count() > 0)
+            return new PortfolioConfigAuditLog()
             {
-                var log = new PortfolioConfigAuditLog() { 
-                    Timestamp = timestamp,
-                    PortfolioConfiguration_Id = con.Id,
-                    AuditType = type
-                };
-                var logText = new List<string>();
-                foreach (var change in changes)
-                {
-                    var originalValues = change.OriginalValues;
-                    var currentValues = change.CurrentValues;
-                    foreach (string pname in originalValues.PropertyNames)
-                    {
-                        var originalValue = originalValues[pname];
-                        var currentValue = currentValues[pname];
-                        if (!Equals(originalValue, currentValue))
-                        {
-                            logText.Add($"{pname}: [{originalValue}] to [{currentValue}]");
-                        }
-                    }
-                }
-                log.Text = string.Join("; ", logText);
-                context.PortfolioConfigAuditLogs.Add(log);
-            }
+                Timestamp = timestamp,
+                PortfolioConfiguration_Id = con.Id,
+                AuditType = type,
+                Text = text
+            };
         }
-
     }
 }

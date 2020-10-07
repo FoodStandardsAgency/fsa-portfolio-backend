@@ -31,7 +31,13 @@ namespace FSAPortfolio.WebAPI.Controllers
                     // Load and map the project
                     var project = await ProjectWithIncludes(context).SingleAsync(p => p.ProjectId == update.project_id);
                     PortfolioMapper.Mapper.Map(update, project, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = context);
-                    LogChanges(context, project, timestamp);
+
+                    // Record changes
+                    AuditProvider.LogChanges(
+                        context,
+                        (ts, txt) => auditLogFactory(ts, txt),
+                        project.AuditLogs,
+                        DateTime.Now);
 
                     // Create a new update
                     var projectUpdate = new ProjectUpdateItem() { Project = project };
@@ -234,32 +240,13 @@ namespace FSAPortfolio.WebAPI.Controllers
                 .Include(p => p.Lead);
         }
 
-
-        private static void LogChanges(PortfolioContext context, Project project, DateTime timestamp)
+        private ProjectAuditLog auditLogFactory(DateTime timestamp, string text)
         {
-            var changes = context.ChangeTracker.Entries().Where(c => c.State == EntityState.Modified);
-            if (changes.Count() > 0)
+            return new ProjectAuditLog()
             {
-                var log = new ProjectAuditLog() { Timestamp = timestamp };
-                var logText = new List<string>();
-                foreach (var change in changes)
-                {
-                    var originalValues = change.OriginalValues;
-                    var currentValues = change.CurrentValues;
-                    foreach (string pname in originalValues.PropertyNames)
-                    {
-                        var originalValue = originalValues[pname];
-                        var currentValue = currentValues[pname];
-                        if (!Equals(originalValue, currentValue))
-                        {
-                            logText.Add($"{pname}: [{originalValue}] to [{currentValue}]");
-                        }
-                    }
-                }
-                log.Text = string.Join("; ", logText);
-                project.AuditLogs.Add(log);
-            }
+                Timestamp = timestamp,
+                Text = text
+            };
         }
-
     }
 }
