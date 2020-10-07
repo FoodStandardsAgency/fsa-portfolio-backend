@@ -8,7 +8,12 @@ namespace FSAPortfolio.Entities.Organisation
         Auto = 1,
         FreeText = 2,
         OptionList = 3,
-        PredefinedList = 4
+        PredefinedList = 4,
+        PredefinedField = 5,
+        Date = 6,
+        Percentage = 7,
+        RAGChoice = 8,
+        Budget = 9
     }
 
     public class PortfolioLabelConfig

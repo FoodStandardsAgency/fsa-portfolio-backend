@@ -52,5 +52,44 @@ namespace FSAPortfolio.WebAPI.Models
         public string g6team { get; set; }
         public string new_flag { get; set; }
         public DateTime? first_completed { get; set; }
+
+        // New fields
+        public string business_case_number { get; set; }
+        public string fs_number { get; set; }
+        public string risk_rating { get; set; }
+        public string theme { get; set; }
+        public string project_type { get; set; }
+        public string strategic_objectives { get; set; }
+        public string programme { get; set; }
+        public string programme_description { get; set; }
+
+
+        public string lead_team { get; set; }
+        public string key_contact1 { get; set; }
+        public string key_contact2 { get; set; }
+        public string key_contact3 { get; set; }
+        public string supplier { get; set; }
+        public string project_team { get; set; }
+
+
+        public string actual_end_date { get; set; }
+        public string milestones { get; set; }
+
+
+        public string how_get_green { get; set; }
+        public string forward_look { get; set; }
+        public string emerging_issues { get; set; }
+        public string progress_status { get; set; }
+        
+
+        public int forecast_spend { get; set; }
+        public int budget_field1 { get; set; }
+        public string cost_centre { get; set; }
+        public string fsa_proc_assurance_gate_number { get; set; }
+        public DateTime fsa_proc_assurance_gate_completed { get; set; }
+        public string fsa_proc_assurance_next_gate { get; set; }
+
+        
+
     }
 }
