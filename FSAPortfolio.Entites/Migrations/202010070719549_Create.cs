@@ -36,33 +36,27 @@
                 c => new
                     {
                         Id = c.Int(nullable: false),
-                        BCNumberLabel_Id = c.Int(),
                         CompletedPhase_Id = c.Int(),
-                        ProjectIdLabel_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.PortfolioLabelConfigs", t => t.BCNumberLabel_Id)
                 .ForeignKey("dbo.ProjectPhases", t => t.CompletedPhase_Id)
                 .ForeignKey("dbo.Portfolios", t => t.Id)
-                .ForeignKey("dbo.PortfolioLabelConfigs", t => t.ProjectIdLabel_Id)
                 .Index(t => t.Id)
-                .Index(t => t.BCNumberLabel_Id)
-                .Index(t => t.CompletedPhase_Id)
-                .Index(t => t.ProjectIdLabel_Id);
+                .Index(t => t.CompletedPhase_Id);
             
             CreateTable(
-                "dbo.PortfolioLabelConfigs",
+                "dbo.PortfolioConfigAuditLogs",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Included = c.Boolean(nullable: false),
-                        FieldName = c.String(maxLength: 50),
-                        Label = c.String(maxLength: 50),
-                        Configuration_Id = c.Int(nullable: false),
+                        PortfolioConfiguration_Id = c.Int(nullable: false),
+                        AuditType = c.String(maxLength: 50),
+                        Timestamp = c.DateTime(nullable: false),
+                        Text = c.String(),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.PortfolioConfigurations", t => t.Configuration_Id)
-                .Index(t => new { t.Configuration_Id, t.FieldName }, unique: true);
+                .ForeignKey("dbo.PortfolioConfigurations", t => t.PortfolioConfiguration_Id)
+                .Index(t => t.PortfolioConfiguration_Id);
             
             CreateTable(
                 "dbo.ProjectCategories",
@@ -93,6 +87,28 @@
                 .ForeignKey("dbo.PortfolioConfigurations", t => t.Configuration_Id)
                 .Index(t => new { t.Configuration_Id, t.ViewKey }, unique: true)
                 .Index(t => new { t.Configuration_Id, t.Name }, unique: true);
+            
+            CreateTable(
+                "dbo.PortfolioLabelConfigs",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Configuration_Id = c.Int(nullable: false),
+                        FieldName = c.String(maxLength: 50),
+                        FieldGroup = c.String(maxLength: 50),
+                        FieldTitle = c.String(maxLength: 50),
+                        FieldOrder = c.Int(nullable: false),
+                        Included = c.Boolean(nullable: false),
+                        AdminOnly = c.Boolean(nullable: false),
+                        ReadOnly = c.Boolean(nullable: false),
+                        Label = c.String(maxLength: 50),
+                        FieldType = c.Int(nullable: false),
+                        FieldTypeLocked = c.Boolean(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.PortfolioConfigurations", t => t.Configuration_Id)
+                .Index(t => new { t.Configuration_Id, t.FieldName }, unique: true)
+                .Index(t => new { t.Configuration_Id, t.FieldTitle }, unique: true);
             
             CreateTable(
                 "dbo.ProjectOnHoldStatus",
@@ -273,30 +289,30 @@
                 .Index(t => t.AccessGroupId);
             
             CreateTable(
-                "dbo.ProjectProjects",
+                "dbo.DependantProjects",
                 c => new
                     {
                         Project_Id = c.Int(nullable: false),
-                        Project_Id1 = c.Int(nullable: false),
+                        DependantProject_Id = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => new { t.Project_Id, t.Project_Id1 })
+                .PrimaryKey(t => new { t.Project_Id, t.DependantProject_Id })
                 .ForeignKey("dbo.Projects", t => t.Project_Id)
-                .ForeignKey("dbo.Projects", t => t.Project_Id1)
+                .ForeignKey("dbo.Projects", t => t.DependantProject_Id)
                 .Index(t => t.Project_Id)
-                .Index(t => t.Project_Id1);
+                .Index(t => t.DependantProject_Id);
             
             CreateTable(
-                "dbo.ProjectProject1",
+                "dbo.RelatedProjects",
                 c => new
                     {
                         Project_Id = c.Int(nullable: false),
-                        Project_Id1 = c.Int(nullable: false),
+                        RelatedProject_Id = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => new { t.Project_Id, t.Project_Id1 })
+                .PrimaryKey(t => new { t.Project_Id, t.RelatedProject_Id })
                 .ForeignKey("dbo.Projects", t => t.Project_Id)
-                .ForeignKey("dbo.Projects", t => t.Project_Id1)
+                .ForeignKey("dbo.Projects", t => t.RelatedProject_Id)
                 .Index(t => t.Project_Id)
-                .Index(t => t.Project_Id1);
+                .Index(t => t.RelatedProject_Id);
             
             CreateTable(
                 "dbo.PortfolioProjects",
@@ -318,14 +334,13 @@
             DropForeignKey("dbo.Users", "AccessGroupId", "dbo.AccessGroups");
             DropForeignKey("dbo.ProjectRAGStatus", "Configuration_Id", "dbo.PortfolioConfigurations");
             DropForeignKey("dbo.ProjectSizes", "Configuration_Id", "dbo.PortfolioConfigurations");
-            DropForeignKey("dbo.PortfolioConfigurations", "ProjectIdLabel_Id", "dbo.PortfolioLabelConfigs");
             DropForeignKey("dbo.PortfolioProjects", "Project_Id", "dbo.Projects");
             DropForeignKey("dbo.PortfolioProjects", "Portfolio_Id", "dbo.Portfolios");
             DropForeignKey("dbo.ProjectUpdateItems", "Project_Id", "dbo.Projects");
             DropForeignKey("dbo.Projects", "ProjectSize_Id", "dbo.ProjectSizes");
             DropForeignKey("dbo.Projects", "ServiceLead_Id", "dbo.People");
-            DropForeignKey("dbo.ProjectProject1", "Project_Id1", "dbo.Projects");
-            DropForeignKey("dbo.ProjectProject1", "Project_Id", "dbo.Projects");
+            DropForeignKey("dbo.RelatedProjects", "RelatedProject_Id", "dbo.Projects");
+            DropForeignKey("dbo.RelatedProjects", "Project_Id", "dbo.Projects");
             DropForeignKey("dbo.Projects", "OwningPortfolio_Id", "dbo.Portfolios");
             DropForeignKey("dbo.Projects", "Lead_Id", "dbo.People");
             DropForeignKey("dbo.Projects", "LatestUpdate_Id", "dbo.ProjectUpdateItems");
@@ -334,8 +349,8 @@
             DropForeignKey("dbo.ProjectUpdateItems", "Phase_Id", "dbo.ProjectPhases");
             DropForeignKey("dbo.ProjectUpdateItems", "Person_Id", "dbo.People");
             DropForeignKey("dbo.ProjectUpdateItems", "OnHoldStatus_Id", "dbo.ProjectOnHoldStatus");
-            DropForeignKey("dbo.ProjectProjects", "Project_Id1", "dbo.Projects");
-            DropForeignKey("dbo.ProjectProjects", "Project_Id", "dbo.Projects");
+            DropForeignKey("dbo.DependantProjects", "DependantProject_Id", "dbo.Projects");
+            DropForeignKey("dbo.DependantProjects", "Project_Id", "dbo.Projects");
             DropForeignKey("dbo.Projects", "ProjectCategory_Id", "dbo.ProjectCategories");
             DropForeignKey("dbo.Projects", "BudgetType_Id", "dbo.BudgetTypes");
             DropForeignKey("dbo.ProjectAuditLogs", "Project_Id", "dbo.Projects");
@@ -346,13 +361,13 @@
             DropForeignKey("dbo.PortfolioConfigurations", "CompletedPhase_Id", "dbo.ProjectPhases");
             DropForeignKey("dbo.ProjectCategories", "Configuration_Id", "dbo.PortfolioConfigurations");
             DropForeignKey("dbo.BudgetTypes", "Configuration_Id", "dbo.PortfolioConfigurations");
-            DropForeignKey("dbo.PortfolioConfigurations", "BCNumberLabel_Id", "dbo.PortfolioLabelConfigs");
+            DropForeignKey("dbo.PortfolioConfigAuditLogs", "PortfolioConfiguration_Id", "dbo.PortfolioConfigurations");
             DropIndex("dbo.PortfolioProjects", new[] { "Project_Id" });
             DropIndex("dbo.PortfolioProjects", new[] { "Portfolio_Id" });
-            DropIndex("dbo.ProjectProject1", new[] { "Project_Id1" });
-            DropIndex("dbo.ProjectProject1", new[] { "Project_Id" });
-            DropIndex("dbo.ProjectProjects", new[] { "Project_Id1" });
-            DropIndex("dbo.ProjectProjects", new[] { "Project_Id" });
+            DropIndex("dbo.RelatedProjects", new[] { "RelatedProject_Id" });
+            DropIndex("dbo.RelatedProjects", new[] { "Project_Id" });
+            DropIndex("dbo.DependantProjects", new[] { "DependantProject_Id" });
+            DropIndex("dbo.DependantProjects", new[] { "Project_Id" });
             DropIndex("dbo.Users", new[] { "AccessGroupId" });
             DropIndex("dbo.ProjectSizes", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.ProjectSizes", new[] { "Configuration_Id", "ViewKey" });
@@ -378,20 +393,20 @@
             DropIndex("dbo.Portfolios", new[] { "ViewKey" });
             DropIndex("dbo.ProjectOnHoldStatus", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.ProjectOnHoldStatus", new[] { "Configuration_Id", "ViewKey" });
+            DropIndex("dbo.PortfolioLabelConfigs", new[] { "Configuration_Id", "FieldTitle" });
+            DropIndex("dbo.PortfolioLabelConfigs", new[] { "Configuration_Id", "FieldName" });
             DropIndex("dbo.ProjectPhases", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.ProjectPhases", new[] { "Configuration_Id", "ViewKey" });
             DropIndex("dbo.ProjectCategories", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.ProjectCategories", new[] { "Configuration_Id", "ViewKey" });
-            DropIndex("dbo.PortfolioLabelConfigs", new[] { "Configuration_Id", "FieldName" });
-            DropIndex("dbo.PortfolioConfigurations", new[] { "ProjectIdLabel_Id" });
+            DropIndex("dbo.PortfolioConfigAuditLogs", new[] { "PortfolioConfiguration_Id" });
             DropIndex("dbo.PortfolioConfigurations", new[] { "CompletedPhase_Id" });
-            DropIndex("dbo.PortfolioConfigurations", new[] { "BCNumberLabel_Id" });
             DropIndex("dbo.PortfolioConfigurations", new[] { "Id" });
             DropIndex("dbo.BudgetTypes", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.BudgetTypes", new[] { "Configuration_Id", "ViewKey" });
             DropTable("dbo.PortfolioProjects");
-            DropTable("dbo.ProjectProject1");
-            DropTable("dbo.ProjectProjects");
+            DropTable("dbo.RelatedProjects");
+            DropTable("dbo.DependantProjects");
             DropTable("dbo.Users");
             DropTable("dbo.ProjectSizes");
             DropTable("dbo.ProjectRAGStatus");
@@ -401,9 +416,10 @@
             DropTable("dbo.Projects");
             DropTable("dbo.Portfolios");
             DropTable("dbo.ProjectOnHoldStatus");
+            DropTable("dbo.PortfolioLabelConfigs");
             DropTable("dbo.ProjectPhases");
             DropTable("dbo.ProjectCategories");
-            DropTable("dbo.PortfolioLabelConfigs");
+            DropTable("dbo.PortfolioConfigAuditLogs");
             DropTable("dbo.PortfolioConfigurations");
             DropTable("dbo.BudgetTypes");
             DropTable("dbo.AccessGroups");

@@ -54,21 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\202010031809064_Create.cs" />
-    <Compile Include="Migrations\202010031809064_Create.designer.cs">
-      <DependentUpon>202010031809064_Create.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010051210111_PortfolioConfig1.cs" />
-    <Compile Include="Migrations\202010051210111_PortfolioConfig1.designer.cs">
-      <DependentUpon>202010051210111_PortfolioConfig1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010051316342_PortfolioConfig2.cs" />
-    <Compile Include="Migrations\202010051316342_PortfolioConfig2.designer.cs">
-      <DependentUpon>202010051316342_PortfolioConfig2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010051943262_PortfolioConfig3.cs" />
-    <Compile Include="Migrations\202010051943262_PortfolioConfig3.designer.cs">
-      <DependentUpon>202010051943262_PortfolioConfig3.cs</DependentUpon>
+    <Compile Include="Migrations\202010070719549_Create.cs" />
+    <Compile Include="Migrations\202010070719549_Create.designer.cs">
+      <DependentUpon>202010070719549_Create.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
@@ -100,17 +88,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202010031809064_Create.resx">
-      <DependentUpon>202010031809064_Create.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010051210111_PortfolioConfig1.resx">
-      <DependentUpon>202010051210111_PortfolioConfig1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010051316342_PortfolioConfig2.resx">
-      <DependentUpon>202010051316342_PortfolioConfig2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010051943262_PortfolioConfig3.resx">
-      <DependentUpon>202010051943262_PortfolioConfig3.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202010070719549_Create.resx">
+      <DependentUpon>202010070719549_Create.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

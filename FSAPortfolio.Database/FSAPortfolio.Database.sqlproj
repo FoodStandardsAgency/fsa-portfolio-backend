@@ -79,10 +79,6 @@
     <Build Include="dbo\Views\latest_projects.sql" />
     <Build Include="dbo\Views\latest_project_with_update_date.sql" />
     <Build Include="dbo\Views\completed_time.sql" />
-    <None Include="Deployment\01_Create.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Deployment\01_RenameRelatedProjects.sql" />
-    <None Include="Deployment\02_RemoveConfigurationLabels.sql" />
+    <Build Include="Deployment\00_Create.sql" />
   </ItemGroup>
 </Project>
