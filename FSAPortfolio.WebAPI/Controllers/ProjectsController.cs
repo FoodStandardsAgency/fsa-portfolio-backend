@@ -13,6 +13,7 @@ using FSAPortfolio.WebAPI.Mapping;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.PostgreSQL.Projects;
 using System.Text;
+using FSAPortfolio.WebAPI.DTO;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -29,7 +30,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                     var timestamp = DateTime.Now;
 
                     // Load and map the project
-                    var project = await ProjectWithIncludes(context).SingleAsync(p => p.ProjectId == update.project_id);
+                    var project = await context.Projects.ProjectIncludes().SingleAsync(p => p.ProjectId == update.project_id);
                     PortfolioMapper.Mapper.Map(update, project, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = context);
 
                     // Record changes
@@ -111,14 +112,19 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ProjectModel> Get(string projectId)
+        public async Task<GetProjectDTO> Get(string projectId)
         {
             try
             {
                 using (var context = new PortfolioContext())
                 {
-                    var project = (from p in ProjectWithIncludes(context) where p.ProjectId == projectId select p).Single();
-                    var result = PortfolioMapper.Mapper.Map<ProjectModel>(project);
+                    var project = (from p in context.Projects.ProjectIncludes().ConfigIncludes()
+                                   where p.ProjectId == projectId select p).Single();
+                    var result = new GetProjectDTO()
+                    {
+                        Config = PortfolioMapper.Mapper.Map<PortfolioConfigModel>(project.OwningPortfolio.Configuration),
+                        Project = PortfolioMapper.Mapper.Map<ProjectModel>(project)
+                    };
                     return result;
                 }
             }
@@ -149,7 +155,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 using (var context = new PortfolioContext())
                 {
-                    var projects = await ProjectWithIncludes(context)
+                    var projects = await context.Projects.ProjectIncludes()
                         .Where(p => p.ProjectId == projectId)
                         .SelectMany(p => p.RelatedProjects)
                         .ToListAsync();
@@ -170,7 +176,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 using (var context = new PortfolioContext())
                 {
-                    var projects = await ProjectWithIncludes(context)
+                    var projects = await context.Projects.ProjectIncludes()
                         .Where(p => p.ProjectId == projectId)
                         .SelectMany(p => p.DependantProjects)
                         .ToListAsync(); ;
@@ -219,25 +225,7 @@ namespace FSAPortfolio.WebAPI.Controllers
 
         private static IQueryable<Project> ProjectWithIncludes(PortfolioContext context, string portfolio)
         {
-            return ProjectWithIncludes(context).Where(p => p.Portfolios.Any(po => po.ViewKey == portfolio));
-        }
-
-        private static IQueryable<Project> ProjectWithIncludes(PortfolioContext context)
-        {
-            return context.Projects
-                .Include(p => p.Category)
-                .Include(p => p.FirstUpdate.OnHoldStatus)
-                .Include(p => p.FirstUpdate.RAGStatus)
-                .Include(p => p.FirstUpdate.Phase)
-                .Include(p => p.LatestUpdate.OnHoldStatus)
-                .Include(p => p.LatestUpdate.RAGStatus)
-                .Include(p => p.LatestUpdate.Phase)
-                .Include(p => p.Category)
-                .Include(p => p.Size)
-                .Include(p => p.BudgetType)
-                .Include(p => p.RelatedProjects)
-                .Include(p => p.DependantProjects)
-                .Include(p => p.Lead);
+            return context.Projects.ProjectIncludes().Where(p => p.Portfolios.Any(po => po.ViewKey == portfolio));
         }
 
         private ProjectAuditLog auditLogFactory(DateTime timestamp, string text)

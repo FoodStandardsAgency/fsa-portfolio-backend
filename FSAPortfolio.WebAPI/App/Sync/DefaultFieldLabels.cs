@@ -70,7 +70,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 factory(FieldGroupName_ProjectTeam, "Key contact 2", nameof(ProjectModel.key_contact2), false, false, PortfolioFieldType.PredefinedField, true),
                 factory(FieldGroupName_ProjectTeam, "Key contact 3", nameof(ProjectModel.key_contact3), false, false, PortfolioFieldType.PredefinedField, true),
                 factory(FieldGroupName_ProjectTeam, "Supplier", nameof(ProjectModel.supplier), false, false, PortfolioFieldType.FreeText, true),
-                factory(FieldGroupName_ProjectTeam, "Project team", nameof(ProjectModel.project_team), false, false, PortfolioFieldType.PredefinedField, true),
+                factory(FieldGroupName_ProjectTeam, "Project team", nameof(ProjectModel.team), false, false, PortfolioFieldType.PredefinedField, true),
 
                 factory(FieldGroupName_ProjectPlan, "Intended start date", nameof(ProjectModel.start_date), false, false, PortfolioFieldType.Date, true),
                 factory(FieldGroupName_ProjectPlan, "Actual start date", nameof(ProjectModel.actstart), false, false, PortfolioFieldType.Date, true),

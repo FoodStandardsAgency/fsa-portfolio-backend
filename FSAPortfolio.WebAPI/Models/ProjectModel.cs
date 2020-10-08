@@ -69,7 +69,6 @@ namespace FSAPortfolio.WebAPI.Models
         public string key_contact2 { get; set; }
         public string key_contact3 { get; set; }
         public string supplier { get; set; }
-        public string project_team { get; set; }
 
 
         public string actual_end_date { get; set; }

@@ -214,7 +214,6 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.key_contact2, o => o.Ignore())
                 .ForMember(p => p.key_contact3, o => o.Ignore())
                 .ForMember(p => p.supplier, o => o.Ignore())
-                .ForMember(p => p.project_team, o => o.Ignore())
                 .ForMember(p => p.actual_end_date, o => o.Ignore())
                 .ForMember(p => p.milestones, o => o.Ignore())
                 .ForMember(p => p.how_get_green, o => o.Ignore())
