@@ -196,7 +196,20 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
             if(portfolio == null)
             {
-                portfolio = new Portfolio() { ViewKey = viewKey };
+                portfolio = new Portfolio() { 
+                    ViewKey = viewKey,
+                    Configuration = new PortfolioConfiguration()
+                    {
+                        Phases = new List<ProjectPhase>(),
+                        OnHoldStatuses = new List<ProjectOnHoldStatus>(),
+                        RAGStatuses = new List<ProjectRAGStatus>(),
+                        Categories = new List<ProjectCategory>(),
+                        ProjectSizes = new List<ProjectSize>(),
+                        BudgetTypes = new List<BudgetType>(),
+                        LabelGroups = new List<PortfolioLabelGroup>(),
+                        Labels = new List<PortfolioLabelConfig>()
+                    }
+                };
                 context.Portfolios.Add(portfolio);
             }
             portfolio.Name = name;
