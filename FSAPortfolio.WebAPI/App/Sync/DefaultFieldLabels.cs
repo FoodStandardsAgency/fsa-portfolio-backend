@@ -13,6 +13,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
     {
         private PortfolioConfiguration config;
 
+        internal const string FieldGroupName_Ungrouped = "Ungrouped fields";
         internal const string FieldGroupName_ProjectIDs = "Project IDs";
         internal const string FieldGroupName_AboutTheProject = "About the project";
         internal const string FieldGroupName_ProjectTeam = "Project team";
