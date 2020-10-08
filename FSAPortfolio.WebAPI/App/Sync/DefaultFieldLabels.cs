@@ -41,14 +41,14 @@ namespace FSAPortfolio.WebAPI.App.Sync
         {
             return new PortfolioLabelConfig[]
             {
-                //      FieldGroup      FieldTitle     FieldName                    Included Readonly FieldType FieldTypeLocked
+                //      FieldGroup      FieldTitle     FieldName                    Included IncludeLock FieldType FieldTypeLocked
                 factory(FieldGroupName_ProjectIDs, "Project ID", nameof(ProjectModel.project_id), true, true, PortfolioFieldType.Auto, true),
-                factory(FieldGroupName_ProjectIDs, "Business Case Number", nameof(ProjectModel.business_case_number), false, true, PortfolioFieldType.FreeText, false),
-                factory(FieldGroupName_ProjectIDs, "FS Number", nameof(ProjectModel.fs_number), false, true, PortfolioFieldType.FreeText, false),
+                factory(FieldGroupName_ProjectIDs, "Business Case Number", nameof(ProjectModel.business_case_number), false, false, PortfolioFieldType.FreeText, false),
+                factory(FieldGroupName_ProjectIDs, "FS Number", nameof(ProjectModel.fs_number), false, false, PortfolioFieldType.FreeText, false),
 
                 factory(FieldGroupName_AboutTheProject, "Project name", nameof(ProjectModel.project_name), true, true, PortfolioFieldType.FreeText, true),
-                factory(FieldGroupName_AboutTheProject, "Short description", nameof(ProjectModel.short_desc), false, true, PortfolioFieldType.FreeText, false),
-                factory(FieldGroupName_AboutTheProject, "Risk rating", nameof(ProjectModel.risk_rating), false, true, PortfolioFieldType.OptionList, false),
+                factory(FieldGroupName_AboutTheProject, "Short description", nameof(ProjectModel.short_desc), false, false, PortfolioFieldType.FreeText, false),
+                factory(FieldGroupName_AboutTheProject, "Risk rating", nameof(ProjectModel.risk_rating), false, false, PortfolioFieldType.OptionList, false),
                 factory(FieldGroupName_AboutTheProject, "Theme", nameof(ProjectModel.theme), false, false, PortfolioFieldType.OptionList, false),
                 factory(FieldGroupName_AboutTheProject, "Project type", nameof(ProjectModel.project_type), false, false, PortfolioFieldType.OptionList, false),
                 factory(FieldGroupName_AboutTheProject, "Project size", nameof(ProjectModel.project_size), false, false, PortfolioFieldType.OptionList, false),
