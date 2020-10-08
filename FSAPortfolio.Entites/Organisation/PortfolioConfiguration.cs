@@ -21,6 +21,7 @@ namespace FSAPortfolio.Entities.Organisation
         public virtual ICollection<BudgetType> BudgetTypes { get; set; }
 
         public virtual ICollection<PortfolioLabelConfig> Labels { get; set; }
+        public virtual ICollection<PortfolioLabelGroup> LabelGroups { get; set; }
 
         public virtual ICollection<PortfolioConfigAuditLog> AuditLogs { get; set; }
 

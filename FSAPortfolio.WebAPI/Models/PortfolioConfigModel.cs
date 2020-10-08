@@ -21,7 +21,10 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("fieldgroup")]
         public string FieldGroup { get; set; }
 
-        [JsonProperty("order")]
+        [JsonProperty("grouporder")]
+        public int? GroupOrder { get; set; }
+
+        [JsonProperty("fieldorder")]
         public int FieldOrder { get; set; }
 
         [JsonProperty("fieldtitle")]

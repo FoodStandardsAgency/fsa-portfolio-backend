@@ -23,14 +23,21 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             using (var context = new PortfolioContext())
             {
-                var portfolio = await context.Portfolios.Include(p => p.Configuration.Labels).SingleAsync(p => p.ViewKey == labelRequest.ViewKey);
+                var portfolio = await context.Portfolios
+                    .Include(p => p.Configuration.Labels)
+                    .Include(p => p.Configuration.LabelGroups)
+                    .SingleAsync(p => p.ViewKey == labelRequest.ViewKey);
                 var label = portfolio.Configuration.Labels.SingleOrDefault(l => l.FieldName == labelRequest.FieldName);
-                if(label == null)
+                var group = labelRequest.FieldGroup == null ? null : portfolio.Configuration.LabelGroups.Single(l => l.Name == labelRequest.FieldGroup);
+                if (label == null)
                 {
-                    label = new PortfolioLabelConfig() { FieldName = labelRequest.FieldName };
+                    label = new PortfolioLabelConfig();
                     portfolio.Configuration.Labels.Add(label);
                 }
+
+                // Update the label's fields
                 label = PortfolioMapper.Mapper.Map(labelRequest, label);
+                label.Group = group;
 
                 // Save
                 await context.SaveChangesAsync();

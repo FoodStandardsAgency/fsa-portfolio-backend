@@ -58,6 +58,10 @@
     <Compile Include="Migrations\202010070719549_Create.designer.cs">
       <DependentUpon>202010070719549_Create.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010081015485_01_LabelGroups.cs" />
+    <Compile Include="Migrations\202010081015485_01_LabelGroups.designer.cs">
+      <DependentUpon>202010081015485_01_LabelGroups.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
     <Compile Include="Organisation\Portfolio.cs" />
@@ -90,6 +94,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202010070719549_Create.resx">
       <DependentUpon>202010070719549_Create.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010081015485_01_LabelGroups.resx">
+      <DependentUpon>202010081015485_01_LabelGroups.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

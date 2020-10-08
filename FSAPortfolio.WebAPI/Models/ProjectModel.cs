@@ -85,9 +85,9 @@ namespace FSAPortfolio.WebAPI.Models
         public int forecast_spend { get; set; }
         public int budget_field1 { get; set; }
         public string cost_centre { get; set; }
-        public string fsa_proc_assurance_gate_number { get; set; }
-        public DateTime fsa_proc_assurance_gate_completed { get; set; }
-        public string fsa_proc_assurance_next_gate { get; set; }
+        public string fsaproc_assurance_gatenumber { get; set; }
+        public DateTime fsaproc_assurance_gatecompleted { get; set; }
+        public string fsaproc_assurance_nextgate { get; set; }
 
         
 

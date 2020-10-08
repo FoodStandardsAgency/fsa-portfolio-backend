@@ -224,9 +224,9 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.forecast_spend, o => o.Ignore())
                 .ForMember(p => p.budget_field1, o => o.Ignore())
                 .ForMember(p => p.cost_centre, o => o.Ignore())
-                .ForMember(p => p.fsa_proc_assurance_gate_number, o => o.Ignore())
-                .ForMember(p => p.fsa_proc_assurance_gate_completed, o => o.Ignore())
-                .ForMember(p => p.fsa_proc_assurance_next_gate, o => o.Ignore())
+                .ForMember(p => p.fsaproc_assurance_gatenumber, o => o.Ignore())
+                .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.Ignore())
+                .ForMember(p => p.fsaproc_assurance_nextgate, o => o.Ignore())
                 ;
         }
 

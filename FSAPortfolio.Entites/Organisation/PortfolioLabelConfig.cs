@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace FSAPortfolio.Entities.Organisation
 {
@@ -27,12 +29,8 @@ namespace FSAPortfolio.Entities.Organisation
         public string FieldName { get; set; }
 
         [StringLength(50)]
-        public string FieldGroup { get; set; }
-
-        [StringLength(50)]
         public string FieldTitle { get; set; }
         public int FieldOrder { get; set; }
-
 
         public bool Included { get; set; }
         public bool AdminOnly { get; set; }
@@ -44,5 +42,23 @@ namespace FSAPortfolio.Entities.Organisation
 
         public PortfolioFieldType FieldType { get; set; }
         public bool FieldTypeLocked { get; set; }
+
+        public virtual PortfolioLabelGroup Group { get; set; }
+    }
+
+    public class PortfolioLabelGroup
+    {
+        public int Id { get; set; }
+
+        public virtual PortfolioConfiguration Configuration { get; set; }
+        public int Configuration_Id { get; set; }
+
+
+        [StringLength(50)]
+        public string Name { get; set; }
+
+        public int Order { get; set; }
+
+        public virtual ICollection<PortfolioLabelConfig> Labels { get; set; }
     }
 }

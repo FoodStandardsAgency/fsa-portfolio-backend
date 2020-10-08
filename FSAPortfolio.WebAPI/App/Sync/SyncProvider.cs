@@ -172,9 +172,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
             using (var context = new PortfolioContext())
             {
-                foreach (var config in context.PortfolioConfigurations)
+                foreach (var config in context.PortfolioConfigurations.Include(c => c.LabelGroups).ToList())
                 {
-                    context.PortfolioConfigurationLabels.AddOrUpdate(l => new { l.Configuration_Id, l.FieldName },  DefaultFieldLabels.GetDefaultLabels(config.Id).ToArray());
+                    var defaults = new DefaultFieldLabels(config);
+                    context.PortfolioConfigurationLabels.AddOrUpdate(l => new { l.Configuration_Id, l.FieldName },  defaults.GetDefaultLabels());
                 }
                 context.SaveChanges();
             }
@@ -182,74 +183,138 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
         private void AddPortfolio(PortfolioContext context, string name, string shortName, string viewKey)
         {
-            if (!context.Portfolios.Any(p => p.ViewKey == viewKey))
-            {
-                Func<string, ProjectPhase> phaseFactory = (k) => new ProjectPhase() { Name = phaseMap[k], ViewKey = k };
-                Func<string, ProjectOnHoldStatus> onHoldFactory = (k) => new ProjectOnHoldStatus() { Name = onholdMap[k], ViewKey = k };
-                Func<string, ProjectRAGStatus> ragFactory = (k) => new ProjectRAGStatus() { Name = ragMap[k], ViewKey = k };
-                Func<string, ProjectCategory> categoryFactory = (k) => new ProjectCategory() { Name = categoryMap[k], ViewKey = k };
-                Func<string, ProjectSize> sizeFactory = (k) => new ProjectSize() { Name = sizeMap[k], ViewKey = k };
-                Func<string, BudgetType> budgetTypeFactory = (k) => new BudgetType() { Name = budgetTypeMap[k], ViewKey = k };
+            var portfolio = context.Portfolios
+                .Include(p => p.Configuration.Phases)
+                .Include(p => p.Configuration.OnHoldStatuses)
+                .Include(p => p.Configuration.RAGStatuses)
+                .Include(p => p.Configuration.Categories)
+                .Include(p => p.Configuration.ProjectSizes)
+                .Include(p => p.Configuration.BudgetTypes)
+                .Include(p => p.Configuration.LabelGroups)
+                .Include(p => p.Configuration.Labels)
+                .SingleOrDefault(p => p.ViewKey == viewKey);
 
-                var portfolio = new Portfolio()
-                {
-                    Name = name,
-                    ShortName = shortName,
-                    ViewKey = viewKey,
-                    Configuration = new PortfolioConfiguration()
-                    {
-                        Phases = new List<ProjectPhase>()
-                        {
-                            phaseFactory("backlog"),
-                            phaseFactory("discovery"),
-                            phaseFactory("alpha"),
-                            phaseFactory("beta"),
-                            phaseFactory("live"),
-                            phaseFactory("completed")
-                        },
-                        RAGStatuses = new List<ProjectRAGStatus>()
-                        {
-                            ragFactory("red"),
-                            ragFactory("amb"),
-                            ragFactory("gre"),
-                            ragFactory("nor")
-                        },
-                        OnHoldStatuses = new List<ProjectOnHoldStatus>()
-                        {
-                            onHoldFactory("n"),
-                            onHoldFactory("y"),
-                            onHoldFactory("b"),
-                            onHoldFactory("c")
-                        },
-                        Categories = new List<ProjectCategory>()
-                        {
-                            categoryFactory("cap"),
-                            categoryFactory("data"),
-                            categoryFactory("sm"),
-                            categoryFactory("ser"),
-                            categoryFactory("it"),
-                            categoryFactory("res"),
-                            new ProjectCategory() { Name = CategoryConstants.NotSetName }
-                        },
-                        ProjectSizes = new List<ProjectSize>()
-                        {
-                            sizeFactory("s"),
-                            sizeFactory("m"),
-                            sizeFactory("l"),
-                            sizeFactory("x"),
-                            new ProjectSize() { Name = ProjectSizeConstants.NotSetName }
-                        },
-                        BudgetTypes = new List<BudgetType>()
-                        {
-                            budgetTypeFactory("admin"),
-                            budgetTypeFactory("progr"),
-                            budgetTypeFactory("capit"),
-                            new BudgetType() { Name = BudgetTypeConstants.NotSetName }
-                        }
-                    }
-                };
+            if(portfolio == null)
+            {
+                portfolio = new Portfolio() { ViewKey = viewKey };
                 context.Portfolios.Add(portfolio);
             }
+            portfolio.Name = name;
+            portfolio.ShortName = shortName;
+
+            Func<string, ProjectPhase> phaseFactory = (k) => {
+                var phase = portfolio.Configuration.Phases.SingleOrDefault(p => p.ViewKey == k);
+                if (phase == null)
+                {
+                    phase = new ProjectPhase() { ViewKey = k };
+                    portfolio.Configuration.Phases.Add(phase);
+                }
+                phase.Name = phaseMap[k];
+                return phase;
+            };
+            Func<string, ProjectOnHoldStatus> onHoldFactory = (k) =>
+            {
+                var onhold = portfolio.Configuration.OnHoldStatuses.SingleOrDefault(p => p.ViewKey == k);
+                if (onhold == null)
+                {
+                    onhold = new ProjectOnHoldStatus() { ViewKey = k };
+                    portfolio.Configuration.OnHoldStatuses.Add(onhold);
+                }
+                onhold.Name = onholdMap[k];
+                return onhold;
+            };
+            Func<string, ProjectRAGStatus> ragFactory = (k) =>
+            {
+                var rag = portfolio.Configuration.RAGStatuses.SingleOrDefault(p => p.ViewKey == k);
+                if (rag == null)
+                {
+                    rag = new ProjectRAGStatus() { ViewKey = k };
+                    portfolio.Configuration.RAGStatuses.Add(rag);
+                }
+                rag.Name = ragMap[k];
+                return rag;
+            };
+            Func<string, ProjectCategory> categoryFactory = (k) =>
+            {
+                var category = portfolio.Configuration.Categories.SingleOrDefault(p => p.ViewKey == k);
+                if (category == null)
+                {
+                    category = new ProjectCategory() { ViewKey = k };
+                    portfolio.Configuration.Categories.Add(category);
+                }
+                category.Name = categoryMap[k];
+                return category;
+            };
+            Func<string, ProjectSize> sizeFactory = (k) =>
+            {
+                var projectSize = portfolio.Configuration.ProjectSizes.SingleOrDefault(p => p.ViewKey == k);
+                if (projectSize == null)
+                {
+                    projectSize = new ProjectSize() { ViewKey = k };
+                    portfolio.Configuration.ProjectSizes.Add(projectSize);
+                }
+                projectSize.Name = sizeMap[k];
+                return projectSize;
+            };
+            Func<string, BudgetType> budgetTypeFactory = (k) =>
+            {
+                var budgetType = portfolio.Configuration.BudgetTypes.SingleOrDefault(p => p.ViewKey == k);
+                if (budgetType == null)
+                {
+                    budgetType = new BudgetType() { ViewKey = k };
+                    portfolio.Configuration.BudgetTypes.Add(budgetType);
+                }
+                budgetType.Name = budgetTypeMap[k];
+                return budgetType;
+            };
+            Func<string, int, PortfolioLabelGroup> labelGroupFactory = (n, o) =>
+            {
+                var group = portfolio.Configuration.LabelGroups.SingleOrDefault(p => p.Name == n);
+                if (group == null)
+                {
+                    group = new PortfolioLabelGroup() { Name = n };
+                    portfolio.Configuration.LabelGroups.Add(group);
+                }
+                group.Order = o;
+                return group;
+            };
+
+            phaseFactory("backlog");
+            phaseFactory("discovery");
+            phaseFactory("alpha");
+            phaseFactory("beta");
+            phaseFactory("live");
+            phaseFactory("completed");
+            ragFactory("red");
+            ragFactory("amb");
+            ragFactory("gre");
+            ragFactory("nor");
+            onHoldFactory("n");
+            onHoldFactory("y");
+            onHoldFactory("b");
+            onHoldFactory("c");
+            categoryFactory("cap");
+            categoryFactory("data");
+            categoryFactory("sm");
+            categoryFactory("ser");
+            categoryFactory("it");
+            categoryFactory("res");
+            sizeFactory("s");
+            sizeFactory("m");
+            sizeFactory("l");
+            sizeFactory("x");
+            budgetTypeFactory("admin");
+            budgetTypeFactory("progr");
+            budgetTypeFactory("capit");
+            labelGroupFactory(DefaultFieldLabels.FieldGroupName_ProjectIDs, 0);
+            labelGroupFactory(DefaultFieldLabels.FieldGroupName_AboutTheProject, 1);
+            labelGroupFactory(DefaultFieldLabels.FieldGroupName_ProjectTeam, 2);
+            labelGroupFactory(DefaultFieldLabels.FieldGroupName_ProjectPlan, 3);
+            labelGroupFactory(DefaultFieldLabels.FieldGroupName_ProgressIndicators, 4);
+            labelGroupFactory(DefaultFieldLabels.FieldGroupName_Updates, 5);
+            labelGroupFactory(DefaultFieldLabels.FieldGroupName_Prioritisation, 6);
+            labelGroupFactory(DefaultFieldLabels.FieldGroupName_Budget, 7);
+            labelGroupFactory(DefaultFieldLabels.FieldGroupName_FSAProcesses, 8);
         }
 
         internal void SyncAllProjects()
