@@ -131,7 +131,7 @@ namespace FSAPortfolio.WebAPI.Mapping
 
                 .ForMember(p => p.pgroup, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
-                .ForMember(p => p.toupdate, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.toupdate, o => o.Ignore()) // No longer required.
                 .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.ProjectId))))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.ProjectId))))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
@@ -182,7 +182,6 @@ namespace FSAPortfolio.WebAPI.Mapping
 
                 .ForMember(p => p.pgroup, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
-                .ForMember(p => p.toupdate, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.ProjectId))))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.ProjectId))))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
@@ -209,7 +208,6 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.strategic_objectives, o => o.Ignore())
                 .ForMember(p => p.programme, o => o.Ignore())
                 .ForMember(p => p.programme_description, o => o.Ignore())
-                .ForMember(p => p.lead_team, o => o.Ignore())
                 .ForMember(p => p.key_contact1, o => o.Ignore())
                 .ForMember(p => p.key_contact2, o => o.Ignore())
                 .ForMember(p => p.key_contact3, o => o.Ignore())
@@ -219,7 +217,6 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.how_get_green, o => o.Ignore())
                 .ForMember(p => p.forward_look, o => o.Ignore())
                 .ForMember(p => p.emerging_issues, o => o.Ignore())
-                .ForMember(p => p.progress_status, o => o.Ignore())
                 .ForMember(p => p.forecast_spend, o => o.Ignore())
                 .ForMember(p => p.budget_field1, o => o.Ignore())
                 .ForMember(p => p.cost_centre, o => o.Ignore())

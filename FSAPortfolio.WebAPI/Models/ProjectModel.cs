@@ -33,7 +33,6 @@ namespace FSAPortfolio.WebAPI.Models
         public DateTime timestamp { get; set; }
         public string pgroup { get; set; }
         public string link { get; set; }
-        public string toupdate { get; set; }
         public string rels { get; set; }
         public string team { get; set; }
         public string onhold { get; set; }
@@ -64,7 +63,6 @@ namespace FSAPortfolio.WebAPI.Models
         public string programme_description { get; set; }
 
 
-        public string lead_team { get; set; }
         public string key_contact1 { get; set; }
         public string key_contact2 { get; set; }
         public string key_contact3 { get; set; }
@@ -78,7 +76,6 @@ namespace FSAPortfolio.WebAPI.Models
         public string how_get_green { get; set; }
         public string forward_look { get; set; }
         public string emerging_issues { get; set; }
-        public string progress_status { get; set; }
         
 
         public int forecast_spend { get; set; }

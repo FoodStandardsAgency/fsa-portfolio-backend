@@ -65,7 +65,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                 factory(FieldGroupName_ProjectTeam, "Project lead", nameof(ProjectModel.oddlead), false, false, PortfolioFieldType.PredefinedField, true),
                 factory(FieldGroupName_ProjectTeam, "Lead role", nameof(ProjectModel.oddlead_role), false, false, PortfolioFieldType.OptionList, true),
-                factory(FieldGroupName_ProjectTeam, "Lead team", nameof(ProjectModel.lead_team), false, false, PortfolioFieldType.OptionList, true),
+                factory(FieldGroupName_ProjectTeam, "Lead team", nameof(ProjectModel.g6team), false, false, PortfolioFieldType.OptionList, true),
                 factory(FieldGroupName_ProjectTeam, "Key contact 1", nameof(ProjectModel.key_contact1), false, false, PortfolioFieldType.PredefinedField, true),
                 factory(FieldGroupName_ProjectTeam, "Key contact 2", nameof(ProjectModel.key_contact2), false, false, PortfolioFieldType.PredefinedField, true),
                 factory(FieldGroupName_ProjectTeam, "Key contact 3", nameof(ProjectModel.key_contact3), false, false, PortfolioFieldType.PredefinedField, true),
@@ -84,7 +84,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 factory(FieldGroupName_ProgressIndicators, "Phase", nameof(ProjectModel.phase), true, true, PortfolioFieldType.OptionList, false),
                 factory(FieldGroupName_ProgressIndicators, "RAG", nameof(ProjectModel.rag), true, true, PortfolioFieldType.RAGChoice, false),
                 factory(FieldGroupName_ProgressIndicators, "How to get to green", nameof(ProjectModel.how_get_green), false, false, PortfolioFieldType.FreeText, true),
-                factory(FieldGroupName_ProgressIndicators, "Status", nameof(ProjectModel.progress_status), false, false, PortfolioFieldType.OptionList, false),
+                factory(FieldGroupName_ProgressIndicators, "Status", nameof(ProjectModel.onhold), false, false, PortfolioFieldType.OptionList, false),
 
                 //      FieldGroup      FieldTitle     FieldName                    Included Readonly FieldType FieldTypeLocked
                 factory(FieldGroupName_Updates, "Updates", nameof(ProjectModel.update), true, true, PortfolioFieldType.FreeText, true),
