@@ -38,8 +38,11 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("admin")]
         public bool AdminOnly { get; set; }
 
-        [JsonProperty("readonly")]
-        public bool ReadOnly { get; set; }
+        [JsonProperty("included_lock")]
+        public bool IncludedLock { get; set; }
+
+        [JsonProperty("adminonly_lock")]
+        public bool AdminOnlyLock { get; set; }
 
 
         [JsonProperty("label")]

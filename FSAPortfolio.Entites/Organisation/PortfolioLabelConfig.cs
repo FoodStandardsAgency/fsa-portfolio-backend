@@ -34,7 +34,8 @@ namespace FSAPortfolio.Entities.Organisation
 
         public bool Included { get; set; }
         public bool AdminOnly { get; set; }
-        public bool ReadOnly { get; set; }
+        public bool IncludedLock { get; set; }
+        public bool AdminOnlyLock { get; set; }
 
 
         [StringLength(50)]
@@ -44,6 +45,12 @@ namespace FSAPortfolio.Entities.Organisation
         public bool FieldTypeLocked { get; set; }
 
         public virtual PortfolioLabelGroup Group { get; set; }
+
+        /// <summary>
+        /// This label can only be configured if the master label is included.
+        /// </summary>
+        public virtual PortfolioLabelConfig MasterLabel { get; set; }
+        public int? MasterLabel_Id { get; set; }
     }
 
     public class PortfolioLabelGroup

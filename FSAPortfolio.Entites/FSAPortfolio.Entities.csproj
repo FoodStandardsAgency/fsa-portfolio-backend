@@ -62,6 +62,10 @@
     <Compile Include="Migrations\202010081015485_01_LabelGroups.designer.cs">
       <DependentUpon>202010081015485_01_LabelGroups.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010121444246_02_MasterLabel.cs" />
+    <Compile Include="Migrations\202010121444246_02_MasterLabel.designer.cs">
+      <DependentUpon>202010121444246_02_MasterLabel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
     <Compile Include="Organisation\Portfolio.cs" />
@@ -97,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202010081015485_01_LabelGroups.resx">
       <DependentUpon>202010081015485_01_LabelGroups.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010121444246_02_MasterLabel.resx">
+      <DependentUpon>202010121444246_02_MasterLabel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

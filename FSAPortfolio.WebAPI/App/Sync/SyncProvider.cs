@@ -175,8 +175,23 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 foreach (var config in context.PortfolioConfigurations.Include(c => c.LabelGroups).ToList())
                 {
                     var defaults = new DefaultFieldLabels(config);
-                    context.PortfolioConfigurationLabels.AddOrUpdate(l => new { l.Configuration_Id, l.FieldName },  defaults.GetDefaultLabels());
+                    var defaultLabels = defaults.GetDefaultLabels();
+
+                    // Removed redundant labels
+                    var currentLabels = config.Labels.ToArray();
+                    foreach (var label in currentLabels)
+                    {
+                        if(!defaultLabels.Any(l => l.FieldName == label.FieldName))
+                        {
+                            config.Labels.Remove(label);
+                        }
+                    }
+
+                    // Add or update labels
+                    context.PortfolioConfigurationLabels.AddOrUpdate(l => new { l.Configuration_Id, l.FieldName },  defaultLabels);
+
                 }
+
                 context.SaveChanges();
             }
         }
