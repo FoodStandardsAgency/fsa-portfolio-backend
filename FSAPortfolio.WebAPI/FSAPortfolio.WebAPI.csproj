@@ -130,6 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\AuditProvider.cs" />
+    <Compile Include="App\Config\PortfolioConfigProvider.cs" />
     <Compile Include="App\ProjectQueryExtensions.cs" />
     <Compile Include="App\Sync\DefaultFieldLabels.cs" />
     <Compile Include="App\Sync\SyncProvider.cs" />

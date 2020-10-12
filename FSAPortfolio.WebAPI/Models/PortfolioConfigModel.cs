@@ -45,6 +45,9 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("inputtype")]
         public string FieldType { get; set; }
 
+        [JsonProperty("inputvalue")]
+        public string InputValue { get; set; }
+
         [JsonProperty("inputtype_locked")]
         public bool FieldTypeLocked { get; set; }
 

@@ -42,6 +42,7 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(d => d.Label, o => o.MapFrom(s => s.Label))
                 .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType.ToString().ToLower()))
                 .ForMember(d => d.FieldTypeLocked, o => o.MapFrom(s => s.FieldTypeLocked))
+                .ForMember(d => d.InputValue, o => o.Ignore()) // This is set separately as the value can come from anywhere
                 .ReverseMap()
                 ;
         }
