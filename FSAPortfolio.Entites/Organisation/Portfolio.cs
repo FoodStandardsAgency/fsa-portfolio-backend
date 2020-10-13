@@ -24,6 +24,9 @@ namespace FSAPortfolio.Entities.Organisation
         [StringLength(1000)]
         public string Description { get; set; }
 
+        [StringLength(10)]
+        public string IDPrefix { get; set; }
+
         public virtual PortfolioConfiguration Configuration { get; set; }
 
         public virtual ICollection<Project> Projects { get; set; }

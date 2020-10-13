@@ -28,6 +28,7 @@ namespace FSAPortfolio.Entities
         public virtual DbSet<PortfolioConfiguration> PortfolioConfigurations { get; set; }
         public virtual DbSet<PortfolioLabelConfig> PortfolioConfigurationLabels { get; set; }
 
+        public virtual DbSet<ProjectReservation> ProjectReservations { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<ProjectCategory> ProjectCategories { get; set; }
         public virtual DbSet<ProjectSize> ProjectSizes { get; set; }
@@ -58,6 +59,7 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Portfolio>().HasIndex(p => p.Name).IsUnique();
             modelBuilder.Entity<Portfolio>().HasIndex(p => p.ShortName).IsUnique();
             modelBuilder.Entity<Portfolio>().HasIndex(p => p.ViewKey).IsUnique();
+            modelBuilder.Entity<Portfolio>().HasIndex(p => p.IDPrefix).IsUnique();
             modelBuilder.Entity<Portfolio>().HasMany(p => p.Projects).WithMany(p => p.Portfolios);
             modelBuilder.Entity<Portfolio>().HasRequired(p => p.Configuration).WithRequiredPrincipal(c => c.Portfolio);
 
@@ -82,6 +84,11 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<PortfolioLabelConfig>().HasOptional(l => l.MasterLabel).WithMany().HasForeignKey(l => l.MasterLabel_Id);
 
             modelBuilder.Entity<PortfolioLabelGroup>().HasMany(g => g.Labels).WithOptional(l => l.Group);
+
+            modelBuilder.Entity<ProjectReservation>().HasKey(p => p.Id);
+            modelBuilder.Entity<ProjectReservation>().HasRequired(p => p.Portfolio).WithMany().HasForeignKey(p => p.Portfolio_Id);
+            modelBuilder.Entity<ProjectReservation>().HasOptional(p => p.Project).WithRequired(p => p.Reservation);
+            modelBuilder.Entity<ProjectReservation>().HasIndex(l => new { l.Year, l.Month, l.Index }).IsUnique();
 
             modelBuilder.Entity<Project>().HasKey(p => p.Id);
             modelBuilder.Entity<Project>().HasIndex(p => p.ProjectId).IsUnique();

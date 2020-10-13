@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.Entities.Projects;
+﻿using FSAPortfolio.Entities.Organisation;
+using FSAPortfolio.Entities.Projects;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -32,5 +33,6 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.OwningPortfolio.Configuration.LabelGroups)
                 ;
         }
+
     }
 }

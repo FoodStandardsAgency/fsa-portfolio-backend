@@ -54,17 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\202010070719549_Create.cs" />
-    <Compile Include="Migrations\202010070719549_Create.designer.cs">
-      <DependentUpon>202010070719549_Create.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010081015485_01_LabelGroups.cs" />
-    <Compile Include="Migrations\202010081015485_01_LabelGroups.designer.cs">
-      <DependentUpon>202010081015485_01_LabelGroups.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010121444246_02_MasterLabel.cs" />
-    <Compile Include="Migrations\202010121444246_02_MasterLabel.designer.cs">
-      <DependentUpon>202010121444246_02_MasterLabel.cs</DependentUpon>
+    <Compile Include="Migrations\202010131337208_Create.cs" />
+    <Compile Include="Migrations\202010131337208_Create.designer.cs">
+      <DependentUpon>202010131337208_Create.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
@@ -77,6 +69,7 @@
     <Compile Include="Projects\ProjectAuditLog.cs" />
     <Compile Include="Projects\ProjectCategory.cs" />
     <Compile Include="Projects\ProjectConstants.cs" />
+    <Compile Include="Projects\ProjectReservation.cs" />
     <Compile Include="Projects\ProjectStatus.cs" />
     <Compile Include="Projects\ProjectStatusItem.cs" />
     <Compile Include="Projects\ProjectUpdateItem.cs" />
@@ -96,14 +89,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202010070719549_Create.resx">
-      <DependentUpon>202010070719549_Create.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010081015485_01_LabelGroups.resx">
-      <DependentUpon>202010081015485_01_LabelGroups.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010121444246_02_MasterLabel.resx">
-      <DependentUpon>202010121444246_02_MasterLabel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202010131337208_Create.resx">
+      <DependentUpon>202010131337208_Create.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

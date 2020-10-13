@@ -14,6 +14,7 @@ using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.PostgreSQL.Projects;
 using System.Text;
 using FSAPortfolio.WebAPI.DTO;
+using FSAPortfolio.WebAPI.App.Projects;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -112,6 +113,30 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         [HttpGet]
+        public async Task<GetNewProjectDTO> GetConfig([FromUri] string portfolio)
+        {
+            using(var provider = new ProjectIdReservationProvider(portfolio))
+            {
+                try
+                {
+                    var config = await provider.GetConfigAsync();
+                    var reservation = await provider.GetProjectReservationAsync(config.Portfolio);
+                    var result = new GetNewProjectDTO()
+                    {
+                        Config = PortfolioMapper.Mapper.Map<ProjectLabelConfigModel>(config),
+                        ProjectId = reservation.ProjectId
+                    };
+                    return result;
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+            }
+        }
+
+
+        [HttpGet]
         public async Task<GetProjectDTO> Get(string projectId)
         {
             try
@@ -122,7 +147,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                                    where p.ProjectId == projectId select p).Single();
                     var result = new GetProjectDTO()
                     {
-                        Config = PortfolioMapper.Mapper.Map<PortfolioConfigModel>(project.OwningPortfolio.Configuration),
+                        Config = PortfolioMapper.Mapper.Map<ProjectLabelConfigModel>(project.OwningPortfolio.Configuration),
                         Project = PortfolioMapper.Mapper.Map<ProjectModel>(project)
                     };
                     return result;

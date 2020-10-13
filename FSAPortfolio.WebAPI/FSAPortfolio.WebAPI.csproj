@@ -130,8 +130,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App\AuditProvider.cs" />
+    <Compile Include="App\PortfolioExtensions.cs" />
+    <Compile Include="App\ConfigurationExtensions.cs" />
     <Compile Include="App\Config\PortfolioConfigProvider.cs" />
     <Compile Include="App\ProjectQueryExtensions.cs" />
+    <Compile Include="App\Projects\ProjectIdReservationProvider.cs" />
     <Compile Include="App\Sync\DefaultFieldLabels.cs" />
     <Compile Include="App\Sync\SyncProvider.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -141,6 +144,7 @@
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\LegacyProjectsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="DTO\GetNewProjectDTO.cs" />
     <Compile Include="DTO\GetProjectDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -152,6 +156,7 @@
     <Compile Include="Models\PortfolioConfigLabelRequests.cs" />
     <Compile Include="Models\PortfolioConfigModel.cs" />
     <Compile Include="Models\PortfolioConfigUpdateRequest.cs" />
+    <Compile Include="Models\ProjectLabelConfigModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\SyncRequestModel.cs" />
     <Compile Include="Models\ODDLeadResponse.cs" />
@@ -160,7 +165,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="appSettings.config" />
+    <None Include="appSettings.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="connectionStrings.config" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">

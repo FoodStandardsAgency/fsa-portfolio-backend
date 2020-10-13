@@ -83,7 +83,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     .ToList();
 
                 // Ensure we have all access groups
-                var accessGroupLookup = dest.AccessGroups.ToDictionary(ag => ag.Name);
+                var accessGroupLookup = dest.AccessGroups?.ToDictionary(ag => ag.Name);
                 foreach (var sourceAccessGroup in sourceAccessGroups)
                 {
                     var destAccessGroup = dest.AccessGroups.SingleOrDefault(dag => dag.Name == sourceAccessGroup.Name);
@@ -229,6 +229,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
             portfolio.Name = name;
             portfolio.ShortName = shortName;
+            portfolio.IDPrefix = viewKey.ToUpper();
 
             Func<string, ProjectPhase> phaseFactory = (k) => {
                 var phase = portfolio.Configuration.Phases.SingleOrDefault(p => p.ViewKey == k);
@@ -404,6 +405,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                     // First sync the project
                     var destProject = dest.Projects
+                        .Include(p => p.Reservation)
                         .Include(p => p.Portfolios)
                         .Include(p => p.Updates.Select(u => u.OnHoldStatus))
                         .Include(p => p.Updates.Select(u => u.RAGStatus))
@@ -418,9 +420,17 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     var latestSourceUpdate = sourceProjectDetail.OrderBy(d => d.timestamp).Last();
                     if (destProject == null)
                     {
+                        var pid = sourceProjectDetail.Key.project_id.Trim();
+                        var yrStart = pid.Length - 7;
                         destProject = new Project()
                         {
-                            ProjectId = sourceProjectDetail.Key.project_id,
+                            Reservation = new ProjectReservation() { 
+                                Year = int.Parse(pid.Substring(yrStart, 2)) + 2000, 
+                                Month = int.Parse(pid.Substring(yrStart + 2, 2)),
+                                Index = int.Parse(pid.Substring(yrStart + 4)),
+                                ReservedAt = DateTime.Now
+                                },
+                            ProjectId = pid,
                             Updates = new List<ProjectUpdateItem>(),
                             Portfolios = new List<Portfolio>()
                         };
@@ -433,6 +443,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         var portfolio = dest.Portfolios.Single(p => p.ShortName == portfolioShortName);
                         destProject.OwningPortfolio = portfolio;
                         destProject.Portfolios.Add(portfolio);
+                        destProject.Reservation.Portfolio = portfolio;
                     }
 
 
