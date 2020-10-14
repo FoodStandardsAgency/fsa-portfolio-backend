@@ -107,6 +107,7 @@
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Configuration_Id = c.Int(nullable: false),
+                        Flags = c.Int(nullable: false),
                         FieldName = c.String(maxLength: 50),
                         FieldTitle = c.String(maxLength: 50),
                         FieldOrder = c.Int(nullable: false),

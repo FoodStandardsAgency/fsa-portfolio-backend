@@ -33,7 +33,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
         private PortfolioLabelConfig Factory(string fieldGroup, string fieldTitle, string fieldName, 
                                              bool included, bool includedLock, bool adminLock, 
-                                             PortfolioFieldType inputType, bool inputTypeLocked)
+                                             PortfolioFieldType inputType, bool inputTypeLocked,
+                                             PortfolioFieldFlags flags = PortfolioFieldFlags.Default)
         {
             var group = config.LabelGroups.FirstOrDefault(g => g.Name == fieldGroup);
             return new PortfolioLabelConfig() { 
@@ -46,7 +47,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 FieldType = inputType,
                 IncludedLock = includedLock,
                 AdminOnlyLock = adminLock,
-                FieldTypeLocked = inputTypeLocked
+                FieldTypeLocked = inputTypeLocked,
+                Flags = flags
             };
         }
 
@@ -105,7 +107,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_ProgressIndicators, "Status", nameof(ProjectModel.onhold), false, false, false, PortfolioFieldType.OptionList, false),
 
                 //      FieldGroup      FieldTitle     FieldName                    Included IncludeLock AdmLock FieldType FieldTypeLocked
-                Factory(FieldGroupName_Updates, "Updates", nameof(ProjectModel.update), true, false, false, PortfolioFieldType.FreeText, true),
+                Factory(FieldGroupName_Updates, "Update", nameof(ProjectModel.update), true, false, false, PortfolioFieldType.FreeTextArea, true, PortfolioFieldFlags.UpdateOnly),
                 Factory(FieldGroupName_Updates, "Forward look", nameof(ProjectModel.forward_look), false, false, false, PortfolioFieldType.FreeText, true),
                 Factory(FieldGroupName_Updates, "Emerging issues, risks", nameof(ProjectModel.emerging_issues), false, false, false, PortfolioFieldType.FreeText, true),
 

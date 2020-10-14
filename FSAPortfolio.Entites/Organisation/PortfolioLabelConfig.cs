@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -17,6 +18,17 @@ namespace FSAPortfolio.Entities.Organisation
         RAGChoice = 8,
         Budget = 9,
         FreeTextArea = 10
+    }
+
+    [Flags]
+    public enum PortfolioFieldFlags
+    {
+        Create = 1,
+        Read = 1 << 1,
+        Update = 1 << 2,
+        Delete = 1 << 3,
+        Default = Create | Read | Update | Delete,
+        UpdateOnly = Read | Update
     }
 
     public class PortfolioFieldTypeDescriptions : Dictionary<PortfolioFieldType, string>
@@ -44,6 +56,8 @@ namespace FSAPortfolio.Entities.Organisation
 
         public virtual PortfolioConfiguration Configuration { get; set; }
         public int Configuration_Id { get; set; }
+
+        public PortfolioFieldFlags Flags { get; set; }
 
         [StringLength(50)]
         public string FieldName { get; set; }

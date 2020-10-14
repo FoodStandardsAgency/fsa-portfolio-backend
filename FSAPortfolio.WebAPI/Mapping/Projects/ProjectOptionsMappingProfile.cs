@@ -36,7 +36,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         private void PortfolioConfiguration_ProjectLabelConfigModel()
         {
             CreateMap<PortfolioConfiguration, ProjectLabelConfigModel>()
-                .ForMember(d => d.Labels, o => o.MapFrom(s => s.Labels.OrderBy(l => l.Group.Order).ThenBy(l => l.FieldOrder)))
+                .ForMember(d => d.Labels, o => o.MapFrom<ConfigLabelFlagResolver, ICollection<PortfolioLabelConfig>>(s => s.Labels))
                 ;
 
             CreateMap<PortfolioLabelConfig, ProjectLabelModel>()
@@ -53,6 +53,24 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 ;
 
         }
-
     }
+
+    /// <summary>
+    /// Maps labels filtering on flags passed into the mapping options: only labels with one of the flags set are returned.
+    /// </summary>
+    public class ConfigLabelFlagResolver : IMemberValueResolver<PortfolioConfiguration, ProjectLabelConfigModel, ICollection<PortfolioLabelConfig>, IEnumerable<ProjectLabelModel>>
+    {
+        public IEnumerable<ProjectLabelModel> Resolve(PortfolioConfiguration source, ProjectLabelConfigModel destination,
+                                                      ICollection<PortfolioLabelConfig> sourceMember,
+                                                      IEnumerable<ProjectLabelModel> destMember,
+                                                      ResolutionContext context)
+        {
+            var flags = (PortfolioFieldFlags)context.Items[nameof(PortfolioFieldFlags)];
+            return context.Mapper.Map<ICollection<ProjectLabelModel>>(sourceMember.Where(s => (s.Flags & flags) != 0))
+                                 .OrderBy(l => l.GroupOrder)
+                                 .ThenBy(l => l.FieldOrder)
+                                 .ToList();
+        }
+    }
+
 }

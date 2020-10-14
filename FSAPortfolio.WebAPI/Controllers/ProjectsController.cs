@@ -16,6 +16,7 @@ using System.Text;
 using FSAPortfolio.WebAPI.DTO;
 using FSAPortfolio.WebAPI.App.Projects;
 using FSAPortfolio.WebAPI.Mapping.Projects;
+using FSAPortfolio.Entities.Organisation;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -113,16 +114,24 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets a new project with any default settings and reserves an project_id.
+        /// Gets the label configuration for the view, with options set for any view components such as drop down lists.
+        /// </summary>
+        /// <param name="portfolio">The portfolio to create the new project for</param>
+        /// <returns>A DTO with the label config, options and default project data.</returns>
+        /// <remarks>Labels must have the Create flag set in order to be included in the config data.</remarks>
         [HttpGet]
-        public async Task<GetNewProjectDTO> GetConfig([FromUri] string portfolio)
+        public async Task<GetNewProjectDTO> GetNewProject([FromUri] string portfolio)
         {
             using (var provider = new ProjectProvider(portfolio))
             {
                 var config = await provider.GetConfigAsync();
                 var reservation = await provider.GetProjectReservationAsync(config);
+
                 var result = new GetNewProjectDTO()
                 {
-                    Config = PortfolioMapper.ProjectMapper.Map<ProjectLabelConfigModel>(config),
+                    Config = PortfolioMapper.ProjectMapper.Map<ProjectLabelConfigModel>(config, opts => opts.Items[nameof(PortfolioFieldFlags)] = PortfolioFieldFlags.Create),
                     Options = PortfolioMapper.ProjectMapper.Map<ProjectOptionsModel>(config),
                     Project = new ProjectModel() { project_id = reservation.ProjectId }
                 };
