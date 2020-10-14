@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FSAPortfolio.Entities.Projects
 {
-    public class ProjectCategory
+    public class ProjectCategory : IProjectOption
     {
         public int Id { get; set; }
 
@@ -24,7 +24,7 @@ namespace FSAPortfolio.Entities.Projects
 
     }
 
-    public class ProjectSize
+    public class ProjectSize : IProjectOption
     {
         public int Id { get; set; }
 
@@ -39,7 +39,7 @@ namespace FSAPortfolio.Entities.Projects
         public int Configuration_Id { get; set; }
     }
 
-    public class BudgetType
+    public class BudgetType : IProjectOption
     {
         public int Id { get; set; }
 

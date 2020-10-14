@@ -1,6 +1,7 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.WebAPI.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -10,11 +11,11 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.App.Projects
 {
-    public class ProjectIdReservationProvider : IDisposable
+    public class ProjectProvider : IDisposable
     {
         private PortfolioContext context;
         private string portfolioViewKey;
-        public ProjectIdReservationProvider(string portfolioViewKey)
+        public ProjectProvider(string portfolioViewKey)
         {
             this.context = new PortfolioContext();
             this.portfolioViewKey = portfolioViewKey;
@@ -27,16 +28,16 @@ namespace FSAPortfolio.WebAPI.App.Projects
                           select c).SingleAsync();
         }
 
-        public async Task<ProjectReservation> GetProjectReservationAsync(Portfolio portfolio)
+        public async Task<ProjectReservation> GetProjectReservationAsync(PortfolioConfiguration config)
         {
             var timestamp = DateTime.Now;
             int year = timestamp.Year;
             int month = timestamp.Month;
-            int maxIndex = await context.ProjectReservations
-                .Where(r => r.Portfolio.Id == portfolio.Id && r.Year == year && r.Month == month)
-                .Select(r => r.Index)
-                .DefaultIfEmpty()
-                .MaxAsync();
+
+            var maxIndexQuery = context.ProjectReservations
+                .Where(r => r.Portfolio_Id == config.Portfolio_Id && r.Year == year && r.Month == month)
+                .Select(r => (int?)r.Index);
+            int maxIndex = (await maxIndexQuery.MaxAsync()) ?? 0;
 
             var reservation = new ProjectReservation()
             {
@@ -44,7 +45,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 Month = month,
                 Index = maxIndex + 1,
                 ReservedAt = timestamp,
-                Portfolio_Id = portfolio.Id
+                Portfolio_Id = config.Portfolio_Id
             };
 
             context.ProjectReservations.Add(reservation);

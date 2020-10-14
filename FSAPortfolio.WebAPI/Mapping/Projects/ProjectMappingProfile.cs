@@ -14,7 +14,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Mapping
+namespace FSAPortfolio.WebAPI.Mapping.Projects
 {
     public class ProjectMappingProfile : Profile
     {
@@ -32,7 +32,6 @@ namespace FSAPortfolio.WebAPI.Mapping
             Project__latest_projects();
             Project__ProjectModel();
             ProjectUpdateItem__ProjectUpdateModel();
-            PortfolioConfiguration_ProjectLabelConfigModel();
 
             // Inbound
             project__Project();
@@ -91,7 +90,7 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(p => p.AuditLogs, o => o.Ignore())
                 .ForMember(p => p.OwningPortfolio, o => o.Ignore())
                 // Ignore the keys
-                .ForMember(p => p.Id, o => o.Ignore())
+                .ForMember(p => p.ProjectReservation_Id, o => o.Ignore())
                 .ForMember(p => p.ProjectCategory_Id, o => o.Ignore())
                 .ForMember(p => p.ProjectSize_Id, o => o.Ignore())
                 .ForMember(p => p.BudgetType_Id, o => o.Ignore())
@@ -239,26 +238,6 @@ namespace FSAPortfolio.WebAPI.Mapping
                 ;
         }
 
-        private void PortfolioConfiguration_ProjectLabelConfigModel()
-        {
-            CreateMap<PortfolioConfiguration, ProjectLabelConfigModel>()
-                .ForMember(d => d.Labels, o => o.MapFrom(s => s.Labels.Where(l => l.Included && (l.MasterLabel == null || l.MasterLabel.Included)).OrderBy(l => l.Group.Order).ThenBy(l => l.FieldOrder)))
-                ;
-
-
-            CreateMap<PortfolioLabelConfig, ProjectLabelModel>()
-                .ForMember(d => d.FieldName, o => o.MapFrom(s => s.FieldName))
-                .ForMember(d => d.FieldGroup, o => o.MapFrom(s => s.Group == null ? DefaultFieldLabels.FieldGroupName_Ungrouped : s.Group.Name))
-                .ForMember(d => d.GroupOrder, o => o.MapFrom(s => s.Group.Order))
-                .ForMember(d => d.FieldOrder, o => o.MapFrom(s => s.FieldOrder))
-                .ForMember(d => d.FieldTitle, o => o.MapFrom(s => s.FieldTitle))
-                .ForMember(d => d.AdminOnly, o => o.MapFrom(s => s.AdminOnly))
-                .ForMember(d => d.Label, o => o.MapFrom(s => s.Label == null ? s.FieldTitle : s.Label))
-                .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType.ToString().ToLower()))
-                .ForMember(d => d.InputValue, o => o.Ignore()) // This is set separately as the value can come from anywhere
-                ;
-
-        }
 
     }
 

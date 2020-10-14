@@ -12,13 +12,16 @@ namespace FSAPortfolio.Entities
 
     public partial class PortfolioContext : DbContext
     {
+        private const bool LazyLoad = false;
         public PortfolioContext()
             : base("name=PortfolioContext")
         {
+            Configuration.LazyLoadingEnabled = LazyLoad;
         }
         public PortfolioContext(ConnectionStringSettings cs)
             : base(cs.ConnectionString)
         {
+            Configuration.LazyLoadingEnabled = LazyLoad;
         }
 
         public virtual DbSet<User> Users { get; set; }
@@ -63,7 +66,7 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Portfolio>().HasMany(p => p.Projects).WithMany(p => p.Portfolios);
             modelBuilder.Entity<Portfolio>().HasRequired(p => p.Configuration).WithRequiredPrincipal(c => c.Portfolio);
 
-            modelBuilder.Entity<PortfolioConfiguration>().HasKey(p => p.Id);
+            modelBuilder.Entity<PortfolioConfiguration>().HasKey(p => p.Portfolio_Id);
             modelBuilder.Entity<PortfolioConfiguration>().HasMany(p => p.AuditLogs).WithRequired(l => l.PortfolioConfiguration).HasForeignKey(u => u.PortfolioConfiguration_Id);
 
             modelBuilder.Entity<PortfolioConfiguration>().HasMany(p => p.Phases).WithRequired(p => p.Configuration).HasForeignKey(p => p.Configuration_Id);
@@ -90,7 +93,7 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<ProjectReservation>().HasOptional(p => p.Project).WithRequired(p => p.Reservation);
             modelBuilder.Entity<ProjectReservation>().HasIndex(l => new { l.Year, l.Month, l.Index }).IsUnique();
 
-            modelBuilder.Entity<Project>().HasKey(p => p.Id);
+            modelBuilder.Entity<Project>().HasKey(p => p.ProjectReservation_Id);
             modelBuilder.Entity<Project>().HasIndex(p => p.ProjectId).IsUnique();
             modelBuilder.Entity<Project>().HasRequired(p => p.OwningPortfolio).WithMany().HasForeignKey(p => p.OwningPortfolio_Id);
             modelBuilder.Entity<Project>().HasMany(p => p.Updates).WithRequired(u => u.Project).HasForeignKey(u => u.Project_Id);

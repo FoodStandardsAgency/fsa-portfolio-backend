@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FSAPortfolio.Entities.Projects
 {
-    public class ProjectRAGStatus
+    public class ProjectRAGStatus : IProjectOption
     {
         public int Id { get; set; }
 
@@ -23,7 +23,7 @@ namespace FSAPortfolio.Entities.Projects
 
     }
 
-    public class ProjectOnHoldStatus
+    public class ProjectOnHoldStatus : IProjectOption
     {
         public int Id { get; set; }
 
@@ -37,7 +37,7 @@ namespace FSAPortfolio.Entities.Projects
         public virtual PortfolioConfiguration Configuration { get; set; }
         public int Configuration_Id { get; set; }
     }
-    public class ProjectPhase
+    public class ProjectPhase : IProjectOption
     {
         public int Id { get; set; }
 

@@ -11,7 +11,7 @@ namespace FSAPortfolio.Entities.Projects
 {
     public class Project
     {
-        public int Id { get; set; }
+        public int ProjectReservation_Id { get; set; }
 
         public ProjectReservation Reservation { get; set; }
 

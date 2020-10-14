@@ -36,7 +36,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 }
 
                 // Update the label's fields
-                label = PortfolioMapper.Mapper.Map(labelRequest, label);
+                label = PortfolioMapper.ConfigMapper.Map(labelRequest, label);
                 label.Group = group;
 
                 // Save

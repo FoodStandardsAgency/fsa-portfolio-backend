@@ -37,7 +37,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         {
             var group = config.LabelGroups.FirstOrDefault(g => g.Name == fieldGroup);
             return new PortfolioLabelConfig() { 
-                Configuration_Id = config.Id,
+                Configuration_Id = config.Portfolio_Id,
                 Group = group,
                 FieldOrder = fieldOrder++,
                 FieldTitle = fieldTitle,

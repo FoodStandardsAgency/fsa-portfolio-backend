@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FSAPortfolio.WebAPI.Mapping.Organisation;
+using FSAPortfolio.WebAPI.Mapping.Projects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,19 +10,28 @@ namespace FSAPortfolio.WebAPI.Mapping
 {
     internal class PortfolioMapper
     {
-        internal static MapperConfiguration config;
+        internal static MapperConfiguration projectConfig;
+        internal static MapperConfiguration configConfig;
         internal static MapperConfiguration updateConfig;
 
-        internal static IMapper Mapper { get; private set; }
+        internal static IMapper ProjectMapper { get; private set; }
+        internal static IMapper ConfigMapper { get; private set; }
         internal static IMapper UpdateMapper { get; private set; }
         internal static void Configure()
         {
-            config = new MapperConfiguration(cfg =>
+            projectConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<ProjectMappingProfile>();
+                cfg.AddProfile<ProjectOptionsMappingProfile>();
+            });
+            ProjectMapper = projectConfig.CreateMapper();
+
+            configConfig = new MapperConfiguration(cfg =>
+            {
                 cfg.AddProfile<PortfolioConfigurationMappingProfile>();
             });
-            Mapper = config.CreateMapper();
+            ConfigMapper = configConfig.CreateMapper();
+
             updateConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<PortfolioConfigUpdateProfile>();

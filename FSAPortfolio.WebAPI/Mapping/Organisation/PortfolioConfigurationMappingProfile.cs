@@ -3,7 +3,7 @@ using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.WebAPI.App.Sync;
 using FSAPortfolio.WebAPI.Models;
 
-namespace FSAPortfolio.WebAPI.Mapping
+namespace FSAPortfolio.WebAPI.Mapping.Organisation
 {
     public class PortfolioConfigurationMappingProfile : Profile
     {

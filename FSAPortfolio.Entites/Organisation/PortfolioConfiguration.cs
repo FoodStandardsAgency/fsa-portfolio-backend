@@ -8,7 +8,7 @@ namespace FSAPortfolio.Entities.Organisation
 {
     public class PortfolioConfiguration
     {
-        public int Id { get; set; }
+        public int Portfolio_Id { get; set; }
 
         public virtual Portfolio Portfolio { get; set; }
         public virtual ICollection<ProjectPhase> Phases { get; set; }

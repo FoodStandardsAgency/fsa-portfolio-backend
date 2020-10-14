@@ -11,7 +11,8 @@ namespace FSAPortfolio.UnitTests
         public void MappingProfilesAreValid()
         {
             PortfolioMapper.Configure();
-            PortfolioMapper.config.AssertConfigurationIsValid();
+            PortfolioMapper.projectConfig.AssertConfigurationIsValid();
+            PortfolioMapper.configConfig.AssertConfigurationIsValid();
             PortfolioMapper.updateConfig.AssertConfigurationIsValid();
         }
     }

@@ -28,7 +28,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 using (var context = new PortfolioContext())
                 {
                     // Map the updates to labels
-                    var labelUpdates = PortfolioMapper.Mapper.Map<IEnumerable<PortfolioLabelConfig>>(update.Labels);
+                    var labelUpdates = PortfolioMapper.ConfigMapper.Map<IEnumerable<PortfolioLabelConfig>>(update.Labels);
 
                     // Get the config with labels
                     var config = await context.PortfolioConfigurations
@@ -70,7 +70,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 {
                     var pfolio = await context.Portfolios.ConfigIncludes()
                         .SingleAsync(p => p.ViewKey == portfolio);
-                    var model = PortfolioMapper.Mapper.Map<PortfolioConfigModel>(pfolio.Configuration);
+                    var model = PortfolioMapper.ConfigMapper.Map<PortfolioConfigModel>(pfolio.Configuration);
                     model.Labels = model.Labels.OrderBy(l => l.FieldGroup).ThenBy(l => l.FieldOrder).ToList();
 
                     // Set input values
@@ -100,7 +100,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             return new PortfolioConfigAuditLog()
             {
                 Timestamp = timestamp,
-                PortfolioConfiguration_Id = con.Id,
+                PortfolioConfiguration_Id = con.Portfolio_Id,
                 AuditType = type,
                 Text = text
             };

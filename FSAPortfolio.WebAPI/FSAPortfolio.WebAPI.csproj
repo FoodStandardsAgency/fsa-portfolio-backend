@@ -134,7 +134,7 @@
     <Compile Include="App\ConfigurationExtensions.cs" />
     <Compile Include="App\Config\PortfolioConfigProvider.cs" />
     <Compile Include="App\ProjectQueryExtensions.cs" />
-    <Compile Include="App\Projects\ProjectIdReservationProvider.cs" />
+    <Compile Include="App\Projects\ProjectProvider.cs" />
     <Compile Include="App\Sync\DefaultFieldLabels.cs" />
     <Compile Include="App\Sync\SyncProvider.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -151,8 +151,9 @@
     </Compile>
     <Compile Include="Mapping\PortfolioConfigUpdateProfile.cs" />
     <Compile Include="Mapping\PortfolioMapper.cs" />
-    <Compile Include="Mapping\PortfolioConfigurationMappingProfile.cs" />
-    <Compile Include="Mapping\ProjectMappingProfile.cs" />
+    <Compile Include="Mapping\Organisation\PortfolioConfigurationMappingProfile.cs" />
+    <Compile Include="Mapping\Projects\ProjectMappingProfile.cs" />
+    <Compile Include="Mapping\Projects\ProjectOptionsMappingProfile.cs" />
     <Compile Include="Models\PortfolioConfigLabelRequests.cs" />
     <Compile Include="Models\PortfolioConfigModel.cs" />
     <Compile Include="Models\PortfolioConfigUpdateRequest.cs" />

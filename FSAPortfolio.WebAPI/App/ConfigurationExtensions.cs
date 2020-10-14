@@ -17,14 +17,15 @@ namespace FSAPortfolio.WebAPI.App
         public static IQueryable<PortfolioConfiguration> ConfigIncludes(this IQueryable<PortfolioConfiguration> query)
         {
             return query
-                .Include(p => p.Phases)
-                .Include(p => p.RAGStatuses)
-                .Include(p => p.OnHoldStatuses)
-                .Include(p => p.Categories)
-                .Include(p => p.ProjectSizes)
-                .Include(p => p.BudgetTypes)
-                .Include(p => p.Labels)
-                .Include(p => p.LabelGroups)
+                .Include(c => c.Portfolio)
+                .Include(c => c.Phases)
+                .Include(c => c.RAGStatuses)
+                .Include(c => c.OnHoldStatuses)
+                .Include(c => c.Categories)
+                .Include(c => c.ProjectSizes)
+                .Include(c => c.BudgetTypes)
+                .Include(c => c.Labels)
+                .Include(c => c.LabelGroups)
                 ;
         }
 

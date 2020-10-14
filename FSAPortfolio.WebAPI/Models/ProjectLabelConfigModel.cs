@@ -33,6 +33,9 @@ namespace FSAPortfolio.WebAPI.Models
         public string FieldTitle { get; set; }
 
 
+        [JsonProperty("included")]
+        public bool Included { get; set; }
+
         [JsonProperty("admin")]
         public bool AdminOnly { get; set; }
 
@@ -46,6 +49,44 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("inputvalue")]
         public string InputValue { get; set; }
 
+    }
+
+    public class ProjectOptionsModel
+    {
+
+        [JsonProperty("phase")]
+        public IEnumerable<DropDownItemModel> PhaseItems { get; set; }
+
+        [JsonProperty("rag")]
+        public IEnumerable<DropDownItemModel> RAGStatusItems { get; set; }
+
+        [JsonProperty("onhold")]
+        public IEnumerable<DropDownItemModel> OnHoldStatusItems { get; set; }
+
+        [JsonProperty("project_size")]
+        public IEnumerable<DropDownItemModel> ProjectSizeItems { get; set; }
+
+        [JsonProperty("budgettype")]
+        public IEnumerable<DropDownItemModel> BudgetTypeItems { get; set; }
+
+        [JsonProperty("category")]
+        public IEnumerable<DropDownItemModel> CategoryItems { get; set; }
+
+        [JsonProperty("subcat")]
+        public IEnumerable<DropDownItemModel> SubCategoryItems { get; set; }
+
+    }
+
+    public class DropDownItemModel
+    {
+        [JsonProperty("display")]
+        public string Display { get; set; }
+
+        [JsonProperty("value")]
+        public string Value { get; set; }
+
+        [JsonProperty("order")]
+        public string Order { get; set; }
     }
 
 }

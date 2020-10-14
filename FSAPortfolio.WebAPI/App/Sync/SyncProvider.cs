@@ -1,9 +1,12 @@
-﻿using FSAPortfolio.Entities;
+﻿using AutoMapper;
+using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.PostgreSQL;
 using FSAPortfolio.WebAPI.Mapping;
+using FSAPortfolio.WebAPI.Mapping.Organisation;
+using FSAPortfolio.WebAPI.Mapping.Projects;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -67,9 +70,19 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "capit", BudgetTypeConstants.CapitalName }
         };
 
+        IMapper mapper;
+
         internal SyncProvider(ICollection<string> log)
         {
             this.log = log;
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<ProjectMappingProfile>();
+                cfg.AddProfile<ProjectOptionsMappingProfile>();
+                cfg.AddProfile<PortfolioConfigurationMappingProfile>();
+            });
+            mapper = config.CreateMapper();
+
         }
         internal void SyncUsers()
         {
@@ -172,7 +185,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
             using (var context = new PortfolioContext())
             {
-                foreach (var config in context.PortfolioConfigurations.Include(c => c.LabelGroups).ToList())
+                foreach (var config in context.PortfolioConfigurations.ConfigIncludes().ToList())
                 {
                     var defaults = new DefaultFieldLabels(config);
                     var defaultLabels = defaults.GetDefaultLabels();
@@ -231,72 +244,72 @@ namespace FSAPortfolio.WebAPI.App.Sync
             portfolio.ShortName = shortName;
             portfolio.IDPrefix = viewKey.ToUpper();
 
-            Func<string, ProjectPhase> phaseFactory = (k) => {
+            Func<string, int, ProjectPhase> phaseFactory = (k, o) => {
                 var phase = portfolio.Configuration.Phases.SingleOrDefault(p => p.ViewKey == k);
                 if (phase == null)
                 {
-                    phase = new ProjectPhase() { ViewKey = k };
+                    phase = new ProjectPhase() { ViewKey = k, Order = o };
                     portfolio.Configuration.Phases.Add(phase);
                 }
                 phase.Name = phaseMap[k];
                 return phase;
             };
-            Func<string, ProjectOnHoldStatus> onHoldFactory = (k) =>
+            Func<string, int, ProjectOnHoldStatus> onHoldFactory = (k, o) =>
             {
                 var onhold = portfolio.Configuration.OnHoldStatuses.SingleOrDefault(p => p.ViewKey == k);
                 if (onhold == null)
                 {
-                    onhold = new ProjectOnHoldStatus() { ViewKey = k };
+                    onhold = new ProjectOnHoldStatus() { ViewKey = k, Order = o };
                     portfolio.Configuration.OnHoldStatuses.Add(onhold);
                 }
                 onhold.Name = onholdMap[k];
                 return onhold;
             };
-            Func<string, ProjectRAGStatus> ragFactory = (k) =>
+            Func<string, int, ProjectRAGStatus> ragFactory = (k, o) =>
             {
                 var rag = portfolio.Configuration.RAGStatuses.SingleOrDefault(p => p.ViewKey == k);
                 if (rag == null)
                 {
-                    rag = new ProjectRAGStatus() { ViewKey = k };
+                    rag = new ProjectRAGStatus() { ViewKey = k, Order = o };
                     portfolio.Configuration.RAGStatuses.Add(rag);
                 }
                 rag.Name = ragMap[k];
                 return rag;
             };
-            Func<string, ProjectCategory> categoryFactory = (k) =>
+            Func<string, int, ProjectCategory> categoryFactory = (k, o) =>
             {
                 var category = portfolio.Configuration.Categories.SingleOrDefault(p => p.ViewKey == k);
                 if (category == null)
                 {
-                    category = new ProjectCategory() { ViewKey = k };
+                    category = new ProjectCategory() { ViewKey = k, Order = o };
                     portfolio.Configuration.Categories.Add(category);
                 }
                 category.Name = categoryMap[k];
                 return category;
             };
-            Func<string, ProjectSize> sizeFactory = (k) =>
+            Func<string, int, ProjectSize> sizeFactory = (k, o) =>
             {
                 var projectSize = portfolio.Configuration.ProjectSizes.SingleOrDefault(p => p.ViewKey == k);
                 if (projectSize == null)
                 {
-                    projectSize = new ProjectSize() { ViewKey = k };
+                    projectSize = new ProjectSize() { ViewKey = k, Order = o };
                     portfolio.Configuration.ProjectSizes.Add(projectSize);
                 }
                 projectSize.Name = sizeMap[k];
                 return projectSize;
             };
-            Func<string, BudgetType> budgetTypeFactory = (k) =>
+            Func<string, int, BudgetType> budgetTypeFactory = (k, o) =>
             {
                 var budgetType = portfolio.Configuration.BudgetTypes.SingleOrDefault(p => p.ViewKey == k);
                 if (budgetType == null)
                 {
-                    budgetType = new BudgetType() { ViewKey = k };
+                    budgetType = new BudgetType() { ViewKey = k, Order = o };
                     portfolio.Configuration.BudgetTypes.Add(budgetType);
                 }
                 budgetType.Name = budgetTypeMap[k];
                 return budgetType;
             };
-            Func<string, int, PortfolioLabelGroup> labelGroupFactory = (n, o) =>
+            Func<string, int, PortfolioLabelGroup> labelGroupFactory = (n, go) =>
             {
                 var group = portfolio.Configuration.LabelGroups.SingleOrDefault(p => p.Name == n);
                 if (group == null)
@@ -304,37 +317,37 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     group = new PortfolioLabelGroup() { Name = n };
                     portfolio.Configuration.LabelGroups.Add(group);
                 }
-                group.Order = o;
+                group.Order = go;
                 return group;
             };
 
-            phaseFactory("backlog");
-            phaseFactory("discovery");
-            phaseFactory("alpha");
-            phaseFactory("beta");
-            phaseFactory("live");
-            phaseFactory("completed");
-            ragFactory("red");
-            ragFactory("amb");
-            ragFactory("gre");
-            ragFactory("nor");
-            onHoldFactory("n");
-            onHoldFactory("y");
-            onHoldFactory("b");
-            onHoldFactory("c");
-            categoryFactory("cap");
-            categoryFactory("data");
-            categoryFactory("sm");
-            categoryFactory("ser");
-            categoryFactory("it");
-            categoryFactory("res");
-            sizeFactory("s");
-            sizeFactory("m");
-            sizeFactory("l");
-            sizeFactory("x");
-            budgetTypeFactory("admin");
-            budgetTypeFactory("progr");
-            budgetTypeFactory("capit");
+            phaseFactory("backlog", 0);
+            phaseFactory("discovery", 1);
+            phaseFactory("alpha", 2);
+            phaseFactory("beta", 3);
+            phaseFactory("live", 4);
+            phaseFactory("completed", 5);
+            ragFactory("red", 1);
+            ragFactory("amb", 2);
+            ragFactory("gre", 3);
+            ragFactory("nor", 0);
+            onHoldFactory("n", 0);
+            onHoldFactory("y", 1);
+            onHoldFactory("b", 2);
+            onHoldFactory("c", 3);
+            categoryFactory("cap", 0);
+            categoryFactory("data", 1);
+            categoryFactory("sm", 2);
+            categoryFactory("ser", 3);
+            categoryFactory("it", 4);
+            categoryFactory("res", 5);
+            sizeFactory("s", 0);
+            sizeFactory("m", 1);
+            sizeFactory("l", 2);
+            sizeFactory("x", 3);
+            budgetTypeFactory("admin", 1);
+            budgetTypeFactory("progr", 2);
+            budgetTypeFactory("capit", 3);
             labelGroupFactory(DefaultFieldLabels.FieldGroupName_ProjectIDs, 0);
             labelGroupFactory(DefaultFieldLabels.FieldGroupName_AboutTheProject, 1);
             labelGroupFactory(DefaultFieldLabels.FieldGroupName_ProjectTeam, 2);
@@ -361,20 +374,20 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
             foreach (var id in projectIds)
             {
-                try
-                {
+                //try
+                //{
                     if(!portfolios.MoveNext())
                     {
                         portfolios.Reset();
                         portfolios.MoveNext();
                     }
                     SyncProject(id, portfolios.Current);
-                }
-                catch(Exception e)
-                {
-                    log.Add($"Project {id} failed to sync: {e.Message}");
-                    throw e;
-                }
+                //}
+                //catch(Exception e)
+                //{
+                //    log.Add($"Project {id} failed to sync: {e.Message}");
+                //    throw e;
+                //}
             }
         }
         internal bool SyncProject(string projectId, string portfolioShortName = null)
@@ -404,7 +417,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     var sourceProjectDetail = projectDetails.Single();
 
                     // First sync the project
-                    var destProject = dest.Projects
+                    var destProject = dest.Projects.ConfigIncludes()
+                        .Include(p => p.OwningPortfolio.Configuration.BudgetTypes)
                         .Include(p => p.Reservation)
                         .Include(p => p.Portfolios)
                         .Include(p => p.Updates.Select(u => u.OnHoldStatus))
@@ -440,14 +454,14 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     // Add to the given portfolio if not already in one
                     if (!string.IsNullOrEmpty(portfolioShortName) && destProject.Portfolios.Count == 0)
                     {
-                        var portfolio = dest.Portfolios.Single(p => p.ShortName == portfolioShortName);
+                        var portfolio = dest.Portfolios.ConfigIncludes().Single(p => p.ShortName == portfolioShortName);
                         destProject.OwningPortfolio = portfolio;
                         destProject.Portfolios.Add(portfolio);
                         destProject.Reservation.Portfolio = portfolio;
                     }
 
 
-                    PortfolioMapper.Mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = dest);
+                    mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = dest);
 
                     destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
 
@@ -465,7 +479,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                             };
                             destProject.Updates.Add(destUpdate);
                         }
-                        PortfolioMapper.Mapper.Map(sourceUpdate, destUpdate, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = dest);
+                        mapper.Map(sourceUpdate, destUpdate, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = dest);
                     }
 
                     dest.SaveChanges();
