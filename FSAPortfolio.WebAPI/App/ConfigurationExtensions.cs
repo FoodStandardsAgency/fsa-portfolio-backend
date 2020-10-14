@@ -9,6 +9,11 @@ namespace FSAPortfolio.WebAPI.App
 {
     public static class ConfigurationExtensions
     {
+        /// <summary>
+        /// Includes for loading the full config for add/edit/view of a project
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public static IQueryable<PortfolioConfiguration> ConfigIncludes(this IQueryable<PortfolioConfiguration> query)
         {
             return query

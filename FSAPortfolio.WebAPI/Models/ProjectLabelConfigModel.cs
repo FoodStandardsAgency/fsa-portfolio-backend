@@ -12,7 +12,7 @@ namespace FSAPortfolio.WebAPI.Models
     public class ProjectLabelConfigModel
     {
         [JsonProperty("labels")]
-        public IEnumerable<PortfolioLabelModel> Labels { get; set; }
+        public IEnumerable<ProjectLabelModel> Labels { get; set; }
     }
 
     public class ProjectLabelModel

@@ -253,7 +253,7 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(d => d.FieldOrder, o => o.MapFrom(s => s.FieldOrder))
                 .ForMember(d => d.FieldTitle, o => o.MapFrom(s => s.FieldTitle))
                 .ForMember(d => d.AdminOnly, o => o.MapFrom(s => s.AdminOnly))
-                .ForMember(d => d.Label, o => o.MapFrom(s => s.Label))
+                .ForMember(d => d.Label, o => o.MapFrom(s => s.Label == null ? s.FieldTitle : s.Label))
                 .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType.ToString().ToLower()))
                 .ForMember(d => d.InputValue, o => o.Ignore()) // This is set separately as the value can come from anywhere
                 ;

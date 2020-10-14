@@ -47,6 +47,9 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("inputtype")]
         public string FieldType { get; set; }
 
+        [JsonProperty("inputdesc")]
+        public string FieldTypeDescription { get; set; }
+
         [JsonProperty("inputvalue")]
         public string InputValue { get; set; }
 

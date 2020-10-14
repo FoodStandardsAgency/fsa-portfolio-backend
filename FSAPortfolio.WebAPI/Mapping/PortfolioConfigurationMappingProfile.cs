@@ -44,6 +44,7 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(d => d.AdminOnlyLock, o => o.MapFrom(s => s.AdminOnlyLock))
                 .ForMember(d => d.Label, o => o.MapFrom(s => s.Label))
                 .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType.ToString().ToLower()))
+                .ForMember(d => d.FieldTypeDescription, o => o.MapFrom(s => PortfolioFieldTypeDescriptions.Map[s.FieldType]))
                 .ForMember(d => d.FieldTypeLocked, o => o.MapFrom(s => s.FieldTypeLocked))
                 .ForMember(d => d.InputValue, o => o.Ignore()) // This is set separately as the value can come from anywhere
                 .ForMember(d => d.MasterField, o => o.MapFrom(s => s.MasterLabel == null ? null : s.MasterLabel.FieldName))

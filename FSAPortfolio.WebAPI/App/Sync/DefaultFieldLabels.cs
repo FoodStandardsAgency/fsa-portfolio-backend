@@ -61,11 +61,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
             {
                 //      FieldGroup      FieldTitle     FieldName                    Included IncludeLock AdmLock FieldType FieldTypeLocked
                 Factory(FieldGroupName_ProjectIDs, "Project ID", nameof(ProjectModel.project_id), true, true, true, PortfolioFieldType.Auto, true),
-                Factory(FieldGroupName_ProjectIDs, "Business Case Number", nameof(ProjectModel.business_case_number), false, false, false, PortfolioFieldType.FreeText, false),
-                Factory(FieldGroupName_ProjectIDs, "FS Number", nameof(ProjectModel.fs_number), false, false, false, PortfolioFieldType.FreeText, false),
+                Factory(FieldGroupName_ProjectIDs, "Business Case Number", nameof(ProjectModel.business_case_number), false, false, false, PortfolioFieldType.FreeText, true),
+                Factory(FieldGroupName_ProjectIDs, "FS Number", nameof(ProjectModel.fs_number), false, false, false, PortfolioFieldType.FreeText, true),
 
                 Factory(FieldGroupName_AboutTheProject, "Project name", nameof(ProjectModel.project_name), true, true, false, PortfolioFieldType.FreeText, true),
-                Factory(FieldGroupName_AboutTheProject, "Short description", nameof(ProjectModel.short_desc), false, false, false, PortfolioFieldType.FreeText, false),
+                Factory(FieldGroupName_AboutTheProject, "Short description", nameof(ProjectModel.short_desc), false, false, false, PortfolioFieldType.FreeText, true),
                 Factory(FieldGroupName_AboutTheProject, "Risk rating", nameof(ProjectModel.risk_rating), false, false, false, PortfolioFieldType.OptionList, false),
                 Factory(FieldGroupName_AboutTheProject, "Theme", nameof(ProjectModel.theme), false, false, false, PortfolioFieldType.OptionList, false),
                 Factory(FieldGroupName_AboutTheProject, "Project type", nameof(ProjectModel.project_type), false, false, false, PortfolioFieldType.OptionList, false),
