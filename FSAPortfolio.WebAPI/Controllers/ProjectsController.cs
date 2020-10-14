@@ -23,7 +23,7 @@ namespace FSAPortfolio.WebAPI.Controllers
     {
         // POST: api/Projects
         [HttpPost]
-        public async Task Post([FromBody]project update)
+        public async Task Post([FromBody]ProjectModel update)
         {
             try
             {

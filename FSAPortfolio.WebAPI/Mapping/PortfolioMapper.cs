@@ -21,6 +21,7 @@ namespace FSAPortfolio.WebAPI.Mapping
         {
             projectConfig = new MapperConfiguration(cfg =>
             {
+                cfg.AddProfile<PostgresProjectMappingProfile>();
                 cfg.AddProfile<ProjectMappingProfile>();
                 cfg.AddProfile<ProjectOptionsMappingProfile>();
             });

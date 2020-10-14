@@ -61,25 +61,25 @@ namespace FSAPortfolio.WebAPI.App.Sync
             {
                 //      FieldGroup      FieldTitle     FieldName                    Included IncludeLock AdmLock FieldType FieldTypeLocked
                 Factory(FieldGroupName_ProjectIDs, "Project ID", nameof(ProjectModel.project_id), true, true, true, PortfolioFieldType.Auto, true),
-                Factory(FieldGroupName_ProjectIDs, "Business Case Number", nameof(ProjectModel.business_case_number), false, false, false, PortfolioFieldType.FreeText, true),
+                Factory(FieldGroupName_ProjectIDs, "Business Case Number", nameof(ProjectModel.business_case_number), true, false, false, PortfolioFieldType.FreeText, true),
                 Factory(FieldGroupName_ProjectIDs, "FS Number", nameof(ProjectModel.fs_number), false, false, false, PortfolioFieldType.FreeText, true),
 
                 Factory(FieldGroupName_AboutTheProject, "Project name", nameof(ProjectModel.project_name), true, true, false, PortfolioFieldType.FreeText, true),
-                Factory(FieldGroupName_AboutTheProject, "Short description", nameof(ProjectModel.short_desc), false, false, false, PortfolioFieldType.FreeText, true),
+                Factory(FieldGroupName_AboutTheProject, "Short description", nameof(ProjectModel.short_desc), true, false, false, PortfolioFieldType.FreeTextArea, true),
                 Factory(FieldGroupName_AboutTheProject, "Risk rating", nameof(ProjectModel.risk_rating), false, false, false, PortfolioFieldType.OptionList, false),
-                Factory(FieldGroupName_AboutTheProject, "Theme", nameof(ProjectModel.theme), false, false, false, PortfolioFieldType.OptionList, false),
+                Factory(FieldGroupName_AboutTheProject, "Theme", nameof(ProjectModel.theme), true, false, false, PortfolioFieldType.OptionList, false),
                 Factory(FieldGroupName_AboutTheProject, "Project type", nameof(ProjectModel.project_type), false, false, false, PortfolioFieldType.OptionList, false),
                 Factory(FieldGroupName_AboutTheProject, "Project size", nameof(ProjectModel.project_size), false, false, false, PortfolioFieldType.OptionList, false),
-                Factory(FieldGroupName_AboutTheProject, "Category", nameof(ProjectModel.category), false, false, false, PortfolioFieldType.OptionList, false),
-                Factory(FieldGroupName_AboutTheProject, "Secondary category", nameof(ProjectModel.subcat), false, false, false, PortfolioFieldType.PredefinedList, false), // Uses the same values as category
-                Factory(FieldGroupName_AboutTheProject, "Directorate", nameof(ProjectModel.direct), false, false, false, PortfolioFieldType.PredefinedList, true),
+                Factory(FieldGroupName_AboutTheProject, "Category", nameof(ProjectModel.category), true, false, false, PortfolioFieldType.OptionList, false),
+                Factory(FieldGroupName_AboutTheProject, "Secondary category", nameof(ProjectModel.subcat), true, false, false, PortfolioFieldType.PredefinedList, false), // Uses the same values as category
+                Factory(FieldGroupName_AboutTheProject, "Directorate", nameof(ProjectModel.direct), true, false, false, PortfolioFieldType.PredefinedList, true),
                 Factory(FieldGroupName_AboutTheProject, "Strategic objectives", nameof(ProjectModel.strategic_objectives), false, false, false, PortfolioFieldType.PredefinedList, true),
                 Factory(FieldGroupName_AboutTheProject, "Programme", nameof(ProjectModel.programme), false, false, false, PortfolioFieldType.OptionList, false),
                 Factory(FieldGroupName_AboutTheProject, "Programme description", nameof(ProjectModel.programme_description), false, false, false, PortfolioFieldType.FreeText, true),
-                Factory(FieldGroupName_AboutTheProject, "Project channel (link)", nameof(ProjectModel.link), false, false, false, PortfolioFieldType.FreeText, true),
-                Factory(FieldGroupName_AboutTheProject, "Related projects", nameof(ProjectModel.rels), false, false, false, PortfolioFieldType.PredefinedList, true),
+                Factory(FieldGroupName_AboutTheProject, "Project channel (link)", nameof(ProjectModel.link), true, false, false, PortfolioFieldType.FreeText, true),
+                Factory(FieldGroupName_AboutTheProject, "Related projects", nameof(ProjectModel.rels), true, false, false, PortfolioFieldType.PredefinedList, true),
                 Factory(FieldGroupName_AboutTheProject, "Dependencies", nameof(ProjectModel.dependencies), false, false, false, PortfolioFieldType.PredefinedList, true),
-                Factory(FieldGroupName_AboutTheProject, "Key documents", nameof(ProjectModel.documents), false, false, false, PortfolioFieldType.PredefinedList, true),
+                Factory(FieldGroupName_AboutTheProject, "Key documents", nameof(ProjectModel.documents), true, false, false, PortfolioFieldType.PredefinedList, true),
 
                 Factory(FieldGroupName_ProjectTeam, "Project lead", nameof(ProjectModel.oddlead), false, false, false, PortfolioFieldType.PredefinedField, true),
                 Factory(FieldGroupName_ProjectTeam, "Lead role", nameof(ProjectModel.oddlead_role), false, false, false, PortfolioFieldType.OptionList, true),
