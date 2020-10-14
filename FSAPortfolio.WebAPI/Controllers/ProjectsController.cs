@@ -124,7 +124,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                     var result = new GetNewProjectDTO()
                     {
                         Config = PortfolioMapper.Mapper.Map<ProjectLabelConfigModel>(config),
-                        ProjectId = reservation.ProjectId
+                        Project = new ProjectModel() { project_id = reservation.ProjectId }
                     };
                     return result;
                 }

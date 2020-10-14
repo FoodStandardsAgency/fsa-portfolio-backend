@@ -12,8 +12,8 @@ namespace FSAPortfolio.WebAPI.DTO
         [JsonProperty("config")]
         public ProjectLabelConfigModel Config { get; set; }
 
-        [JsonProperty("project_id")]
-        public string ProjectId { get; set; }
+        [JsonProperty("project")]
+        public ProjectModel Project { get; set; }
 
     }
 }
