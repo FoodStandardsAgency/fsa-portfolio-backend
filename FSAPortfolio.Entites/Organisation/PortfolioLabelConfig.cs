@@ -17,7 +17,8 @@ namespace FSAPortfolio.Entities.Organisation
         Percentage = 7,
         RAGChoice = 8,
         Budget = 9,
-        FreeTextArea = 10
+        FreeTextArea = 10,
+        SelectPicker = 11
     }
 
     [Flags]
@@ -47,6 +48,7 @@ namespace FSAPortfolio.Entities.Organisation
             this[PortfolioFieldType.Percentage] = "Percentage";
             this[PortfolioFieldType.RAGChoice] = "RAG choice";
             this[PortfolioFieldType.Budget] = "Budget amount";
+            this[PortfolioFieldType.SelectPicker] = "Select multiple options from list";
         }
     }
 

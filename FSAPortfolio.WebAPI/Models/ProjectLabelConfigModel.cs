@@ -101,6 +101,18 @@ namespace FSAPortfolio.WebAPI.Models
             new DropDownItemModel(){ Display = "Communications", Value = "communcations", Order = 2 }
         };
 
+        [JsonProperty(nameof(ProjectModel.rels))]
+        public SelectPickerModel RelatedProjects = new SelectPickerModel()
+        {
+            Header = "Select the related projects (enter a phase or RAG status to narrow list)...",
+            Items = new SelectPickerItemModel[] {
+                new SelectPickerItemModel(){ Display = "ODD2010001: Test1", SearchTokens = "amber, backlog", Value = "ODD2010001", Order = 0 },
+                new SelectPickerItemModel(){ Display = "ODD2010002: Test2", SearchTokens = "amber, alpha", Value = "ODD2010002", Order = 1 },
+                new SelectPickerItemModel(){ Display = "ODD2010003: Test3", SearchTokens = "green, alpha", Value = "ODD2010003", Order = 2 }
+            }
+        };
+
+
     }
 
     public class DropDownItemModel
@@ -115,4 +127,18 @@ namespace FSAPortfolio.WebAPI.Models
         public int Order { get; set; }
     }
 
+    public class SelectPickerModel
+    {
+        [JsonProperty("header")]
+        public string Header { get; set; }
+
+        [JsonProperty("items")]
+        public IEnumerable<SelectPickerItemModel> Items { get; set; }
+    }
+
+    public class SelectPickerItemModel : DropDownItemModel
+    {
+        [JsonProperty("tokens")]
+        public string SearchTokens { get; set; }
+    }
 }
