@@ -31,6 +31,13 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Value, o => o.MapFrom(s => s.ViewKey))
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
                 ;
+
+            CreateMap<IEnumerable<ProjectCategory>, SelectPickerModel>()
+                .ConstructUsing(s => new SelectPickerModel()
+                {
+                    Header = "Select the subcategories...",
+                    Items = s.Select(c => new SelectPickerItemModel() { Display = c.Name, Value = c.ViewKey, Order = c.Order }).ToArray()
+                });
         }
 
         private void PortfolioConfiguration_ProjectLabelConfigModel()
