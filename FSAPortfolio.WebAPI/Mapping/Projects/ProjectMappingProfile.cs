@@ -33,6 +33,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
             // Inbound
             ProjectModel__Project();
+            ProjectModel__ProjectUpdateItem();
         }
 
 
@@ -40,7 +41,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             CreateMap<Project, ProjectModel>()
                 .ForMember(p => p.id, o => o.MapFrom(s => s.LatestUpdate.SyncId))
-                .ForMember(p => p.project_id, o => o.MapFrom(s => s.ProjectId))
+                .ForMember(p => p.project_id, o => o.MapFrom(s => s.Reservation.ProjectId))
                 .ForMember(p => p.project_name, o => o.MapFrom(s => s.Name))
                 .ForMember(p => p.start_date, o => o.MapFrom(s => s.StartDate))
                 .ForMember(p => p.short_desc, o => o.MapFrom(s => s.Description))
@@ -66,8 +67,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
                 .ForMember(p => p.pgroup, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
-                .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.ProjectId))))
-                .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.ProjectId))))
+                .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.Reservation.ProjectId))))
+                .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.Reservation.ProjectId))))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
                 .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
                 .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
@@ -113,7 +114,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         private void ProjectModel__Project()
         {
             CreateMap<ProjectModel, Project>()
-                .ForMember(p => p.ProjectId, o => o.MapFrom(s => s.project_id))
                 .ForMember(p => p.Name, o => o.MapFrom(s => s.project_name))
                 .ForMember(p => p.StartDate, o => o.MapFrom<PostgresDateResolver, string>(s => s.start_date))
                 .ForMember(p => p.ActualStartDate, o => o.MapFrom<PostgresDateResolver, string>(s => s.actstart))
@@ -140,7 +140,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.FirstUpdate, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate, o => o.Ignore())
                 .ForMember(p => p.AuditLogs, o => o.Ignore())
-                .ForMember(p => p.OwningPortfolio, o => o.Ignore())
+                .ForMember(p => p.Reservation, o => o.Ignore())
                 // Ignore the keys
                 .ForMember(p => p.ProjectReservation_Id, o => o.Ignore())
                 .ForMember(p => p.ProjectCategory_Id, o => o.Ignore())
@@ -150,15 +150,33 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.ServiceLead_Id, o => o.Ignore())
                 .ForMember(p => p.FirstUpdate_Id, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate_Id, o => o.Ignore())
-                .ForMember(p => p.OwningPortfolio_Id, o => o.Ignore())
             ;
         }
 
+        private void ProjectModel__ProjectUpdateItem()
+        {
+            CreateMap<ProjectModel, ProjectUpdateItem>()
+                .ForMember(p => p.Id, o => o.Ignore())
+                .ForMember(p => p.Project_Id, o => o.Ignore())
+                .ForMember(p => p.Project, o => o.Ignore())
+                .ForMember(p => p.Person, o => o.Ignore())
+                .ForMember(p => p.SyncId, o => o.MapFrom(s => s.id))
+                .ForMember(p => p.Timestamp, o => o.MapFrom(s => s.timestamp))
+                .ForMember(p => p.Text, o => o.MapFrom(s => s.update))
+                .ForMember(p => p.PercentageComplete, o => o.MapFrom(s => s.p_comp))
+                .ForMember(p => p.RAGStatus, o => o.MapFrom<ConfigRAGStatusResolver, string>(s => s.rag))
+                .ForMember(p => p.Phase, o => o.MapFrom<ConfigPhaseStatusResolver, string>(s => s.phase))
+                .ForMember(p => p.OnHoldStatus, o => o.MapFrom<ConfigOnHoldStatusResolver, string>(s => s.onhold))
+                .ForMember(p => p.Budget, o => o.MapFrom<DecimalResolver, string>(s => s.budget))
+                .ForMember(p => p.Spent, o => o.MapFrom<DecimalResolver, string>(s => s.spent))
+                .ForMember(p => p.ExpectedCurrentPhaseEnd, o => o.MapFrom<PostgresDateResolver, string>(s => s.expendp))
+                ;
+        }
 
         private void ProjectUpdateItem__ProjectUpdateModel()
         {
             CreateMap<ProjectUpdateItem, ProjectUpdateModel>()
-                .ForMember(d => d.project_id, o => o.MapFrom(s => s.Project.ProjectId))
+                .ForMember(d => d.project_id, o => o.MapFrom(s => s.Project.Reservation.ProjectId))
                 .ForMember(d => d.timestamp, o => o.MapFrom<OutputTimestampResolver, DateTime>(s => s.Timestamp))
                 .ForMember(d => d.max_timestamp, o => o.MapFrom<OutputTimestampResolver, DateTime>(s => s.Project.LatestUpdate.Timestamp))
                 .ForMember(d => d.date, o => o.MapFrom(s => s.Timestamp.Date))
@@ -208,7 +226,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public DateTime? Resolve(Project source, ProjectModel destination, Project sourceMember, DateTime? destMember, ResolutionContext context)
         {
-            var completedPhase = source.OwningPortfolio.Configuration.CompletedPhase;
+            var completedPhase = source.Reservation.Portfolio.Configuration.CompletedPhase;
             var firstCompletePhase = source.Updates.Where(u => u.Phase == completedPhase).OrderBy(u => u.Timestamp).FirstOrDefault();
             return firstCompletePhase?.Timestamp;
         }
@@ -237,9 +255,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 foreach (var relatedProjectId in projectIds)
                 {
                     var trimmedId = relatedProjectId.Trim();
-                    if (!result.Any(p => p.ProjectId == trimmedId))
+                    if (!result.Any(p => p.Reservation.ProjectId == trimmedId))
                     {
-                        var project = portfolioContext.Projects.SingleOrDefault(p => p.ProjectId == trimmedId);
+                        var project = portfolioContext.Projects.SingleOrDefault(p => p.Reservation.ProjectId == trimmedId);
                         if (project != null)
                         {
                             result.Add(project);
@@ -257,7 +275,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         public ProjectCategory Resolve(object source, Project destination, string sourceMember, ProjectCategory destMember, ResolutionContext context)
         {
             var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
-            return destination.OwningPortfolio.Configuration.Categories.SingleOrDefault(c => c.ViewKey == sourceMember);
+            return destination.Reservation.Portfolio.Configuration.Categories.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
     public class ConfigProjectSizeResolver : IMemberValueResolver<object, Project, string, ProjectSize>
@@ -265,7 +283,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         public ProjectSize Resolve(object source, Project destination, string sourceMember, ProjectSize destMember, ResolutionContext context)
         {
             var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
-            return destination.OwningPortfolio.Configuration.ProjectSizes.SingleOrDefault(c => c.ViewKey == sourceMember);
+            return destination.Reservation.Portfolio.Configuration.ProjectSizes.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
     public class ConfigBudgetTypeResolver : IMemberValueResolver<object, Project, string, BudgetType>
@@ -273,7 +291,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         public BudgetType Resolve(object source, Project destination, string sourceMember, BudgetType destMember, ResolutionContext context)
         {
             var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
-            return destination.OwningPortfolio.Configuration.BudgetTypes.SingleOrDefault(c => c.ViewKey == sourceMember);
+            return destination.Reservation.Portfolio.Configuration.BudgetTypes.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
 
@@ -283,7 +301,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         public ProjectRAGStatus Resolve(object source, ProjectUpdateItem destination, string sourceMember, ProjectRAGStatus destMember, ResolutionContext context)
         {
             var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
-            return destination.Project.OwningPortfolio.Configuration.RAGStatuses.SingleOrDefault(c => c.ViewKey == sourceMember);
+            return destination.Project.Reservation.Portfolio.Configuration.RAGStatuses.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
     public class ConfigPhaseStatusResolver : IMemberValueResolver<object, ProjectUpdateItem, string, ProjectPhase>
@@ -291,7 +309,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         public ProjectPhase Resolve(object source, ProjectUpdateItem destination, string sourceMember, ProjectPhase destMember, ResolutionContext context)
         {
             var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
-            return destination.Project.OwningPortfolio.Configuration.Phases.SingleOrDefault(c => c.ViewKey == sourceMember);
+            return destination.Project.Reservation.Portfolio.Configuration.Phases.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
     public class ConfigOnHoldStatusResolver : IMemberValueResolver<object, ProjectUpdateItem, string, ProjectOnHoldStatus>
@@ -299,7 +317,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         public ProjectOnHoldStatus Resolve(object source, ProjectUpdateItem destination, string sourceMember, ProjectOnHoldStatus destMember, ResolutionContext context)
         {
             var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
-            return destination.Project.OwningPortfolio.Configuration.OnHoldStatuses.SingleOrDefault(c => c.ViewKey == sourceMember);
+            return destination.Project.Reservation.Portfolio.Configuration.OnHoldStatuses.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
 

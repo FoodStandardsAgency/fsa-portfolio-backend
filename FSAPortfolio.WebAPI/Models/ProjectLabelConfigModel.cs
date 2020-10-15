@@ -76,7 +76,7 @@ namespace FSAPortfolio.WebAPI.Models
         public SelectPickerModel SubCategoryItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.direct))]
-        public IEnumerable<DropDownItemModel> Directorates = new DropDownItemModel[] {
+        public readonly IEnumerable<DropDownItemModel> Directorates = new DropDownItemModel[] {
             new DropDownItemModel(){ Display = "None", Value = "0", Order = 0 },
             new DropDownItemModel(){ Display = "Communications", Value = "1", Order = 2 },
             new DropDownItemModel(){ Display = "Incidents & Resilience", Value = "2", Order = 3 },
@@ -95,7 +95,7 @@ namespace FSAPortfolio.WebAPI.Models
         };
 
         [JsonProperty(nameof(ProjectModel.strategic_objectives))]
-        public IEnumerable<DropDownItemModel> StrategicObjectives = new DropDownItemModel[] {
+        public readonly IEnumerable<DropDownItemModel> StrategicObjectives = new DropDownItemModel[] {
             new DropDownItemModel(){ Display = "None", Value = "none", Order = 0 },
             new DropDownItemModel(){ Display = "FSA wide", Value = "fsa", Order = 1 },
             new DropDownItemModel(){ Display = "Communications", Value = "communcations", Order = 2 }
@@ -103,7 +103,7 @@ namespace FSAPortfolio.WebAPI.Models
 
         // TODO: stub - need to select these values from portfolio projects
         [JsonProperty(nameof(ProjectModel.rels))]
-        public SelectPickerModel RelatedProjects = new SelectPickerModel()
+        public readonly SelectPickerModel RelatedProjects = new SelectPickerModel()
         {
             Header = "Select the related projects (enter a phase or RAG status to narrow list)...",
             Items = new SelectPickerItemModel[] {
@@ -113,7 +113,7 @@ namespace FSAPortfolio.WebAPI.Models
             }
         };
         [JsonProperty(nameof(ProjectModel.dependencies))]
-        public SelectPickerModel DependantProjects = new SelectPickerModel()
+        public readonly SelectPickerModel DependantProjects = new SelectPickerModel()
         {
             Header = "Select the dependencies (enter a phase or RAG status to narrow list)...",
             Items = new SelectPickerItemModel[] {
@@ -126,7 +126,7 @@ namespace FSAPortfolio.WebAPI.Models
         // TODO: these options are multi selects that come from the user input in the config screen.
         // Need to store the input (like RAG Statuses etc are stored - but generic way for ad-hoc fields).
         [JsonProperty(nameof(ProjectModel.programme))]
-        public SelectPickerModel Programme = new SelectPickerModel()
+        public readonly SelectPickerModel Programme = new SelectPickerModel()
         {
             Header = "Select the programmes...",
             Items = new SelectPickerItemModel[] {

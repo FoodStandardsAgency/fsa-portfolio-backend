@@ -53,6 +53,10 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonProperty("inputtype_locked")]
         public bool FieldTypeLocked { get; set; }
+
+        [JsonProperty("flags")]
+        public PortfolioFieldFlags Flags { get; set; } = PortfolioFieldFlags.Default;
+
     }
 
     public class PortfolioConfigDeleteLabelRequest

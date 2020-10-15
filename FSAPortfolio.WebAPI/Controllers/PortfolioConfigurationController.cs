@@ -86,15 +86,6 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<string> GetMaxId([FromUri] string portfolio)
-        {
-            using (var context = new PortfolioContext())
-            {
-                return await context.Projects.Where(p => p.OwningPortfolio.ViewKey == portfolio).MaxAsync(p => p.ProjectId);
-            }
-        }
-
         private PortfolioConfigAuditLog auditLogFactory(PortfolioConfiguration con, string type, DateTime timestamp, string text)
         {
             return new PortfolioConfigAuditLog()

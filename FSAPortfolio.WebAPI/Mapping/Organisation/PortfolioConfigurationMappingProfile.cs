@@ -14,7 +14,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
                 .ForMember(d => d.Id, o => o.Ignore())
                 .ForMember(d => d.Configuration_Id, o => o.Ignore())
                 .ForMember(d => d.Configuration, o => o.Ignore())
+                .ForMember(d => d.Group, o => o.Ignore())
                 .ForMember(d => d.MasterLabel, o => o.Ignore())
+                .ForMember(d => d.MasterLabel_Id, o => o.Ignore())
                 .ForMember(d => d.FieldName, o => o.MapFrom(s => s.FieldName))
                 .ForMember(d => d.FieldOrder, o => o.MapFrom(s => s.FieldOrder))
                 .ForMember(d => d.FieldTitle, o => o.MapFrom(s => s.FieldTitle))
@@ -25,6 +27,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
                 .ForMember(d => d.Label, o => o.MapFrom(s => s.FieldLabel))
                 .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType))
                 .ForMember(d => d.FieldTypeLocked, o => o.MapFrom(s => s.FieldTypeLocked))
+                .ForMember(d => d.Flags, o => o.MapFrom(s => s.Flags))
                 ;
 
             CreateMap<PortfolioConfiguration, PortfolioConfigModel>()

@@ -89,13 +89,12 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<PortfolioLabelGroup>().HasMany(g => g.Labels).WithOptional(l => l.Group);
 
             modelBuilder.Entity<ProjectReservation>().HasKey(p => p.Id);
+            modelBuilder.Entity<ProjectReservation>().HasIndex(p => p.ProjectId).IsUnique();
             modelBuilder.Entity<ProjectReservation>().HasRequired(p => p.Portfolio).WithMany().HasForeignKey(p => p.Portfolio_Id);
             modelBuilder.Entity<ProjectReservation>().HasOptional(p => p.Project).WithRequired(p => p.Reservation);
             modelBuilder.Entity<ProjectReservation>().HasIndex(l => new { l.Year, l.Month, l.Index }).IsUnique();
 
             modelBuilder.Entity<Project>().HasKey(p => p.ProjectReservation_Id);
-            modelBuilder.Entity<Project>().HasIndex(p => p.ProjectId).IsUnique();
-            modelBuilder.Entity<Project>().HasRequired(p => p.OwningPortfolio).WithMany().HasForeignKey(p => p.OwningPortfolio_Id);
             modelBuilder.Entity<Project>().HasMany(p => p.Updates).WithRequired(u => u.Project).HasForeignKey(u => u.Project_Id);
             modelBuilder.Entity<Project>().HasMany(p => p.RelatedProjects).WithMany().Map(mc =>
             {

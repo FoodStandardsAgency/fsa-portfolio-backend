@@ -419,8 +419,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                     // First sync the project
                     var destProject = dest.Projects.ConfigIncludes()
-                        .Include(p => p.OwningPortfolio.Configuration.BudgetTypes)
-                        .Include(p => p.Reservation)
+                        .Include(p => p.Reservation.Portfolio.Configuration.BudgetTypes)
                         .Include(p => p.Portfolios)
                         .Include(p => p.Updates.Select(u => u.OnHoldStatus))
                         .Include(p => p.Updates.Select(u => u.RAGStatus))
@@ -430,7 +429,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         .Include(p => p.BudgetType)
                         .Include(p => p.RelatedProjects)
                         .Include(p => p.DependantProjects)
-                        .SingleOrDefault(p => p.ProjectId == sourceProjectDetail.Key.project_id);
+                        .SingleOrDefault(p => p.Reservation.ProjectId == sourceProjectDetail.Key.project_id);
 
                     var latestSourceUpdate = sourceProjectDetail.OrderBy(d => d.timestamp).Last();
                     if (destProject == null)
@@ -439,13 +438,13 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         var yrStart = pid.Length - 7;
                         destProject = new Project()
                         {
-                            Reservation = new ProjectReservation() { 
+                            Reservation = new ProjectReservation() {
+                                ProjectId = pid,
                                 Year = int.Parse(pid.Substring(yrStart, 2)) + 2000, 
                                 Month = int.Parse(pid.Substring(yrStart + 2, 2)),
                                 Index = int.Parse(pid.Substring(yrStart + 4)),
                                 ReservedAt = DateTime.Now
                                 },
-                            ProjectId = pid,
                             Updates = new List<ProjectUpdateItem>(),
                             Portfolios = new List<Portfolio>()
                         };
@@ -456,7 +455,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     if (!string.IsNullOrEmpty(portfolioShortName) && destProject.Portfolios.Count == 0)
                     {
                         var portfolio = dest.Portfolios.ConfigIncludes().Single(p => p.ShortName == portfolioShortName);
-                        destProject.OwningPortfolio = portfolio;
                         destProject.Portfolios.Add(portfolio);
                         destProject.Reservation.Portfolio = portfolio;
                     }

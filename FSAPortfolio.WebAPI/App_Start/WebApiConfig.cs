@@ -29,12 +29,6 @@ namespace FSAPortfolio.WebAPI
 
             #region Portfolio Configuration
 
-            config.Routes.MapHttpRoute(
-                name: "PortfolioConfigurationMaxId",
-                routeTemplate: "api/PortfolioConfiguration/MaxId",
-                defaults: new { controller = ControllerName<PortfolioConfigurationController>(), action = nameof(PortfolioConfigurationController.GetMaxId) }
-            );
-
             #endregion
 
             #region Projects

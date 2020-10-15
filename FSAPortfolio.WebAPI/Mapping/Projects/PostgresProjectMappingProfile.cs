@@ -46,7 +46,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         private void project__Project()
         {
             CreateMap<project, Project>()
-                .ForMember(p => p.ProjectId, o => o.MapFrom(s => s.project_id))
                 .ForMember(p => p.Name, o => o.MapFrom(s => s.project_name))
                 .ForMember(p => p.StartDate, o => o.MapFrom<PostgresDateResolver, string>(s => s.start_date))
                 .ForMember(p => p.ActualStartDate, o => o.MapFrom<PostgresDateResolver, string>(s => s.actstart))
@@ -68,12 +67,12 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => s.project_size))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => s.budgettype))
                 // Ignore these
+                .ForMember(p => p.Reservation, o => o.Ignore())
                 .ForMember(p => p.Portfolios, o => o.Ignore())
                 .ForMember(p => p.Updates, o => o.Ignore())
                 .ForMember(p => p.FirstUpdate, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate, o => o.Ignore())
                 .ForMember(p => p.AuditLogs, o => o.Ignore())
-                .ForMember(p => p.OwningPortfolio, o => o.Ignore())
                 // Ignore the keys
                 .ForMember(p => p.ProjectReservation_Id, o => o.Ignore())
                 .ForMember(p => p.ProjectCategory_Id, o => o.Ignore())
@@ -83,7 +82,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.ServiceLead_Id, o => o.Ignore())
                 .ForMember(p => p.FirstUpdate_Id, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate_Id, o => o.Ignore())
-                .ForMember(p => p.OwningPortfolio_Id, o => o.Ignore())
             ;
         }
 
@@ -91,7 +89,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             CreateMap<Project, latest_projects>()
                 .ForMember(p => p.id, o => o.MapFrom(s => s.LatestUpdate.SyncId))
-                .ForMember(p => p.project_id, o => o.MapFrom(s => s.ProjectId))
+                .ForMember(p => p.project_id, o => o.MapFrom(s => s.Reservation.ProjectId))
                 .ForMember(p => p.project_name, o => o.MapFrom(s => s.Name))
                 .ForMember(p => p.start_date, o => o.MapFrom(s => s.StartDate))
                 .ForMember(p => p.short_desc, o => o.MapFrom(s => s.Description))
@@ -118,8 +116,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.pgroup, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.toupdate, o => o.Ignore()) // No longer required.
-                .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.ProjectId))))
-                .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.ProjectId))))
+                .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.Reservation.ProjectId))))
+                .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.Reservation.ProjectId))))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
                 .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
                 .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))

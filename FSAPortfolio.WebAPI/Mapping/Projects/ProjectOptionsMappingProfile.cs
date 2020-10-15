@@ -33,7 +33,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 ;
 
             CreateMap<IEnumerable<ProjectCategory>, SelectPickerModel>()
-                .ConstructUsing(s => new SelectPickerModel()
+                .ConvertUsing(s => new SelectPickerModel()
                 {
                     Header = "Select the subcategories...",
                     Items = s.Select(c => new SelectPickerItemModel() { Display = c.Name, Value = c.ViewKey, Order = c.Order }).ToArray()

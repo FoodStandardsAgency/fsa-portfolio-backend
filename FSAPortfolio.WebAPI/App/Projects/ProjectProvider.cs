@@ -1,7 +1,6 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.WebAPI.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,50 +12,75 @@ namespace FSAPortfolio.WebAPI.App.Projects
 {
     public class ProjectProvider : IDisposable
     {
-        private PortfolioContext context;
-        private string portfolioViewKey;
-        public ProjectProvider(string portfolioViewKey)
+        internal PortfolioContext Context;
+        private string projectId;
+        public ProjectProvider(string projectId)
         {
-            this.context = new PortfolioContext();
-            this.portfolioViewKey = portfolioViewKey;
+            this.Context = new PortfolioContext();
+            this.projectId = projectId;
         }
 
-        public async Task<PortfolioConfiguration> GetConfigAsync()
+        public async Task<Project> GetProjectAsync() => (await GetProjectReservationAsync())?.Project;
+        
+
+        public async Task<ProjectReservation> GetProjectReservationAsync()
         {
-            return await (from c in context.PortfolioConfigurations.ConfigIncludes()
-                            where c.Portfolio.ViewKey == portfolioViewKey
-                          select c).SingleAsync();
+            return await Context.ProjectReservations
+                .ProjectIncludes()
+                .ConfigIncludes()
+                .SingleOrDefaultAsync(r => r.ProjectId == projectId);
         }
 
-        public async Task<ProjectReservation> GetProjectReservationAsync(PortfolioConfiguration config)
+        internal void CreateProjectUpdate(ProjectUpdateItem update, Project project)
         {
-            var timestamp = DateTime.Now;
-            int year = timestamp.Year;
-            int month = timestamp.Month;
-
-            var maxIndexQuery = context.ProjectReservations
-                .Where(r => r.Portfolio_Id == config.Portfolio_Id && r.Year == year && r.Month == month)
-                .Select(r => (int?)r.Index);
-            int maxIndex = (await maxIndexQuery.MaxAsync()) ?? 0;
-
-            var reservation = new ProjectReservation()
+            update.Timestamp = DateTime.Now;
+            if (!update.IsDuplicate(project.LatestUpdate))
             {
-                Year = year,
-                Month = month,
-                Index = maxIndex + 1,
-                ReservedAt = timestamp,
-                Portfolio_Id = config.Portfolio_Id
-            };
-
-            context.ProjectReservations.Add(reservation);
-            // TODO: save!!!
-
-            return reservation;
+                project.Updates.Add(update);
+                project.LatestUpdate = update;
+            }
         }
+
+        internal Project CreateNewProject(ProjectReservation reservation)
+        {
+            reservation.Project = new Project()
+            {
+                Reservation = reservation,
+                Updates = new List<ProjectUpdateItem>(),
+                Portfolios = new List<Portfolio>() { reservation.Portfolio }
+            };
+            return reservation.Project;
+        }
+
 
         public void Dispose()
         {
-            context.Dispose();
+            Context.Dispose();
         }
+
+        internal Task<int> SaveChangesAsync()
+        {
+            return Context.SaveChangesAsync();
+        }
+
+        internal void LogAuditChanges(Project project)
+        {
+            // Record changes
+            AuditProvider.LogChanges(
+                Context,
+                (ts, txt) => auditLogFactory(ts, txt),
+                project.AuditLogs,
+                DateTime.Now);
+        }
+
+        private ProjectAuditLog auditLogFactory(DateTime timestamp, string text)
+        {
+            return new ProjectAuditLog()
+            {
+                Timestamp = timestamp,
+                Text = text
+            };
+        }
+
     }
 }

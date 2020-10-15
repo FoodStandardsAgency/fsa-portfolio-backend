@@ -167,11 +167,9 @@
                 c => new
                     {
                         ProjectReservation_Id = c.Int(nullable: false),
-                        ProjectId = c.String(maxLength: 10),
                         Name = c.String(maxLength: 250),
                         Description = c.String(maxLength: 1000),
                         Directorate = c.String(maxLength: 150),
-                        OwningPortfolio_Id = c.Int(nullable: false),
                         ProjectCategory_Id = c.Int(),
                         ProjectSize_Id = c.Int(),
                         BudgetType_Id = c.Int(),
@@ -197,13 +195,10 @@
                 .ForeignKey("dbo.ProjectUpdateItems", t => t.FirstUpdate_Id)
                 .ForeignKey("dbo.ProjectUpdateItems", t => t.LatestUpdate_Id)
                 .ForeignKey("dbo.People", t => t.Lead_Id)
-                .ForeignKey("dbo.Portfolios", t => t.OwningPortfolio_Id)
                 .ForeignKey("dbo.ProjectReservations", t => t.ProjectReservation_Id)
                 .ForeignKey("dbo.People", t => t.ServiceLead_Id)
                 .ForeignKey("dbo.ProjectSizes", t => t.ProjectSize_Id)
                 .Index(t => t.ProjectReservation_Id)
-                .Index(t => t.ProjectId, unique: true)
-                .Index(t => t.OwningPortfolio_Id)
                 .Index(t => t.ProjectCategory_Id)
                 .Index(t => t.ProjectSize_Id)
                 .Index(t => t.BudgetType_Id)
@@ -289,6 +284,7 @@
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Portfolio_Id = c.Int(nullable: false),
+                        ProjectId = c.String(maxLength: 10),
                         Year = c.Int(nullable: false),
                         Month = c.Int(nullable: false),
                         Index = c.Int(nullable: false),
@@ -297,6 +293,7 @@
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Portfolios", t => t.Portfolio_Id)
                 .Index(t => t.Portfolio_Id)
+                .Index(t => t.ProjectId, unique: true)
                 .Index(t => new { t.Year, t.Month, t.Index }, unique: true);
             
             CreateTable(
@@ -383,7 +380,6 @@
             DropForeignKey("dbo.ProjectReservations", "Portfolio_Id", "dbo.Portfolios");
             DropForeignKey("dbo.RelatedProjects", "RelatedProject_Id", "dbo.Projects");
             DropForeignKey("dbo.RelatedProjects", "Project_Id", "dbo.Projects");
-            DropForeignKey("dbo.Projects", "OwningPortfolio_Id", "dbo.Portfolios");
             DropForeignKey("dbo.Projects", "Lead_Id", "dbo.People");
             DropForeignKey("dbo.Projects", "LatestUpdate_Id", "dbo.ProjectUpdateItems");
             DropForeignKey("dbo.Projects", "FirstUpdate_Id", "dbo.ProjectUpdateItems");
@@ -417,6 +413,7 @@
             DropIndex("dbo.ProjectSizes", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.ProjectSizes", new[] { "Configuration_Id", "ViewKey" });
             DropIndex("dbo.ProjectReservations", new[] { "Year", "Month", "Index" });
+            DropIndex("dbo.ProjectReservations", new[] { "ProjectId" });
             DropIndex("dbo.ProjectReservations", new[] { "Portfolio_Id" });
             DropIndex("dbo.ProjectRAGStatus", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.ProjectRAGStatus", new[] { "Configuration_Id", "ViewKey" });
@@ -433,8 +430,6 @@
             DropIndex("dbo.Projects", new[] { "BudgetType_Id" });
             DropIndex("dbo.Projects", new[] { "ProjectSize_Id" });
             DropIndex("dbo.Projects", new[] { "ProjectCategory_Id" });
-            DropIndex("dbo.Projects", new[] { "OwningPortfolio_Id" });
-            DropIndex("dbo.Projects", new[] { "ProjectId" });
             DropIndex("dbo.Projects", new[] { "ProjectReservation_Id" });
             DropIndex("dbo.Portfolios", new[] { "IDPrefix" });
             DropIndex("dbo.Portfolios", new[] { "Name" });

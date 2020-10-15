@@ -15,8 +15,6 @@ namespace FSAPortfolio.Entities.Projects
 
         public ProjectReservation Reservation { get; set; }
 
-        [StringLength(10)]
-        public string ProjectId { get; set; }
 
         [StringLength(250)]
         public string Name { get; set; }
@@ -27,8 +25,6 @@ namespace FSAPortfolio.Entities.Projects
         [StringLength(150)]
         public string Directorate { get; set; }
 
-        public int OwningPortfolio_Id { get; set; }
-        public virtual Portfolio OwningPortfolio { get; set; }
         public virtual ProjectCategory Category { get; set; }
         public int? ProjectCategory_Id { get; set; }
         public virtual ProjectSize Size { get; set; }

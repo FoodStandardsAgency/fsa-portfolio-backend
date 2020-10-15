@@ -28,40 +28,40 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             try
             {
-                using (var context = new PortfolioContext())
+                using (var provider = new ProjectProvider(update.project_id))
                 {
-                    var timestamp = DateTime.Now;
-
                     // Load and map the project
-                    var project = await context.Projects.ProjectIncludes().SingleAsync(p => p.ProjectId == update.project_id);
-                    PortfolioMapper.ProjectMapper.Map(update, project, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = context);
-
-                    // Record changes
-                    AuditProvider.LogChanges(
-                        context,
-                        (ts, txt) => auditLogFactory(ts, txt),
-                        project.AuditLogs,
-                        DateTime.Now);
-
-                    // Create a new update
-                    var projectUpdate = new ProjectUpdateItem() { Project = project };
-                    PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = context);
-                    projectUpdate.Timestamp = DateTime.Now;
-                    if (!projectUpdate.IsDuplicate(project.LatestUpdate))
+                    var reservation = await provider.GetProjectReservationAsync();
+                    if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+                    else
                     {
-                        project.Updates.Add(projectUpdate);
-                        project.LatestUpdate = projectUpdate;
+                        var project = reservation?.Project;
+                        if (project == null)
+                        {
+                            project = provider.CreateNewProject(reservation);
+                        }
+                        PortfolioMapper.ProjectMapper.Map(update, project, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = provider.Context);
+                        provider.LogAuditChanges(project);
+                        await provider.SaveChangesAsync();
+
+                        // Create a new update
+                        var projectUpdate = new ProjectUpdateItem() { Project = project };
+                        PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = provider.Context);
+                        provider.CreateProjectUpdate(projectUpdate, project);
+
+                        // Save
+                        await provider.SaveChangesAsync();
                     }
 
-                    // Save
-                    await context.SaveChangesAsync();
                 }
             }
             catch(Exception e)
             {
                 throw e;
             }
+
         }
+
 
         // GET: api/Projects?portfolio={portfolio}&filter={filter}
         [HttpGet]
@@ -124,14 +124,15 @@ namespace FSAPortfolio.WebAPI.Controllers
         [HttpGet]
         public async Task<GetNewProjectDTO> GetNewProject([FromUri] string portfolio)
         {
-            using (var provider = new ProjectProvider(portfolio))
+            using (var provider = new PortfolioProvider(portfolio))
             {
                 var config = await provider.GetConfigAsync();
                 var reservation = await provider.GetProjectReservationAsync(config);
+                await provider.SaveChangesAsync();
 
                 var result = new GetNewProjectDTO()
                 {
-                    Config = PortfolioMapper.ProjectMapper.Map<ProjectLabelConfigModel>(config, opts => opts.Items[nameof(PortfolioFieldFlags)] = PortfolioFieldFlags.Create),
+                    Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.Create),
                     Options = PortfolioMapper.ProjectMapper.Map<ProjectOptionsModel>(config),
                     Project = new ProjectModel() { project_id = reservation.ProjectId }
                 };
@@ -148,10 +149,10 @@ namespace FSAPortfolio.WebAPI.Controllers
                 using (var context = new PortfolioContext())
                 {
                     var project = (from p in context.Projects.ProjectIncludes().ConfigIncludes()
-                                   where p.ProjectId == projectId select p).Single();
+                                   where p.Reservation.ProjectId == projectId select p).Single();
                     var result = new GetProjectDTO()
                     {
-                        Config = PortfolioMapper.ProjectMapper.Map<ProjectLabelConfigModel>(project.OwningPortfolio.Configuration),
+                        Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration),
                         Project = PortfolioMapper.ProjectMapper.Map<ProjectModel>(project)
                     };
                     return result;
@@ -185,7 +186,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 using (var context = new PortfolioContext())
                 {
                     var projects = await context.Projects.ProjectIncludes()
-                        .Where(p => p.ProjectId == projectId)
+                        .Where(p => p.Reservation.ProjectId == projectId)
                         .SelectMany(p => p.RelatedProjects)
                         .ToListAsync();
                     var result = PortfolioMapper.ProjectMapper.Map<IEnumerable<ProjectModel>>(projects);
@@ -206,7 +207,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 using (var context = new PortfolioContext())
                 {
                     var projects = await context.Projects.ProjectIncludes()
-                        .Where(p => p.ProjectId == projectId)
+                        .Where(p => p.Reservation.ProjectId == projectId)
                         .SelectMany(p => p.DependantProjects)
                         .ToListAsync(); ;
                     var result = PortfolioMapper.ProjectMapper.Map<IEnumerable<ProjectModel>>(projects);
@@ -234,7 +235,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                     var project = await (from u in context.Projects
                                          .Include(p => p.Updates)
                                          .Include(p => p.LatestUpdate)
-                                         where u.ProjectId == projectId
+                                         where u.Reservation.ProjectId == projectId
                                          select u)
                                    .SingleAsync();
                     var updates = (from u in project.Updates
@@ -257,13 +258,5 @@ namespace FSAPortfolio.WebAPI.Controllers
             return context.Projects.ProjectIncludes().Where(p => p.Portfolios.Any(po => po.ViewKey == portfolio));
         }
 
-        private ProjectAuditLog auditLogFactory(DateTime timestamp, string text)
-        {
-            return new ProjectAuditLog()
-            {
-                Timestamp = timestamp,
-                Text = text
-            };
-        }
     }
 }

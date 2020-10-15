@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.WebAPI.Mapping.Organisation;
 using FSAPortfolio.WebAPI.Mapping.Projects;
+using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +40,11 @@ namespace FSAPortfolio.WebAPI.Mapping
                 cfg.AddProfile<PortfolioConfigUpdateProfile>();
             });
             UpdateMapper = updateConfig.CreateMapper();
+        }
+
+        internal static ProjectLabelConfigModel GetProjectLabelConfigModel(PortfolioConfiguration config, PortfolioFieldFlags flags = PortfolioFieldFlags.Read)
+        {
+            return ProjectMapper.Map<ProjectLabelConfigModel>(config, opts => opts.Items[nameof(PortfolioFieldFlags)] = flags);
         }
     }
 }

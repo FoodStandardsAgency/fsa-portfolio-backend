@@ -35,7 +35,7 @@ namespace FSAPortfolio.Entities.Projects
 
         public bool IsDuplicate(ProjectUpdateItem update)
         {
-            return 
+            return update != null &&
                 RAGStatus.ViewKey.Equals(update.RAGStatus.ViewKey) &&
                 OnHoldStatus.ViewKey.Equals(update.OnHoldStatus.ViewKey) &&
                 Phase.ViewKey.Equals(update.Phase.ViewKey) &&
