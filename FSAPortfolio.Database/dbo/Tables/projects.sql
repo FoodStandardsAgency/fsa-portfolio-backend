@@ -1,43 +1,74 @@
-﻿CREATE TABLE [dbo].[projects] (
-    [id]                INT            IDENTITY (1, 1) NOT NULL,
-    [project_id]        VARCHAR (10)   NULL,
-    [project_name]      VARCHAR (250)  NULL,
-    [start_date]        VARCHAR (50)   NULL,
-    [short_desc]        VARCHAR (1000) NULL,
-    [phase]             VARCHAR (50)   NULL,
-    [category]          VARCHAR (50)   NULL,
-    [subcat]            VARCHAR (150)  NULL,
-    [rag]               VARCHAR (50)   NULL,
-    [update]            NVARCHAR (MAX) NULL,
-    [oddlead]           VARCHAR (150)  NULL,
-    [oddlead_email]     VARCHAR (150)  NULL,
-    [servicelead]       VARCHAR (150)  NULL,
-    [servicelead_email] VARCHAR (150)  NULL,
-    [priority_main]     VARCHAR (3)    NULL,
-    [funded]            VARCHAR (3)    NULL,
-    [confidence]        VARCHAR (3)    NULL,
-    [priorities]        VARCHAR (3)    NULL,
-    [benefits]          VARCHAR (3)    NULL,
-    [criticality]       VARCHAR (3)    NULL,
-    [budget]            VARCHAR (15)   NULL,
-    [spent]             VARCHAR (15)   NULL,
-    [documents]         VARCHAR (2000) NULL,
-    [timestamp]         DATETIME       NOT NULL DEFAULT (getdate()),
-    [pgroup]            VARCHAR (20)   NULL,
-    [link]              VARCHAR (1000) NULL,
-    [toupdate]          CHAR (1)       NULL,
-    [rels]              VARCHAR (500)  NULL,
-    [team]              VARCHAR (500)  NULL,
-    [onhold]            VARCHAR (10)   NULL,
-    [expend]            VARCHAR (50)   NULL,
-    [hardend]           VARCHAR (50)   NULL,
-    [actstart]          VARCHAR (50)   NULL,
-    [dependencies]      VARCHAR (500)  NULL,
-    [project_size]      VARCHAR (5)    NULL,
-    [oddlead_role]      VARCHAR (5)    NULL,
-    [budgettype]        VARCHAR (15)   NULL,
-    [direct]            VARCHAR (150)  NULL,
-    [expendp]           VARCHAR (12)   NULL,
-    [p_comp]            REAL           NULL
+﻿CREATE TABLE [dbo].[Projects] (
+    [ProjectReservation_Id] INT             NOT NULL,
+    [Name]                  NVARCHAR (250)  NULL,
+    [Description]           NVARCHAR (1000) NULL,
+    [Directorate]           NVARCHAR (150)  NULL,
+    [ProjectCategory_Id]    INT             NULL,
+    [ProjectSize_Id]        INT             NULL,
+    [BudgetType_Id]         INT             NULL,
+    [Funded]                INT             NOT NULL,
+    [Confidence]            INT             NOT NULL,
+    [Priorities]            INT             NOT NULL,
+    [Benefits]              INT             NOT NULL,
+    [Criticality]           INT             NOT NULL,
+    [Lead_Id]               INT             NULL,
+    [ServiceLead_Id]        INT             NULL,
+    [Team]                  NVARCHAR (500)  NULL,
+    [Priority]              INT             NULL,
+    [StartDate]             DATETIME        NULL,
+    [ActualStartDate]       DATETIME        NULL,
+    [ExpectedEndDate]       DATETIME        NULL,
+    [HardEndDate]           DATETIME        NULL,
+    [LatestUpdate_Id]       INT             NULL,
+    [FirstUpdate_Id]        INT             NULL,
+    CONSTRAINT [PK_dbo.Projects] PRIMARY KEY CLUSTERED ([ProjectReservation_Id] ASC),
+    CONSTRAINT [FK_dbo.Projects_dbo.BudgetTypes_BudgetType_Id] FOREIGN KEY ([BudgetType_Id]) REFERENCES [dbo].[BudgetTypes] ([Id]),
+    CONSTRAINT [FK_dbo.Projects_dbo.People_Lead_Id] FOREIGN KEY ([Lead_Id]) REFERENCES [dbo].[People] ([Id]),
+    CONSTRAINT [FK_dbo.Projects_dbo.People_ServiceLead_Id] FOREIGN KEY ([ServiceLead_Id]) REFERENCES [dbo].[People] ([Id]),
+    CONSTRAINT [FK_dbo.Projects_dbo.ProjectCategories_ProjectCategory_Id] FOREIGN KEY ([ProjectCategory_Id]) REFERENCES [dbo].[ProjectCategories] ([Id]),
+    CONSTRAINT [FK_dbo.Projects_dbo.ProjectReservations_ProjectReservation_Id] FOREIGN KEY ([ProjectReservation_Id]) REFERENCES [dbo].[ProjectReservations] ([Id]),
+    CONSTRAINT [FK_dbo.Projects_dbo.ProjectSizes_ProjectSize_Id] FOREIGN KEY ([ProjectSize_Id]) REFERENCES [dbo].[ProjectSizes] ([Id]),
+    CONSTRAINT [FK_dbo.Projects_dbo.ProjectUpdateItems_FirstUpdate_Id] FOREIGN KEY ([FirstUpdate_Id]) REFERENCES [dbo].[ProjectUpdateItems] ([Id]),
+    CONSTRAINT [FK_dbo.Projects_dbo.ProjectUpdateItems_LatestUpdate_Id] FOREIGN KEY ([LatestUpdate_Id]) REFERENCES [dbo].[ProjectUpdateItems] ([Id])
 );
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_FirstUpdate_Id]
+    ON [dbo].[Projects]([FirstUpdate_Id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_LatestUpdate_Id]
+    ON [dbo].[Projects]([LatestUpdate_Id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ServiceLead_Id]
+    ON [dbo].[Projects]([ServiceLead_Id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Lead_Id]
+    ON [dbo].[Projects]([Lead_Id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_BudgetType_Id]
+    ON [dbo].[Projects]([BudgetType_Id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ProjectSize_Id]
+    ON [dbo].[Projects]([ProjectSize_Id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ProjectCategory_Id]
+    ON [dbo].[Projects]([ProjectCategory_Id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_ProjectReservation_Id]
+    ON [dbo].[Projects]([ProjectReservation_Id] ASC);
 

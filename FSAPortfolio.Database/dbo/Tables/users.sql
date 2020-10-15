@@ -1,8 +1,15 @@
-﻿CREATE TABLE [dbo].[users] (
-    [id]           INT           IDENTITY (1, 1) NOT NULL,
-    [timestamp]    DATETIME      DEFAULT (getdate()) NOT NULL,
-    [username]     VARCHAR (50)  NULL,
-    [pass_hash]    VARCHAR (300) NULL,
-    [access_group] VARCHAR (3)   NULL
+﻿CREATE TABLE [dbo].[Users] (
+    [Id]            INT            IDENTITY (1, 1) NOT NULL,
+    [Timestamp]     DATETIME       NOT NULL,
+    [UserName]      NVARCHAR (50)  NULL,
+    [PasswordHash]  NVARCHAR (300) NULL,
+    [AccessGroupId] INT            NOT NULL,
+    CONSTRAINT [PK_dbo.Users] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_dbo.Users_dbo.AccessGroups_AccessGroupId] FOREIGN KEY ([AccessGroupId]) REFERENCES [dbo].[AccessGroups] ([Id])
 );
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_AccessGroupId]
+    ON [dbo].[Users]([AccessGroupId] ASC);
 

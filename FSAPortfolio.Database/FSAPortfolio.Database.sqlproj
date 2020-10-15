@@ -63,22 +63,32 @@
     <Folder Include="Deployment" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\projects.sql" />
-    <Build Include="dbo\Tables\odd_people.sql" />
-    <Build Include="dbo\Tables\users.sql" />
-    <Build Include="dbo\Views\updates_latest_date.sql" />
-    <Build Include="dbo\Views\updates_int5.sql" />
-    <Build Include="dbo\Views\updates_int4.sql" />
-    <Build Include="dbo\Views\updates_int3.sql" />
-    <Build Include="dbo\Views\updates_int2.sql" />
-    <Build Include="dbo\Views\updates_int1.sql" />
-    <Build Include="dbo\Views\updates.sql" />
-    <Build Include="dbo\Views\latest_projects_int3.sql" />
-    <Build Include="dbo\Views\latest_projects_int2.sql" />
-    <Build Include="dbo\Views\latest_projects_int1.sql" />
-    <Build Include="dbo\Views\latest_projects.sql" />
-    <Build Include="dbo\Views\latest_project_with_update_date.sql" />
-    <Build Include="dbo\Views\completed_time.sql" />
     <None Include="Deployment\00_Create.sql" />
+    <None Include="Deployment\Compare_DEVDB_to_Project.scmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\Users.sql" />
+    <Build Include="dbo\Tables\RelatedProjects.sql" />
+    <Build Include="dbo\Tables\ProjectUpdateItems.sql" />
+    <Build Include="dbo\Tables\ProjectSizes.sql" />
+    <Build Include="dbo\Tables\Projects.sql" />
+    <Build Include="dbo\Tables\ProjectReservations.sql" />
+    <Build Include="dbo\Tables\ProjectRAGStatus.sql" />
+    <Build Include="dbo\Tables\ProjectPhases.sql" />
+    <Build Include="dbo\Tables\ProjectOnHoldStatus.sql" />
+    <Build Include="dbo\Tables\ProjectCategories.sql" />
+    <Build Include="dbo\Tables\ProjectAuditLogs.sql" />
+    <Build Include="dbo\Tables\Portfolios.sql" />
+    <Build Include="dbo\Tables\PortfolioProjects.sql" />
+    <Build Include="dbo\Tables\PortfolioLabelGroups.sql" />
+    <Build Include="dbo\Tables\PortfolioLabelConfigs.sql" />
+    <Build Include="dbo\Tables\PortfolioConfigurations.sql" />
+    <Build Include="dbo\Tables\PortfolioConfigAuditLogs.sql" />
+    <Build Include="dbo\Tables\People.sql" />
+    <Build Include="dbo\Tables\DependantProjects.sql" />
+    <Build Include="dbo\Tables\BudgetTypes.sql" />
+    <Build Include="dbo\Tables\AccessGroups.sql" />
+    <Build Include="dbo\Tables\__MigrationHistory.sql" />
+    <Build Include="dbo\Views\vwProjects.sql" />
   </ItemGroup>
 </Project>
