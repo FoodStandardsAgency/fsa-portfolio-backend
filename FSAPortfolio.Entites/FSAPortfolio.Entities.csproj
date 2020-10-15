@@ -62,7 +62,12 @@
     <Compile Include="Migrations\202010151326342_01_Subcats.designer.cs">
       <DependentUpon>202010151326342_01_Subcats.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010151401008_02_Directorates.cs" />
+    <Compile Include="Migrations\202010151401008_02_Directorates.designer.cs">
+      <DependentUpon>202010151401008_02_Directorates.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Organisation\Directorate.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
     <Compile Include="Organisation\Portfolio.cs" />
     <Compile Include="Organisation\PortfolioLabelConfig.cs" />
@@ -99,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202010151326342_01_Subcats.resx">
       <DependentUpon>202010151326342_01_Subcats.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010151401008_02_Directorates.resx">
+      <DependentUpon>202010151401008_02_Directorates.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

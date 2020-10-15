@@ -164,6 +164,32 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
+        internal void SyncDirectorates()
+        {
+            using (var context = new PortfolioContext())
+            {
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "FSA wide", ViewKey = "fsa", Order = 1 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "Communications", ViewKey = "comms", Order = 2 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "Incidents & Resilience", ViewKey = "inc", Order = 3 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "Field Operations", ViewKey = "field", Order = 4 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "Finance & Performance", ViewKey = "finance", Order = 5 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "Food Safety Policy", ViewKey = "policy", Order = 6 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "National Food Crime Unit", ViewKey = "nfcu", Order = 7 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "Northern Ireland", ViewKey = "ni", Order = 8 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "Openness, Data & Digital", ViewKey = "odd", Order = 9 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "People", ViewKey = "people", Order = 10 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "Regulatory Compliance", ViewKey = "comp", Order = 11 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "Science, Evidence & Research", ViewKey = "science", Order = 12 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "Strategy, Legal & Governance", ViewKey = "strategy", Order = 13 });
+                context.Directorates.AddOrUpdate(d => d.ViewKey, new Directorate() { Name = "Wales", ViewKey = "wales", Order = 14 });
+                context.SaveChanges();
+            }
+        }
+
+    
+
+
+
         internal void SyncPortfolios()
         {
             using (var context = new PortfolioContext())

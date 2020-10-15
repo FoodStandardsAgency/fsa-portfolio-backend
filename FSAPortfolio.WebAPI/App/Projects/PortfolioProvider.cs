@@ -2,6 +2,7 @@
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.Mapping;
+using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -51,6 +52,16 @@ namespace FSAPortfolio.WebAPI.App.Projects
             context.ProjectReservations.Add(reservation);
             return reservation;
         }
+
+        public async Task<ProjectOptionsModel> GetNewProjectOptionsAsync(PortfolioConfiguration config)
+        {
+            var options = PortfolioMapper.ProjectMapper.Map<ProjectOptionsModel>(config);
+            var directorates = await context.Directorates.OrderBy(d => d.Order).Select(d => new DropDownItemModel() { Display = d.Name, Value = d.ViewKey, Order = d.Order }).ToListAsync();
+            directorates.Insert(0, new DropDownItemModel() { Display = "None", Value = "0", Order = 0 });
+            options.Directorates = directorates;
+            return options;
+        }
+
 
         public Task<int> SaveChangesAsync()
         {

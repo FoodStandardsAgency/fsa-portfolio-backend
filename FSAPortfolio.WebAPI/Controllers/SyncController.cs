@@ -27,6 +27,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             sync.SyncUsers();
             sync.SyncPeople();
 
+            sync.SyncDirectorates();
             sync.SyncPortfolios();
 
             sync.SyncAllProjects();

@@ -133,7 +133,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 var result = new GetNewProjectDTO()
                 {
                     Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.Create),
-                    Options = PortfolioMapper.ProjectMapper.Map<ProjectOptionsModel>(config),
+                    Options = await provider.GetNewProjectOptionsAsync(config),
                     Project = new ProjectModel() { project_id = reservation.ProjectId }
                 };
                 return result;

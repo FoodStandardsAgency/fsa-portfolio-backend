@@ -27,6 +27,7 @@ namespace FSAPortfolio.Entities
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<AccessGroup> AccessGroups { get; set; }
+        public virtual DbSet<Directorate> Directorates { get; set; }
         public virtual DbSet<Portfolio> Portfolios { get; set; }
         public virtual DbSet<PortfolioConfiguration> PortfolioConfigurations { get; set; }
         public virtual DbSet<PortfolioLabelConfig> PortfolioConfigurationLabels { get; set; }
@@ -57,6 +58,10 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Person>().HasKey(u => u.Id);
 
             modelBuilder.Entity<AccessGroup>().HasKey(u => u.Id);
+
+            modelBuilder.Entity<Directorate>().HasKey(p => p.Id);
+            modelBuilder.Entity<Directorate>().HasIndex(p => p.Name).IsUnique();
+            modelBuilder.Entity<Directorate>().HasIndex(p => p.ViewKey).IsUnique();
 
             modelBuilder.Entity<Portfolio>().HasKey(p => p.Id);
             modelBuilder.Entity<Portfolio>().HasIndex(p => p.Name).IsUnique();
