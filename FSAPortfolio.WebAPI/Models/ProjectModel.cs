@@ -14,7 +14,7 @@ namespace FSAPortfolio.WebAPI.Models
         public string short_desc { get; set; }
         public string phase { get; set; }
         public string category { get; set; }
-        public string subcat { get; set; }
+        public string[] subcat { get; set; }
         public string rag { get; set; }
         public string update { get; set; }
         public string oddlead { get; set; }

@@ -47,7 +47,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.short_desc, o => o.MapFrom(s => s.Description))
                 .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.ViewKey))
                 .ForMember(p => p.category, o => o.MapFrom(s => s.Category.ViewKey))
-                .ForMember(p => p.subcat, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.subcat, o => o.MapFrom(s => s.Subcategories.Select(sc => sc.ViewKey).ToArray()))
                 .ForMember(p => p.rag, o => o.MapFrom(s => s.LatestUpdate.RAGStatus.ViewKey))
                 .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Text))
                 .ForMember(p => p.oddlead, o => o.Ignore()) // TODO: add a field for the lead name
@@ -132,6 +132,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.RelatedProjects, o => o.MapFrom<ProjectCollectionResolver, string>(s => s.rels))
                 .ForMember(p => p.DependantProjects, o => o.MapFrom<ProjectCollectionResolver, string>(s => s.dependencies))
                 .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => s.category))
+                .ForMember(p => p.Subcategories, o => o.MapFrom<ConfigSubcategoryResolver, string[]>(s => s.subcat))
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => s.project_size))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => s.budgettype))
                 // Ignore these
@@ -276,6 +277,14 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
             return destination.Reservation.Portfolio.Configuration.Categories.SingleOrDefault(c => c.ViewKey == sourceMember);
+        }
+    }
+    public class ConfigSubcategoryResolver : IMemberValueResolver<object, Project, string[], ICollection<ProjectCategory>>
+    {
+        public ICollection<ProjectCategory> Resolve(object source, Project destination, string[] sourceMember, ICollection<ProjectCategory> destMember, ResolutionContext context)
+        {
+            var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+            return destination.Reservation.Portfolio.Configuration.Categories.Where(c => sourceMember.Contains(c.ViewKey)).ToList();
         }
     }
     public class ConfigProjectSizeResolver : IMemberValueResolver<object, Project, string, ProjectSize>

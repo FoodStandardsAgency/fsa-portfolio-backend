@@ -107,7 +107,13 @@ namespace FSAPortfolio.Entities
                 mc.MapLeftKey("Project_Id");
                 mc.MapRightKey("DependantProject_Id");
                 mc.ToTable("DependantProjects");
-            }); ;
+            });
+            modelBuilder.Entity<Project>().HasMany(p => p.Subcategories).WithMany().Map(mc =>
+            {
+                mc.MapLeftKey("Project_Id");
+                mc.MapRightKey("Subcategory_Id");
+                mc.ToTable("ProjectSubcategories");
+            });
             modelBuilder.Entity<Project>().HasMany(p => p.AuditLogs).WithRequired(l => l.Project).HasForeignKey(u => u.Project_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.LatestUpdate).WithMany().HasForeignKey(p => p.LatestUpdate_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.FirstUpdate).WithMany().HasForeignKey(p => p.FirstUpdate_Id);

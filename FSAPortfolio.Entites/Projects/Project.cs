@@ -27,6 +27,9 @@ namespace FSAPortfolio.Entities.Projects
 
         public virtual ProjectCategory Category { get; set; }
         public int? ProjectCategory_Id { get; set; }
+
+        public virtual ICollection<ProjectCategory> Subcategories { get; set; }
+
         public virtual ProjectSize Size { get; set; }
         public int? ProjectSize_Id { get; set; }
         public virtual BudgetType BudgetType { get; set; }
