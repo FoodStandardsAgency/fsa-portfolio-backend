@@ -56,9 +56,34 @@ namespace FSAPortfolio.WebAPI.App.Projects
         public async Task<ProjectOptionsModel> GetNewProjectOptionsAsync(PortfolioConfiguration config)
         {
             var options = PortfolioMapper.ProjectMapper.Map<ProjectOptionsModel>(config);
+
             var directorates = await context.Directorates.OrderBy(d => d.Order).Select(d => new DropDownItemModel() { Display = d.Name, Value = d.ViewKey, Order = d.Order }).ToListAsync();
             directorates.Insert(0, new DropDownItemModel() { Display = "None", Value = "0", Order = 0 });
             options.Directorates = directorates;
+
+            var projects = await context.Projects
+                .ProjectIncludes()
+                .Where(p => p.Reservation.Portfolio_Id == config.Portfolio_Id)
+                .OrderBy(p => p.Reservation.ProjectId)
+                .ToListAsync();
+
+            options.RelatedProjects = new SelectPickerModel() {
+                Header = "Select the related projects (enter a phase or RAG status to narrow list)...",
+                Items = projects.Select((p, i) => new SelectPickerItemModel()
+                {
+                    Value = p.Reservation.ProjectId,
+                    Display = $"{p.Reservation.ProjectId}: {p.Name}",
+                    SearchTokens = $"{p.Category.Name},{p.LatestUpdate.Phase.Name}",
+                    Order = i
+                }).ToList()
+            };
+
+            options.DependantProjects = new SelectPickerModel()
+            {
+                Header = "Select the dependencies (enter a phase or RAG status to narrow list)...",
+                Items = options.RelatedProjects.Items
+            };
+
             return options;
         }
 

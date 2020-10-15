@@ -29,17 +29,17 @@ namespace FSAPortfolio.WebAPI.Models
         public string criticality { get; set; }
         public string budget { get; set; }
         public string spent { get; set; }
-        public string documents { get; set; }
+        public string[] documents { get; set; }
         public DateTime? timestamp { get; set; }
         public string pgroup { get; set; }
         public string link { get; set; }
-        public string rels { get; set; }
+        public string[] rels { get; set; }
         public string team { get; set; }
         public string onhold { get; set; }
         public string expend { get; set; }
         public string hardend { get; set; }
         public string actstart { get; set; }
-        public string dependencies { get; set; }
+        public string[] dependencies { get; set; }
         public string project_size { get; set; }
         public string oddlead_role { get; set; }
         public string budgettype { get; set; }

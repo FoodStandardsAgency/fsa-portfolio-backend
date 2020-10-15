@@ -108,8 +108,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                 //      FieldGroup      FieldTitle     FieldName                    Included IncludeLock AdmLock FieldType FieldTypeLocked
                 Factory(FieldGroupName_Updates, "Update", nameof(ProjectModel.update), true, false, false, PortfolioFieldType.FreeTextArea, true, PortfolioFieldFlags.UpdateOnly),
-                Factory(FieldGroupName_Updates, "Forward look", nameof(ProjectModel.forward_look), false, false, false, PortfolioFieldType.FreeText, true),
-                Factory(FieldGroupName_Updates, "Emerging issues, risks", nameof(ProjectModel.emerging_issues), false, false, false, PortfolioFieldType.FreeText, true),
+                Factory(FieldGroupName_Updates, "Forward look", nameof(ProjectModel.forward_look), false, false, false, PortfolioFieldType.FreeTextArea, true),
+                Factory(FieldGroupName_Updates, "Emerging issues, risks", nameof(ProjectModel.emerging_issues), false, false, false, PortfolioFieldType.FreeTextArea, true),
 
                 Factory(FieldGroupName_Prioritisation, "Priority score", nameof(ProjectModel.priority_main), false, false, false, PortfolioFieldType.PredefinedField, true),
                 Factory(FieldGroupName_Prioritisation, "Funded", nameof(ProjectModel.funded), false, false, false, PortfolioFieldType.PredefinedField, true),

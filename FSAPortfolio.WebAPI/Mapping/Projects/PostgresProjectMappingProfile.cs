@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
 
 namespace FSAPortfolio.WebAPI.Mapping.Projects
 {
@@ -61,8 +62,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Team, o => o.MapFrom(s => s.team))
                 .ForMember(p => p.Lead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.oddlead_email))
                 .ForMember(p => p.ServiceLead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.servicelead_email))
-                .ForMember(p => p.RelatedProjects, o => o.MapFrom<ProjectCollectionResolver, string>(s => s.rels))
-                .ForMember(p => p.DependantProjects, o => o.MapFrom<ProjectCollectionResolver, string>(s => s.dependencies))
+                .ForMember(p => p.RelatedProjects, o => o.MapFrom<PostgresProjectCollectionResolver, string>(s => s.rels))
+                .ForMember(p => p.DependantProjects, o => o.MapFrom<PostgresProjectCollectionResolver, string>(s => s.dependencies))
                 .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => s.category))
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => s.project_size))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => s.budgettype))
@@ -147,6 +148,31 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
+    public class PostgresProjectCollectionResolver : IMemberValueResolver<object, Project, string, ICollection<Project>>
+    {
+        public ICollection<Project> Resolve(object source, Project destination, string sourceMember, ICollection<Project> destMember, ResolutionContext context)
+        {
+            var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+            var result = new List<Project>();
+            if (!string.IsNullOrEmpty(sourceMember))
+            {
+                // Add missing related projects
+                var projectIds = sourceMember.Split(',');
+                foreach (var relatedProjectId in projectIds)
+                {
+                    var trimmedId = relatedProjectId.Trim();
+                    if (!result.Any(p => p.Reservation.ProjectId == trimmedId))
+                    {
+                        var project = portfolioContext.Projects.Include(p => p.Reservation).SingleOrDefault(p => p.Reservation.ProjectId == trimmedId);
+                        if (project != null)
+                        {
+                            result.Add(project);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+    }
 
- 
 }

@@ -37,27 +37,11 @@ namespace FSAPortfolio.WebAPI.Models
             new DropDownItemModel(){ Display = "Communications", Value = "communcations", Order = 2 }
         };
 
-        // TODO: stub - need to select these values from portfolio projects
         [JsonProperty(nameof(ProjectModel.rels))]
-        public readonly SelectPickerModel RelatedProjects = new SelectPickerModel()
-        {
-            Header = "Select the related projects (enter a phase or RAG status to narrow list)...",
-            Items = new SelectPickerItemModel[] {
-                new SelectPickerItemModel(){ Display = "ODD2010001: Test1", SearchTokens = "amber, backlog", Value = "ODD2010001", Order = 0 },
-                new SelectPickerItemModel(){ Display = "ODD2010002: Test2", SearchTokens = "amber, alpha", Value = "ODD2010002", Order = 1 },
-                new SelectPickerItemModel(){ Display = "ODD2010003: Test3", SearchTokens = "green, alpha", Value = "ODD2010003", Order = 2 }
-            }
-        };
+        public SelectPickerModel RelatedProjects { get; set; }
+
         [JsonProperty(nameof(ProjectModel.dependencies))]
-        public readonly SelectPickerModel DependantProjects = new SelectPickerModel()
-        {
-            Header = "Select the dependencies (enter a phase or RAG status to narrow list)...",
-            Items = new SelectPickerItemModel[] {
-                new SelectPickerItemModel(){ Display = "ODD2010001: Test1", SearchTokens = "amber, backlog", Value = "ODD2010001", Order = 0 },
-                new SelectPickerItemModel(){ Display = "ODD2010002: Test2", SearchTokens = "amber, alpha", Value = "ODD2010002", Order = 1 },
-                new SelectPickerItemModel(){ Display = "ODD2010003: Test3", SearchTokens = "green, alpha", Value = "ODD2010003", Order = 2 }
-            }
-        };
+        public SelectPickerModel DependantProjects { get; set; }
 
         // TODO: these options are multi selects that come from the user input in the config screen.
         // Need to store the input (like RAG Statuses etc are stored - but generic way for ad-hoc fields).

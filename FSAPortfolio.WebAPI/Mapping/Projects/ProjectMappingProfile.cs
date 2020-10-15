@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
 
 namespace FSAPortfolio.WebAPI.Mapping.Projects
 {
@@ -129,8 +130,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Team, o => o.MapFrom(s => s.team))
                 .ForMember(p => p.Lead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.oddlead_email))
                 .ForMember(p => p.ServiceLead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.servicelead_email))
-                .ForMember(p => p.RelatedProjects, o => o.MapFrom<ProjectCollectionResolver, string>(s => s.rels))
-                .ForMember(p => p.DependantProjects, o => o.MapFrom<ProjectCollectionResolver, string>(s => s.dependencies))
+                .ForMember(p => p.RelatedProjects, o => o.MapFrom<ProjectCollectionResolver, string[]>(s => s.rels))
+                .ForMember(p => p.DependantProjects, o => o.MapFrom<ProjectCollectionResolver, string[]>(s => s.dependencies))
                 .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => s.category))
                 .ForMember(p => p.Subcategories, o => o.MapFrom<ConfigSubcategoryResolver, string[]>(s => s.subcat))
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => s.project_size))
@@ -243,22 +244,21 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
 
 
-    public class ProjectCollectionResolver : IMemberValueResolver<object, Project, string, ICollection<Project>>
+    public class ProjectCollectionResolver : IMemberValueResolver<object, Project, string[], ICollection<Project>>
     {
-        public ICollection<Project> Resolve(object source, Project destination, string sourceMember, ICollection<Project> destMember, ResolutionContext context)
+        public ICollection<Project> Resolve(object source, Project destination, string[] sourceMember, ICollection<Project> destMember, ResolutionContext context)
         {
             var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
             var result = new List<Project>();
-            if (!string.IsNullOrEmpty(sourceMember))
+            if (sourceMember != null && sourceMember.Length > 0)
             {
                 // Add missing related projects
-                var projectIds = sourceMember.Split(',');
-                foreach (var relatedProjectId in projectIds)
+                foreach (var relatedProjectId in sourceMember)
                 {
                     var trimmedId = relatedProjectId.Trim();
                     if (!result.Any(p => p.Reservation.ProjectId == trimmedId))
                     {
-                        var project = portfolioContext.Projects.SingleOrDefault(p => p.Reservation.ProjectId == trimmedId);
+                        var project = portfolioContext.Projects.Include(p => p.Reservation).SingleOrDefault(p => p.Reservation.ProjectId == trimmedId);
                         if (project != null)
                         {
                             result.Add(project);
@@ -283,8 +283,13 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public ICollection<ProjectCategory> Resolve(object source, Project destination, string[] sourceMember, ICollection<ProjectCategory> destMember, ResolutionContext context)
         {
-            var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
-            return destination.Reservation.Portfolio.Configuration.Categories.Where(c => sourceMember.Contains(c.ViewKey)).ToList();
+            ICollection<ProjectCategory> result = null;
+            if (sourceMember != null && sourceMember.Length > 0)
+            {
+                var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+                result = destination.Reservation.Portfolio.Configuration.Categories.Where(c => sourceMember.Contains(c.ViewKey)).ToList();
+            }
+            return result;
         }
     }
     public class ConfigProjectSizeResolver : IMemberValueResolver<object, Project, string, ProjectSize>
