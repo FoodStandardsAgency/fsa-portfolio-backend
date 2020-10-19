@@ -54,17 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\202010141937261_Create.cs" />
-    <Compile Include="Migrations\202010141937261_Create.designer.cs">
-      <DependentUpon>202010141937261_Create.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010151326342_01_Subcats.cs" />
-    <Compile Include="Migrations\202010151326342_01_Subcats.designer.cs">
-      <DependentUpon>202010151326342_01_Subcats.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202010151401008_02_Directorates.cs" />
-    <Compile Include="Migrations\202010151401008_02_Directorates.designer.cs">
-      <DependentUpon>202010151401008_02_Directorates.cs</DependentUpon>
+    <Compile Include="Migrations\202010191538381_Create.cs" />
+    <Compile Include="Migrations\202010191538381_Create.designer.cs">
+      <DependentUpon>202010191538381_Create.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
@@ -74,6 +66,7 @@
     <Compile Include="Organisation\PortfolioConfigAuditLog.cs" />
     <Compile Include="PortfolioContext.cs" />
     <Compile Include="PortfolioSettings.cs" />
+    <Compile Include="Projects\Document.cs" />
     <Compile Include="Projects\IProjectOption.cs" />
     <Compile Include="Projects\Project.cs" />
     <Compile Include="Projects\ProjectAuditLog.cs" />
@@ -99,14 +92,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202010141937261_Create.resx">
-      <DependentUpon>202010141937261_Create.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010151326342_01_Subcats.resx">
-      <DependentUpon>202010151326342_01_Subcats.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202010151401008_02_Directorates.resx">
-      <DependentUpon>202010151401008_02_Directorates.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202010191538381_Create.resx">
+      <DependentUpon>202010191538381_Create.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

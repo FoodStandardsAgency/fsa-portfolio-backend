@@ -21,6 +21,7 @@ namespace FSAPortfolio.Entities.Organisation
         SelectPicker = 11,
         PredefinedMultiList = 12,
         MultiOptionList = 13,
+        LinkedItemList = 14,
     }
 
     [Flags]
@@ -53,6 +54,7 @@ namespace FSAPortfolio.Entities.Organisation
             this[PortfolioFieldType.Budget] = "Budget amount";
             this[PortfolioFieldType.SelectPicker] = "Select multiple options from searchable list";
             this[PortfolioFieldType.MultiOptionList] = "List of options for multiple choice";
+            this[PortfolioFieldType.LinkedItemList] = "List of items with links";
         }
     }
 

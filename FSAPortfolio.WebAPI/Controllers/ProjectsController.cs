@@ -17,6 +17,7 @@ using FSAPortfolio.WebAPI.DTO;
 using FSAPortfolio.WebAPI.App.Projects;
 using FSAPortfolio.WebAPI.Mapping.Projects;
 using FSAPortfolio.Entities.Organisation;
+using System.Linq.Expressions;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -124,19 +125,26 @@ namespace FSAPortfolio.WebAPI.Controllers
         [HttpGet]
         public async Task<GetNewProjectDTO> GetNewProject([FromUri] string portfolio)
         {
-            using (var provider = new PortfolioProvider(portfolio))
+            try
             {
-                var config = await provider.GetConfigAsync();
-                var reservation = await provider.GetProjectReservationAsync(config);
-                await provider.SaveChangesAsync();
-
-                var result = new GetNewProjectDTO()
+                using (var provider = new PortfolioProvider(portfolio))
                 {
-                    Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.Create),
-                    Options = await provider.GetNewProjectOptionsAsync(config),
-                    Project = new ProjectModel() { project_id = reservation.ProjectId }
-                };
-                return result;
+                    var config = await provider.GetConfigAsync();
+                    var reservation = await provider.GetProjectReservationAsync(config);
+                    await provider.SaveChangesAsync();
+
+                    var result = new GetNewProjectDTO()
+                    {
+                        Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.Create),
+                        Options = await provider.GetNewProjectOptionsAsync(config),
+                        Project = new ProjectModel() { project_id = reservation.ProjectId }
+                    };
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
         }
 

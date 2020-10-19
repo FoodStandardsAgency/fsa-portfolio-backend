@@ -47,7 +47,7 @@ namespace FSAPortfolio.Entities
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //Database.SetInitializer<PortfolioContext>(null);
+            Database.SetInitializer<PortfolioContext>(null);
 
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
@@ -97,7 +97,7 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<ProjectReservation>().HasIndex(p => p.ProjectId).IsUnique();
             modelBuilder.Entity<ProjectReservation>().HasRequired(p => p.Portfolio).WithMany().HasForeignKey(p => p.Portfolio_Id);
             modelBuilder.Entity<ProjectReservation>().HasOptional(p => p.Project).WithRequired(p => p.Reservation);
-            modelBuilder.Entity<ProjectReservation>().HasIndex(l => new { l.Year, l.Month, l.Index }).IsUnique();
+            modelBuilder.Entity<ProjectReservation>().HasIndex(l => new { l.Portfolio_Id, l.Year, l.Month, l.Index }).IsUnique();
 
             modelBuilder.Entity<Project>().HasKey(p => p.ProjectReservation_Id);
             modelBuilder.Entity<Project>().HasMany(p => p.Updates).WithRequired(u => u.Project).HasForeignKey(u => u.Project_Id);
@@ -118,6 +118,12 @@ namespace FSAPortfolio.Entities
                 mc.MapLeftKey("Project_Id");
                 mc.MapRightKey("Subcategory_Id");
                 mc.ToTable("ProjectSubcategories");
+            });
+            modelBuilder.Entity<Project>().HasMany(p => p.Documents).WithMany().Map(mc =>
+            {
+                mc.MapLeftKey("Project_Id");
+                mc.MapRightKey("Document_Id");
+                mc.ToTable("ProjectDocuments");
             });
             modelBuilder.Entity<Project>().HasMany(p => p.AuditLogs).WithRequired(l => l.Project).HasForeignKey(u => u.Project_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.LatestUpdate).WithMany().HasForeignKey(p => p.LatestUpdate_Id);

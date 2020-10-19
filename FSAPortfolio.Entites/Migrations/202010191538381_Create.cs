@@ -221,6 +221,17 @@
                 .Index(t => t.Project_Id);
             
             CreateTable(
+                "dbo.Documents",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(maxLength: 150),
+                        Link = c.String(maxLength: 250),
+                        Order = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.ProjectUpdateItems",
                 c => new
                     {
@@ -284,7 +295,7 @@
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Portfolio_Id = c.Int(nullable: false),
-                        ProjectId = c.String(maxLength: 10),
+                        ProjectId = c.String(maxLength: 20),
                         Year = c.Int(nullable: false),
                         Month = c.Int(nullable: false),
                         Index = c.Int(nullable: false),
@@ -292,9 +303,8 @@
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Portfolios", t => t.Portfolio_Id)
-                .Index(t => t.Portfolio_Id)
-                .Index(t => t.ProjectId, unique: true)
-                .Index(t => new { t.Year, t.Month, t.Index }, unique: true);
+                .Index(t => new { t.Portfolio_Id, t.Year, t.Month, t.Index }, unique: true)
+                .Index(t => t.ProjectId, unique: true);
             
             CreateTable(
                 "dbo.ProjectSizes",
@@ -310,6 +320,19 @@
                 .ForeignKey("dbo.PortfolioConfigurations", t => t.Configuration_Id)
                 .Index(t => new { t.Configuration_Id, t.ViewKey }, unique: true)
                 .Index(t => new { t.Configuration_Id, t.Name }, unique: true);
+            
+            CreateTable(
+                "dbo.Directorates",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        ViewKey = c.String(maxLength: 10),
+                        Name = c.String(maxLength: 250),
+                        Order = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .Index(t => t.ViewKey, unique: true)
+                .Index(t => t.Name, unique: true);
             
             CreateTable(
                 "dbo.Users",
@@ -339,6 +362,19 @@
                 .Index(t => t.DependantProject_Id);
             
             CreateTable(
+                "dbo.ProjectDocuments",
+                c => new
+                    {
+                        Project_Id = c.Int(nullable: false),
+                        Document_Id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.Project_Id, t.Document_Id })
+                .ForeignKey("dbo.Projects", t => t.Project_Id)
+                .ForeignKey("dbo.Documents", t => t.Document_Id)
+                .Index(t => t.Project_Id)
+                .Index(t => t.Document_Id);
+            
+            CreateTable(
                 "dbo.RelatedProjects",
                 c => new
                     {
@@ -350,6 +386,19 @@
                 .ForeignKey("dbo.Projects", t => t.RelatedProject_Id)
                 .Index(t => t.Project_Id)
                 .Index(t => t.RelatedProject_Id);
+            
+            CreateTable(
+                "dbo.ProjectSubcategories",
+                c => new
+                    {
+                        Project_Id = c.Int(nullable: false),
+                        Subcategory_Id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.Project_Id, t.Subcategory_Id })
+                .ForeignKey("dbo.Projects", t => t.Project_Id)
+                .ForeignKey("dbo.ProjectCategories", t => t.Subcategory_Id)
+                .Index(t => t.Project_Id)
+                .Index(t => t.Subcategory_Id);
             
             CreateTable(
                 "dbo.PortfolioProjects",
@@ -374,6 +423,8 @@
             DropForeignKey("dbo.PortfolioProjects", "Project_ProjectReservation_Id", "dbo.Projects");
             DropForeignKey("dbo.PortfolioProjects", "Portfolio_Id", "dbo.Portfolios");
             DropForeignKey("dbo.ProjectUpdateItems", "Project_Id", "dbo.Projects");
+            DropForeignKey("dbo.ProjectSubcategories", "Subcategory_Id", "dbo.ProjectCategories");
+            DropForeignKey("dbo.ProjectSubcategories", "Project_Id", "dbo.Projects");
             DropForeignKey("dbo.Projects", "ProjectSize_Id", "dbo.ProjectSizes");
             DropForeignKey("dbo.Projects", "ServiceLead_Id", "dbo.People");
             DropForeignKey("dbo.Projects", "ProjectReservation_Id", "dbo.ProjectReservations");
@@ -387,6 +438,8 @@
             DropForeignKey("dbo.ProjectUpdateItems", "Phase_Id", "dbo.ProjectPhases");
             DropForeignKey("dbo.ProjectUpdateItems", "Person_Id", "dbo.People");
             DropForeignKey("dbo.ProjectUpdateItems", "OnHoldStatus_Id", "dbo.ProjectOnHoldStatus");
+            DropForeignKey("dbo.ProjectDocuments", "Document_Id", "dbo.Documents");
+            DropForeignKey("dbo.ProjectDocuments", "Project_Id", "dbo.Projects");
             DropForeignKey("dbo.DependantProjects", "DependantProject_Id", "dbo.Projects");
             DropForeignKey("dbo.DependantProjects", "Project_Id", "dbo.Projects");
             DropForeignKey("dbo.Projects", "ProjectCategory_Id", "dbo.ProjectCategories");
@@ -405,16 +458,21 @@
             DropForeignKey("dbo.PortfolioConfigAuditLogs", "PortfolioConfiguration_Id", "dbo.PortfolioConfigurations");
             DropIndex("dbo.PortfolioProjects", new[] { "Project_ProjectReservation_Id" });
             DropIndex("dbo.PortfolioProjects", new[] { "Portfolio_Id" });
+            DropIndex("dbo.ProjectSubcategories", new[] { "Subcategory_Id" });
+            DropIndex("dbo.ProjectSubcategories", new[] { "Project_Id" });
             DropIndex("dbo.RelatedProjects", new[] { "RelatedProject_Id" });
             DropIndex("dbo.RelatedProjects", new[] { "Project_Id" });
+            DropIndex("dbo.ProjectDocuments", new[] { "Document_Id" });
+            DropIndex("dbo.ProjectDocuments", new[] { "Project_Id" });
             DropIndex("dbo.DependantProjects", new[] { "DependantProject_Id" });
             DropIndex("dbo.DependantProjects", new[] { "Project_Id" });
             DropIndex("dbo.Users", new[] { "AccessGroupId" });
+            DropIndex("dbo.Directorates", new[] { "Name" });
+            DropIndex("dbo.Directorates", new[] { "ViewKey" });
             DropIndex("dbo.ProjectSizes", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.ProjectSizes", new[] { "Configuration_Id", "ViewKey" });
-            DropIndex("dbo.ProjectReservations", new[] { "Year", "Month", "Index" });
             DropIndex("dbo.ProjectReservations", new[] { "ProjectId" });
-            DropIndex("dbo.ProjectReservations", new[] { "Portfolio_Id" });
+            DropIndex("dbo.ProjectReservations", new[] { "Portfolio_Id", "Year", "Month", "Index" });
             DropIndex("dbo.ProjectRAGStatus", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.ProjectRAGStatus", new[] { "Configuration_Id", "ViewKey" });
             DropIndex("dbo.ProjectUpdateItems", new[] { "RAGStatus_Id" });
@@ -452,14 +510,18 @@
             DropIndex("dbo.BudgetTypes", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.BudgetTypes", new[] { "Configuration_Id", "ViewKey" });
             DropTable("dbo.PortfolioProjects");
+            DropTable("dbo.ProjectSubcategories");
             DropTable("dbo.RelatedProjects");
+            DropTable("dbo.ProjectDocuments");
             DropTable("dbo.DependantProjects");
             DropTable("dbo.Users");
+            DropTable("dbo.Directorates");
             DropTable("dbo.ProjectSizes");
             DropTable("dbo.ProjectReservations");
             DropTable("dbo.ProjectRAGStatus");
             DropTable("dbo.People");
             DropTable("dbo.ProjectUpdateItems");
+            DropTable("dbo.Documents");
             DropTable("dbo.ProjectAuditLogs");
             DropTable("dbo.Projects");
             DropTable("dbo.Portfolios");

@@ -67,6 +67,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => s.category))
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => s.project_size))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => s.budgettype))
+                .ForMember(p => p.Documents, o => o.Ignore()) // TODO: migration needs a mapping
                 // Ignore these
                 .ForMember(p => p.Reservation, o => o.Ignore())
                 .ForMember(p => p.Portfolios, o => o.Ignore())

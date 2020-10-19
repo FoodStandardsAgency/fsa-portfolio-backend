@@ -27,6 +27,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(r => r.Project.BudgetType)
                 .Include(r => r.Project.RelatedProjects)
                 .Include(r => r.Project.DependantProjects)
+                .Include(r => r.Project.Documents)
                 .Include(r => r.Project.Lead)
                 ;
         }
@@ -60,6 +61,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.BudgetType)
                 .Include(p => p.RelatedProjects)
                 .Include(p => p.DependantProjects)
+                .Include(p => p.Documents)
                 .Include(p => p.Lead);
         }
         public static IQueryable<Project> ConfigIncludes(this IQueryable<Project> query)

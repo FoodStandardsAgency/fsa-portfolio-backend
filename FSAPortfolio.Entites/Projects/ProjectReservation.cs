@@ -15,7 +15,7 @@ namespace FSAPortfolio.Entities.Projects
         public virtual Portfolio Portfolio { get; set; }
 
         private string projectId;
-        [StringLength(10)]
+        [StringLength(20)]
         public string ProjectId 
         { 
             get
