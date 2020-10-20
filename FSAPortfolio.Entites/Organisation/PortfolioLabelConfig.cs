@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using FSAPortfolio.Entities.Projects;
 
 namespace FSAPortfolio.Entities.Organisation
 {
@@ -24,6 +25,10 @@ namespace FSAPortfolio.Entities.Organisation
         LinkedItemList = 14,
     }
 
+    /// <summary>
+    /// ProjectData set = field data will be stored as a <see cref="ProjectDataItem"/>
+    /// </summary>
+
     [Flags]
     public enum PortfolioFieldFlags
     {
@@ -31,8 +36,10 @@ namespace FSAPortfolio.Entities.Organisation
         Read = 1 << 1,
         Update = 1 << 2,
         Delete = 1 << 3,
+        ProjectData = 1 << 4,
         Default = Create | Read | Update | Delete,
-        UpdateOnly = Read | Update
+        UpdateOnly = Read | Update,
+        DefaultProjectData = Default | ProjectData
     }
 
     public class PortfolioFieldTypeDescriptions : Dictionary<PortfolioFieldType, string>

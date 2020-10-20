@@ -6,6 +6,8 @@ using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Web;
 
 namespace FSAPortfolio.WebAPI.Mapping
@@ -45,6 +47,22 @@ namespace FSAPortfolio.WebAPI.Mapping
         internal static ProjectLabelConfigModel GetProjectLabelConfigModel(PortfolioConfiguration config, PortfolioFieldFlags flags = PortfolioFieldFlags.Read)
         {
             return ProjectMapper.Map<ProjectLabelConfigModel>(config, opts => opts.Items[nameof(PortfolioFieldFlags)] = flags);
+        }
+
+        internal static PropertyInfo[] GetUnmappedSourceMembers<TSource, TDest>(MapperConfiguration config)
+        {
+            TypeMap typeMap = config.FindTypeMapFor<TSource, TDest>();
+            var memberMaps = typeMap.MemberMaps.Where(m => !m.Ignored);
+
+            Func<IMemberMap, string> extractSourceMemberName = m =>
+            {
+                string name = m.SourceMember?.Name;
+                if (name == null) name = ((MemberExpression)m.ValueResolverConfig?.SourceMember?.Body)?.Member.Name;
+                return name;
+            };
+            var mappedProperties = memberMaps.Select(m => extractSourceMemberName(m)).Where(n => n != null).ToArray();
+            var unmappedProperties = typeof(TSource).GetProperties().Where(p => !mappedProperties.Contains(p.Name)).ToArray();
+            return unmappedProperties;
         }
     }
 }

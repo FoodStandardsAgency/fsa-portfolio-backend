@@ -126,6 +126,7 @@ namespace FSAPortfolio.Entities
                 mc.ToTable("ProjectDocuments");
             });
             modelBuilder.Entity<Project>().HasMany(p => p.AuditLogs).WithRequired(l => l.Project).HasForeignKey(u => u.Project_Id);
+            modelBuilder.Entity<Project>().HasMany(p => p.ProjectData).WithRequired(l => l.Project).HasForeignKey(u => u.Project_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.LatestUpdate).WithMany().HasForeignKey(p => p.LatestUpdate_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.FirstUpdate).WithMany().HasForeignKey(p => p.FirstUpdate_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.Lead).WithMany().HasForeignKey(p => p.Lead_Id);
@@ -133,6 +134,9 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Project>().HasOptional(p => p.Category).WithMany().HasForeignKey(p => p.ProjectCategory_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.Size).WithMany().HasForeignKey(p => p.ProjectSize_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.BudgetType).WithMany().HasForeignKey(p => p.BudgetType_Id);
+
+            modelBuilder.Entity<ProjectDataItem>().HasKey(p => p.Id);
+            modelBuilder.Entity<ProjectDataItem>().HasRequired(p => p.Label).WithMany().HasForeignKey(p => p.Label_Id);
 
             modelBuilder.Entity<ProjectAuditLog>().HasKey(p => p.Id);
 

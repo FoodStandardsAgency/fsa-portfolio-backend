@@ -14,8 +14,7 @@ namespace FSAPortfolio.WebAPI.App
         public static IQueryable<ProjectReservation> ProjectIncludes(this IQueryable<ProjectReservation> query)
         {
             return query
-                .Include(r => r.Project.Category)
-                .Include(r => r.Project.Subcategories)
+                .Include(r => r.Project.ProjectData)
                 .Include(r => r.Project.FirstUpdate.OnHoldStatus)
                 .Include(r => r.Project.FirstUpdate.RAGStatus)
                 .Include(r => r.Project.FirstUpdate.Phase)
@@ -23,6 +22,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(r => r.Project.LatestUpdate.RAGStatus)
                 .Include(r => r.Project.LatestUpdate.Phase)
                 .Include(r => r.Project.Category)
+                .Include(r => r.Project.Subcategories)
                 .Include(r => r.Project.Size)
                 .Include(r => r.Project.BudgetType)
                 .Include(r => r.Project.RelatedProjects)
@@ -48,8 +48,7 @@ namespace FSAPortfolio.WebAPI.App
         {
             return query
                 .Include(p => p.Reservation)
-                .Include(p => p.Category)
-                .Include(p => p.Subcategories)
+                .Include(p => p.ProjectData)
                 .Include(p => p.FirstUpdate.OnHoldStatus)
                 .Include(p => p.FirstUpdate.RAGStatus)
                 .Include(p => p.FirstUpdate.Phase)
@@ -57,6 +56,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.LatestUpdate.RAGStatus)
                 .Include(p => p.LatestUpdate.Phase)
                 .Include(p => p.Category)
+                .Include(p => p.Subcategories)
                 .Include(p => p.Size)
                 .Include(p => p.BudgetType)
                 .Include(p => p.RelatedProjects)

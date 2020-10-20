@@ -44,6 +44,7 @@ namespace FSAPortfolio.Entities.Projects
         public virtual ICollection<Project> RelatedProjects { get; set; }
         public virtual ICollection<Project> DependantProjects { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
+        public virtual ICollection<ProjectDataItem> ProjectData { get; set; }
 
         public virtual Person Lead { get; set; }
         public int? Lead_Id { get; set; }
