@@ -30,7 +30,11 @@ namespace FSAPortfolio.UnitTests
         public void Map_ProjectModel_Project()
         {
             PortfolioMapper.Configure();
-            PortfolioConfiguration config = new PortfolioConfiguration() { LabelGroups = new List<PortfolioLabelGroup>() };
+            PortfolioConfiguration config = new PortfolioConfiguration() 
+            {
+                Labels = new List<PortfolioLabelConfig>(),
+                LabelGroups = new List<PortfolioLabelGroup>()
+            };
             DefaultFieldLabels labelFactory = new DefaultFieldLabels(config);
             var labels = labelFactory.GetDefaultLabels();
 

@@ -42,15 +42,15 @@ namespace FSAPortfolio.WebAPI.Controllers
                             project = provider.CreateNewProject(reservation);
                         }
                         PortfolioMapper.ProjectMapper.Map(update, project, opt => {
-                            opt.Items[ProjectMappingProfile.PortfolioContextKey] = provider.Context;
+                            opt.Items[nameof(PortfolioContext)] = provider.Context;
                             opt.Items[nameof(PortfolioConfiguration.Labels)] = reservation.Portfolio.Configuration.Labels;
                         });
-                        provider.LogAuditChanges(project);
+                        if(project.AuditLogs != null) provider.LogAuditChanges(project);
                         await provider.SaveChangesAsync();
 
                         // Create a new update
                         var projectUpdate = new ProjectUpdateItem() { Project = project };
-                        PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = provider.Context);
+                        PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[nameof(PortfolioContext)] = provider.Context);
                         provider.CreateProjectUpdate(projectUpdate, project);
 
                         // Save

@@ -31,6 +31,12 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(r => r.Project.Lead)
                 ;
         }
+        public static IQueryable<ProjectReservation> ProjectUpdateIncludes(this IQueryable<ProjectReservation> query)
+        {
+            return query
+                .Include(r => r.Project.AuditLogs)
+                ;
+        }
         public static IQueryable<ProjectReservation> ConfigIncludes(this IQueryable<ProjectReservation> query)
         {
             return query

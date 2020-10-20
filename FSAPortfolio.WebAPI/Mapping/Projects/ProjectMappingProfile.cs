@@ -20,8 +20,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 {
     public class ProjectMappingProfile : Profile
     {
-        public const string PortfolioContextKey = "portfolioContext";
-        public const string PortfolioConfigKey = "portfolioConfig";
         internal const string TimeOutputFormat = "dd/MM/yyyy hh:mm";
         private const string DateOutputFormat = "dd/MM/yyyy";
 
@@ -116,6 +114,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.fsaproc_assurance_gatenumber, o => o.Ignore())
                 .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.Ignore())
                 .ForMember(p => p.fsaproc_assurance_nextgate, o => o.Ignore())
+                .AfterMap(ProjectDataOutboundMapper.Map)
                 ;
         }
 
@@ -143,7 +142,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Subcategories, o => o.MapFrom<ConfigSubcategoryResolver, string[]>(s => s.subcat))
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => s.project_size))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => s.budgettype))
-                .ForMember(p => p.ProjectData, o => o.MapFrom<ProjectDataResolver>())
+                .ForMember(p => p.ProjectData, o => o.MapFrom<ProjectDataInboundResolver>())
                 .ForMember(p => p.Documents, o => o.Ignore()) // TODO: need a mapping for this.
                 // Ignore these
                 .ForMember(p => p.Portfolios, o => o.Ignore())
@@ -227,7 +226,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public Person Resolve(object source, object destination, string sourceMember, Person destMember, ResolutionContext context)
         {
-            var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
             return portfolioContext.People.SingleOrDefault(p => p.Email == sourceMember);
         }
     }
@@ -257,7 +256,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public ICollection<Project> Resolve(object source, Project destination, string[] sourceMember, ICollection<Project> destMember, ResolutionContext context)
         {
-            var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
             var result = new List<Project>();
             if (sourceMember != null && sourceMember.Length > 0)
             {
@@ -284,7 +283,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public ProjectCategory Resolve(object source, Project destination, string sourceMember, ProjectCategory destMember, ResolutionContext context)
         {
-            var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
             return destination.Reservation.Portfolio.Configuration.Categories.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
@@ -295,7 +294,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             ICollection<ProjectCategory> result = null;
             if (sourceMember != null && sourceMember.Length > 0)
             {
-                var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+                var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
                 result = destination.Reservation.Portfolio.Configuration.Categories.Where(c => sourceMember.Contains(c.ViewKey)).ToList();
             }
             return result;
@@ -305,7 +304,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public ProjectSize Resolve(object source, Project destination, string sourceMember, ProjectSize destMember, ResolutionContext context)
         {
-            var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
             return destination.Reservation.Portfolio.Configuration.ProjectSizes.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
@@ -313,7 +312,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public BudgetType Resolve(object source, Project destination, string sourceMember, BudgetType destMember, ResolutionContext context)
         {
-            var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
             return destination.Reservation.Portfolio.Configuration.BudgetTypes.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
@@ -323,7 +322,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public ProjectRAGStatus Resolve(object source, ProjectUpdateItem destination, string sourceMember, ProjectRAGStatus destMember, ResolutionContext context)
         {
-            var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
             return destination.Project.Reservation.Portfolio.Configuration.RAGStatuses.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
@@ -331,7 +330,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public ProjectPhase Resolve(object source, ProjectUpdateItem destination, string sourceMember, ProjectPhase destMember, ResolutionContext context)
         {
-            var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
             return destination.Project.Reservation.Portfolio.Configuration.Phases.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
@@ -339,54 +338,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public ProjectOnHoldStatus Resolve(object source, ProjectUpdateItem destination, string sourceMember, ProjectOnHoldStatus destMember, ResolutionContext context)
         {
-            var portfolioContext = (PortfolioContext)context.Items[ProjectMappingProfile.PortfolioContextKey];
+            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
             return destination.Project.Reservation.Portfolio.Configuration.OnHoldStatuses.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
 
-    public class ProjectDataResolver : IValueResolver<ProjectModel, Project, ICollection<ProjectDataItem>>
-    {
-        /// <summary>
-        /// Unmapped <see cref="ProjectModel"/> properties
-        /// </summary>
-        private static readonly PropertyInfo[] unmappedProperties;
-        static ProjectDataResolver()
-        {
-            var unmappedToProject = PortfolioMapper.GetUnmappedSourceMembers<ProjectModel, Project>(PortfolioMapper.projectConfig);
-            var unmappedToUpdate = PortfolioMapper.GetUnmappedSourceMembers<ProjectModel, ProjectUpdateItem>(PortfolioMapper.projectConfig);
-            unmappedProperties = unmappedToProject.Intersect(unmappedToUpdate).ToArray();
-        }
-
-        public ICollection<ProjectDataItem> Resolve(ProjectModel source, Project destination, ICollection<ProjectDataItem> destMember, ResolutionContext context)
-        {
-            var labels = context.Items[nameof(PortfolioConfiguration.Labels)] as ICollection<PortfolioLabelConfig>;
-            var dataItems = destMember ?? new List<ProjectDataItem>();
-            foreach(var label in labels)
-            {
-                if(label.FieldType != PortfolioFieldType.Auto && label.Flags.HasFlag(PortfolioFieldFlags.ProjectData)) // Ignore autogenerated fields
-                {
-                    var property = unmappedProperties.SingleOrDefault(p => p.Name == label.FieldName);
-                    if(property != null)
-                    {
-                        var dataItem = dataItems.SingleOrDefault(i => i.Label.Id == label.Id);
-                        var value = property.GetValue(source);
-                        if (value != null)
-                        {
-                            if (dataItem == null)
-                            {
-                                dataItem = new ProjectDataItem() { Label = label };
-                            }
-                            dataItems.Add(new ProjectDataItem() { Label = label, Value = JsonConvert.SerializeObject(value) });
-                        }
-                        else
-                        {
-                            // Remove the data item if it exists
-                            if (dataItem != null) dataItems.Remove(dataItem);
-                        }
-                    }
-                }
-            }
-            return dataItems;
-        }
-    }
 }

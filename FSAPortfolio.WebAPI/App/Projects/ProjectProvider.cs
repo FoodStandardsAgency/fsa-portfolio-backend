@@ -20,13 +20,11 @@ namespace FSAPortfolio.WebAPI.App.Projects
             this.projectId = projectId;
         }
 
-        public async Task<Project> GetProjectAsync() => (await GetProjectReservationAsync())?.Project;
-        
-
         public async Task<ProjectReservation> GetProjectReservationAsync()
         {
             return await Context.ProjectReservations
                 .ProjectIncludes()
+                .ProjectUpdateIncludes()
                 .ConfigIncludes()
                 .SingleOrDefaultAsync(r => r.ProjectId == projectId);
         }

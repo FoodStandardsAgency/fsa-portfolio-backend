@@ -484,7 +484,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
 
 
-                    mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = dest);
+                    mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
 
                     destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
 
@@ -502,7 +502,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                             };
                             destProject.Updates.Add(destUpdate);
                         }
-                        mapper.Map(sourceUpdate, destUpdate, opt => opt.Items[ProjectMappingProfile.PortfolioContextKey] = dest);
+                        mapper.Map(sourceUpdate, destUpdate, opt => opt.Items[nameof(PortfolioContext)] = dest);
                     }
 
                     dest.SaveChanges();
