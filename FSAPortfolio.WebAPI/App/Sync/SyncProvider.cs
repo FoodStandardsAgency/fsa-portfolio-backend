@@ -444,8 +444,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     var sourceProjectDetail = projectDetails.Single();
 
                     // First sync the project
-                    var destProject = dest.Projects.ConfigIncludes()
-                        .Include(p => p.Reservation.Portfolio.Configuration.BudgetTypes)
+                    var destProject = dest.Projects.FullConfigIncludes()
                         .Include(p => p.Portfolios)
                         .Include(p => p.Updates.Select(u => u.OnHoldStatus))
                         .Include(p => p.Updates.Select(u => u.RAGStatus))

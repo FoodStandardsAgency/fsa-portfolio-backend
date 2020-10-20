@@ -64,11 +64,26 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Documents)
                 .Include(p => p.Lead);
         }
-        public static IQueryable<Project> ConfigIncludes(this IQueryable<Project> query)
+        public static IQueryable<Project> ViewConfigIncludes(this IQueryable<Project> query)
         {
             return query
                 .Include(p => p.Reservation.Portfolio.Configuration.Labels)
                 .Include(p => p.Reservation.Portfolio.Configuration.LabelGroups)
+                ;
+        }
+        public static IQueryable<Project> FullConfigIncludes(this IQueryable<Project> query)
+        {
+            return query
+                .Include(p => p.Reservation.Portfolio.Configuration.Labels)
+                .Include(p => p.Reservation.Portfolio.Configuration.LabelGroups)
+                .Include(p => p.Reservation.Portfolio.Configuration.BudgetTypes)
+                .Include(p => p.Reservation.Portfolio.Configuration.Portfolio)
+                .Include(p => p.Reservation.Portfolio.Configuration.Phases)
+                .Include(p => p.Reservation.Portfolio.Configuration.RAGStatuses)
+                .Include(p => p.Reservation.Portfolio.Configuration.OnHoldStatuses)
+                .Include(p => p.Reservation.Portfolio.Configuration.Categories)
+                .Include(p => p.Reservation.Portfolio.Configuration.ProjectSizes)
+                .Include(p => p.Reservation.Portfolio.Configuration.BudgetTypes)
                 ;
         }
 

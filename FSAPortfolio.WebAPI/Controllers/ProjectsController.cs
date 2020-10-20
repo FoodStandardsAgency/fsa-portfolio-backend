@@ -159,7 +159,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 using (var context = new PortfolioContext())
                 {
-                    var project = (from p in context.Projects.ProjectIncludes().ConfigIncludes()
+                    var project = (from p in context.Projects.ProjectIncludes().ViewConfigIncludes()
                                    where p.Reservation.ProjectId == projectId select p).Single();
                     var result = new GetProjectDTO()
                     {
