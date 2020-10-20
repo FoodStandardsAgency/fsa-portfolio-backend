@@ -229,7 +229,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                     // Add or update labels
                     context.PortfolioConfigurationLabels.AddOrUpdate(l => new { l.Configuration_Id, l.FieldName },  defaultLabels);
-
                 }
 
                 context.SaveChanges();

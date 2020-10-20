@@ -37,19 +37,19 @@ namespace FSAPortfolio.WebAPI.App.Sync
                                              PortfolioFieldFlags flags = PortfolioFieldFlags.Default)
         {
             var group = config.LabelGroups.FirstOrDefault(g => g.Name == fieldGroup);
-            return new PortfolioLabelConfig() { 
-                Configuration_Id = config.Portfolio_Id,
-                Group = group,
-                FieldOrder = fieldOrder++,
-                FieldTitle = fieldTitle,
-                FieldName = fieldName,
-                Included = included,
-                FieldType = inputType,
-                IncludedLock = includedLock,
-                AdminOnlyLock = adminLock,
-                FieldTypeLocked = inputTypeLocked,
-                Flags = flags
-            };
+            var label = config.Labels.FirstOrDefault(l => l.FieldName == fieldName) ?? new PortfolioLabelConfig();
+            label.Configuration_Id = config.Portfolio_Id;
+            label.Group = group;
+            label.FieldOrder = fieldOrder++;
+            label.FieldTitle = fieldTitle;
+            label.FieldName = fieldName;
+            label.Included = included;
+            label.FieldType = inputType;
+            label.IncludedLock = includedLock;
+            label.AdminOnlyLock = adminLock;
+            label.FieldTypeLocked = inputTypeLocked;
+            label.Flags = flags;
+            return label;
         }
 
         private void SetMasterLabel(PortfolioLabelConfig[] labels, string slaveFieldName, string masterFieldName)
