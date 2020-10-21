@@ -132,7 +132,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             SelectPickerModel model = null;
             var label = source.Labels.SingleOrDefault(l => l.FieldName == fieldName);
-            if (label != null)
+            if (label?.FieldOptions != null)
             {
                 var items = label.FieldOptions.Split(',').Select((l, i) => new SelectPickerItemModel() { Display = l, Value = l, Order = i });
 
