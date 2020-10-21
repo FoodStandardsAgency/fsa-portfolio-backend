@@ -91,6 +91,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
                 .ForMember(p => p.oddlead_role, o => o.Ignore()) // TODO: add a field for this
 
+                .ForMember(p => p.actual_end_date, o => o.Ignore())
+                .ForMember(p => p.milestones, o => o.Ignore())
+
+                // Below this line are project data items
                 .ForMember(p => p.business_case_number, o => o.Ignore())
                 .ForMember(p => p.fs_number, o => o.Ignore())
                 .ForMember(p => p.risk_rating, o => o.Ignore())
@@ -103,8 +107,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.key_contact2, o => o.Ignore())
                 .ForMember(p => p.key_contact3, o => o.Ignore())
                 .ForMember(p => p.supplier, o => o.Ignore())
-                .ForMember(p => p.actual_end_date, o => o.Ignore())
-                .ForMember(p => p.milestones, o => o.Ignore())
                 .ForMember(p => p.how_get_green, o => o.Ignore())
                 .ForMember(p => p.forward_look, o => o.Ignore())
                 .ForMember(p => p.emerging_issues, o => o.Ignore())

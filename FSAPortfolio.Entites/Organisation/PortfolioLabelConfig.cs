@@ -19,11 +19,12 @@ namespace FSAPortfolio.Entities.Organisation
         RAGChoice = 8,
         Budget = 9,
         FreeTextArea = 10,
-        SelectPicker = 11,
+        PredefinedSearchableMultiList = 11,
         PredefinedMultiList = 12,
         MultiOptionList = 13,
         LinkedItemList = 14,
-        NamedLink = 15
+        NamedLink = 15,
+        PredefinedSearchableList = 16
     }
 
     /// <summary>
@@ -54,13 +55,14 @@ namespace FSAPortfolio.Entities.Organisation
             this[PortfolioFieldType.FreeTextArea] = "Multiline text input";
             this[PortfolioFieldType.OptionList] = "List of options for the drop-down";
             this[PortfolioFieldType.PredefinedList] = "Pre-defined list";
+            this[PortfolioFieldType.PredefinedSearchableList] = "Pre-defined searchable list";
             this[PortfolioFieldType.PredefinedMultiList] = "Pre-defined multiple choice";
             this[PortfolioFieldType.PredefinedField] = "Pre-defined field";
             this[PortfolioFieldType.Date] = "Date";
             this[PortfolioFieldType.Percentage] = "Percentage";
             this[PortfolioFieldType.RAGChoice] = "RAG choice";
             this[PortfolioFieldType.Budget] = "Budget amount";
-            this[PortfolioFieldType.SelectPicker] = "Select multiple options from searchable list";
+            this[PortfolioFieldType.PredefinedSearchableMultiList] = "Select multiple options from searchable list";
             this[PortfolioFieldType.MultiOptionList] = "List of options for multiple choice";
             this[PortfolioFieldType.LinkedItemList] = "List of items with links";
             this[PortfolioFieldType.NamedLink] = "Named hyperlink";

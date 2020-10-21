@@ -43,22 +43,18 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.dependencies))]
         public SelectPickerModel DependantProjects { get; set; }
 
-        // TODO: these options are multi selects that come from the user input in the config screen.
-        // Need to store the input (like RAG Statuses etc are stored - but generic way for ad-hoc fields).
         [JsonProperty(nameof(ProjectModel.programme))]
-        public readonly SelectPickerModel Programme = new SelectPickerModel()
-        {
-            Header = "Select the programmes...",
-            Items = new SelectPickerItemModel[] {
-                new SelectPickerItemModel(){ Display = "Test1", Value = "prog1", Order = 0 },
-                new SelectPickerItemModel(){ Display = "Test2", Value = "prog2", Order = 1 },
-                new SelectPickerItemModel(){ Display = "Test3", Value = "prog3", Order = 2 }
-            }
-        };
+        public SelectPickerModel Programme { get; set; }
 
 
         [JsonProperty(nameof(ProjectModel.risk_rating))]
         public IEnumerable<DropDownItemModel> RiskRating { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.theme))]
+        public IEnumerable<DropDownItemModel> Theme { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.project_type))]
+        public IEnumerable<DropDownItemModel> ProjectType { get; set; }
 
     }
 

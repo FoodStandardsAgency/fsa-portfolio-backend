@@ -28,6 +28,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.RelatedProjects, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
                 .ForMember(d => d.DependantProjects, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
                 .ForMember(d => d.RiskRating, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.risk_rating))))
+                .ForMember(d => d.Theme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.theme))))
+                .ForMember(d => d.ProjectType, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_type))))
+                .ForMember(d => d.Programme, o => o.MapFrom(new SelectPickerResolver(nameof(ProjectModel.programme), "Select the programmes...")))
                 ;
 
             CreateMap<IProjectOption, DropDownItemModel>()
@@ -104,4 +107,34 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             return items;
         }
     }
+
+    public class SelectPickerResolver : IValueResolver<PortfolioConfiguration, ProjectOptionsModel, SelectPickerModel>
+    {
+        private string fieldName;
+        private string header;
+
+        public SelectPickerResolver(string fieldName, string header)
+        {
+            this.fieldName = fieldName;
+            this.header = header;
+        }
+
+        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
+        {
+            SelectPickerModel model = null;
+            var label = source.Labels.SingleOrDefault(l => l.FieldName == fieldName);
+            if (label != null)
+            {
+                var items = label.FieldOptions.Split(',').Select((l, i) => new SelectPickerItemModel() { Display = l, Value = l, Order = i });
+
+                model = new SelectPickerModel()
+                {
+                    Header = header,
+                    Items = items
+                };
+            }
+            return model;
+        }
+    }
+
 }
