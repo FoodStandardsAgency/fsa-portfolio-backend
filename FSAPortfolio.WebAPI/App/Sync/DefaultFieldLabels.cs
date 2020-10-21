@@ -11,6 +11,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
 {
     public class DefaultFieldLabels
     {
+        private const bool IncludeAll = true;
+
         private PortfolioConfiguration config;
 
         internal const string FieldGroupName_Ungrouped = "Ungrouped fields";
@@ -43,7 +45,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             label.FieldOrder = fieldOrder++;
             label.FieldTitle = fieldTitle;
             label.FieldName = fieldName;
-            label.Included = included;
+            label.Included = included || IncludeAll;
             label.FieldType = inputType;
             label.IncludedLock = includedLock;
             label.AdminOnlyLock = adminLock;
