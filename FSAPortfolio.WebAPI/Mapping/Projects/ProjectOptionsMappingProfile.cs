@@ -109,7 +109,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             IEnumerable<DropDownItemModel> items = null;
             var label = source.Labels.SingleOrDefault(l => l.FieldName == fieldName);
-            if(label != null)
+            if(label?.FieldOptions != null)
             {
                 items = label.FieldOptions.Split(',').Select((l, i ) => new DropDownItemModel() { Display = l, Value = l, Order = i });
             }
