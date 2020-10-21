@@ -56,6 +56,10 @@ namespace FSAPortfolio.WebAPI.Models
             }
         };
 
+
+        [JsonProperty(nameof(ProjectModel.risk_rating))]
+        public IEnumerable<DropDownItemModel> RiskRating { get; set; }
+
     }
 
     public class DropDownItemModel

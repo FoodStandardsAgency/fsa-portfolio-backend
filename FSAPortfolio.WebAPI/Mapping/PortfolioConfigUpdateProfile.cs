@@ -19,6 +19,7 @@ namespace FSAPortfolio.WebAPI.Mapping
                 .ForMember(d => d.AdminOnly, o => o.MapFrom(s => s.AdminOnly))
                 .ForMember(d => d.Label, o => o.MapFrom(s => string.IsNullOrWhiteSpace(s.Label) ? null : s.Label))
                 .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType))
+                .ForMember(d => d.FieldOptions, o => o.MapFrom(s => s.FieldOptions))
                 .ForAllOtherMembers(o => o.Ignore())
                 ;
         }

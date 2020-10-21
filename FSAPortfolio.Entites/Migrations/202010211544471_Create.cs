@@ -118,6 +118,7 @@
                         Label = c.String(maxLength: 50),
                         FieldType = c.Int(nullable: false),
                         FieldTypeLocked = c.Boolean(nullable: false),
+                        FieldOptions = c.String(),
                         MasterLabel_Id = c.Int(),
                         Group_Id = c.Int(),
                     })

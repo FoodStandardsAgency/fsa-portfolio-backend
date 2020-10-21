@@ -27,7 +27,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
         public ICollection<ProjectDataItem> Resolve(ProjectModel source, Project destination, ICollection<ProjectDataItem> destMember, ResolutionContext context)
         {
-            var labels = context.Items[nameof(PortfolioConfiguration.Labels)] as ICollection<PortfolioLabelConfig>;
+            var labels = destination.Reservation.Portfolio.Configuration.Labels;
             var portfolioContext = context.Items[nameof(PortfolioContext)] as PortfolioContext;
             var dataItems = destMember?.ToList() ?? new List<ProjectDataItem>();
             foreach (var label in labels)
@@ -39,7 +39,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                     {
                         var dataItem = dataItems?.SingleOrDefault(i => i.Label.Id == label.Id);
                         var value = property.GetValue(source);
-                        if (value != null)
+                        if (value != null && !value.Equals(string.Empty))
                         {
                             if(dataItem == null)
                             {

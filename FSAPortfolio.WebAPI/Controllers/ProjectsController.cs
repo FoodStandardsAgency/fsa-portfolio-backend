@@ -43,7 +43,6 @@ namespace FSAPortfolio.WebAPI.Controllers
                         }
                         PortfolioMapper.ProjectMapper.Map(update, project, opt => {
                             opt.Items[nameof(PortfolioContext)] = provider.Context;
-                            opt.Items[nameof(PortfolioConfiguration.Labels)] = reservation.Portfolio.Configuration.Labels;
                         });
                         if(project.AuditLogs != null) provider.LogAuditChanges(project);
                         await provider.SaveChangesAsync();

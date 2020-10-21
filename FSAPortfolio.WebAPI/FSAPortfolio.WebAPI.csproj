@@ -132,7 +132,6 @@
     <Compile Include="App\AuditProvider.cs" />
     <Compile Include="App\PortfolioExtensions.cs" />
     <Compile Include="App\ConfigurationExtensions.cs" />
-    <Compile Include="App\Config\PortfolioConfigProvider.cs" />
     <Compile Include="App\ProjectQueryExtensions.cs" />
     <Compile Include="App\Projects\PortfolioProvider.cs" />
     <Compile Include="App\Projects\ProjectProvider.cs" />
@@ -181,6 +180,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App\Config\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>

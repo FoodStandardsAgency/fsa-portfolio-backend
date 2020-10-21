@@ -29,7 +29,7 @@ namespace FSAPortfolio.WebAPI.Models
         public string criticality { get; set; }
         public string budget { get; set; }
         public string spent { get; set; }
-        public object[] documents { get; set; }
+        public LinkModel[] documents { get; set; }
         public DateTime? timestamp { get; set; }
         public string pgroup { get; set; }
         public LinkModel link { get; set; }

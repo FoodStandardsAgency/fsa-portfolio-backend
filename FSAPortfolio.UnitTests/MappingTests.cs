@@ -66,8 +66,6 @@ namespace FSAPortfolio.UnitTests
                 }
             }
 
-
-            //var project = PortfolioMapper.ProjectMapper.Map<Project>(source, opt => opt.Items[nameof(PortfolioConfiguration.Labels)] = labels);
         }
 
     }

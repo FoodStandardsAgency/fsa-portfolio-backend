@@ -12,7 +12,6 @@ using FSAPortfolio.WebAPI.Mapping;
 using Newtonsoft.Json.Linq;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.App.Config;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -72,10 +71,6 @@ namespace FSAPortfolio.WebAPI.Controllers
                         .SingleAsync(p => p.ViewKey == portfolio);
                     var model = PortfolioMapper.ConfigMapper.Map<PortfolioConfigModel>(pfolio.Configuration);
                     model.Labels = model.Labels.OrderBy(l => l.FieldGroup).ThenBy(l => l.FieldOrder).ToList();
-
-                    // Set input values
-                    var configProvider = new PortfolioConfigProvider(pfolio.Configuration, model.Labels);
-                    configProvider.PopulateLabelValues();
 
                     return model;
                 } 

@@ -95,6 +95,11 @@ namespace FSAPortfolio.Entities.Organisation
         public PortfolioFieldType FieldType { get; set; }
         public bool FieldTypeLocked { get; set; }
 
+        /// <summary>
+        /// The options for list type fields stored as comma separated values
+        /// </summary>
+        public string FieldOptions { get; set; }
+
         public virtual PortfolioLabelGroup Group { get; set; }
 
         /// <summary>

@@ -27,6 +27,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Directorates, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
                 .ForMember(d => d.RelatedProjects, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
                 .ForMember(d => d.DependantProjects, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
+                .ForMember(d => d.RiskRating, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.risk_rating))))
                 ;
 
             CreateMap<IProjectOption, DropDownItemModel>()
@@ -83,4 +84,24 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
+    public class LabelDropDownResolver : IValueResolver<PortfolioConfiguration, ProjectOptionsModel, IEnumerable<DropDownItemModel>>
+    {
+        private string fieldName;
+
+        public LabelDropDownResolver(string fieldName)
+        {
+            this.fieldName = fieldName;
+        }
+
+        public IEnumerable<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectOptionsModel destination, IEnumerable<DropDownItemModel> destMember, ResolutionContext context)
+        {
+            IEnumerable<DropDownItemModel> items = null;
+            var label = source.Labels.SingleOrDefault(l => l.FieldName == fieldName);
+            if(label != null)
+            {
+                items = label.FieldOptions.Split(',').Select((l, i ) => new DropDownItemModel() { Display = l, Value = l, Order = i });
+            }
+            return items;
+        }
+    }
 }
