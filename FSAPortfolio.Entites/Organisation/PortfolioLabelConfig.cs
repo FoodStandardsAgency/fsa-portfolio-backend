@@ -23,6 +23,7 @@ namespace FSAPortfolio.Entities.Organisation
         PredefinedMultiList = 12,
         MultiOptionList = 13,
         LinkedItemList = 14,
+        NamedLink = 15
     }
 
     /// <summary>
@@ -62,6 +63,7 @@ namespace FSAPortfolio.Entities.Organisation
             this[PortfolioFieldType.SelectPicker] = "Select multiple options from searchable list";
             this[PortfolioFieldType.MultiOptionList] = "List of options for multiple choice";
             this[PortfolioFieldType.LinkedItemList] = "List of items with links";
+            this[PortfolioFieldType.NamedLink] = "Named hyperlink";
         }
     }
 

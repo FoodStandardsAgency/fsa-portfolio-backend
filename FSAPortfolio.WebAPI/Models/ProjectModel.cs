@@ -32,7 +32,7 @@ namespace FSAPortfolio.WebAPI.Models
         public object[] documents { get; set; }
         public DateTime? timestamp { get; set; }
         public string pgroup { get; set; }
-        public string link { get; set; }
+        public LinkModel link { get; set; }
         public string[] rels { get; set; }
         public string team { get; set; }
         public string onhold { get; set; }
@@ -87,5 +87,11 @@ namespace FSAPortfolio.WebAPI.Models
 
         
 
+    }
+
+    public class LinkModel
+    {
+        public string name { get; set; }
+        public string link { get; set; }
     }
 }
