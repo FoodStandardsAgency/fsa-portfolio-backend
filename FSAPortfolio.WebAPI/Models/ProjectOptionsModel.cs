@@ -56,6 +56,29 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.project_type))]
         public IEnumerable<DropDownItemModel> ProjectType { get; set; }
 
+        // People
+        [JsonProperty(nameof(ProjectModel.oddlead))]
+        public SelectPickerModel ODDLead { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.oddlead_role))]
+        public SelectPickerModel ODDLeadRole { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.g6team))]
+        public SelectPickerModel G6Team { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.key_contact1))]
+        public SelectPickerModel KeyContact1 { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.key_contact2))]
+        public SelectPickerModel KeyContact2 { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.key_contact3))]
+        public SelectPickerModel KeyContact3 { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.team))]
+        public SelectPickerModel Team { get; set; }
+
+
     }
 
     public class DropDownItemModel

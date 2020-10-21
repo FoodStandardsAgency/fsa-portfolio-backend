@@ -113,13 +113,13 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_AboutTheProject, "Key documents", nameof(ProjectModel.documents), true, false, false, PortfolioFieldType.LinkedItemList),
 
                 Factory(FieldGroupName_ProjectTeam, "Project lead", nameof(ProjectModel.oddlead), false, false, false, PortfolioFieldType.PredefinedSearchableList),
-                Factory(FieldGroupName_ProjectTeam, "Lead role", nameof(ProjectModel.oddlead_role), false, false, false, PortfolioFieldType.OptionList),
-                Factory(FieldGroupName_ProjectTeam, "Lead team", nameof(ProjectModel.g6team), false, false, false, PortfolioFieldType.OptionList),
+                Factory(FieldGroupName_ProjectTeam, "Lead role", nameof(ProjectModel.oddlead_role), false, false, false, PortfolioFieldType.PredefinedSearchableList),
+                Factory(FieldGroupName_ProjectTeam, "Lead team", nameof(ProjectModel.g6team), false, false, false, PortfolioFieldType.PredefinedSearchableList),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 1", nameof(ProjectModel.key_contact1), false, false, false, PortfolioFieldType.PredefinedSearchableList, flags: PortfolioFieldFlags.DefaultProjectData),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 2", nameof(ProjectModel.key_contact2), false, false, false, PortfolioFieldType.PredefinedSearchableList, flags: PortfolioFieldFlags.DefaultProjectData),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 3", nameof(ProjectModel.key_contact3), false, false, false, PortfolioFieldType.PredefinedSearchableList, flags: PortfolioFieldFlags.DefaultProjectData),
                 Factory(FieldGroupName_ProjectTeam, "Supplier", nameof(ProjectModel.supplier), false, false, false, PortfolioFieldType.FreeText, flags: PortfolioFieldFlags.DefaultProjectData),
-                Factory(FieldGroupName_ProjectTeam, "Project team", nameof(ProjectModel.team), false, false, false, PortfolioFieldType.PredefinedField),
+                Factory(FieldGroupName_ProjectTeam, "Project team", nameof(ProjectModel.team), false, false, false, PortfolioFieldType.PredefinedSearchableList, flags: PortfolioFieldFlags.DefaultProjectData),
 
                 Factory(FieldGroupName_ProjectPlan, "Intended start date", nameof(ProjectModel.start_date), false, false, false, PortfolioFieldType.Date),
                 Factory(FieldGroupName_ProjectPlan, "Actual start date", nameof(ProjectModel.actstart), false, false, false, PortfolioFieldType.Date),

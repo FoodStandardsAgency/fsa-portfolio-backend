@@ -31,7 +31,16 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Theme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.theme))))
                 .ForMember(d => d.ProjectType, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_type))))
                 .ForMember(d => d.Programme, o => o.MapFrom(new SelectPickerResolver(nameof(ProjectModel.programme), "Select the programmes...")))
+
+                .ForMember(d => d.ODDLead, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.oddlead))))
+                .ForMember(d => d.ODDLeadRole, o => o.MapFrom(new StubRoleResolver(nameof(ProjectModel.oddlead_role))))
+                .ForMember(d => d.G6Team, o => o.MapFrom(new StubTeamResolver(nameof(ProjectModel.g6team))))
+                .ForMember(d => d.KeyContact1, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.key_contact1))))
+                .ForMember(d => d.KeyContact2, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.key_contact2))))
+                .ForMember(d => d.KeyContact3, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.key_contact3))))
+                .ForMember(d => d.Team, o => o.MapFrom(new StubTeamResolver(nameof(ProjectModel.team))))
                 ;
+
 
             CreateMap<IProjectOption, DropDownItemModel>()
                 .ForMember(d => d.Display, o => o.MapFrom(s => s.Name))
@@ -137,4 +146,84 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
+    // TODO: implement resolver using AD integration
+    public class StubPersonResolver : IValueResolver<PortfolioConfiguration, ProjectOptionsModel, SelectPickerModel>
+    {
+        private string fieldName;
+
+        public StubPersonResolver(string fieldName)
+        {
+            this.fieldName = fieldName;
+        }
+
+        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
+        {
+            SelectPickerModel model = new SelectPickerModel()
+            {
+                Header = "Select the person...",
+                Items = new SelectPickerItemModel[] {
+                    new SelectPickerItemModel() { Display = "None", Order = 0 },
+                    new SelectPickerItemModel() { Display = "Person0 (p0@a.b.com)", Value = "p0id", SearchTokens="Person0, p0@a.b.com", Order = 1 },
+                    new SelectPickerItemModel() { Display = "Person1 (p1@a.b.com)", Value = "p1id", SearchTokens="Person1, p1@a.b.com", Order = 2 },
+                    new SelectPickerItemModel() { Display = "Person2 (p2@a.b.com)", Value = "p2id", SearchTokens="Person2, p2@a.b.com", Order = 3 },
+                    new SelectPickerItemModel() { Display = "Person3 (p3@a.b.com)", Value = "p3id", SearchTokens="Person3, p3@a.b.com", Order = 4 },
+                }
+            };
+            return model;
+        }
+    }
+
+    // TODO: implement resolver using AD integration
+    public class StubRoleResolver : IValueResolver<PortfolioConfiguration, ProjectOptionsModel, SelectPickerModel>
+    {
+        private string fieldName;
+
+        public StubRoleResolver(string fieldName)
+        {
+            this.fieldName = fieldName;
+        }
+
+        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
+        {
+            SelectPickerModel model = new SelectPickerModel()
+            {
+                Header = "Select the role...",
+                Items = new SelectPickerItemModel[] {
+                    new SelectPickerItemModel() { Display = "None", Order = 0 },
+                    new SelectPickerItemModel() { Display = "Role0", Value = "r0id", SearchTokens="Role0", Order = 1 },
+                    new SelectPickerItemModel() { Display = "Role1", Value = "r1id", SearchTokens="Role1", Order = 2 },
+                    new SelectPickerItemModel() { Display = "Role2", Value = "r2id", SearchTokens="Role2", Order = 3 },
+                    new SelectPickerItemModel() { Display = "Role3", Value = "r3id", SearchTokens="Role3", Order = 4 },
+                }
+            };
+            return model;
+        }
+    }
+
+    // TODO: implement resolver using AD integration
+    public class StubTeamResolver : IValueResolver<PortfolioConfiguration, ProjectOptionsModel, SelectPickerModel>
+    {
+        private string fieldName;
+
+        public StubTeamResolver(string fieldName)
+        {
+            this.fieldName = fieldName;
+        }
+
+        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
+        {
+            SelectPickerModel model = model = new SelectPickerModel()
+            {
+                Header = "Select the team...",
+                Items = new SelectPickerItemModel[] {
+                    new SelectPickerItemModel() { Display = "None", Order = 0 },
+                    new SelectPickerItemModel() { Display = "Team0 (t0@a.b.com)", Value = "t0id", SearchTokens="Team0, t0@a.b.com", Order = 1 },
+                    new SelectPickerItemModel() { Display = "Team1 (t1@a.b.com)", Value = "t1id", SearchTokens="Team1, t1@a.b.com", Order = 2 },
+                    new SelectPickerItemModel() { Display = "Team2 (t2@a.b.com)", Value = "t2id", SearchTokens="Team2, t2@a.b.com", Order = 3 },
+                    new SelectPickerItemModel() { Display = "Team3 (t3@a.b.com)", Value = "t3id", SearchTokens="Team3, t3@a.b.com", Order = 4 },
+                }
+            };
+            return model;
+        }
+    }
 }
