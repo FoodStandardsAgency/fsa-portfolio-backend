@@ -136,6 +136,7 @@
     <Compile Include="App\Projects\PortfolioProvider.cs" />
     <Compile Include="App\Projects\ProjectProvider.cs" />
     <Compile Include="App\Sync\DefaultFieldLabels.cs" />
+    <Compile Include="App\Sync\SyncMaps.cs" />
     <Compile Include="App\Sync\SyncProvider.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\PortfolioLabelController.cs" />

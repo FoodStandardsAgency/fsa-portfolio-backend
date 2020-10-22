@@ -29,16 +29,6 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 .SingleOrDefaultAsync(r => r.ProjectId == projectId);
         }
 
-        internal void CreateProjectUpdate(ProjectUpdateItem update, Project project)
-        {
-            update.Timestamp = DateTime.Now;
-            if (!update.IsDuplicate(project.LatestUpdate))
-            {
-                project.Updates.Add(update);
-                project.LatestUpdate = update;
-            }
-        }
-
         internal Project CreateNewProject(ProjectReservation reservation)
         {
             reservation.Project = new Project()
@@ -49,7 +39,6 @@ namespace FSAPortfolio.WebAPI.App.Projects
             };
             return reservation.Project;
         }
-
 
         public void Dispose()
         {

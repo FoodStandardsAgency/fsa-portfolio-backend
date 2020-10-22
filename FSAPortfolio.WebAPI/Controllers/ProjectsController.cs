@@ -41,16 +41,30 @@ namespace FSAPortfolio.WebAPI.Controllers
                         {
                             project = provider.CreateNewProject(reservation);
                         }
-                        PortfolioMapper.ProjectMapper.Map(update, project, opt => {
+                        PortfolioMapper.ProjectMapper.Map(update, project, opt =>
+                        {
                             opt.Items[nameof(PortfolioContext)] = provider.Context;
                         });
-                        if(project.AuditLogs != null) provider.LogAuditChanges(project);
+                        if (project.AuditLogs != null) provider.LogAuditChanges(project);
                         await provider.SaveChangesAsync();
 
-                        // Create a new update
-                        var projectUpdate = new ProjectUpdateItem() { Project = project };
+                        // Get the last update and create a new one if necessary
+                        ProjectUpdateItem lastUpdate = project.LatestUpdate;
+                        ProjectUpdateItem projectUpdate = lastUpdate;
+                        if (projectUpdate == null || projectUpdate.Timestamp.Date != DateTime.Today)
+                        {
+                            // Create a new update
+                            projectUpdate = new ProjectUpdateItem() { Project = project };
+                        }
+
+                        // Map the data to the update and add if not a duplicate
                         PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[nameof(PortfolioContext)] = provider.Context);
-                        provider.CreateProjectUpdate(projectUpdate, project);
+                        if (!projectUpdate.IsDuplicate(lastUpdate))
+                        {
+                            project.Updates.Add(projectUpdate);
+                            project.LatestUpdate = projectUpdate;
+                            project.LatestUpdate.Timestamp = DateTime.Now;
+                        }
 
                         // Save
                         await provider.SaveChangesAsync();

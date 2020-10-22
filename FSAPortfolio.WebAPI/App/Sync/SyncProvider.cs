@@ -24,51 +24,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
     internal class SyncProvider
     {
         private ICollection<string> log;
-        private static readonly Dictionary<string, string> phaseMap = new Dictionary<string, string>()
-        {
-            { "backlog", PhaseConstants.BacklogName },
-            { "discovery", PhaseConstants.DiscoveryName },
-            { "alpha", PhaseConstants.AlphaName },
-            { "beta", PhaseConstants.BetaName },
-            { "live", PhaseConstants.LiveName },
-            { "completed", PhaseConstants.CompletedName }
-        };
-        private static readonly Dictionary<string, string> onholdMap = new Dictionary<string, string>()
-        {
-            { "n", OnHoldConstants.NoName },
-            { "y", OnHoldConstants.OnHoldName },
-            { "b", OnHoldConstants.BlockedName },
-            { "c", OnHoldConstants.CovidName }
-        };
-        private static readonly Dictionary<string, string> ragMap = new Dictionary<string, string>()
-        {
-            { "red", RagConstants.RedName },
-            { "amb", RagConstants.AmberName },
-            { "gre", RagConstants.GreenName },
-            { "nor", RagConstants.NoneName }
-        };
-        internal static readonly Dictionary<string, string> categoryMap = new Dictionary<string, string>()
-        {
-            { "cap", CategoryConstants.CapabilityName },
-            { "data", CategoryConstants.DataName },
-            { "sm", CategoryConstants.ServiceMgmtName },
-            { "ser", CategoryConstants.SupportName },
-            { "it", CategoryConstants.ITName },
-            { "res", CategoryConstants.ResilienceName }
-        };
-        private static readonly Dictionary<string, string> sizeMap = new Dictionary<string, string>()
-        {
-            { "s", ProjectSizeConstants.SmallName },
-            { "m", ProjectSizeConstants.MediumName },
-            { "l", ProjectSizeConstants.LargeName },
-            { "x", ProjectSizeConstants.ExtraLargeName }
-        };
-        private static readonly Dictionary<string, string> budgetTypeMap = new Dictionary<string, string>()
-        {
-            { "admin", BudgetTypeConstants.AdminName },
-            { "progr", BudgetTypeConstants.ProgrammeName },
-            { "capit", BudgetTypeConstants.CapitalName }
-        };
+
 
         IMapper mapper;
 
@@ -277,7 +233,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     phase = new ProjectPhase() { ViewKey = k, Order = o };
                     portfolio.Configuration.Phases.Add(phase);
                 }
-                phase.Name = phaseMap[k];
+                phase.Name = SyncMaps.phaseMap[k];
                 return phase;
             };
             Func<string, int, ProjectOnHoldStatus> onHoldFactory = (k, o) =>
@@ -288,7 +244,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     onhold = new ProjectOnHoldStatus() { ViewKey = k, Order = o };
                     portfolio.Configuration.OnHoldStatuses.Add(onhold);
                 }
-                onhold.Name = onholdMap[k];
+                onhold.Name = SyncMaps.onholdMap[k];
                 return onhold;
             };
             Func<string, int, ProjectRAGStatus> ragFactory = (k, o) =>
@@ -299,7 +255,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     rag = new ProjectRAGStatus() { ViewKey = k, Order = o };
                     portfolio.Configuration.RAGStatuses.Add(rag);
                 }
-                rag.Name = ragMap[k];
+                rag.Name = SyncMaps.ragMap[k];
                 return rag;
             };
             Func<string, int, ProjectCategory> categoryFactory = (k, o) =>
@@ -310,7 +266,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     category = new ProjectCategory() { ViewKey = k, Order = o };
                     portfolio.Configuration.Categories.Add(category);
                 }
-                category.Name = categoryMap[k];
+                category.Name = SyncMaps.categoryMap[k];
                 return category;
             };
             Func<string, int, ProjectSize> sizeFactory = (k, o) =>
@@ -321,7 +277,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     projectSize = new ProjectSize() { ViewKey = k, Order = o };
                     portfolio.Configuration.ProjectSizes.Add(projectSize);
                 }
-                projectSize.Name = sizeMap[k];
+                projectSize.Name = SyncMaps.sizeMap[k];
                 return projectSize;
             };
             Func<string, int, BudgetType> budgetTypeFactory = (k, o) =>
@@ -332,7 +288,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     budgetType = new BudgetType() { ViewKey = k, Order = o };
                     portfolio.Configuration.BudgetTypes.Add(budgetType);
                 }
-                budgetType.Name = budgetTypeMap[k];
+                budgetType.Name = SyncMaps.budgetTypeMap[k];
                 return budgetType;
             };
             Func<string, int, PortfolioLabelGroup> labelGroupFactory = (n, go) =>
