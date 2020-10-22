@@ -139,6 +139,7 @@
     <Compile Include="App\Sync\SyncMaps.cs" />
     <Compile Include="App\Sync\SyncProvider.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\PortfoliosController.cs" />
     <Compile Include="Controllers\PortfolioLabelController.cs" />
     <Compile Include="Controllers\PortfolioConfigurationController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Mapping\Organisation\PortfolioMappingProfile.cs" />
     <Compile Include="Mapping\PortfolioConfigUpdateProfile.cs" />
     <Compile Include="Mapping\PortfolioMapper.cs" />
     <Compile Include="Mapping\Organisation\PortfolioConfigurationMappingProfile.cs" />
@@ -159,6 +161,7 @@
     <Compile Include="Models\PortfolioConfigLabelRequests.cs" />
     <Compile Include="Models\PortfolioConfigModel.cs" />
     <Compile Include="Models\PortfolioConfigUpdateRequest.cs" />
+    <Compile Include="Models\PortfolioModel.cs" />
     <Compile Include="Models\ProjectLabelConfigModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\ProjectOptionsModel.cs" />

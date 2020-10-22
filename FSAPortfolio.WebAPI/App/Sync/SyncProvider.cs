@@ -151,12 +151,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
             using (var context = new PortfolioContext())
             {
                 AddPortfolio(context, "Open Data and Digital", "ODD", "odd");
-                AddPortfolio(context, "SERD", "SERD", "serd");
+                AddPortfolio(context, "Science, Evidence and Reseach Directorate", "SERD", "serd");
                 AddPortfolio(context, "ABC", "ABC", "abc");
-                AddPortfolio(context, "Test1", "Test1", "test1");
-                AddPortfolio(context, "Test2", "Test2", "test2");
-                AddPortfolio(context, "Test3", "Test3", "test3");
-                AddPortfolio(context, "Test4", "Test4", "test4");
+                AddPortfolio(context, "FHP", "FHP", "fhp");
+                AddPortfolio(context, "OTP", "OTP", "otp");
+                AddPortfolio(context, "Test", "Test", "test");
                 context.SaveChanges();
 
                 foreach (var portfolio in context.Portfolios)
@@ -226,15 +225,18 @@ namespace FSAPortfolio.WebAPI.App.Sync
             portfolio.ShortName = shortName;
             portfolio.IDPrefix = viewKey.ToUpper();
 
-            Func<string, int, ProjectPhase> phaseFactory = (k, o) => {
-                var phase = portfolio.Configuration.Phases.SingleOrDefault(p => p.ViewKey == k);
-                if (phase == null)
+            Action<string, string, int> phaseFactory = (po, k, o) => {
+                string phaseName;
+                if (SyncMaps.phaseMap.TryGetValue(new Tuple<string, string>(po, k), out phaseName))
                 {
-                    phase = new ProjectPhase() { ViewKey = k, Order = o };
-                    portfolio.Configuration.Phases.Add(phase);
+                    var phase = portfolio.Configuration.Phases.SingleOrDefault(p => p.ViewKey == k);
+                    if (phase == null)
+                    {
+                        phase = new ProjectPhase() { ViewKey = k, Order = o };
+                        portfolio.Configuration.Phases.Add(phase);
+                    }
+                    phase.Name = phaseName;
                 }
-                phase.Name = SyncMaps.phaseMap[k];
-                return phase;
             };
             Func<string, int, ProjectOnHoldStatus> onHoldFactory = (k, o) =>
             {
@@ -303,12 +305,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 return group;
             };
 
-            phaseFactory("backlog", 0);
-            phaseFactory("discovery", 1);
-            phaseFactory("alpha", 2);
-            phaseFactory("beta", 3);
-            phaseFactory("live", 4);
-            phaseFactory("completed", 5);
+            phaseFactory(viewKey, "backlog", 0);
+            phaseFactory(viewKey, "discovery", 1);
+            phaseFactory(viewKey, "alpha", 2);
+            phaseFactory(viewKey, "beta", 3);
+            phaseFactory(viewKey, "live", 4);
+            phaseFactory(viewKey, "completed", 5);
             ragFactory("red", 1);
             ragFactory("amb", 2);
             ragFactory("gre", 3);

@@ -73,7 +73,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 {
                     Value = p.Reservation.ProjectId,
                     Display = $"{p.Reservation.ProjectId}: {p.Name}",
-                    SearchTokens = $"{p.Category.Name},{p.LatestUpdate.Phase.Name}",
+                    SearchTokens = $"{p.Category.Name},{p.LatestUpdate?.Phase?.Name}",
                     Order = i
                 }).ToList()
             };

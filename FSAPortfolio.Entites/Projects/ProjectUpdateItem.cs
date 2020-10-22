@@ -36,15 +36,17 @@ namespace FSAPortfolio.Entities.Projects
         public bool IsDuplicate(ProjectUpdateItem update)
         {
             return update != null &&
-                RAGStatus.ViewKey.Equals(update.RAGStatus.ViewKey) &&
-                OnHoldStatus.ViewKey.Equals(update.OnHoldStatus.ViewKey) &&
-                Phase.ViewKey.Equals(update.Phase.ViewKey) &&
-                PercentageComplete.Equals(update.PercentageComplete) &&
+                IsDuplicate(RAGStatus, update.RAGStatus) &&
+                IsDuplicate(OnHoldStatus, update.OnHoldStatus) &&
+                IsDuplicate(Phase, update.Phase) &&
+                ((PercentageComplete == null && update.PercentageComplete == null) || (PercentageComplete.HasValue && PercentageComplete.Equals(update.PercentageComplete))) &&
                 Budget.Equals(update.Budget) &&
                 Spent.Equals(update.Spent) &&
-                ExpectedCurrentPhaseEnd.Equals(update.ExpectedCurrentPhaseEnd) &&
+                ((ExpectedCurrentPhaseEnd == null && update.ExpectedCurrentPhaseEnd == null) || (ExpectedCurrentPhaseEnd != null && ExpectedCurrentPhaseEnd.Equals(update.ExpectedCurrentPhaseEnd))) &&
                 (string.IsNullOrWhiteSpace(Text) || string.Equals(Text, update.Text, StringComparison.OrdinalIgnoreCase))
                 ;
         }
+
+        private bool IsDuplicate<T>(T option1, T option2) where T : IProjectOption => (option1 == null && option2 == null) || (option1 != null && option1.ViewKey.Equals(option2?.ViewKey));
     }
 }

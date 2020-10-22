@@ -179,7 +179,9 @@ namespace FSAPortfolio.WebAPI.Controllers
                              select p);
                 if (includeHistory) query = query.IncludeUpdates();
 
-                var project = query.Single();
+                var project = await query.SingleOrDefaultAsync();
+                if (project == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+
                 portfolio = project.Reservation.Portfolio.ViewKey;
 
                 // Build the result
