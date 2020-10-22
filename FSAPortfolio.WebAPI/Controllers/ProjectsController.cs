@@ -166,24 +166,28 @@ namespace FSAPortfolio.WebAPI.Controllers
 
 
         [HttpGet]
-        public async Task<GetProjectDTO> Get([FromUri] string projectId, [FromUri] bool includeOptions = false)
+        public async Task<GetProjectDTO> Get([FromUri] string projectId, [FromUri] bool includeOptions = false, [FromUri] bool includeHistory = false, [FromUri] bool includeConfig = false)
         {
             string portfolio;
             GetProjectDTO result;
             using (var context = new PortfolioContext())
             {
-                var query = (from p in context.Projects.IncludeProject()
-                                .IncludeLabelConfigs()
-                                .IncludeUpdates()
+                var query = (from p in context.Projects
+                             .IncludeProject()
+                             .IncludeLabelConfigs() // Need label configs so can map project data fields
                              where p.Reservation.ProjectId == projectId
                              select p);
+                if (includeHistory) query = query.IncludeUpdates();
+
                 var project = query.Single();
+                portfolio = project.Reservation.Portfolio.ViewKey;
+
+                // Build the result
                 result = new GetProjectDTO()
                 {
-                    Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration),
-                    Project = PortfolioMapper.ProjectMapper.Map<ProjectModel>(project)
+                    Project = PortfolioMapper.ProjectMapper.Map<ProjectModel>(project, opt => opt.Items[nameof(ProjectModel.updateHistory)] = includeHistory)
                 };
-                portfolio = project.Reservation.Portfolio.ViewKey;
+                if (includeConfig) result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration);
             }
 
             if (includeOptions)

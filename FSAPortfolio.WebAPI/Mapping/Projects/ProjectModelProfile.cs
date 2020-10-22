@@ -18,12 +18,12 @@ using Newtonsoft.Json;
 
 namespace FSAPortfolio.WebAPI.Mapping.Projects
 {
-    public class ProjectMappingProfile : Profile
+    public class ProjectModelProfile : Profile
     {
         internal const string TimeOutputFormat = "dd/MM/yyyy hh:mm";
         private const string DateOutputFormat = "dd/MM/yyyy";
 
-        public ProjectMappingProfile()
+        public ProjectModelProfile()
         {
             CreateMap<DateTime, string>().ConvertUsing(d => d.ToString(DateOutputFormat));
             CreateMap<DateTime?, string>().ConvertUsing(d => d.HasValue ? d.Value.ToString(DateOutputFormat) : "00/00/00");
@@ -31,6 +31,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             // Outbound
             Project__ProjectModel();
             ProjectUpdateItem__ProjectUpdateModel();
+            ProjectUpdateItem__UpdateHistoryModel();
 
             // Inbound
             ProjectModel__Project();
@@ -51,6 +52,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.subcat, o => o.MapFrom(s => s.Subcategories.Select(sc => sc.ViewKey).ToArray()))
                 .ForMember(p => p.rag, o => o.MapFrom(s => s.LatestUpdate.RAGStatus.ViewKey))
                 .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Timestamp.Date == DateTime.Today ? s.LatestUpdate.Text : null))
+                .ForMember(p => p.updateHistory, o => o.MapFrom<UpdateHistoryResolver>())
                 .ForMember(p => p.priority_main, o => o.MapFrom(s => s.Priority.HasValue ? s.Priority.Value.ToString("D2") : string.Empty))
                 .ForMember(p => p.funded, o => o.MapFrom(s => s.Funded.ToString()))
                 .ForMember(p => p.confidence, o => o.MapFrom(s => s.Confidence.ToString()))
@@ -196,6 +198,14 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 ;
         }
 
+        private void ProjectUpdateItem__UpdateHistoryModel()
+        {
+            CreateMap<ProjectUpdateItem, UpdateHistoryModel>()
+                .ForMember(d => d.text, o => o.MapFrom(s => s.Text))
+                .ForMember(d => d.timestamp, o => o.MapFrom(s => s.Timestamp))
+                ;
+        }
+
 
     }
 
@@ -244,11 +254,26 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
+    public class UpdateHistoryResolver : IValueResolver<Project, ProjectModel, UpdateHistoryModel[]>
+    {
+        public UpdateHistoryModel[] Resolve(Project source, ProjectModel destination, UpdateHistoryModel[] destMember, ResolutionContext context)
+        {
+            UpdateHistoryModel[] result = null;
+            object includeHistory;
+            if(context.Items.TryGetValue(nameof(ProjectModel.updateHistory), out includeHistory) && (includeHistory as bool? ?? false))
+            {
+                // History is updates except the latest if it was added today.
+                result = context.Mapper.Map<UpdateHistoryModel[]>(source.Updates.Where(u => !(u.Timestamp.Date == DateTime.Today && u.Id == source.LatestUpdate_Id)).OrderBy(u => u.Timestamp));
+            }
+            return result;
+        }
+    }
+
     public class OutputTimestampResolver : IMemberValueResolver<object, object, DateTime, string>
     {
         public string Resolve(object source, object destination, DateTime sourceMember, string destMember, ResolutionContext context)
         {
-            return sourceMember.ToString(ProjectMappingProfile.TimeOutputFormat);
+            return sourceMember.ToString(ProjectModelProfile.TimeOutputFormat);
         }
     }
 

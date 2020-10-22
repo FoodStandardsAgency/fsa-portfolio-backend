@@ -17,6 +17,7 @@ namespace FSAPortfolio.WebAPI.Models
         public string[] subcat { get; set; }
         public string rag { get; set; }
         public string update { get; set; }
+        public UpdateHistoryModel[] updateHistory { get; set; }
         public string oddlead { get; set; }
         public string oddlead_email { get; set; }
         public string servicelead { get; set; }
@@ -93,5 +94,11 @@ namespace FSAPortfolio.WebAPI.Models
     {
         public string name { get; set; }
         public string link { get; set; }
+    }
+
+    public class UpdateHistoryModel
+    {
+        public string text { get; set; }
+        public DateTime timestamp { get; set; }
     }
 }

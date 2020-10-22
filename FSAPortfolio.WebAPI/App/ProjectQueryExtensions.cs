@@ -53,7 +53,7 @@ namespace FSAPortfolio.WebAPI.App
         public static IQueryable<Project> IncludeProject(this IQueryable<Project> query)
         {
             return query
-                .Include(p => p.Reservation)
+                .Include(p => p.Reservation.Portfolio.Configuration.CompletedPhase)
                 .Include(p => p.ProjectData)
                 .Include(p => p.FirstUpdate.OnHoldStatus)
                 .Include(p => p.FirstUpdate.RAGStatus)

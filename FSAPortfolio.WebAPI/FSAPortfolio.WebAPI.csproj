@@ -154,7 +154,7 @@
     <Compile Include="Mapping\Organisation\PortfolioConfigurationMappingProfile.cs" />
     <Compile Include="Mapping\Projects\PostgresProjectMappingProfile.cs" />
     <Compile Include="Mapping\Projects\ProjectDataResolvers.cs" />
-    <Compile Include="Mapping\Projects\ProjectMappingProfile.cs" />
+    <Compile Include="Mapping\Projects\ProjectModelProfile.cs" />
     <Compile Include="Mapping\Projects\ProjectOptionsMappingProfile.cs" />
     <Compile Include="Models\PortfolioConfigLabelRequests.cs" />
     <Compile Include="Models\PortfolioConfigModel.cs" />
