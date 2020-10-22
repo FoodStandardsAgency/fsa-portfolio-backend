@@ -50,7 +50,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(r => r.Portfolio.Configuration.LabelGroups);
         }
 
-        public static IQueryable<Project> ProjectIncludes(this IQueryable<Project> query)
+        public static IQueryable<Project> IncludeProject(this IQueryable<Project> query)
         {
             return query
                 .Include(p => p.Reservation)
@@ -70,7 +70,16 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Documents)
                 .Include(p => p.Lead);
         }
-        public static IQueryable<Project> ViewConfigIncludes(this IQueryable<Project> query)
+        public static IQueryable<Project> IncludeUpdates(this IQueryable<Project> query)
+        {
+            return query
+                .Include(p => p.Updates.Select(u => u.OnHoldStatus))
+                .Include(p => p.Updates.Select(u => u.RAGStatus))
+                .Include(p => p.Updates.Select(u => u.Phase))
+                ;
+        }
+
+        public static IQueryable<Project> IncludeLabelConfigs(this IQueryable<Project> query)
         {
             return query
                 .Include(p => p.Reservation.Portfolio.Configuration.Labels)

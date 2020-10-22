@@ -50,7 +50,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.category, o => o.MapFrom(s => s.Category.ViewKey))
                 .ForMember(p => p.subcat, o => o.MapFrom(s => s.Subcategories.Select(sc => sc.ViewKey).ToArray()))
                 .ForMember(p => p.rag, o => o.MapFrom(s => s.LatestUpdate.RAGStatus.ViewKey))
-                .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Text))
+                .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Timestamp.Date == DateTime.Today ? s.LatestUpdate.Text : null))
                 .ForMember(p => p.priority_main, o => o.MapFrom(s => s.Priority.HasValue ? s.Priority.Value.ToString("D2") : string.Empty))
                 .ForMember(p => p.funded, o => o.MapFrom(s => s.Funded.ToString()))
                 .ForMember(p => p.confidence, o => o.MapFrom(s => s.Confidence.ToString()))

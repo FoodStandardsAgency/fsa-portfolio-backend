@@ -62,7 +62,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             options.Directorates = directorates;
 
             var projects = await context.Projects
-                .ProjectIncludes()
+                .IncludeProject()
                 .Where(p => p.Reservation.Portfolio_Id == config.Portfolio_Id)
                 .OrderBy(p => p.Reservation.ProjectId)
                 .ToListAsync();

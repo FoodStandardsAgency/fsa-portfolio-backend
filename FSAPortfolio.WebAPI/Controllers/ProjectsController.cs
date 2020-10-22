@@ -172,7 +172,9 @@ namespace FSAPortfolio.WebAPI.Controllers
             GetProjectDTO result;
             using (var context = new PortfolioContext())
             {
-                var query = (from p in context.Projects.ProjectIncludes().ViewConfigIncludes()
+                var query = (from p in context.Projects.IncludeProject()
+                                .IncludeLabelConfigs()
+                                .IncludeUpdates()
                              where p.Reservation.ProjectId == projectId
                              select p);
                 var project = query.Single();
@@ -216,7 +218,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 using (var context = new PortfolioContext())
                 {
-                    var projects = await context.Projects.ProjectIncludes()
+                    var projects = await context.Projects.IncludeProject()
                         .Where(p => p.Reservation.ProjectId == projectId)
                         .SelectMany(p => p.RelatedProjects)
                         .ToListAsync();
@@ -237,7 +239,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 using (var context = new PortfolioContext())
                 {
-                    var projects = await context.Projects.ProjectIncludes()
+                    var projects = await context.Projects.IncludeProject()
                         .Where(p => p.Reservation.ProjectId == projectId)
                         .SelectMany(p => p.DependantProjects)
                         .ToListAsync(); ;
@@ -286,7 +288,7 @@ namespace FSAPortfolio.WebAPI.Controllers
 
         private static IQueryable<Project> ProjectWithIncludes(PortfolioContext context, string portfolio)
         {
-            return context.Projects.ProjectIncludes().Where(p => p.Portfolios.Any(po => po.ViewKey == portfolio));
+            return context.Projects.IncludeProject().Where(p => p.Portfolios.Any(po => po.ViewKey == portfolio));
         }
 
     }

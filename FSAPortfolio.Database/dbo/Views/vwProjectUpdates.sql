@@ -20,7 +20,7 @@ SELECT
 FROM [dbo].[ProjectReservations] rv
 	JOIN [dbo].[Portfolios] po ON rv.Portfolio_Id = po.Id
 	JOIN [dbo].[Projects] pr ON pr.ProjectReservation_Id = rv.Id
-	LEFT JOIN [dbo].[ProjectUpdateItems] up ON pr.LatestUpdate_Id = up.Id
+	LEFT JOIN [dbo].[ProjectUpdateItems] up ON pr.ProjectReservation_Id = up.Project_Id
 		LEFT JOIN [dbo].[ProjectRAGStatus] uprs ON up.RAGStatus_Id = uprs.Id
 		LEFT JOIN [dbo].[ProjectPhases] upph ON up.Phase_Id = upph.Id
 		LEFT JOIN [dbo].[ProjectOnHoldStatus] upoh ON up.OnHoldStatus_Id = upoh.Id
