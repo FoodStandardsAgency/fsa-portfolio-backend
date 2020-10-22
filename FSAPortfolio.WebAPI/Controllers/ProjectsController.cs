@@ -139,7 +139,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         /// <returns>A DTO with the label config, options and default project data.</returns>
         /// <remarks>Labels must have the Create flag set in order to be included in the config data.</remarks>
         [HttpGet]
-        public async Task<GetNewProjectDTO> GetNewProject([FromUri] string portfolio)
+        public async Task<GetProjectDTO> GetNewProject([FromUri] string portfolio)
         {
             try
             {
@@ -149,7 +149,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                     var reservation = await provider.GetProjectReservationAsync(config);
                     await provider.SaveChangesAsync();
 
-                    var result = new GetNewProjectDTO()
+                    var result = new GetProjectDTO()
                     {
                         Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.Create),
                         Options = await provider.GetNewProjectOptionsAsync(config),
@@ -166,26 +166,33 @@ namespace FSAPortfolio.WebAPI.Controllers
 
 
         [HttpGet]
-        public async Task<GetProjectDTO> Get(string projectId)
+        public async Task<GetProjectDTO> Get([FromUri] string projectId, [FromUri] bool includeOptions = false)
         {
-            try
+            string portfolio;
+            GetProjectDTO result;
+            using (var context = new PortfolioContext())
             {
-                using (var context = new PortfolioContext())
+                var query = (from p in context.Projects.ProjectIncludes().ViewConfigIncludes()
+                             where p.Reservation.ProjectId == projectId
+                             select p);
+                var project = query.Single();
+                result = new GetProjectDTO()
                 {
-                    var project = (from p in context.Projects.ProjectIncludes().ViewConfigIncludes()
-                                   where p.Reservation.ProjectId == projectId select p).Single();
-                    var result = new GetProjectDTO()
-                    {
-                        Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration),
-                        Project = PortfolioMapper.ProjectMapper.Map<ProjectModel>(project)
-                    };
-                    return result;
+                    Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration),
+                    Project = PortfolioMapper.ProjectMapper.Map<ProjectModel>(project)
+                };
+                portfolio = project.Reservation.Portfolio.ViewKey;
+            }
+
+            if (includeOptions)
+            {
+                using (var provider = new PortfolioProvider(portfolio))
+                {
+                    var config = await provider.GetConfigAsync();
+                    result.Options = await provider.GetNewProjectOptionsAsync(config);
                 }
             }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return result;
         }
 
         [HttpGet]

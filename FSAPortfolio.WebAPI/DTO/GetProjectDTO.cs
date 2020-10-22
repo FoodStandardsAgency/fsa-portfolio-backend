@@ -14,5 +14,9 @@ namespace FSAPortfolio.WebAPI.DTO
 
         [JsonProperty("project")]
         public ProjectModel Project { get; set; }
+
+        [JsonProperty("options")]
+        public ProjectOptionsModel Options { get; set; }
+
     }
 }

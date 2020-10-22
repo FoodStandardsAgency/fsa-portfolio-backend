@@ -90,5 +90,6 @@
     <Build Include="dbo\Tables\AccessGroups.sql" />
     <Build Include="dbo\Tables\__MigrationHistory.sql" />
     <Build Include="dbo\Views\vwProjects.sql" />
+    <Build Include="dbo\Views\vwProjectUpdates.sql" />
   </ItemGroup>
 </Project>

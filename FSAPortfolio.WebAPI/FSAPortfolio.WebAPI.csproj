@@ -145,7 +145,6 @@
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\LegacyProjectsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="DTO\GetNewProjectDTO.cs" />
     <Compile Include="DTO\GetProjectDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
