@@ -127,7 +127,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             CreateMap<ProjectUpdateItem, UpdateHistoryModel>()
                 .ForMember(d => d.Text, o => o.MapFrom(s => s.Text))
-                .ForMember(d => d.Timestamp, o => o.MapFrom(s => s.Timestamp.ToString(TimeOutputFormat)))
+                .ForMember(d => d.Timestamp, o => o.MapFrom(s => s.Timestamp))
                 ;
         }
 
