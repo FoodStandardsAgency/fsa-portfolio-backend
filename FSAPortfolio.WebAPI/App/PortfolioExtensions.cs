@@ -25,6 +25,7 @@ namespace FSAPortfolio.WebAPI.App
         public static IQueryable<Portfolio> IncludeProjects(this IQueryable<Portfolio> query)
         {
             return query
+                .Include(p => p.Projects.Select(pr => pr.Reservation))
                 .Include(p => p.Projects.Select(pr => pr.Category))
                 .Include(p => p.Projects.Select(pr => pr.LatestUpdate.Phase))
                 ;
