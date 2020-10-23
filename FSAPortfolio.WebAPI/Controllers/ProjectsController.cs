@@ -187,7 +187,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 // Build the result
                 result = new GetProjectDTO()
                 {
-                    Project = PortfolioMapper.ProjectMapper.Map<ProjectViewModel>(project, opt => opt.Items[nameof(ProjectViewModel.updateHistory)] = includeHistory)
+                    Project = PortfolioMapper.ProjectMapper.Map<ProjectViewModel>(project, opt => opt.Items[nameof(ProjectViewModel.UpdateHistory)] = includeHistory)
                 };
                 if (includeConfig) result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration);
             }

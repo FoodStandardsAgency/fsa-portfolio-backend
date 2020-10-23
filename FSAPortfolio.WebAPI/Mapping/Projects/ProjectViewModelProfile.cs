@@ -48,7 +48,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.subcat, o => o.MapFrom(s => s.Subcategories.Select(sc => sc.ViewKey).ToArray()))
                 .ForMember(p => p.rag, o => o.MapFrom(s => s.LatestUpdate.RAGStatus.ViewKey))
                 .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Timestamp.Date == DateTime.Today ? s.LatestUpdate.Text : null))
-                .ForMember(p => p.updateHistory, o => o.MapFrom<UpdateHistoryResolver>())
+                .ForMember(p => p.UpdateHistory, o => o.MapFrom<UpdateHistoryResolver>())
                 .ForMember(p => p.priority_main, o => o.MapFrom(s => s.Priority.HasValue ? s.Priority.Value.ToString("D2") : string.Empty))
                 .ForMember(p => p.funded, o => o.MapFrom(s => s.Funded.ToString()))
                 .ForMember(p => p.confidence, o => o.MapFrom(s => s.Confidence.ToString()))
@@ -150,7 +150,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             UpdateHistoryModel[] result = null;
             object includeHistory;
-            if (context.Items.TryGetValue(nameof(ProjectViewModel.updateHistory), out includeHistory) && (includeHistory as bool? ?? false))
+            if (context.Items.TryGetValue(nameof(ProjectViewModel.UpdateHistory), out includeHistory) && (includeHistory as bool? ?? false))
             {
                 // History is updates except the latest if it was added today.
                 //result = context.Mapper.Map<UpdateHistoryModel[]>(source.Updates.Where(u => !(u.Timestamp.Date == DateTime.Today && u.Id == source.LatestUpdate_Id)).OrderBy(u => u.Timestamp));
