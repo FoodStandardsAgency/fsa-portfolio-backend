@@ -32,7 +32,6 @@ namespace FSAPortfolio.UnitTests
             string testProjectId = ConfigurationManager.AppSettings["TestProjectId"];
             TestGetOk("api/Projects/odd/newproject");
             TestGetOk($"api/Projects/{testProjectId}");
-            TestGetOk($"api/Projects/{testProjectId}/updates");
             TestGetOk($"api/Projects/{testProjectId}/related");
             TestGetOk($"api/Projects/{testProjectId}/dependant");
         }

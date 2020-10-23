@@ -30,6 +30,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
                 .ForMember(d => d.Label, o => o.MapFrom(s => s.FieldLabel))
                 .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType))
                 .ForMember(d => d.FieldTypeLocked, o => o.MapFrom(s => s.FieldTypeLocked))
+                .ForMember(d => d.FieldOptions, o => o.MapFrom(s => s.FieldOptions))
                 .ForMember(d => d.Flags, o => o.MapFrom(s => s.Flags))
                 ;
 

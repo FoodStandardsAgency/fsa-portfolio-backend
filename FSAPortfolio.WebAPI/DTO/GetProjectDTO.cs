@@ -13,7 +13,7 @@ namespace FSAPortfolio.WebAPI.DTO
         public ProjectLabelConfigModel Config { get; set; }
 
         [JsonProperty("project")]
-        public ProjectModel Project { get; set; }
+        public ProjectViewModel Project { get; set; }
 
         [JsonProperty("options")]
         public ProjectOptionsModel Options { get; set; }

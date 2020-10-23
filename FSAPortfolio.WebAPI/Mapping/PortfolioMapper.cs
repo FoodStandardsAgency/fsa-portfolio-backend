@@ -26,7 +26,8 @@ namespace FSAPortfolio.WebAPI.Mapping
             projectConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<PostgresProjectMappingProfile>();
-                cfg.AddProfile<ProjectModelProfile>();
+                cfg.AddProfile<ProjectViewModelProfile>();
+                cfg.AddProfile<ProjectUpdateModelProfile>();
                 cfg.AddProfile<ProjectOptionsMappingProfile>();
             });
             ProjectMapper = projectConfig.CreateMapper();
@@ -64,6 +65,20 @@ namespace FSAPortfolio.WebAPI.Mapping
             };
             var mappedProperties = memberMaps.Select(m => extractSourceMemberName(m)).Where(n => n != null).ToArray();
             var unmappedProperties = typeof(TSource).GetProperties().Where(p => !mappedProperties.Contains(p.Name)).ToArray();
+            return unmappedProperties;
+        }
+        internal static PropertyInfo[] GetUnmappedDestinationMembers<TSource, TDest>(MapperConfiguration config)
+        {
+            TypeMap typeMap = config.FindTypeMapFor<TSource, TDest>();
+            var memberMaps = typeMap.MemberMaps.Where(m => !m.Ignored);
+
+            Func<IMemberMap, string> extractDestinationMemberName = m =>
+            {
+                string name = m.DestinationName;
+                return name;
+            };
+            var mappedProperties = memberMaps.Select(m => extractDestinationMemberName(m)).Where(n => n != null).ToArray();
+            var unmappedProperties = typeof(TDest).GetProperties().Where(p => !mappedProperties.Contains(p.Name)).ToArray();
             return unmappedProperties;
         }
     }

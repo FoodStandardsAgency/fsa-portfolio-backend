@@ -12,20 +12,20 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.Mapping.Projects
 {
-    public class ProjectDataInboundResolver : IValueResolver<ProjectModel, Project, ICollection<ProjectDataItem>>
+    public class ProjectDataInboundResolver : IValueResolver<ProjectUpdateModel, Project, ICollection<ProjectDataItem>>
     {
         /// <summary>
-        /// Unmapped <see cref="ProjectModel"/> properties
+        /// Unmapped <see cref="ProjectUpdateModel"/> properties
         /// </summary>
         internal static readonly Dictionary<string, PropertyInfo> unmappedProperties;
         static ProjectDataInboundResolver()
         {
-            var unmappedToProject = PortfolioMapper.GetUnmappedSourceMembers<ProjectModel, Project>(PortfolioMapper.projectConfig);
-            var unmappedToUpdate = PortfolioMapper.GetUnmappedSourceMembers<ProjectModel, ProjectUpdateItem>(PortfolioMapper.projectConfig);
+            var unmappedToProject = PortfolioMapper.GetUnmappedSourceMembers<ProjectUpdateModel, Project>(PortfolioMapper.projectConfig);
+            var unmappedToUpdate = PortfolioMapper.GetUnmappedSourceMembers<ProjectUpdateModel, ProjectUpdateItem>(PortfolioMapper.projectConfig);
             unmappedProperties = unmappedToProject.Intersect(unmappedToUpdate).ToDictionary(p => p.Name);
         }
 
-        public ICollection<ProjectDataItem> Resolve(ProjectModel source, Project destination, ICollection<ProjectDataItem> destMember, ResolutionContext context)
+        public ICollection<ProjectDataItem> Resolve(ProjectUpdateModel source, Project destination, ICollection<ProjectDataItem> destMember, ResolutionContext context)
         {
             var labels = destination.Reservation.Portfolio.Configuration.Labels;
             var portfolioContext = context.Items[nameof(PortfolioContext)] as PortfolioContext;
@@ -62,12 +62,21 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
     public class ProjectDataOutboundMapper
     {
-        public static void Map(Project source, ProjectModel model)
+        /// <summary>
+        /// Unmapped <see cref="ProjectViewModel"/> properties
+        /// </summary>
+        internal static readonly Dictionary<string, PropertyInfo> unmappedProperties;
+        static ProjectDataOutboundMapper()
+        {
+            var unmappedToProject = PortfolioMapper.GetUnmappedDestinationMembers<Project, ProjectViewModel>(PortfolioMapper.projectConfig);
+            unmappedProperties = unmappedToProject.ToDictionary(p => p.Name);
+        }
+        public static void Map(Project source, ProjectViewModel model)
         {
             foreach(var dataItem in source.ProjectData)
             {
                 PropertyInfo property;
-                if(ProjectDataInboundResolver.unmappedProperties.TryGetValue(dataItem.Label.FieldName, out property))
+                if(unmappedProperties.TryGetValue(dataItem.Label.FieldName, out property))
                 {
                     property.SetValue(model, JsonConvert.DeserializeObject(dataItem.Value, property.PropertyType));
                 }

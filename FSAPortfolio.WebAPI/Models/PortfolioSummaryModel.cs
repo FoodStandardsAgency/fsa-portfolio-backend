@@ -51,6 +51,9 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("viewkey")]
         public string ViewKey { get; set; }
 
+        [JsonProperty("order")]
+        public int Order { get; set; }
+
         [JsonProperty("projects")]
         public IEnumerable<ProjectIndexModel> Projects { get; set; }
     }

@@ -25,7 +25,7 @@ namespace FSAPortfolio.WebAPI.Controllers
     {
         // POST: api/Projects
         [HttpPost]
-        public async Task Post([FromBody]ProjectModel update)
+        public async Task Post([FromBody]ProjectUpdateModel update)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                     {
                         Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.Create),
                         Options = await provider.GetNewProjectOptionsAsync(config),
-                        Project = new ProjectModel() { project_id = reservation.ProjectId }
+                        Project = new ProjectViewModel() { project_id = reservation.ProjectId }
                     };
                     return result;
                 }
@@ -187,7 +187,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 // Build the result
                 result = new GetProjectDTO()
                 {
-                    Project = PortfolioMapper.ProjectMapper.Map<ProjectModel>(project, opt => opt.Items[nameof(ProjectModel.updateHistory)] = includeHistory)
+                    Project = PortfolioMapper.ProjectMapper.Map<ProjectViewModel>(project, opt => opt.Items[nameof(ProjectViewModel.updateHistory)] = includeHistory)
                 };
                 if (includeConfig) result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration);
             }
@@ -204,7 +204,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         [HttpGet]
-        public Task<IEnumerable<ProjectModel>> GetFiltered(string projectId, [FromUri] string filter)
+        public Task<IEnumerable<ProjectViewModel>> GetFiltered(string projectId, [FromUri] string filter)
         {
             switch(filter)
             {
@@ -218,7 +218,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ProjectModel>> GetRelatedProjects(string projectId)
+        public async Task<IEnumerable<ProjectViewModel>> GetRelatedProjects(string projectId)
         {
             try
             {
@@ -228,7 +228,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                         .Where(p => p.Reservation.ProjectId == projectId)
                         .SelectMany(p => p.RelatedProjects)
                         .ToListAsync();
-                    var result = PortfolioMapper.ProjectMapper.Map<IEnumerable<ProjectModel>>(projects);
+                    var result = PortfolioMapper.ProjectMapper.Map<IEnumerable<ProjectViewModel>>(projects);
                     return result;
                 }
             }
@@ -239,7 +239,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ProjectModel>> GetDependantProjects(string projectId)
+        public async Task<IEnumerable<ProjectViewModel>> GetDependantProjects(string projectId)
         {
             try
             {
@@ -249,7 +249,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                         .Where(p => p.Reservation.ProjectId == projectId)
                         .SelectMany(p => p.DependantProjects)
                         .ToListAsync(); ;
-                    var result = PortfolioMapper.ProjectMapper.Map<IEnumerable<ProjectModel>>(projects);
+                    var result = PortfolioMapper.ProjectMapper.Map<IEnumerable<ProjectViewModel>>(projects);
                     return result;
                 }
             }

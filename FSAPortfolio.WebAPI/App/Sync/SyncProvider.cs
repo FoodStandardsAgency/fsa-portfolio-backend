@@ -34,7 +34,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<PostgresProjectMappingProfile>();
-                cfg.AddProfile<ProjectModelProfile>();
+                cfg.AddProfile<ProjectViewModelProfile>();
+                cfg.AddProfile<ProjectUpdateModelProfile>();
                 cfg.AddProfile<ProjectOptionsMappingProfile>();
                 cfg.AddProfile<PortfolioConfigurationMappingProfile>();
             });
