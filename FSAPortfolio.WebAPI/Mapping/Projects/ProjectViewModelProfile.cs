@@ -66,6 +66,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
                 .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
                 .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
+                .ForMember(p => p.actual_end_date, o => o.MapFrom(s => s.ActualEndDate))
                 .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey))
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.ViewKey))
                 .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate))
@@ -89,7 +90,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
                 .ForMember(p => p.oddlead_role, o => o.Ignore()) // TODO: add a field for this
 
-                .ForMember(p => p.actual_end_date, o => o.Ignore())
                 .ForMember(p => p.milestones, o => o.Ignore())
 
                 // Below this line are project data items

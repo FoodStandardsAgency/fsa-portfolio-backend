@@ -60,6 +60,7 @@ namespace FSAPortfolio.Entities.Projects
         public DateTime? ActualStartDate { get; set; }
         public DateTime? ExpectedEndDate { get; set; }
         public DateTime? HardEndDate { get; set; }
+        public DateTime? ActualEndDate { get; set; }
 
         public virtual ICollection<ProjectUpdateItem> Updates { get; set; }
         public virtual ProjectUpdateItem LatestUpdate { get; set; }

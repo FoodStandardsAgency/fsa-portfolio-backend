@@ -11,7 +11,26 @@ namespace FSAPortfolio.WebAPI.Models
         public string id { get; set; }
         public string project_id { get; set; }
         public string project_name { get; set; }
-        public string start_date { get; set; }
+
+        [JsonProperty("start_date")]
+        public DateTime? start_date { get; set; }
+
+        [JsonProperty("expend")]
+        public DateTime? expend { get; set; }
+
+        [JsonProperty("hardend")]
+        public DateTime? hardend { get; set; }
+
+        [JsonProperty("actstart")]
+        public DateTime? actstart { get; set; }
+
+        [JsonProperty("expendp")]
+        public DateTime? expendp { get; set; }
+
+        [JsonProperty("actual_end_date")]
+        public DateTime? actual_end_date { get; set; }
+
+
         public string short_desc { get; set; }
         public string phase { get; set; }
         public string category { get; set; }
@@ -37,15 +56,11 @@ namespace FSAPortfolio.WebAPI.Models
         public string[] rels { get; set; }
         public string team { get; set; }
         public string onhold { get; set; }
-        public string expend { get; set; }
-        public string hardend { get; set; }
-        public string actstart { get; set; }
         public string[] dependencies { get; set; }
         public string project_size { get; set; }
         public string oddlead_role { get; set; }
         public string budgettype { get; set; }
         public string direct { get; set; }
-        public string expendp { get; set; }
         public float? p_comp { get; set; }
         public DateTime? max_time { get; set; }
         public DateTime? min_time { get; set; }
@@ -70,7 +85,6 @@ namespace FSAPortfolio.WebAPI.Models
         public string supplier { get; set; }
 
 
-        public string actual_end_date { get; set; }
         public string milestones { get; set; }
 
 

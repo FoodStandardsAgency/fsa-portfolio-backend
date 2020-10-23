@@ -187,6 +187,7 @@
                         ActualStartDate = c.DateTime(),
                         ExpectedEndDate = c.DateTime(),
                         HardEndDate = c.DateTime(),
+                        ActualEndDate = c.DateTime(),
                         LatestUpdate_Id = c.Int(),
                         FirstUpdate_Id = c.Int(),
                     })

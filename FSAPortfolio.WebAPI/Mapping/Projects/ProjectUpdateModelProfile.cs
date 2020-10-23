@@ -32,10 +32,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             CreateMap<ProjectUpdateModel, Project>()
                 .ForMember(p => p.Name, o => o.MapFrom(s => s.project_name))
-                .ForMember(p => p.StartDate, o => o.MapFrom<PostgresDateResolver, string>(s => s.start_date))
-                .ForMember(p => p.ActualStartDate, o => o.MapFrom<PostgresDateResolver, string>(s => s.actstart))
-                .ForMember(p => p.ExpectedEndDate, o => o.MapFrom<PostgresDateResolver, string>(s => s.expend))
-                .ForMember(p => p.HardEndDate, o => o.MapFrom<PostgresDateResolver, string>(s => s.hardend))
+                .ForMember(p => p.StartDate, o => o.MapFrom(s => s.start_date))
+                .ForMember(p => p.ActualStartDate, o => o.MapFrom(s => s.actstart))
+                .ForMember(p => p.ExpectedEndDate, o => o.MapFrom(s => s.expend))
+                .ForMember(p => p.HardEndDate, o => o.MapFrom(s => s.hardend))
+                .ForMember(p => p.ActualEndDate, o => o.MapFrom(s => s.actual_end_date))
                 .ForMember(p => p.Description, o => o.MapFrom(s => s.short_desc))
                 .ForMember(p => p.Priority, o => o.MapFrom<NullableIntResolver, string>(s => s.priority_main))
                 .ForMember(p => p.Directorate, o => o.MapFrom(s => s.direct))
@@ -89,7 +90,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.OnHoldStatus, o => o.MapFrom<ConfigOnHoldStatusResolver, string>(s => s.onhold))
                 .ForMember(p => p.Budget, o => o.MapFrom<DecimalResolver, string>(s => s.budget))
                 .ForMember(p => p.Spent, o => o.MapFrom<DecimalResolver, string>(s => s.spent))
-                .ForMember(p => p.ExpectedCurrentPhaseEnd, o => o.MapFrom<PostgresDateResolver, string>(s => s.expendp))
+                .ForMember(p => p.ExpectedCurrentPhaseEnd, o => o.MapFrom(s => s.expendp))
                 ;
         }
     }
