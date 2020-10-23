@@ -126,8 +126,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         private void ProjectUpdateItem__UpdateHistoryModel()
         {
             CreateMap<ProjectUpdateItem, UpdateHistoryModel>()
-                .ForMember(d => d.text, o => o.MapFrom(s => s.Text))
-                .ForMember(d => d.timestamp, o => o.MapFrom(s => s.Timestamp))
+                .ForMember(d => d.Text, o => o.MapFrom(s => s.Text))
+                .ForMember(d => d.Timestamp, o => o.MapFrom(s => s.Timestamp.ToString(TimeOutputFormat)))
                 ;
         }
 
@@ -156,7 +156,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 //result = context.Mapper.Map<UpdateHistoryModel[]>(source.Updates.Where(u => !(u.Timestamp.Date == DateTime.Today && u.Id == source.LatestUpdate_Id)).OrderBy(u => u.Timestamp));
 
                 // History is all updates 
-                result = context.Mapper.Map<UpdateHistoryModel[]>(source.Updates.OrderBy(u => u.Timestamp));
+                result = context.Mapper.Map<UpdateHistoryModel[]>(source.Updates.Where(u => !string.IsNullOrWhiteSpace(u.Text)).OrderBy(u => u.Timestamp));
             }
             return result;
         }

@@ -98,8 +98,10 @@ namespace FSAPortfolio.WebAPI.Models
 
     public class UpdateHistoryModel
     {
-        public string text { get; set; }
-        public DateTime timestamp { get; set; }
+        [JsonProperty("text")]
+        public string Text { get; set; }
+        [JsonProperty("timestamp")]
+        public DateTime Timestamp { get; set; }
     }
 
     public class RelatedProjectModel
