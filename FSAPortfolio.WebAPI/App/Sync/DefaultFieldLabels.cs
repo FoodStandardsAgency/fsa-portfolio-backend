@@ -50,7 +50,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 case PortfolioFieldType.Percentage:
                 case PortfolioFieldType.Budget:
                 case PortfolioFieldType.FreeTextArea:
-                case PortfolioFieldType.PredefinedSearchableMultiList:
+                case PortfolioFieldType.ProjectMultiSelect:
                 case PortfolioFieldType.PredefinedMultiList:
                 case PortfolioFieldType.LinkedItemList:
                 case PortfolioFieldType.NamedLink:
@@ -58,6 +58,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     break;
                 case PortfolioFieldType.OptionList:
                 case PortfolioFieldType.RAGChoice:
+                case PortfolioFieldType.PhaseChoice:
                 case PortfolioFieldType.MultiOptionList:
                     inputTypeLocked = false;
                     break;
@@ -108,8 +109,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_AboutTheProject, "Programme", nameof(ProjectModel.programme), false, false, false, PortfolioFieldType.MultiOptionList, flags: PortfolioFieldFlags.DefaultProjectData),
                 Factory(FieldGroupName_AboutTheProject, "Programme description", nameof(ProjectModel.programme_description), false, false, false, PortfolioFieldType.FreeText, flags: PortfolioFieldFlags.DefaultProjectData),
                 Factory(FieldGroupName_AboutTheProject, "Project channel (link)", nameof(ProjectModel.link), true, false, false, PortfolioFieldType.NamedLink, flags: PortfolioFieldFlags.DefaultProjectData),
-                Factory(FieldGroupName_AboutTheProject, "Related projects", nameof(ProjectModel.rels), true, false, false, PortfolioFieldType.PredefinedSearchableMultiList),
-                Factory(FieldGroupName_AboutTheProject, "Dependencies", nameof(ProjectModel.dependencies), false, false, false, PortfolioFieldType.PredefinedSearchableMultiList),
+                Factory(FieldGroupName_AboutTheProject, "Related projects", nameof(ProjectModel.rels), true, false, false, PortfolioFieldType.ProjectMultiSelect),
+                Factory(FieldGroupName_AboutTheProject, "Dependencies", nameof(ProjectModel.dependencies), false, false, false, PortfolioFieldType.ProjectMultiSelect),
                 Factory(FieldGroupName_AboutTheProject, "Key documents", nameof(ProjectModel.documents), true, false, false, PortfolioFieldType.LinkedItemList),
 
                 Factory(FieldGroupName_ProjectTeam, "Project lead", nameof(ProjectModel.oddlead), false, false, false, PortfolioFieldType.PredefinedSearchableList),
@@ -130,7 +131,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_ProjectPlan, "Percentage completed", nameof(ProjectModel.p_comp), false, false, false, PortfolioFieldType.Percentage),
                 Factory(FieldGroupName_ProjectPlan, "Milestones", nameof(ProjectModel.milestones), false, false, false, PortfolioFieldType.PredefinedField),
 
-                Factory(FieldGroupName_ProgressIndicators, "Phase", nameof(ProjectModel.phase), true, true, false, PortfolioFieldType.OptionList),
+                Factory(FieldGroupName_ProgressIndicators, "Phase", nameof(ProjectModel.phase), true, true, false, PortfolioFieldType.PhaseChoice),
                 Factory(FieldGroupName_ProgressIndicators, "RAG", nameof(ProjectModel.rag), true, false, false, PortfolioFieldType.RAGChoice),
                 Factory(FieldGroupName_ProgressIndicators, "How to get to green", nameof(ProjectModel.how_get_green), false, false, false, PortfolioFieldType.FreeTextArea, flags: PortfolioFieldFlags.DefaultProjectData),
                 Factory(FieldGroupName_ProgressIndicators, "Status", nameof(ProjectModel.onhold), false, false, false, PortfolioFieldType.OptionList),

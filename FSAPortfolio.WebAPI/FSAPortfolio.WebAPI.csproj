@@ -169,7 +169,6 @@
     <Compile Include="Models\ProjectOptionsModel.cs" />
     <Compile Include="Models\SyncRequestModel.cs" />
     <Compile Include="Models\ODDLeadResponse.cs" />
-    <Compile Include="Models\ProjectUpdateModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

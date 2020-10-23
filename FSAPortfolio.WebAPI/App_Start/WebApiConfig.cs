@@ -53,11 +53,6 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.Get) }
             );
             config.Routes.MapHttpRoute(
-                name: "ProjectUpdates",
-                routeTemplate: "api/Projects/{projectId}/updates",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetUpdates) }
-            );
-            config.Routes.MapHttpRoute(
                 name: "RelatedProjects",
                 routeTemplate: "api/Projects/{projectId}/related",
                 defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetRelatedProjects) }

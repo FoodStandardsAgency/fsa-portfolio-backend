@@ -30,7 +30,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
             // Outbound
             Project__ProjectModel();
-            ProjectUpdateItem__ProjectUpdateModel();
             ProjectUpdateItem__UpdateHistoryModel();
 
             // Inbound
@@ -63,7 +62,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.spent, o => o.MapFrom(s => Convert.ToInt32(s.LatestUpdate.Spent)))
                 .ForMember(p => p.timestamp, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
 
-                .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.Reservation.ProjectId))))
+                .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => new RelatedProjectModel() { ProjectId = rp.Reservation.ProjectId, Name = rp.Name })))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.Reservation.ProjectId))))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
                 .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
@@ -187,16 +186,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 ;
         }
 
-        private void ProjectUpdateItem__ProjectUpdateModel()
-        {
-            CreateMap<ProjectUpdateItem, ProjectUpdateModel>()
-                .ForMember(d => d.project_id, o => o.MapFrom(s => s.Project.Reservation.ProjectId))
-                .ForMember(d => d.timestamp, o => o.MapFrom<OutputTimestampResolver, DateTime>(s => s.Timestamp))
-                .ForMember(d => d.max_timestamp, o => o.MapFrom<OutputTimestampResolver, DateTime>(s => s.Project.LatestUpdate.Timestamp))
-                .ForMember(d => d.date, o => o.MapFrom(s => s.Timestamp.Date))
-                .ForMember(d => d.update, o => o.MapFrom(s => s.Text))
-                ;
-        }
 
         private void ProjectUpdateItem__UpdateHistoryModel()
         {
@@ -263,34 +252,27 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             if(context.Items.TryGetValue(nameof(ProjectModel.updateHistory), out includeHistory) && (includeHistory as bool? ?? false))
             {
                 // History is updates except the latest if it was added today.
-                result = context.Mapper.Map<UpdateHistoryModel[]>(source.Updates.Where(u => !(u.Timestamp.Date == DateTime.Today && u.Id == source.LatestUpdate_Id)).OrderBy(u => u.Timestamp));
+                //result = context.Mapper.Map<UpdateHistoryModel[]>(source.Updates.Where(u => !(u.Timestamp.Date == DateTime.Today && u.Id == source.LatestUpdate_Id)).OrderBy(u => u.Timestamp));
+
+                // History is all updates 
+                result = context.Mapper.Map<UpdateHistoryModel[]>(source.Updates.OrderBy(u => u.Timestamp));
             }
             return result;
         }
     }
 
-    public class OutputTimestampResolver : IMemberValueResolver<object, object, DateTime, string>
-    {
-        public string Resolve(object source, object destination, DateTime sourceMember, string destMember, ResolutionContext context)
-        {
-            return sourceMember.ToString(ProjectModelProfile.TimeOutputFormat);
-        }
-    }
-
-
-
     public class ProjectCollectionResolver : IMemberValueResolver<object, Project, string[], ICollection<Project>>
     {
-        public ICollection<Project> Resolve(object source, Project destination, string[] sourceMember, ICollection<Project> destMember, ResolutionContext context)
+        public ICollection<Project> Resolve(object source, Project destination, string[] projectIds, ICollection<Project> destMember, ResolutionContext context)
         {
             var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
             var result = new List<Project>();
-            if (sourceMember != null && sourceMember.Length > 0)
+            if (projectIds != null && projectIds.Length > 0)
             {
                 // Add missing related projects
-                foreach (var relatedProjectId in sourceMember)
+                foreach (var projectId in projectIds)
                 {
-                    var trimmedId = relatedProjectId.Trim();
+                    var trimmedId = projectId.Trim();
                     if (!result.Any(p => p.Reservation.ProjectId == trimmedId))
                     {
                         var project = portfolioContext.Projects.Include(p => p.Reservation).SingleOrDefault(p => p.Reservation.ProjectId == trimmedId);

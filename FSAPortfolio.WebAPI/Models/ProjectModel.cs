@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -101,4 +102,15 @@ namespace FSAPortfolio.WebAPI.Models
         public string text { get; set; }
         public DateTime timestamp { get; set; }
     }
+
+    public class RelatedProjectModel
+    { 
+        [JsonProperty("project_id")]
+        public string ProjectId { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+    }
+
+
 }
