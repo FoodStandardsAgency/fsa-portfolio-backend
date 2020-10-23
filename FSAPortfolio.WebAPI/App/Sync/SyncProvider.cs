@@ -225,18 +225,17 @@ namespace FSAPortfolio.WebAPI.App.Sync
             portfolio.ShortName = shortName;
             portfolio.IDPrefix = viewKey.ToUpper();
 
-            Action<string, string, int> phaseFactory = (po, k, o) => {
+            Action<string, int> phaseFactory = (k, o) => {
                 string phaseName;
-                if (SyncMaps.phaseMap.TryGetValue(new Tuple<string, string>(po, k), out phaseName))
+                if (!SyncMaps.phaseMap.TryGetValue(new Tuple<string, string>(viewKey, k), out phaseName))
+                phaseName = SyncMaps.phaseMap.First().Value;
+                var phase = portfolio.Configuration.Phases.SingleOrDefault(p => p.ViewKey == k);
+                if (phase == null)
                 {
-                    var phase = portfolio.Configuration.Phases.SingleOrDefault(p => p.ViewKey == k);
-                    if (phase == null)
-                    {
-                        phase = new ProjectPhase() { ViewKey = k, Order = o };
-                        portfolio.Configuration.Phases.Add(phase);
-                    }
-                    phase.Name = phaseName;
+                    phase = new ProjectPhase() { ViewKey = k, Order = o };
+                    portfolio.Configuration.Phases.Add(phase);
                 }
+                phase.Name = phaseName;
             };
             Func<string, int, ProjectOnHoldStatus> onHoldFactory = (k, o) =>
             {
@@ -260,7 +259,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 rag.Name = SyncMaps.ragMap[k];
                 return rag;
             };
-            Func<string, int, ProjectCategory> categoryFactory = (k, o) =>
+            Action<string, int> categoryFactory = (k, o) =>
             {
                 var category = portfolio.Configuration.Categories.SingleOrDefault(p => p.ViewKey == k);
                 if (category == null)
@@ -268,8 +267,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     category = new ProjectCategory() { ViewKey = k, Order = o };
                     portfolio.Configuration.Categories.Add(category);
                 }
-                category.Name = SyncMaps.categoryMap[k];
-                return category;
+                var tk = new Tuple<string, string>(viewKey, k);
+                category.Name = SyncMaps.categoryMap.ContainsKey(tk) ? SyncMaps.categoryMap[tk] : SyncMaps.categoryMap[new Tuple<string, string>("odd", k)];
             };
             Func<string, int, ProjectSize> sizeFactory = (k, o) =>
             {
@@ -305,12 +304,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 return group;
             };
 
-            phaseFactory(viewKey, "backlog", 0);
-            phaseFactory(viewKey, "discovery", 1);
-            phaseFactory(viewKey, "alpha", 2);
-            phaseFactory(viewKey, "beta", 3);
-            phaseFactory(viewKey, "live", 4);
-            phaseFactory(viewKey, "completed", 5);
+            phaseFactory("backlog", 0);
+            phaseFactory("discovery", 1);
+            phaseFactory("alpha", 2);
+            phaseFactory("beta", 3);
+            phaseFactory("live", 4);
+            phaseFactory("completed", 5);
             ragFactory("red", 1);
             ragFactory("amb", 2);
             ragFactory("gre", 3);
@@ -436,7 +435,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     // Add to the given portfolio if not already in one
                     if (!string.IsNullOrEmpty(portfolioShortName) && destProject.Portfolios.Count == 0)
                     {
-                        var portfolio = dest.Portfolios.ConfigIncludes().Single(p => p.ShortName == portfolioShortName);
+                        var portfolio = dest.Portfolios.IncludeConfig().Single(p => p.ShortName == portfolioShortName);
                         destProject.Portfolios.Add(portfolio);
                         destProject.Reservation.Portfolio = portfolio;
                     }

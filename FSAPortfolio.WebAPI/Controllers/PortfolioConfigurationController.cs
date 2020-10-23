@@ -67,7 +67,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 using (var context = new PortfolioContext())
                 {
-                    var pfolio = await context.Portfolios.ConfigIncludes()
+                    var pfolio = await context.Portfolios.IncludeConfig()
                         .SingleAsync(p => p.ViewKey == portfolio);
                     var model = PortfolioMapper.ConfigMapper.Map<PortfolioConfigModel>(pfolio.Configuration);
                     model.Labels = model.Labels.OrderBy(l => l.FieldGroup).ThenBy(l => l.FieldOrder).ToList();

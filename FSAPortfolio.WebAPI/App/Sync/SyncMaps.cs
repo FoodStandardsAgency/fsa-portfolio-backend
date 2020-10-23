@@ -17,6 +17,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { new Tuple<string, string>("odd", "live"), PhaseConstants.LiveName },
             { new Tuple<string, string>("odd", "completed"), PhaseConstants.CompletedName },
 
+            // TODO: change the view keys for other portfolios to match labels (can't at moment as it affects syncing)
             { new Tuple<string, string>("serd", "backlog"), "In development" },
             { new Tuple<string, string>("serd", "discovery"), "Awaiting decision" },
             { new Tuple<string, string>("serd", "alpha"), "Waiting to start" },
@@ -65,14 +66,29 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "gre", RagConstants.GreenName },
             { "nor", RagConstants.NoneName }
         };
-        public static readonly Dictionary<string, string> categoryMap = new Dictionary<string, string>()
+        public static readonly Dictionary<Tuple<string, string>, string> categoryMap = new Dictionary<Tuple<string, string>, string>()
         {
-            { "cap", CategoryConstants.CapabilityName },
-            { "data", CategoryConstants.DataName },
-            { "sm", CategoryConstants.ServiceMgmtName },
-            { "ser", CategoryConstants.SupportName },
-            { "it", CategoryConstants.ITName },
-            { "res", CategoryConstants.ResilienceName }
+            { new Tuple<string, string>("odd", "data"), CategoryConstants.DataName },
+            { new Tuple<string, string>("odd", "cap"), CategoryConstants.CapabilityName },
+            { new Tuple<string, string>("odd", "ser"), CategoryConstants.SupportName },
+            { new Tuple<string, string>("odd", "it"), CategoryConstants.ITName },
+            { new Tuple<string, string>("odd", "res"), CategoryConstants.ResilienceName },
+            { new Tuple<string, string>("odd", "sm"), CategoryConstants.ServiceMgmtName },
+
+            { new Tuple<string, string>("serd", "data"), "Best regulator"},
+            { new Tuple<string, string>("serd", "cap"), "Food hypersensitivity"},
+            { new Tuple<string, string>("serd", "ser"), "Foodborne disease"},
+            { new Tuple<string, string>("serd", "it"), "Chemical contaminants"},
+            { new Tuple<string, string>("serd", "res"), "Novel food and processes"},
+            { new Tuple<string, string>("serd", "sm"), "Antimicrobial resistance"},
+
+            { new Tuple<string, string>("abc","data"), "Category / Swimlane 1"},
+            { new Tuple<string, string>("abc","cap"), "Category / Swimlane 2"},
+            { new Tuple<string, string>("abc","ser"), "Category / Swimlane 3"},
+            { new Tuple<string, string>("abc","it"), "Category / Swimlane 4"},
+            { new Tuple<string, string>("abc","res"), "Category / Swimlane 5"},
+            { new Tuple<string, string>("abc","sm"), "Category / Swimlane 6"}
+
         };
         public static readonly Dictionary<string, string> sizeMap = new Dictionary<string, string>()
         {

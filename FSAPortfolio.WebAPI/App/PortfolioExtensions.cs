@@ -9,7 +9,7 @@ namespace FSAPortfolio.WebAPI.App
 {
     public static class PortfolioExtensions
     {
-        public static IQueryable<Portfolio> ConfigIncludes(this IQueryable<Portfolio> query)
+        public static IQueryable<Portfolio> IncludeConfig(this IQueryable<Portfolio> query)
         {
             return query
                 .Include(p => p.Configuration.Phases)
@@ -20,6 +20,13 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Configuration.BudgetTypes)
                 .Include(p => p.Configuration.Labels)
                 .Include(p => p.Configuration.LabelGroups)
+                ;
+        }
+        public static IQueryable<Portfolio> IncludeProjects(this IQueryable<Portfolio> query)
+        {
+            return query
+                .Include(p => p.Projects.Select(pr => pr.Category))
+                .Include(p => p.Projects.Select(pr => pr.LatestUpdate.Phase))
                 ;
         }
 

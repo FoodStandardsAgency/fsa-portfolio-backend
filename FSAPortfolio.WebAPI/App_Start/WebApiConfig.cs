@@ -31,6 +31,16 @@ namespace FSAPortfolio.WebAPI
 
             #endregion
 
+            #region Portfolio 
+            config.Routes.MapHttpRoute(
+                name: "PortfolioSummary",
+                routeTemplate: "api/Portfolios/{portfolio}/summary",
+                defaults: new { controller = ControllerName<PortfoliosController>(), action = nameof(PortfoliosController.Summary) }
+            );
+
+            #endregion
+
+
             #region Projects
             config.Routes.MapHttpRoute(
                 name: "NewProjectConfig",
