@@ -15,6 +15,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
         private PortfolioConfiguration config;
 
+        private static string priorityOptions = string.Join(", ", Enumerable.Range(0, 21));
+
+
         internal const string FieldGroupName_Ungrouped = "Ungrouped fields";
         internal const string FieldGroupName_ProjectIDs = "Project IDs";
         internal const string FieldGroupName_AboutTheProject = "About the project";
@@ -35,7 +38,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
         private PortfolioLabelConfig Factory(string fieldGroup, string fieldTitle, string fieldName,
                                              bool included, bool includedLock, bool adminLock,
-                                             PortfolioFieldType inputType, PortfolioFieldFlags flags = PortfolioFieldFlags.Default)
+                                             PortfolioFieldType inputType, PortfolioFieldFlags flags = PortfolioFieldFlags.Default, string options = null)
         {
             bool inputTypeLocked;
             switch(inputType)
@@ -82,6 +85,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             label.AdminOnlyLock = adminLock;
             label.FieldTypeLocked = inputTypeLocked;
             label.Flags = flags;
+            label.FieldOptions = options;
             return label;
         }
 
@@ -144,7 +148,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_Updates, "Forward look", nameof(ProjectModel.forward_look), false, false, false, PortfolioFieldType.LargeFreeTextArea, flags: PortfolioFieldFlags.DefaultProjectData),
                 Factory(FieldGroupName_Updates, "Emerging issues, risks", nameof(ProjectModel.emerging_issues), false, false, false, PortfolioFieldType.LargeFreeTextArea, flags: PortfolioFieldFlags.DefaultProjectData),
 
-                Factory(FieldGroupName_Prioritisation, "Priority score", nameof(ProjectModel.priority_main), false, false, false, PortfolioFieldType.PredefinedField),
+                Factory(FieldGroupName_Prioritisation, "Priority score", nameof(ProjectModel.priority_main), false, false, false, PortfolioFieldType.PredefinedList, options: priorityOptions),
                 Factory(FieldGroupName_Prioritisation, "Funded", nameof(ProjectModel.funded), false, false, false, PortfolioFieldType.PredefinedField, flags: PortfolioFieldFlags.DefaultProjectData),
                 Factory(FieldGroupName_Prioritisation, "Confidence in delivery", nameof(ProjectModel.confidence), false, false, false, PortfolioFieldType.PredefinedField, flags: PortfolioFieldFlags.DefaultProjectData),
                 Factory(FieldGroupName_Prioritisation, "Priorities impacted", nameof(ProjectModel.priorities), false, false, false, PortfolioFieldType.PredefinedField, flags: PortfolioFieldFlags.DefaultProjectData),

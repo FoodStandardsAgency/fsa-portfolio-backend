@@ -12,6 +12,7 @@ using FSAPortfolio.WebAPI.Mapping;
 using Newtonsoft.Json.Linq;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.WebAPI.App;
+using FSAPortfolio.WebAPI.App.Config;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -31,7 +32,7 @@ namespace FSAPortfolio.WebAPI.Controllers
 
                     // Get the config with labels
                     var config = await context.PortfolioConfigurations
-                        .Include(pc => pc.Labels)
+                        .IncludeFullConfiguration()
                         .Where(p => p.Portfolio.ViewKey == viewKey)
                         .SingleAsync();
 
@@ -50,6 +51,9 @@ namespace FSAPortfolio.WebAPI.Controllers
                         DateTime.Now);
 
                     await context.SaveChangesAsync();
+
+                    var configProvider = new ConfigurationProvider(context);
+                    await configProvider.UpdateRAGStatusOptions(config);
 
                 }
             }

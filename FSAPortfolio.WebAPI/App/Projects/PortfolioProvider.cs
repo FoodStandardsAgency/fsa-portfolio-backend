@@ -24,7 +24,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
 
         public async Task<PortfolioConfiguration> GetConfigAsync()
         {
-            return await (from c in context.PortfolioConfigurations.ConfigIncludes()
+            return await (from c in context.PortfolioConfigurations.IncludeFullConfiguration()
                             where c.Portfolio.ViewKey == portfolioViewKey
                           select c).SingleAsync();
         }

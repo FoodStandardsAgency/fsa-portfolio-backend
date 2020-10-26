@@ -169,7 +169,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
             using (var context = new PortfolioContext())
             {
-                foreach (var config in context.PortfolioConfigurations.ConfigIncludes().ToList())
+                foreach (var config in context.PortfolioConfigurations.IncludeFullConfiguration().ToList())
                 {
                     var defaults = new DefaultFieldLabels(config);
                     var defaultLabels = defaults.GetDefaultLabels();
@@ -250,15 +250,16 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 onhold.Name = SyncMaps.onholdMap[k];
                 return onhold;
             };
-            Func<string, int, ProjectRAGStatus> ragFactory = (k, o) =>
+            Func<string, ProjectRAGStatus> ragFactory = (k) =>
             {
                 var rag = portfolio.Configuration.RAGStatuses.SingleOrDefault(p => p.ViewKey == k);
                 if (rag == null)
                 {
-                    rag = new ProjectRAGStatus() { ViewKey = k, Order = o };
+                    rag = new ProjectRAGStatus() { ViewKey = k };
                     portfolio.Configuration.RAGStatuses.Add(rag);
                 }
-                rag.Name = SyncMaps.ragMap[k];
+                rag.Name = SyncMaps.ragMap[k].Item1;
+                rag.Order = SyncMaps.ragMap[k].Item2;
                 return rag;
             };
             Action<string, int> categoryFactory = (k, o) =>
@@ -312,10 +313,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
             phaseFactory("beta", 3);
             phaseFactory("live", 4);
             phaseFactory("completed", 5);
-            ragFactory("red", 1);
-            ragFactory("amb", 2);
-            ragFactory("gre", 3);
-            ragFactory("nor", 0);
+            ragFactory(RagConstants.RedViewKey);
+            ragFactory(RagConstants.AmberViewKey);
+            ragFactory(RagConstants.GreenViewKey);
+            ragFactory(RagConstants.NoneViewKey);
             onHoldFactory("n", 0);
             onHoldFactory("y", 1);
             onHoldFactory("b", 2);

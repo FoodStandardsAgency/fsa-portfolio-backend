@@ -79,6 +79,10 @@ namespace FSAPortfolio.WebAPI.Models
         public SelectPickerModel Team { get; set; }
 
 
+        [JsonProperty(nameof(ProjectModel.priority_main))]
+        public IEnumerable<DropDownItemModel> PriorityItems { get; set; }
+
+
     }
 
     public class DropDownItemModel

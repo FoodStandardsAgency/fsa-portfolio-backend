@@ -39,6 +39,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.KeyContact2, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.key_contact2))))
                 .ForMember(d => d.KeyContact3, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.key_contact3))))
                 .ForMember(d => d.Team, o => o.MapFrom(new StubTeamResolver(nameof(ProjectModel.team))))
+                .ForMember(d => d.PriorityItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.priority_main))))
                 ;
 
 
@@ -112,7 +113,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             var label = source.Labels.SingleOrDefault(l => l.FieldName == fieldName);
             if(label?.FieldOptions != null)
             {
-                items = label.FieldOptions.Split(',').Select((l, i ) => new DropDownItemModel() { Display = l, Value = l, Order = i });
+                items = label.FieldOptions.Split(',').Select((l, i ) => {
+                    var value = l.Trim();
+                    var display = value;
+                    return new DropDownItemModel() { Display = display, Value = value, Order = i };
+                    });
             }
             return items;
         }

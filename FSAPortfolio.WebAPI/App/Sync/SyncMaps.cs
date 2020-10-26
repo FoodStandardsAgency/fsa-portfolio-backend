@@ -59,12 +59,14 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "b", OnHoldConstants.BlockedName },
             { "c", OnHoldConstants.CovidName }
         };
-        public static readonly Dictionary<string, string> ragMap = new Dictionary<string, string>()
+        public static readonly Dictionary<string, Tuple<string, int>> ragMap = new Dictionary<string, Tuple<string, int>>()
         {
-            { "red", RagConstants.RedName },
-            { "amb", RagConstants.AmberName },
-            { "gre", RagConstants.GreenName },
-            { "nor", RagConstants.NoneName }
+            { RagConstants.NoneViewKey, new Tuple<string, int>(RagConstants.NoneName, 0) },
+            { RagConstants.RedViewKey, new Tuple<string, int>(RagConstants.RedName, 1) },
+            { RagConstants.RedAmberViewKey, new Tuple<string, int>(RagConstants.RedAmberName, 2) },
+            { RagConstants.AmberViewKey, new Tuple<string, int>(RagConstants.AmberName, 3) },
+            { RagConstants.AmberGreenViewKey, new Tuple<string, int>(RagConstants.AmberGreenName, 4) },
+            { RagConstants.GreenViewKey, new Tuple<string, int>(RagConstants.GreenName, 5) },
         };
         public static readonly Dictionary<Tuple<string, string>, string> categoryMap = new Dictionary<Tuple<string, string>, string>()
         {

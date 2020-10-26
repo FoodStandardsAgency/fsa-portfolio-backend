@@ -26,8 +26,18 @@ namespace FSAPortfolio.Entities.Projects
 
     public static class RagConstants
     {
+        public static string RedViewKey = ConfigurationManager.AppSettings["Rag.Red.ViewKey"] ?? "red";
+        public static string RedAmberViewKey = ConfigurationManager.AppSettings["Rag.RedAmber.ViewKey"] ?? "redamb";
+        public static string AmberViewKey = ConfigurationManager.AppSettings["Rag.Amber.ViewKey"] ?? "amb";
+        public static string AmberGreenViewKey = ConfigurationManager.AppSettings["Rag.AmberGreen.ViewKey"] ?? "ambgre";
+        public static string GreenViewKey = ConfigurationManager.AppSettings["Rag.Green.ViewKey"] ?? "gre";
+        public static string NoneViewKey = ConfigurationManager.AppSettings["Rag.None.ViewKey"] ?? "nor";
+
+
         public static string RedName = ConfigurationManager.AppSettings["Rag.Red.Name"] ?? "Red";
+        public static string RedAmberName = ConfigurationManager.AppSettings["Rag.RedAmber.Name"] ?? "Red/Amber";
         public static string AmberName = ConfigurationManager.AppSettings["Rag.Amber.Name"] ?? "Amber";
+        public static string AmberGreenName = ConfigurationManager.AppSettings["Rag.AmberGreen.Name"] ?? "Amber/Green";
         public static string GreenName = ConfigurationManager.AppSettings["Rag.Green.Name"] ?? "Green";
         public static string NoneName = ConfigurationManager.AppSettings["Rag.None.Name"] ?? "Undecided";
     }

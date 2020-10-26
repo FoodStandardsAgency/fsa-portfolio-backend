@@ -80,7 +80,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
                     result = GetValue(source.Configuration.Phases);
                     break;
                 case nameof(ProjectModel.rag):
-                    result = GetValue(source.Configuration.RAGStatuses);
+                    result = source.Configuration.RAGStatuses.Count.ToString();
                     break;
                 case nameof(ProjectModel.project_size):
                     result = GetValue(source.Configuration.ProjectSizes);
@@ -112,11 +112,13 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
                 case nameof(ProjectModel.category):
                 case nameof(ProjectModel.onhold):
                 case nameof(ProjectModel.phase):
-                case nameof(ProjectModel.rag):
                 case nameof(ProjectModel.project_size):
                 case nameof(ProjectModel.budgettype):
 //                    result = GetValue(destination.Configuration.BudgetTypes);
                     // TODO: set the appropiate collections
+                    break;
+                case nameof(ProjectModel.rag):
+                    result = source.InputValue;
                     break;
                 default:
                     result = source.InputValue;

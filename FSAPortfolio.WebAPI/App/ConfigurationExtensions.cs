@@ -14,7 +14,7 @@ namespace FSAPortfolio.WebAPI.App
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        public static IQueryable<PortfolioConfiguration> ConfigIncludes(this IQueryable<PortfolioConfiguration> query)
+        public static IQueryable<PortfolioConfiguration> IncludeFullConfiguration(this IQueryable<PortfolioConfiguration> query)
         {
             return query
                 .Include(c => c.Portfolio)
