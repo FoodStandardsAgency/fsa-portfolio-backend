@@ -471,7 +471,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
                             if (lastUpdate != null && (lastUpdate.update?.Equals(sourceUpdate.update) ?? false))
                             {
                                 destUpdate.Text = null;
-                                log.Add("Text blanked out");
                             }
                         }
                         else
