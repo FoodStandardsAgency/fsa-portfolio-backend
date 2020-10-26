@@ -47,7 +47,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
         public IEnumerable<PhaseProjectsModel> Resolve(ProjectCategory source, CategorySummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
         {
             var q = from ph in source.Configuration.Phases // Phases...
-                    orderby ph.Order
                     where ph.Id != source.Configuration.CompletedPhase.Id // ...where phase not completed...
                     join pr in source.Configuration.Portfolio.Projects
                         on ph.Id equals pr?.LatestUpdate?.Phase?.Id into projects // ... get projects joined to each phase ...
@@ -59,7 +58,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
                         Order = phaseGroup.Key.Order,
                         Projects = context.Mapper.Map<IEnumerable<ProjectIndexModel>>(phaseGroup.Where(p => p != null))
                     };
-            return q;
+            return q.OrderBy(p => p.Order);
         }
     }
 
