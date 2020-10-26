@@ -49,14 +49,15 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
             var q = from ph in source.Configuration.Phases // Phases...
                     orderby ph.Order
                     where ph.Id != source.Configuration.CompletedPhase.Id // ...where phase not completed...
-                    join pr in source.Configuration.Portfolio.Projects on ph.Id equals pr.LatestUpdate.Phase.Id into projects // ... get projects joined to each phase ...
+                    join pr in source.Configuration.Portfolio.Projects
+                        on ph.Id equals pr?.LatestUpdate?.Phase?.Id into projects // ... get projects joined to each phase ...
                     from pr in projects.DefaultIfEmpty() // ... need to get all phases ...
                     where pr == null || pr.ProjectCategory_Id == source.Id
                     group pr by ph into phaseGroup // ... group projects by phase ...
-                    select new PhaseProjectsModel() { 
-                        ViewKey = phaseGroup.Key.ViewKey, 
-                        Order = phaseGroup.Key.Order, 
-                        Projects = context.Mapper.Map<IEnumerable<ProjectIndexModel>>(phaseGroup.Where(p => p != null)) 
+                    select new PhaseProjectsModel() {
+                        ViewKey = phaseGroup.Key.ViewKey,
+                        Order = phaseGroup.Key.Order,
+                        Projects = context.Mapper.Map<IEnumerable<ProjectIndexModel>>(phaseGroup.Where(p => p != null))
                     };
             return q;
         }
@@ -66,7 +67,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
     {
         public int Resolve(ProjectPhase source, PhaseSummaryModel destination, int destMember, ResolutionContext context)
         {
-            return source.Configuration.Portfolio.Projects.Count(p => p.LatestUpdate.Phase.Id == source.Id);
+            return source.Configuration.Portfolio.Projects.Count(p => p.LatestUpdate?.Phase?.Id == source.Id);
         }
     }
 
