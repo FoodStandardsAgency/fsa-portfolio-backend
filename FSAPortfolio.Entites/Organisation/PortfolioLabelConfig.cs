@@ -49,7 +49,7 @@ namespace FSAPortfolio.Entities.Organisation
         Update = 1 << 2,
         Delete = 1 << 3,
         ProjectData = 1 << 4,
-        AdminViewOnly = 1 << 5,
+        EditorCanView = 1 << 5,
         Default = Create | Read | Update | Delete,
         UpdateOnly = Read | Update,
         DefaultProjectData = Default | ProjectData

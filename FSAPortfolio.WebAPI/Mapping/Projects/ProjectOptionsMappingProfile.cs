@@ -71,7 +71,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.FieldTitle, o => o.MapFrom(s => s.FieldTitle))
                 .ForMember(d => d.Included, o => o.MapFrom(s => s.Included && (s.MasterLabel == null || s.MasterLabel.Included)))
                 .ForMember(d => d.AdminOnly, o => o.MapFrom(s => s.AdminOnly))
-                .ForMember(d => d.AdminViewOnly, o => o.MapFrom(s => s.Flags.HasFlag(PortfolioFieldFlags.AdminViewOnly)))
+                .ForMember(d => d.EditorCanView, o => o.MapFrom(s => s.Flags.HasFlag(PortfolioFieldFlags.EditorCanView)))
                 .ForMember(d => d.Label, o => o.MapFrom(s => s.Label == null ? s.FieldTitle : s.Label))
                 .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType.ToString().ToLower()))
                 .ForMember(d => d.InputValue, o => o.Ignore()) // This is set separately as the value can come from anywhere

@@ -39,8 +39,8 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("admin")]
         public bool AdminOnly { get; set; }
         
-        [JsonProperty("adminviewonly")]
-        public bool AdminViewOnly { get; set; }
+        [JsonProperty("editorcanview")]
+        public bool EditorCanView { get; set; }
 
 
         [JsonProperty("label")]
