@@ -166,7 +166,7 @@ namespace FSAPortfolio.WebAPI.Controllers
 
 
         [HttpGet]
-        public async Task<GetProjectDTO> Get([FromUri] string projectId, [FromUri] bool includeOptions = false, [FromUri] bool includeHistory = false, [FromUri] bool includeConfig = false)
+        public async Task<GetProjectDTO> Get([FromUri] string projectId, [FromUri] bool includeOptions = false, [FromUri] bool includeHistory = false, [FromUri] bool includeLastUpdate = false, [FromUri] bool includeConfig = false)
         {
             string portfolio;
             GetProjectDTO result;
@@ -187,7 +187,11 @@ namespace FSAPortfolio.WebAPI.Controllers
                 // Build the result
                 result = new GetProjectDTO()
                 {
-                    Project = PortfolioMapper.ProjectMapper.Map<ProjectViewModel>(project, opt => opt.Items[nameof(ProjectViewModel.UpdateHistory)] = includeHistory)
+                    Project = PortfolioMapper.ProjectMapper.Map<ProjectViewModel>(project, opt =>
+                    {
+                        opt.Items[nameof(ProjectViewModel.UpdateHistory)] = includeHistory;
+                        opt.Items[nameof(ProjectViewModel.LastUpdate)] = includeLastUpdate;
+                    })
                 };
                 if (includeConfig) result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration);
             }

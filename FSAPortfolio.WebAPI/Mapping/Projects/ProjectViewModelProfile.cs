@@ -49,6 +49,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.rag, o => o.MapFrom(s => s.LatestUpdate.RAGStatus.ViewKey))
                 .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Timestamp.Date == DateTime.Today ? s.LatestUpdate.Text : null))
                 .ForMember(p => p.UpdateHistory, o => o.MapFrom<UpdateHistoryResolver>())
+                .ForMember(p => p.LastUpdate, o => o.MapFrom<LastUpdateResolver>())
                 .ForMember(p => p.priority_main, o => o.MapFrom(s => s.Priority.HasValue ? s.Priority.Value.ToString("D2") : string.Empty))
                 .ForMember(p => p.funded, o => o.MapFrom(s => s.Funded.ToString()))
                 .ForMember(p => p.confidence, o => o.MapFrom(s => s.Confidence.ToString()))
@@ -161,4 +162,19 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             return result;
         }
     }
+
+    public class LastUpdateResolver : IValueResolver<Project, ProjectModel, UpdateHistoryModel>
+    {
+        public UpdateHistoryModel Resolve(Project source, ProjectModel destination, UpdateHistoryModel destMember, ResolutionContext context)
+        {
+            UpdateHistoryModel result = null;
+            object includeHistory;
+            if (context.Items.TryGetValue(nameof(ProjectViewModel.UpdateHistory), out includeHistory) && (includeHistory as bool? ?? false))
+            {
+                result = context.Mapper.Map<UpdateHistoryModel>(source.Updates.Where(u => u.Timestamp.Date != DateTime.Today).OrderBy(u => u.Timestamp).FirstOrDefault());
+            }
+            return result;
+        }
+    }
+
 }

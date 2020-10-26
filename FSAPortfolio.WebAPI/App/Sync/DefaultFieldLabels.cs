@@ -54,8 +54,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 case PortfolioFieldType.LargeFreeTextArea:
                 case PortfolioFieldType.ProjectMultiSelect:
                 case PortfolioFieldType.PredefinedMultiList:
-                case PortfolioFieldType.LinkedItemList:
                 case PortfolioFieldType.NamedLink:
+                case PortfolioFieldType.LinkedItemList:
+                case PortfolioFieldType.ProjectUpdateText:
                     inputTypeLocked = true;
                     break;
                 case PortfolioFieldType.OptionList:
@@ -139,7 +140,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_ProgressIndicators, "Status", nameof(ProjectModel.onhold), false, false, false, PortfolioFieldType.OptionList),
 
                 //      FieldGroup      FieldTitle     FieldName                    Included IncludeLock AdmLock FieldType FieldTypeLocked
-                Factory(FieldGroupName_Updates, "Update", nameof(ProjectModel.update), true, false, false, PortfolioFieldType.LargeFreeTextArea, flags: PortfolioFieldFlags.Default),
+                Factory(FieldGroupName_Updates, "Update", nameof(ProjectModel.update), true, false, false, PortfolioFieldType.ProjectUpdateText, flags: PortfolioFieldFlags.Default),
                 Factory(FieldGroupName_Updates, "Forward look", nameof(ProjectModel.forward_look), false, false, false, PortfolioFieldType.LargeFreeTextArea, flags: PortfolioFieldFlags.DefaultProjectData),
                 Factory(FieldGroupName_Updates, "Emerging issues, risks", nameof(ProjectModel.emerging_issues), false, false, false, PortfolioFieldType.LargeFreeTextArea, flags: PortfolioFieldFlags.DefaultProjectData),
 

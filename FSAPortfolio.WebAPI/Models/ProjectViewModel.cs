@@ -11,5 +11,8 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("updates")]
         public UpdateHistoryModel[] UpdateHistory { get; set; }
 
+        [JsonProperty("lastupdate")]
+        public UpdateHistoryModel LastUpdate { get; set; }
+
     }
 }

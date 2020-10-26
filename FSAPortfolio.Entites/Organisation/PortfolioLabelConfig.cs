@@ -31,8 +31,9 @@ namespace FSAPortfolio.Entities.Organisation
         ProjectMultiSelect = 50, // Data specific inputs
         PhaseChoice = 51,
         RAGChoice = 52,
-        NamedLink = 54,
-        LinkedItemList = 53
+        NamedLink = 53,
+        LinkedItemList = 54,
+        ProjectUpdateText = 55
 
     }
 
@@ -85,6 +86,7 @@ namespace FSAPortfolio.Entities.Organisation
             this[PortfolioFieldType.RAGChoice] = "RAG choice";
             this[PortfolioFieldType.NamedLink] = "Named hyperlink";
             this[PortfolioFieldType.LinkedItemList] = "List of items with links";
+            this[PortfolioFieldType.ProjectUpdateText] = "Project update text";
         }
     }
 
