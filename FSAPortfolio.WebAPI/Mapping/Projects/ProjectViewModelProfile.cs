@@ -171,7 +171,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             object lastUpdate;
             if (context.Items.TryGetValue(nameof(ProjectViewModel.LastUpdate), out lastUpdate) && (lastUpdate as bool? ?? false))
             {
-                result = context.Mapper.Map<UpdateHistoryModel>(source.Updates.Where(u => u.Timestamp.Date != DateTime.Today).OrderBy(u => u.Timestamp).FirstOrDefault());
+                result = context.Mapper.Map<UpdateHistoryModel>(source.Updates.Where(u => u.Timestamp.Date != DateTime.Today && !string.IsNullOrWhiteSpace(u.Text)).OrderBy(u => u.Timestamp).FirstOrDefault());
             }
             return result;
         }
