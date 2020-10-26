@@ -4,6 +4,7 @@ using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.PostgreSQL;
+using FSAPortfolio.PostgreSQL.Projects;
 using FSAPortfolio.WebAPI.Mapping;
 using FSAPortfolio.WebAPI.Mapping.Organisation;
 using FSAPortfolio.WebAPI.Mapping.Projects;
@@ -448,19 +449,36 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
 
                     // Now sync the updates
+                    project lastUpdate = null;
                     foreach (var sourceUpdate in sourceProjectDetail.OrderBy(u => u.timestamp))
                     {
                         var destUpdate = destProject.Updates.SingleOrDefault(u => u.SyncId == sourceUpdate.id);
-                        if (destUpdate == null)
+                        if (lastUpdate == null || !lastUpdate.IsDuplicate(sourceUpdate))
                         {
-                            destUpdate = new ProjectUpdateItem()
+                            if (destUpdate == null)
                             {
-                                SyncId = sourceUpdate.id,
-                                Project = destProject
-                            };
-                            destProject.Updates.Add(destUpdate);
+                                destUpdate = new ProjectUpdateItem()
+                                {
+                                    SyncId = sourceUpdate.id,
+                                    Project = destProject
+                                };
+                                destProject.Updates.Add(destUpdate);
+                            }
+                            mapper.Map(sourceUpdate, destUpdate, opt =>
+                            {
+                                opt.Items[nameof(PortfolioContext)] = dest;
+                            });
+                            if (lastUpdate != null && (lastUpdate.update?.Equals(sourceUpdate.update) ?? false))
+                            {
+                                destUpdate.Text = null;
+                                log.Add("Text blanked out");
+                            }
                         }
-                        mapper.Map(sourceUpdate, destUpdate, opt => opt.Items[nameof(PortfolioContext)] = dest);
+                        else
+                        {
+                            if(destUpdate != null) dest.ProjectUpdates.Remove(destUpdate);
+                        }
+                        lastUpdate = sourceUpdate;
                     }
 
                     dest.SaveChanges();

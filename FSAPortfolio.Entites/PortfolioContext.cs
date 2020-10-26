@@ -34,6 +34,7 @@ namespace FSAPortfolio.Entities
 
         public virtual DbSet<ProjectReservation> ProjectReservations { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
+        public virtual DbSet<ProjectUpdateItem> ProjectUpdates { get; set; }
         public virtual DbSet<ProjectDataItem> ProjectDataItems { get; set; }
         public virtual DbSet<ProjectCategory> ProjectCategories { get; set; }
         public virtual DbSet<ProjectSize> ProjectSizes { get; set; }

@@ -32,7 +32,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.ProjectType, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_type))))
                 .ForMember(d => d.Programme, o => o.MapFrom(new SelectPickerResolver(nameof(ProjectModel.programme), "Select the programmes...")))
 
-                .ForMember(d => d.ODDLead, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.oddlead))))
+                .ForMember(d => d.ODDLead, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.oddlead), addNoneOption: false)))
                 .ForMember(d => d.ODDLeadRole, o => o.MapFrom(new StubRoleResolver(nameof(ProjectModel.oddlead_role))))
                 .ForMember(d => d.G6Team, o => o.MapFrom(new StubTeamResolver(nameof(ProjectModel.g6team))))
                 .ForMember(d => d.KeyContact1, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.key_contact1))))
@@ -70,6 +70,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.FieldTitle, o => o.MapFrom(s => s.FieldTitle))
                 .ForMember(d => d.Included, o => o.MapFrom(s => s.Included && (s.MasterLabel == null || s.MasterLabel.Included)))
                 .ForMember(d => d.AdminOnly, o => o.MapFrom(s => s.AdminOnly))
+                .ForMember(d => d.AdminViewOnly, o => o.MapFrom(s => s.Flags.HasFlag(PortfolioFieldFlags.AdminViewOnly)))
                 .ForMember(d => d.Label, o => o.MapFrom(s => s.Label == null ? s.FieldTitle : s.Label))
                 .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType.ToString().ToLower()))
                 .ForMember(d => d.InputValue, o => o.Ignore()) // This is set separately as the value can come from anywhere
@@ -150,19 +151,31 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     public class StubPersonResolver : IValueResolver<PortfolioConfiguration, ProjectOptionsModel, SelectPickerModel>
     {
         private string fieldName;
+        private bool addNoneOption;
 
-        public StubPersonResolver(string fieldName)
+        public StubPersonResolver(string fieldName, bool addNoneOption = true)
         {
             this.fieldName = fieldName;
+            this.addNoneOption = addNoneOption;
         }
 
         public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
         {
-            SelectPickerModel model = new SelectPickerModel()
+            SelectPickerModel model = addNoneOption ? new SelectPickerModel()
             {
                 Header = "Select the person...",
                 Items = new SelectPickerItemModel[] {
                     new SelectPickerItemModel() { Display = "None", Order = 0 },
+                    new SelectPickerItemModel() { Display = "Person0 (p0@a.b.com)", Value = "p0id", SearchTokens="Person0, p0@a.b.com", Order = 1 },
+                    new SelectPickerItemModel() { Display = "Person1 (p1@a.b.com)", Value = "p1id", SearchTokens="Person1, p1@a.b.com", Order = 2 },
+                    new SelectPickerItemModel() { Display = "Person2 (p2@a.b.com)", Value = "p2id", SearchTokens="Person2, p2@a.b.com", Order = 3 },
+                    new SelectPickerItemModel() { Display = "Person3 (p3@a.b.com)", Value = "p3id", SearchTokens="Person3, p3@a.b.com", Order = 4 },
+                }
+            } :
+            new SelectPickerModel()
+            {
+                Header = "Select the person...",
+                Items = new SelectPickerItemModel[] {
                     new SelectPickerItemModel() { Display = "Person0 (p0@a.b.com)", Value = "p0id", SearchTokens="Person0, p0@a.b.com", Order = 1 },
                     new SelectPickerItemModel() { Display = "Person1 (p1@a.b.com)", Value = "p1id", SearchTokens="Person1, p1@a.b.com", Order = 2 },
                     new SelectPickerItemModel() { Display = "Person2 (p2@a.b.com)", Value = "p2id", SearchTokens="Person2, p2@a.b.com", Order = 3 },

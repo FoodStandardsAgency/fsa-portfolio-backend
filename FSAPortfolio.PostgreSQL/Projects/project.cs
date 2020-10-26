@@ -127,5 +127,20 @@ namespace FSAPortfolio.PostgreSQL.Projects
         public string expendp { get; set; }
 
         public float? p_comp { get; set; }
+
+        public bool IsDuplicate(project p)
+        {
+            return update != null &&
+                rag == p.rag &&
+                onhold == p.onhold &&
+                phase == p.phase &&
+                p_comp == p.p_comp &&
+                budget == p.budget &&
+                spent == p.spent &&
+                expendp == p.expendp &&
+                (string.IsNullOrWhiteSpace(update) || update == p.update)
+                ;
+        }
+
     }
 }
