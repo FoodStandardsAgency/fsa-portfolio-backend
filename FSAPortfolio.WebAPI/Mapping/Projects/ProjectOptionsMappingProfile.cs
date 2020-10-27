@@ -40,6 +40,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.KeyContact3, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.key_contact3))))
                 .ForMember(d => d.Team, o => o.MapFrom(new StubTeamResolver(nameof(ProjectModel.team))))
                 .ForMember(d => d.PriorityItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.priority_main))))
+                .ForMember(d => d.FundedItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.funded))))
+                .ForMember(d => d.ConfidenceItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.confidence))))
+                .ForMember(d => d.PrioritiesItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.priorities))))
+                .ForMember(d => d.BenefitItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.benefits))))
+                .ForMember(d => d.CriticalityItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.criticality))))
                 ;
 
 

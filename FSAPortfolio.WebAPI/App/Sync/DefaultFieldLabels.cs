@@ -16,6 +16,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         private PortfolioConfiguration config;
 
         private static string priorityOptions = string.Join(", ", Enumerable.Range(0, 21));
+        private static string fundedOptions = string.Join(", ", Enumerable.Range(0, 5));
 
 
         internal const string FieldGroupName_Ungrouped = "Ungrouped fields";
@@ -149,11 +150,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_Updates, "Emerging issues, risks", nameof(ProjectModel.emerging_issues), false, false, false, PortfolioFieldType.LargeFreeTextArea, flags: PortfolioFieldFlags.DefaultProjectData),
 
                 Factory(FieldGroupName_Prioritisation, "Priority score", nameof(ProjectModel.priority_main), false, false, false, PortfolioFieldType.PredefinedList, options: priorityOptions),
-                Factory(FieldGroupName_Prioritisation, "Funded", nameof(ProjectModel.funded), false, false, false, PortfolioFieldType.PredefinedField, flags: PortfolioFieldFlags.DefaultProjectData),
-                Factory(FieldGroupName_Prioritisation, "Confidence in delivery", nameof(ProjectModel.confidence), false, false, false, PortfolioFieldType.PredefinedField, flags: PortfolioFieldFlags.DefaultProjectData),
-                Factory(FieldGroupName_Prioritisation, "Priorities impacted", nameof(ProjectModel.priorities), false, false, false, PortfolioFieldType.PredefinedField, flags: PortfolioFieldFlags.DefaultProjectData),
-                Factory(FieldGroupName_Prioritisation, "Benefits", nameof(ProjectModel.benefits), false, false, false, PortfolioFieldType.PredefinedField, flags: PortfolioFieldFlags.DefaultProjectData),
-                Factory(FieldGroupName_Prioritisation, "Criticality", nameof(ProjectModel.criticality), false, false, false, PortfolioFieldType.PredefinedField, flags: PortfolioFieldFlags.DefaultProjectData),
+                Factory(FieldGroupName_Prioritisation, "Funded", nameof(ProjectModel.funded), false, false, false, PortfolioFieldType.PredefinedList, flags: PortfolioFieldFlags.DefaultProjectData, options: fundedOptions),
+                Factory(FieldGroupName_Prioritisation, "Confidence in delivery", nameof(ProjectModel.confidence), false, false, false, PortfolioFieldType.PredefinedList, flags: PortfolioFieldFlags.DefaultProjectData, options: fundedOptions),
+                Factory(FieldGroupName_Prioritisation, "Priorities impacted", nameof(ProjectModel.priorities), false, false, false, PortfolioFieldType.PredefinedList, flags: PortfolioFieldFlags.DefaultProjectData, options: fundedOptions),
+                Factory(FieldGroupName_Prioritisation, "Benefits", nameof(ProjectModel.benefits), false, false, false, PortfolioFieldType.PredefinedList, flags: PortfolioFieldFlags.DefaultProjectData, options: fundedOptions),
+                Factory(FieldGroupName_Prioritisation, "Criticality", nameof(ProjectModel.criticality), false, false, false, PortfolioFieldType.PredefinedList, flags: PortfolioFieldFlags.DefaultProjectData, options: fundedOptions),
 
                 Factory(FieldGroupName_Budget, "Budget category", nameof(ProjectModel.budgettype), false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_Budget, "Budget amount", nameof(ProjectModel.budget), false, false, false, PortfolioFieldType.Budget),

@@ -42,11 +42,11 @@ namespace FSAPortfolio.WebAPI.Models
         public string servicelead { get; set; }
         public string servicelead_email { get; set; }
         public string priority_main { get; set; }
-        public string funded { get; set; }
-        public string confidence { get; set; }
-        public string priorities { get; set; }
-        public string benefits { get; set; }
-        public string criticality { get; set; }
+        public int funded { get; set; }
+        public int confidence { get; set; }
+        public int priorities { get; set; }
+        public int benefits { get; set; }
+        public int criticality { get; set; }
         public string budget { get; set; }
         public string spent { get; set; }
         public LinkModel[] documents { get; set; }

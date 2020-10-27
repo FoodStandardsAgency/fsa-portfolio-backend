@@ -82,6 +82,21 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.priority_main))]
         public IEnumerable<DropDownItemModel> PriorityItems { get; set; }
 
+        [JsonProperty(nameof(ProjectModel.funded))]
+        public IEnumerable<DropDownItemModel> FundedItems { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.confidence))]
+        public IEnumerable<DropDownItemModel> ConfidenceItems { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.priorities))]
+        public IEnumerable<DropDownItemModel> PrioritiesItems { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.benefits))]
+        public IEnumerable<DropDownItemModel> BenefitItems { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.criticality))]
+        public IEnumerable<DropDownItemModel> CriticalityItems { get; set; }
+
 
     }
 
