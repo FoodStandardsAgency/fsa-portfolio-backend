@@ -51,6 +51,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 case PortfolioFieldType.PredefinedSearchableList:
                 case PortfolioFieldType.PredefinedField:
                 case PortfolioFieldType.Date:
+                case PortfolioFieldType.Month:
                 case PortfolioFieldType.Percentage:
                 case PortfolioFieldType.Budget:
                 case PortfolioFieldType.SmallFreeTextArea:
@@ -130,10 +131,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_ProjectTeam, "Supplier", nameof(ProjectModel.supplier), false, false, false, PortfolioFieldType.FreeText, flags: PortfolioFieldFlags.DefaultProjectData),
                 Factory(FieldGroupName_ProjectTeam, "Project team", nameof(ProjectModel.team), false, false, false, PortfolioFieldType.PredefinedMultiList, flags: PortfolioFieldFlags.DefaultProjectData),
 
-                Factory(FieldGroupName_ProjectPlan, "Intended start date", nameof(ProjectModel.start_date), false, false, false, PortfolioFieldType.Date),
+                Factory(FieldGroupName_ProjectPlan, "Intended start date", nameof(ProjectModel.start_date), false, false, false, PortfolioFieldType.Month),
                 Factory(FieldGroupName_ProjectPlan, "Actual start date", nameof(ProjectModel.actstart), false, false, false, PortfolioFieldType.Date),
                 Factory(FieldGroupName_ProjectPlan, "Expected current phase end date", nameof(ProjectModel.expendp), false, false, false, PortfolioFieldType.Date),
-                Factory(FieldGroupName_ProjectPlan, "Expected end date", nameof(ProjectModel.expend), false, false, false, PortfolioFieldType.Date),
+                Factory(FieldGroupName_ProjectPlan, "Expected end date", nameof(ProjectModel.expend), false, false, false, PortfolioFieldType.Month),
                 Factory(FieldGroupName_ProjectPlan, "Actual end date", nameof(ProjectModel.actual_end_date), false, false, false, PortfolioFieldType.Date),
                 Factory(FieldGroupName_ProjectPlan, "Hard deadline", nameof(ProjectModel.hardend), false, false, false, PortfolioFieldType.Date),
                 Factory(FieldGroupName_ProjectPlan, "Percentage completed", nameof(ProjectModel.p_comp), false, false, false, PortfolioFieldType.Percentage),
