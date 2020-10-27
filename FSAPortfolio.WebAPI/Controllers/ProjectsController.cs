@@ -177,7 +177,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                              .IncludeLabelConfigs() // Need label configs so can map project data fields
                              where p.Reservation.ProjectId == projectId
                              select p);
-                if (includeHistory) query = query.IncludeUpdates();
+                if (includeHistory || includeLastUpdate) query = query.IncludeUpdates();
 
                 var project = await query.SingleOrDefaultAsync();
                 if (project == null) throw new HttpResponseException(HttpStatusCode.NotFound);
