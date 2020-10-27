@@ -119,8 +119,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 ;
 
             CreateMap<Document, LinkModel>()
-                .ForMember(d => d.name, o => o.MapFrom(s => s.Name))
-                .ForMember(d => d.link, o => o.MapFrom(s => s.Link))
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Link, o => o.MapFrom(s => s.Link))
                 ;
         }
 

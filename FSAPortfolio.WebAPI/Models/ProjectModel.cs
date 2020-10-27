@@ -6,30 +6,24 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.Models
 {
+    /// <summary>
+    /// This class forms the main contract between the front end and the API.
+    /// The names of these fields are stored in the label configurations in the database.
+    /// Take caution when renaming these fields as this is likely to break:
+    /// - existing label configurations
+    /// - front end views and forms
+    /// </summary>
     public class ProjectModel
     {
         public string id { get; set; }
         public string project_id { get; set; }
         public string project_name { get; set; }
-
-        [JsonProperty("start_date")]
         public DateTime? start_date { get; set; }
-
-        [JsonProperty("expend")]
         public DateTime? expend { get; set; }
-
-        [JsonProperty("hardend")]
         public DateTime? hardend { get; set; }
-
-        [JsonProperty("actstart")]
         public DateTime? actstart { get; set; }
-
-        [JsonProperty("expendp")]
         public DateTime? expendp { get; set; }
-
-        [JsonProperty("actual_end_date")]
         public DateTime? actual_end_date { get; set; }
-
 
         public string short_desc { get; set; }
         public string phase { get; set; }
@@ -78,15 +72,12 @@ namespace FSAPortfolio.WebAPI.Models
         public string programme { get; set; }
         public string programme_description { get; set; }
 
-
         public string key_contact1 { get; set; }
         public string key_contact2 { get; set; }
         public string key_contact3 { get; set; }
         public string supplier { get; set; }
 
-
         public string milestones { get; set; }
-
 
         public string how_get_green { get; set; }
         public string forward_look { get; set; }
@@ -106,14 +97,18 @@ namespace FSAPortfolio.WebAPI.Models
 
     public class LinkModel
     {
-        public string name { get; set; }
-        public string link { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("link")]
+        public string Link { get; set; }
     }
 
     public class UpdateHistoryModel
     {
         [JsonProperty("text")]
         public string Text { get; set; }
+
         [JsonProperty("timestamp")]
         public DateTime Timestamp { get; set; }
     }
