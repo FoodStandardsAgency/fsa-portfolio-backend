@@ -86,7 +86,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
                 .ForMember(p => p.documents, o => o.MapFrom(s => s.Documents.OrderBy(d => d.Order))) // TODO: add a field for this
 
-                .ForMember(p => p.pgroup, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.pgroup, o => o.MapFrom<PriorityGroupResolver, int?>(s => s.Priority))
                 .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
 
                 .ForMember(p => p.oddlead_role, o => o.Ignore()) // TODO: add a field for this
@@ -177,4 +177,27 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
+    public class PriorityGroupResolver : IMemberValueResolver<Project, ProjectModel, int?, string>
+    {
+        public string Resolve(Project source, ProjectModel destination, int? sourceMember, string destMember, ResolutionContext context)
+        {
+            string pgroup = PriorityGroupConstants.NotSetName;
+            if (sourceMember.HasValue)
+            {
+                switch (sourceMember.Value)
+                {
+                    case int n when (n >= 15):
+                        pgroup = PriorityGroupConstants.HighName;
+                        break;
+                    case int n when (n >= 8):
+                        pgroup = PriorityGroupConstants.MediumName;
+                        break;
+                    default:
+                        pgroup = PriorityGroupConstants.LowName;
+                        break;
+                }
+            }
+            return pgroup;
+        }
+    }
 }

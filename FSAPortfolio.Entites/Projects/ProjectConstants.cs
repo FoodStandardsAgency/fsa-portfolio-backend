@@ -69,4 +69,13 @@ namespace FSAPortfolio.Entities.Projects
         public static string NotSetName = ConfigurationManager.AppSettings["BudgetType.NotSet.Name"] ?? "Not set";
     }
 
+    public static class PriorityGroupConstants
+    {
+        public static string HighName = ConfigurationManager.AppSettings["PriorityGroup.High.Name"] ?? "high";
+        public static string MediumName = ConfigurationManager.AppSettings["PriorityGroup.Medium.Name"] ?? "medium";
+        public static string LowName = ConfigurationManager.AppSettings["PriorityGroup.Low.Name"] ?? "low";
+        public static string NotSetName = ConfigurationManager.AppSettings["PriorityGroup.NotSet.Name"] ?? "not set";
+
+    }
+
 }
