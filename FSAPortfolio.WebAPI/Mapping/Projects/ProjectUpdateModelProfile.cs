@@ -198,7 +198,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         public BudgetType Resolve(object source, Project destination, string sourceMember, BudgetType destMember, ResolutionContext context)
         {
             var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
-            return destination.Reservation.Portfolio.Configuration.BudgetTypes.SingleOrDefault(c => c.ViewKey == sourceMember);
+            ICollection<BudgetType> budgetTypes = destination.Reservation.Portfolio.Configuration.BudgetTypes;
+            return
+                budgetTypes.SingleOrDefault(c => c.ViewKey == sourceMember) ??
+                budgetTypes.SingleOrDefault(c => c.ViewKey == BudgetTypeConstants.NotSetViewKey);
         }
     }
 

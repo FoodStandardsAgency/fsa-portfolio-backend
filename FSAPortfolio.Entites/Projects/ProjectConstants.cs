@@ -67,6 +67,7 @@ namespace FSAPortfolio.Entities.Projects
         public static string ProgrammeName = ConfigurationManager.AppSettings["BudgetType.Programme.Name"] ?? "Programme";
         public static string CapitalName = ConfigurationManager.AppSettings["BudgetType.Capital.Name"] ?? "Capital";
         public static string NotSetName = ConfigurationManager.AppSettings["BudgetType.NotSet.Name"] ?? "Not set";
+        public static string NotSetViewKey = ConfigurationManager.AppSettings["BudgetType.NotSet.ViewKey"] ?? "none";
     }
 
     public static class PriorityGroupConstants

@@ -58,7 +58,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             var options = PortfolioMapper.ProjectMapper.Map<ProjectOptionsModel>(config);
 
             var directorates = await context.Directorates.OrderBy(d => d.Order).Select(d => new DropDownItemModel() { Display = d.Name, Value = d.ViewKey, Order = d.Order }).ToListAsync();
-            directorates.Insert(0, new DropDownItemModel() { Display = "None", Value = "0", Order = 0 });
+            directorates.Insert(0, new DropDownItemModel() { Display = "None", Value = "", Order = 0 });
             options.Directorates = directorates;
 
             var projects = await context.Projects

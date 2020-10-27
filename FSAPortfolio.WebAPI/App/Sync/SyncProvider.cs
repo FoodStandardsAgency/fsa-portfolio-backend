@@ -333,6 +333,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             sizeFactory("m", 1);
             sizeFactory("l", 2);
             sizeFactory("x", 3);
+            budgetTypeFactory(BudgetTypeConstants.NotSetViewKey, 0);
             budgetTypeFactory("admin", 1);
             budgetTypeFactory("progr", 2);
             budgetTypeFactory("capit", 3);

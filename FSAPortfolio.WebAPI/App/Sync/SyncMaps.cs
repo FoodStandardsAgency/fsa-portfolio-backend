@@ -101,6 +101,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         };
         public static readonly Dictionary<string, string> budgetTypeMap = new Dictionary<string, string>()
         {
+            { "none", BudgetTypeConstants.NotSetName },
             { "admin", BudgetTypeConstants.AdminName },
             { "progr", BudgetTypeConstants.ProgrammeName },
             { "capit", BudgetTypeConstants.CapitalName }
