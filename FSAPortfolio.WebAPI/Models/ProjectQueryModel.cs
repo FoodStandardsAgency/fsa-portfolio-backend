@@ -11,9 +11,11 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("portfolio")]
         public string PortfolioViewKey { get; set; }
 
+        [JsonProperty(nameof(ProjectModel.project_name))]
+        public string Name { get; set; }
+
         [JsonProperty(nameof(ProjectModel.phase))]
         public string[] Phases { get; set; }
-
 
         [JsonProperty(nameof(ProjectModel.theme))]
         public string[] Themes { get; set; }

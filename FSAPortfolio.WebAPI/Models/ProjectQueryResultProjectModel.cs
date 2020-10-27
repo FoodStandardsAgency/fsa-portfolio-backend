@@ -28,5 +28,8 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.priority_main))]
         public int? Priority { get; set; }
 
+        [JsonProperty(nameof(ProjectModel.pgroup))]
+        public string PriorityGroup { get; set; }
+
     }
 }

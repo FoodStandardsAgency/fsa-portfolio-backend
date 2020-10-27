@@ -106,7 +106,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_ProjectIDs, "Business Case Number", nameof(ProjectModel.business_case_number), true, false, false, PortfolioFieldType.FreeText, flags: DefaultProjectData|EditorCanView),
                 Factory(FieldGroupName_ProjectIDs, "FS Number", nameof(ProjectModel.fs_number), false, false, false, PortfolioFieldType.FreeText, flags: DefaultProjectData|EditorCanView),
 
-                Factory(FieldGroupName_AboutTheProject, "Project name", nameof(ProjectModel.project_name), true, true, false, PortfolioFieldType.FreeText, flags: EditorCanView),
+                Factory(FieldGroupName_AboutTheProject, "Project name", nameof(ProjectModel.project_name), true, true, false, PortfolioFieldType.FreeText, flags: EditorCanView|FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Short description", nameof(ProjectModel.short_desc), true, false, false, PortfolioFieldType.SmallFreeTextArea, flags: EditorCanView),
                 Factory(FieldGroupName_AboutTheProject, "Risk rating", nameof(ProjectModel.risk_rating), false, false, false, PortfolioFieldType.OptionList, flags: DefaultProjectData),
                 Factory(FieldGroupName_AboutTheProject, "Theme", nameof(ProjectModel.theme), true, false, false, PortfolioFieldType.OptionList, flags: FilterProject, options: "Theme1, Theme2, Theme3"),
@@ -151,7 +151,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_Updates, "Forward look", nameof(ProjectModel.forward_look), false, false, false, PortfolioFieldType.LargeFreeTextArea, flags: DefaultProjectData),
                 Factory(FieldGroupName_Updates, "Emerging issues, risks", nameof(ProjectModel.emerging_issues), false, false, false, PortfolioFieldType.LargeFreeTextArea, flags: DefaultProjectData),
 
-                Factory(FieldGroupName_Prioritisation, "Priority score", nameof(ProjectModel.priority_main), false, false, false, PortfolioFieldType.PredefinedList, options: priorityOptions),
+                Factory(FieldGroupName_Prioritisation, "Priority score", nameof(ProjectModel.priority_main), false, false, false, PortfolioFieldType.PredefinedList, flags: FilterRequired, options: priorityOptions),
                 Factory(FieldGroupName_Prioritisation, "Funded", nameof(ProjectModel.funded), false, false, false, PortfolioFieldType.PredefinedList, options: fundedOptions),
                 Factory(FieldGroupName_Prioritisation, "Confidence in delivery", nameof(ProjectModel.confidence), false, false, false, PortfolioFieldType.PredefinedList, options: fundedOptions),
                 Factory(FieldGroupName_Prioritisation, "Priorities impacted", nameof(ProjectModel.priorities), false, false, false, PortfolioFieldType.PredefinedList, options: fundedOptions),

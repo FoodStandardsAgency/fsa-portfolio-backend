@@ -19,6 +19,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(s => s.ProjectId, o => o.MapFrom(d => d.Reservation.ProjectId))
                 .ForMember(s => s.ProjectName, o => o.MapFrom(d => d.Name))
                 .ForMember(s => s.Priority, o => o.MapFrom(d => d.Priority))
+                .ForMember(p => p.PriorityGroup, o => o.MapFrom<PriorityGroupResolver>())
                 ;
 
         }

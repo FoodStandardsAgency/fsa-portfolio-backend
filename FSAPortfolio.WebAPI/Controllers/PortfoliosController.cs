@@ -59,7 +59,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 var config = await provider.GetConfigAsync();
                 result = new GetProjectQueryDTO()
                 {
-                    Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.FilterProject),
+                    Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.FilterProject|PortfolioFieldFlags.FilterRequired),
                     Options = await provider.GetNewProjectOptionsAsync(config)
                 };
             }
@@ -73,6 +73,10 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 ProjectQueryResultModel result = null;
                 var filteredQuery = from p in context.Projects.IncludeQueryResult() where p.Reservation.Portfolio.ViewKey == searchTerms.PortfolioViewKey select p;
+                if(!string.IsNullOrWhiteSpace(searchTerms.Name))
+                {
+                    filteredQuery = filteredQuery.Where(p => p.Name.Contains(searchTerms.Name) || p.Reservation.ProjectId.Contains(searchTerms.Name));
+                }
                 filteredQuery = AddExactMatchFilter(searchTerms.Phases, filteredQuery, p => searchTerms.Phases.Contains(p.LatestUpdate.Phase.ViewKey));
                 filteredQuery = AddExactMatchFilter(searchTerms.Themes, filteredQuery, p => searchTerms.Themes.Contains(p.Theme));
                 filteredQuery = AddExactMatchFilter(searchTerms.ProjectTypes, filteredQuery, p => searchTerms.ProjectTypes.Contains(p.ProjectType));
@@ -85,7 +89,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 filteredQuery = AddExactMatchFilter(searchTerms.Programmes, filteredQuery, p => searchTerms.Programmes.Contains(p.Programme));
                 // TODO: add filters for leads etc
 
-                result = PortfolioMapper.ProjectMapper.Map<ProjectQueryResultModel>(await filteredQuery.ToArrayAsync());
+                result = PortfolioMapper.ProjectMapper.Map<ProjectQueryResultModel>(await filteredQuery.OrderByDescending(p => p.Priority).ToArrayAsync());
                 return result;
             }
         }
