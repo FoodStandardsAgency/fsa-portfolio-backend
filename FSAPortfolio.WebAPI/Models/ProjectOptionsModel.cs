@@ -37,10 +37,10 @@ namespace FSAPortfolio.WebAPI.Models
             new DropDownItemModel(){ Display = "Communications", Value = "communcations", Order = 2 }
         };
 
-        [JsonProperty(nameof(ProjectModel.rels))]
+        [JsonProperty(nameof(ProjectEditViewModel.rels))]
         public SelectPickerModel RelatedProjects { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.dependencies))]
+        [JsonProperty(nameof(ProjectEditViewModel.dependencies))]
         public SelectPickerModel DependantProjects { get; set; }
 
         [JsonProperty(nameof(ProjectModel.programme))]

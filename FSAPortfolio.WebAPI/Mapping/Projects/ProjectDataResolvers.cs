@@ -63,15 +63,15 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     public class ProjectDataOutboundMapper
     {
         /// <summary>
-        /// Unmapped <see cref="ProjectViewModel"/> properties
+        /// Unmapped <see cref="ProjectModel"/> properties
         /// </summary>
         internal static readonly Dictionary<string, PropertyInfo> unmappedProperties;
         static ProjectDataOutboundMapper()
         {
-            var unmappedToProject = PortfolioMapper.GetUnmappedDestinationMembers<Project, ProjectViewModel>(PortfolioMapper.projectConfig);
+            var unmappedToProject = PortfolioMapper.GetUnmappedDestinationMembers<Project, ProjectModel>(PortfolioMapper.projectConfig);
             unmappedProperties = unmappedToProject.ToDictionary(p => p.Name);
         }
-        public static void Map(Project source, ProjectViewModel model)
+        public static void Map(Project source, ProjectModel model)
         {
             foreach(var dataItem in source.ProjectData)
             {

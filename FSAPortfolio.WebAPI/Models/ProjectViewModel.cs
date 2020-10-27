@@ -17,6 +17,20 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("laststatusupdate")]
         public StatusUpdateHistoryModel LastStatusUpdate { get; set; }
 
+        public RelatedProjectModel[] rels { get; set; }
+        public RelatedProjectModel[] dependencies { get; set; }
+
+
 
     }
+
+    public class RelatedProjectModel
+    {
+        [JsonProperty("project_id")]
+        public string ProjectId { get; set; }
+
+        [JsonProperty("project_name")]
+        public string Name { get; set; }
+    }
+
 }

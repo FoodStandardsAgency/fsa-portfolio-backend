@@ -25,7 +25,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
         private void Project__ProjectViewModel()
         {
-            CreateMap<Project, ProjectViewModel>()
+            CreateMap<Project, ProjectModel>()
+                .Include<Project, ProjectViewModel>()
+                .Include<Project, ProjectEditViewModel>()
                 .ForMember(p => p.project_id, o => o.MapFrom(s => s.Reservation.ProjectId))
                 .ForMember(p => p.project_name, o => o.MapFrom(s => s.Name))
                 .ForMember(p => p.start_date, o => o.MapFrom(s => s.StartDate))
@@ -40,9 +42,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.benefits, o => o.MapFrom(s => s.Benefits))
                 .ForMember(p => p.criticality, o => o.MapFrom(s => s.Criticality))
 
-                .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => new RelatedProjectModel() { ProjectId = rp.Reservation.ProjectId, Name = rp.Name })))
-                .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.Reservation.ProjectId))))
-                .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
+                .ForMember(p => p.team, o => o.MapFrom(s => s.Team == null ? null : s.Team.Split(',')))
                 .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
                 .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
                 .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
@@ -61,6 +61,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
                 .ForMember(p => p.first_completed, o => o.MapFrom<FirstCompletedResolver, Project>(s => s))
                 .ForMember(p => p.pgroup, o => o.MapFrom<PriorityGroupResolver>())
+
+                .ForMember(p => p.project_type, o => o.MapFrom(s => s.ProjectType))
+                .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives))
+                .ForMember(p => p.programme, o => o.MapFrom(s => s.Programme))
+                .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
 
                 // TODO: add persistence and mappings for outstanding fields
                 // Outstanding
@@ -86,18 +91,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.max_time, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
                 .ForMember(p => p.min_time, o => o.MapFrom(s => s.FirstUpdate.Timestamp))
                 .ForMember(p => p.timestamp, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
-                .ForMember(p => p.LastUpdate, o => o.MapFrom<LastUpdateResolver>())
-                .ForMember(p => p.LastStatusUpdate, o => o.MapFrom<LastStatusUpdateResolver>())
-                .ForMember(p => p.UpdateHistory, o => o.MapFrom<UpdateHistoryResolver>())
 
                 // Below this line are project data items
                 .ForMember(p => p.business_case_number, o => o.Ignore())
                 .ForMember(p => p.fs_number, o => o.Ignore())
                 .ForMember(p => p.risk_rating, o => o.Ignore())
-                .ForMember(p => p.theme, o => o.Ignore())
-                .ForMember(p => p.project_type, o => o.Ignore())
-                .ForMember(p => p.strategic_objectives, o => o.Ignore())
-                .ForMember(p => p.programme, o => o.Ignore())
                 .ForMember(p => p.programme_description, o => o.Ignore())
                 .ForMember(p => p.key_contact1, o => o.Ignore())
                 .ForMember(p => p.key_contact2, o => o.Ignore())
@@ -113,6 +111,19 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.Ignore())
                 .ForMember(p => p.fsaproc_assurance_nextgate, o => o.Ignore())
                 .AfterMap(ProjectDataOutboundMapper.Map)
+                ;
+
+            CreateMap<Project, ProjectViewModel>()
+                .ForMember(p => p.LastUpdate, o => o.MapFrom<LastUpdateResolver>())
+                .ForMember(p => p.LastStatusUpdate, o => o.MapFrom<LastStatusUpdateResolver>())
+                .ForMember(p => p.UpdateHistory, o => o.MapFrom<UpdateHistoryResolver>())
+                .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => new RelatedProjectModel() { ProjectId = rp.Reservation.ProjectId, Name = rp.Name })))
+                .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects.Select(rp => new RelatedProjectModel() { ProjectId = rp.Reservation.ProjectId, Name = rp.Name })))
+                ;
+
+            CreateMap<Project, ProjectEditViewModel>()
+                .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => rp.Reservation.ProjectId)))
+                .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects.Select(rp => rp.Reservation.ProjectId)))
                 ;
 
             CreateMap<Document, LinkModel>()

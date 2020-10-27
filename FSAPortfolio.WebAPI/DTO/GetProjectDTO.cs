@@ -7,13 +7,13 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.DTO
 {
-    public class GetProjectDTO
+    public class GetProjectDTO<T> where T : ProjectModel, new()
     {
         [JsonProperty("config")]
         public ProjectLabelConfigModel Config { get; set; }
 
         [JsonProperty("project")]
-        public ProjectViewModel Project { get; set; }
+        public T Project { get; set; }
 
         [JsonProperty("options")]
         public ProjectOptionsModel Options { get; set; }

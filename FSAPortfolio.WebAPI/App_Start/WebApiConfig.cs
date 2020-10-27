@@ -58,19 +58,14 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetNewProject) }
             );
             config.Routes.MapHttpRoute(
+                name: "EditProjectView",
+                routeTemplate: "api/Projects/{projectId}/edit",
+                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetForEdit) }
+            );
+            config.Routes.MapHttpRoute(
                 name: "Project",
                 routeTemplate: "api/Projects/{projectId}",
                 defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.Get) }
-            );
-            config.Routes.MapHttpRoute(
-                name: "RelatedProjects",
-                routeTemplate: "api/Projects/{projectId}/related",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetRelatedProjects) }
-            );
-            config.Routes.MapHttpRoute(
-                name: "DependantProjects",
-                routeTemplate: "api/Projects/{projectId}/dependant",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetDependantProjects) }
             );
             #endregion
 

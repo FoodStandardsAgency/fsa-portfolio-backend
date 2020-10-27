@@ -47,10 +47,8 @@ namespace FSAPortfolio.WebAPI.Models
         public DateTime? timestamp { get; set; }
         public string pgroup { get; set; }
         public LinkModel link { get; set; }
-        public string[] rels { get; set; }
-        public string team { get; set; }
+        public string[] team { get; set; }
         public string onhold { get; set; }
-        public string[] dependencies { get; set; }
         public string project_size { get; set; }
         public string oddlead_role { get; set; }
         public string budgettype { get; set; }
@@ -122,14 +120,6 @@ namespace FSAPortfolio.WebAPI.Models
         public DateTime Timestamp { get; set; }
     }
 
-    public class RelatedProjectModel
-    { 
-        [JsonProperty("project_id")]
-        public string ProjectId { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-    }
 
 
 }

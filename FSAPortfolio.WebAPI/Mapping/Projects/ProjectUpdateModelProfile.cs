@@ -48,7 +48,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.ProjectType, o => o.MapFrom(s => s.project_type))
                 .ForMember(p => p.StrategicObjectives, o => o.MapFrom(s => s.strategic_objectives))
                 .ForMember(p => p.Programme, o => o.MapFrom(s => s.programme))
-                .ForMember(p => p.Team, o => o.MapFrom(s => s.team))
+                .ForMember(p => p.Team, o => o.MapFrom(s => string.Join(",", s.team)))
                 .ForMember(p => p.Lead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.oddlead_email))
                 .ForMember(p => p.ServiceLead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.servicelead_email))
                 .ForMember(p => p.RelatedProjects, o => o.MapFrom<ProjectCollectionResolver, string[]>(s => s.rels))

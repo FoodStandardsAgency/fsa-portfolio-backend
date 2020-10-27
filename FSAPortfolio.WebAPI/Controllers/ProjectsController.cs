@@ -25,59 +25,51 @@ namespace FSAPortfolio.WebAPI.Controllers
     {
         // POST: api/Projects
         [HttpPost]
-        public async Task Post([FromBody]ProjectUpdateModel update)
+        public async Task Post([FromBody] ProjectUpdateModel update)
         {
-            try
+            using (var context = new PortfolioContext())
             {
-                using (var context = new PortfolioContext())
+                // Load and map the project
+                var provider = new ProjectProvider(context, update.project_id);
+                var reservation = await provider.GetProjectReservationAsync();
+                if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+                else
                 {
-                    // Load and map the project
-                    var provider = new ProjectProvider(context, update.project_id);
-                    var reservation = await provider.GetProjectReservationAsync();
-                    if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
-                    else
+                    var project = reservation?.Project;
+                    if (project == null)
                     {
-                        var project = reservation?.Project;
-                        if (project == null)
-                        {
-                            project = provider.CreateNewProject(reservation);
-                        }
-                        PortfolioMapper.ProjectMapper.Map(update, project, opt =>
-                        {
-                            opt.Items[nameof(PortfolioContext)] = context;
-                        });
-                        if (project.AuditLogs != null) provider.LogAuditChanges(project);
-                        await context.SaveChangesAsync();
+                        project = provider.CreateNewProject(reservation);
+                    }
+                    PortfolioMapper.ProjectMapper.Map(update, project, opt =>
+                    {
+                        opt.Items[nameof(PortfolioContext)] = context;
+                    });
+                    if (project.AuditLogs != null) provider.LogAuditChanges(project);
+                    await context.SaveChangesAsync();
 
-                        // Get the last update and create a new one if necessary
-                        ProjectUpdateItem lastUpdate = project.LatestUpdate;
-                        ProjectUpdateItem projectUpdate = lastUpdate;
-                        if (projectUpdate == null || projectUpdate.Timestamp.Date != DateTime.Today)
-                        {
-                            // Create a new update
-                            projectUpdate = new ProjectUpdateItem() { Project = project };
-                        }
-
-                        // Map the data to the update and add if not a duplicate
-                        PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[nameof(PortfolioContext)] = context);
-                        if (!projectUpdate.IsDuplicate(lastUpdate))
-                        {
-                            project.Updates.Add(projectUpdate);
-                            project.LatestUpdate = projectUpdate;
-                            project.LatestUpdate.Timestamp = DateTime.Now;
-                        }
-
-                        // Save
-                        await context.SaveChangesAsync();
+                    // Get the last update and create a new one if necessary
+                    ProjectUpdateItem lastUpdate = project.LatestUpdate;
+                    ProjectUpdateItem projectUpdate = lastUpdate;
+                    if (projectUpdate == null || projectUpdate.Timestamp.Date != DateTime.Today)
+                    {
+                        // Create a new update
+                        projectUpdate = new ProjectUpdateItem() { Project = project };
                     }
 
-                }
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
+                    // Map the data to the update and add if not a duplicate
+                    PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[nameof(PortfolioContext)] = context);
+                    if (!projectUpdate.IsDuplicate(lastUpdate))
+                    {
+                        project.Updates.Add(projectUpdate);
+                        project.LatestUpdate = projectUpdate;
+                        project.LatestUpdate.Timestamp = DateTime.Now;
+                    }
 
+                    // Save
+                    await context.SaveChangesAsync();
+                }
+
+            }
         }
 
 
@@ -140,7 +132,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         /// <returns>A DTO with the label config, options and default project data.</returns>
         /// <remarks>Labels must have the Create flag set in order to be included in the config data.</remarks>
         [HttpGet]
-        public async Task<GetProjectDTO> GetNewProject([FromUri] string portfolio)
+        public async Task<GetProjectDTO<ProjectEditViewModel>> GetNewProject([FromUri] string portfolio)
         {
             try
             {
@@ -151,11 +143,11 @@ namespace FSAPortfolio.WebAPI.Controllers
                     var reservation = await provider.GetProjectReservationAsync(config);
                     await context.SaveChangesAsync();
 
-                    var result = new GetProjectDTO()
+                    var result = new GetProjectDTO<ProjectEditViewModel>()
                     {
                         Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.Create),
                         Options = await provider.GetNewProjectOptionsAsync(config),
-                        Project = new ProjectViewModel() { project_id = reservation.ProjectId }
+                        Project = new ProjectEditViewModel() { project_id = reservation.ProjectId }
                     };
                     return result;
                 }
@@ -168,10 +160,21 @@ namespace FSAPortfolio.WebAPI.Controllers
 
 
         [HttpGet]
-        public async Task<GetProjectDTO> Get([FromUri] string projectId, [FromUri] bool includeOptions = false, [FromUri] bool includeHistory = false, [FromUri] bool includeLastUpdate = false, [FromUri] bool includeConfig = false)
+        public async Task<GetProjectDTO<ProjectViewModel>> Get([FromUri] string projectId, [FromUri] bool includeOptions = false, [FromUri] bool includeHistory = false, [FromUri] bool includeLastUpdate = false, [FromUri] bool includeConfig = false)
+        {
+            return await GetProject<ProjectViewModel>(projectId, includeOptions, includeHistory, includeLastUpdate, includeConfig);
+        }
+        [HttpGet]
+        public async Task<GetProjectDTO<ProjectEditViewModel>> GetForEdit([FromUri] string projectId)
+        {
+            return await GetProject<ProjectEditViewModel>(projectId, includeOptions: true, includeHistory: false, includeLastUpdate: true, includeConfig: true);
+        }
+
+        private static async Task<GetProjectDTO<T>> GetProject<T>(string projectId, bool includeOptions, bool includeHistory, bool includeLastUpdate, bool includeConfig)
+            where T : ProjectModel, new()
         {
             string portfolio;
-            GetProjectDTO result;
+            GetProjectDTO<T> result;
             using (var context = new PortfolioContext())
             {
                 var query = (from p in context.Projects
@@ -187,9 +190,9 @@ namespace FSAPortfolio.WebAPI.Controllers
                 portfolio = project.Reservation.Portfolio.ViewKey;
 
                 // Build the result
-                result = new GetProjectDTO()
+                result = new GetProjectDTO<T>()
                 {
-                    Project = PortfolioMapper.ProjectMapper.Map<ProjectViewModel>(project, opt =>
+                    Project = PortfolioMapper.ProjectMapper.Map<T>(project, opt =>
                     {
                         opt.Items[nameof(ProjectViewModel.UpdateHistory)] = includeHistory;
                         opt.Items[nameof(ProjectViewModel.LastUpdate)] = includeLastUpdate;
@@ -208,47 +211,8 @@ namespace FSAPortfolio.WebAPI.Controllers
             return result;
         }
 
-        [HttpGet]
-        public async Task<IEnumerable<ProjectViewModel>> GetRelatedProjects(string projectId)
-        {
-            try
-            {
-                using (var context = new PortfolioContext())
-                {
-                    var projects = await context.Projects.IncludeProject()
-                        .Where(p => p.Reservation.ProjectId == projectId)
-                        .SelectMany(p => p.RelatedProjects)
-                        .ToListAsync();
-                    var result = PortfolioMapper.ProjectMapper.Map<IEnumerable<ProjectViewModel>>(projects);
-                    return result;
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
 
-        [HttpGet]
-        public async Task<IEnumerable<ProjectViewModel>> GetDependantProjects(string projectId)
-        {
-            try
-            {
-                using (var context = new PortfolioContext())
-                {
-                    var projects = await context.Projects.IncludeProject()
-                        .Where(p => p.Reservation.ProjectId == projectId)
-                        .SelectMany(p => p.DependantProjects)
-                        .ToListAsync(); ;
-                    var result = PortfolioMapper.ProjectMapper.Map<IEnumerable<ProjectViewModel>>(projects);
-                    return result;
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
+
 
         private static IQueryable<Project> ProjectWithIncludes(PortfolioContext context, string portfolio)
         {
