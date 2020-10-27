@@ -55,7 +55,8 @@ namespace FSAPortfolio.Entities.Organisation
         FilterRequired = 1 << 7, // Marks the label as being required by the filter view, even if it is not a filter field
         Default = Create | Read | Update | Delete,
         UpdateOnly = Read | Update,
-        DefaultProjectData = Default | ProjectData
+        DefaultProjectData = Default | ProjectData,
+        DefaultFilterProject = Default | FilterProject
     }
 
     public class PortfolioFieldTypeDescriptions : Dictionary<PortfolioFieldType, string>
