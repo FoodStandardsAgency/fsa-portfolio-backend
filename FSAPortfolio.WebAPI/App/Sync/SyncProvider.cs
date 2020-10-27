@@ -267,11 +267,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 var category = portfolio.Configuration.Categories.SingleOrDefault(p => p.ViewKey == k);
                 if (category == null)
                 {
-                    category = new ProjectCategory() { ViewKey = k, Order = o };
+                    category = new ProjectCategory() { ViewKey = k };
                     portfolio.Configuration.Categories.Add(category);
                 }
                 var tk = new Tuple<string, string>(viewKey, k);
                 category.Name = SyncMaps.categoryMap.ContainsKey(tk) ? SyncMaps.categoryMap[tk] : SyncMaps.categoryMap[new Tuple<string, string>("odd", k)];
+                category.Order = o;
             };
             Func<string, int, ProjectSize> sizeFactory = (k, o) =>
             {

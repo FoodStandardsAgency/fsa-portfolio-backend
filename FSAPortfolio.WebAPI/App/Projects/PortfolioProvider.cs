@@ -12,13 +12,13 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.App.Projects
 {
-    public class PortfolioProvider : IDisposable
+    public class PortfolioProvider
     {
         private PortfolioContext context;
         private string portfolioViewKey;
-        public PortfolioProvider(string portfolioViewKey)
+        public PortfolioProvider(PortfolioContext context, string portfolioViewKey)
         {
-            this.context = new PortfolioContext();
+            this.context = context;
             this.portfolioViewKey = portfolioViewKey;
         }
 
@@ -73,7 +73,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 {
                     Value = p.Reservation.ProjectId,
                     Display = $"{p.Reservation.ProjectId}: {p.Name}",
-                    SearchTokens = $"{p.Category.Name},{p.LatestUpdate?.Phase?.Name}",
+                    SearchTokens = $"{p.Category?.Name},{p.LatestUpdate?.Phase?.Name}",
                     Order = i
                 }).ToList()
             };
@@ -87,15 +87,5 @@ namespace FSAPortfolio.WebAPI.App.Projects
             return options;
         }
 
-
-        public Task<int> SaveChangesAsync()
-        {
-            return context.SaveChangesAsync();
-        }
-
-        public void Dispose()
-        {
-            context.Dispose();
-        }
     }
 }

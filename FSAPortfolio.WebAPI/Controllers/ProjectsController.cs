@@ -29,9 +29,10 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             try
             {
-                using (var provider = new ProjectProvider(update.project_id))
+                using (var context = new PortfolioContext())
                 {
                     // Load and map the project
+                    var provider = new ProjectProvider(context, update.project_id);
                     var reservation = await provider.GetProjectReservationAsync();
                     if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
                     else
@@ -43,10 +44,10 @@ namespace FSAPortfolio.WebAPI.Controllers
                         }
                         PortfolioMapper.ProjectMapper.Map(update, project, opt =>
                         {
-                            opt.Items[nameof(PortfolioContext)] = provider.Context;
+                            opt.Items[nameof(PortfolioContext)] = context;
                         });
                         if (project.AuditLogs != null) provider.LogAuditChanges(project);
-                        await provider.SaveChangesAsync();
+                        await context.SaveChangesAsync();
 
                         // Get the last update and create a new one if necessary
                         ProjectUpdateItem lastUpdate = project.LatestUpdate;
@@ -58,7 +59,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                         }
 
                         // Map the data to the update and add if not a duplicate
-                        PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[nameof(PortfolioContext)] = provider.Context);
+                        PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[nameof(PortfolioContext)] = context);
                         if (!projectUpdate.IsDuplicate(lastUpdate))
                         {
                             project.Updates.Add(projectUpdate);
@@ -67,7 +68,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                         }
 
                         // Save
-                        await provider.SaveChangesAsync();
+                        await context.SaveChangesAsync();
                     }
 
                 }
@@ -143,11 +144,12 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             try
             {
-                using (var provider = new PortfolioProvider(portfolio))
+                using (var context = new PortfolioContext())
                 {
+                    var provider = new PortfolioProvider(context, portfolio);
                     var config = await provider.GetConfigAsync();
                     var reservation = await provider.GetProjectReservationAsync(config);
-                    await provider.SaveChangesAsync();
+                    await context.SaveChangesAsync();
 
                     var result = new GetProjectDTO()
                     {
@@ -194,16 +196,15 @@ namespace FSAPortfolio.WebAPI.Controllers
                     })
                 };
                 if (includeConfig) result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration);
-            }
-
-            if (includeOptions)
-            {
-                using (var provider = new PortfolioProvider(portfolio))
+                if (includeOptions)
                 {
+                    var provider = new PortfolioProvider(context, portfolio);
                     var config = await provider.GetConfigAsync();
                     result.Options = await provider.GetNewProjectOptionsAsync(config);
                 }
+
             }
+
             return result;
         }
 

@@ -10,19 +10,19 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.App.Projects
 {
-    public class ProjectProvider : IDisposable
+    public class ProjectProvider
     {
-        internal PortfolioContext Context;
+        internal PortfolioContext context;
         private string projectId;
-        public ProjectProvider(string projectId)
+        public ProjectProvider(PortfolioContext context, string projectId)
         {
-            this.Context = new PortfolioContext();
+            this.context = context;
             this.projectId = projectId;
         }
 
         public async Task<ProjectReservation> GetProjectReservationAsync()
         {
-            return await Context.ProjectReservations
+            return await context.ProjectReservations
                 .ProjectIncludes()
                 .ProjectUpdateIncludes()
                 .ConfigIncludes()
@@ -40,21 +40,11 @@ namespace FSAPortfolio.WebAPI.App.Projects
             return reservation.Project;
         }
 
-        public void Dispose()
-        {
-            Context.Dispose();
-        }
-
-        internal Task<int> SaveChangesAsync()
-        {
-            return Context.SaveChangesAsync();
-        }
-
         internal void LogAuditChanges(Project project)
         {
             // Record changes
             AuditProvider.LogChanges(
-                Context,
+                context,
                 (ts, txt) => auditLogFactory(ts, txt),
                 project.AuditLogs,
                 DateTime.Now);

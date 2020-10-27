@@ -77,19 +77,19 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { new Tuple<string, string>("odd", "res"), CategoryConstants.ResilienceName },
             { new Tuple<string, string>("odd", "sm"), CategoryConstants.ServiceMgmtName },
 
-            { new Tuple<string, string>("serd", "data"), "Best regulator"},
-            { new Tuple<string, string>("serd", "cap"), "Food hypersensitivity"},
-            { new Tuple<string, string>("serd", "ser"), "Foodborne disease"},
-            { new Tuple<string, string>("serd", "it"), "Chemical contaminants"},
-            { new Tuple<string, string>("serd", "res"), "Novel food and processes"},
-            { new Tuple<string, string>("serd", "sm"), "Antimicrobial resistance"},
+            { new Tuple<string, string>("serd", "cap"), "Best regulator"},
+            { new Tuple<string, string>("serd", "data"), "Food hypersensitivity"},
+            { new Tuple<string, string>("serd", "sm"), "Foodborne disease"},
+            { new Tuple<string, string>("serd", "ser"), "Chemical contaminants"},
+            { new Tuple<string, string>("serd", "it"), "Novel food and processes"},
+            { new Tuple<string, string>("serd", "res"), "Antimicrobial resistance"},
 
-            { new Tuple<string, string>("abc","data"), "Category / Swimlane 1"},
-            { new Tuple<string, string>("abc","cap"), "Category / Swimlane 2"},
-            { new Tuple<string, string>("abc","ser"), "Category / Swimlane 3"},
-            { new Tuple<string, string>("abc","it"), "Category / Swimlane 4"},
-            { new Tuple<string, string>("abc","res"), "Category / Swimlane 5"},
-            { new Tuple<string, string>("abc","sm"), "Category / Swimlane 6"}
+            { new Tuple<string, string>("abc","cap"), "Category / Swimlane 1"},
+            { new Tuple<string, string>("abc","data"), "Category / Swimlane 2"},
+            { new Tuple<string, string>("abc","sm"), "Category / Swimlane 3"},
+            { new Tuple<string, string>("abc","ser"), "Category / Swimlane 4"},
+            { new Tuple<string, string>("abc","it"), "Category / Swimlane 5"},
+            { new Tuple<string, string>("abc","res"), "Category / Swimlane 6"}
 
         };
         public static readonly Dictionary<string, string> sizeMap = new Dictionary<string, string>()
