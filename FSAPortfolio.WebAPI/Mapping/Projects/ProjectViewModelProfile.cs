@@ -184,18 +184,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             string pgroup = PriorityGroupConstants.NotSetName;
             if (sourceMember.HasValue)
             {
-                switch (sourceMember.Value)
-                {
-                    case int n when (n >= 15):
-                        pgroup = PriorityGroupConstants.HighName;
-                        break;
-                    case int n when (n >= 8):
-                        pgroup = PriorityGroupConstants.MediumName;
-                        break;
-                    default:
-                        pgroup = PriorityGroupConstants.LowName;
-                        break;
-                }
+                if(sourceMember.Value > 15) pgroup = PriorityGroupConstants.HighName;
+                else if(sourceMember.Value > 8) pgroup = PriorityGroupConstants.MediumName;
+                else pgroup = PriorityGroupConstants.LowName;
             }
             return pgroup;
         }
