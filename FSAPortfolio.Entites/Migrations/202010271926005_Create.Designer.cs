@@ -7,13 +7,13 @@ namespace FSAPortfolio.Entities.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class ProjectFilterData : IMigrationMetadata
+    public sealed partial class Create : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ProjectFilterData));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Create));
         
         string IMigrationMetadata.Id
         {
-            get { return "202010271636135_ProjectFilterData"; }
+            get { return "202010271926005_Create"; }
         }
         
         string IMigrationMetadata.Source
