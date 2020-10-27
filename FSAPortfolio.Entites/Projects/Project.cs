@@ -25,6 +25,18 @@ namespace FSAPortfolio.Entities.Projects
         [StringLength(150)]
         public string Directorate { get; set; }
 
+        [StringLength(50)]
+        public string Theme { get; set; }
+
+        [StringLength(50)]
+        public string ProjectType { get; set; }
+
+        [StringLength(50)]
+        public string StrategicObjectives { get; set; }
+
+        [StringLength(150)]
+        public string Programme { get; set; }
+
         public virtual ProjectCategory Category { get; set; }
         public int? ProjectCategory_Id { get; set; }
 

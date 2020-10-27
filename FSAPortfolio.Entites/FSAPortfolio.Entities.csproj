@@ -58,6 +58,10 @@
     <Compile Include="Migrations\202010231531117_Create.designer.cs">
       <DependentUpon>202010231531117_Create.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202010271636135_ProjectFilterData.cs" />
+    <Compile Include="Migrations\202010271636135_ProjectFilterData.designer.cs">
+      <DependentUpon>202010271636135_ProjectFilterData.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
@@ -95,6 +99,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202010231531117_Create.resx">
       <DependentUpon>202010231531117_Create.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202010271636135_ProjectFilterData.resx">
+      <DependentUpon>202010271636135_ProjectFilterData.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

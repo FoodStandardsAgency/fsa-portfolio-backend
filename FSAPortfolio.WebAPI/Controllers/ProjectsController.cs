@@ -209,20 +209,6 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         [HttpGet]
-        public Task<IEnumerable<ProjectViewModel>> GetFiltered(string projectId, [FromUri] string filter)
-        {
-            switch(filter)
-            {
-                case "related":
-                    return GetRelatedProjects(projectId);
-                case "dependent":
-                    return GetDependantProjects(projectId);
-                default:
-                    throw new HttpResponseException(HttpStatusCode.NotFound);
-            }
-        }
-
-        [HttpGet]
         public async Task<IEnumerable<ProjectViewModel>> GetRelatedProjects(string projectId)
         {
             try

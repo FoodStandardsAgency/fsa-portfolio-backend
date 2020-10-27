@@ -68,8 +68,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => s.category))
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => s.project_size))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => s.budgettype))
-                .ForMember(p => p.Documents, o => o.Ignore()) // TODO: migration needs a mapping
-                .ForMember(p => p.Subcategories, o => o.Ignore()) // TODO: migration needs a mapping
+
+                // TODO: These need migration mappings
+                .ForMember(p => p.Documents, o => o.Ignore())
+                .ForMember(p => p.Subcategories, o => o.Ignore())
                 // Ignore these
                 .ForMember(p => p.ProjectData, o => o.Ignore())
                 .ForMember(p => p.Reservation, o => o.Ignore())
@@ -78,6 +80,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.FirstUpdate, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate, o => o.Ignore())
                 .ForMember(p => p.AuditLogs, o => o.Ignore())
+                .ForMember(p => p.Theme, o => o.Ignore())
+                .ForMember(p => p.ProjectType, o => o.Ignore())
+                .ForMember(p => p.StrategicObjectives, o => o.Ignore())
+                .ForMember(p => p.Programme, o => o.Ignore())
                 // Ignore the keys
                 .ForMember(p => p.ProjectReservation_Id, o => o.Ignore())
                 .ForMember(p => p.ProjectCategory_Id, o => o.Ignore())
@@ -100,12 +106,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.short_desc, o => o.MapFrom(s => s.Description))
                 .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.ViewKey))
                 .ForMember(p => p.category, o => o.MapFrom(s => s.Category.ViewKey))
-                .ForMember(p => p.subcat, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.rag, o => o.MapFrom(s => s.LatestUpdate.RAGStatus.ViewKey))
                 .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Text))
-                .ForMember(p => p.oddlead, o => o.Ignore()) // TODO: add a field for the lead name
                 .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email))
-                .ForMember(p => p.servicelead, o => o.Ignore()) // TODO: add a field for the lead name
                 .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
                 .ForMember(p => p.priority_main, o => o.MapFrom(s => s.Priority.HasValue ? s.Priority.Value.ToString("D2") : string.Empty))
                 .ForMember(p => p.funded, o => o.MapFrom(s => s.Funded.ToString()))
@@ -115,12 +118,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.criticality, o => o.MapFrom(s => s.Criticality.ToString()))
                 .ForMember(p => p.budget, o => o.MapFrom(s => s.LatestUpdate.Budget))
                 .ForMember(p => p.spent, o => o.MapFrom(s => s.LatestUpdate.Spent))
-                .ForMember(p => p.documents, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.timestamp, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
 
-                .ForMember(p => p.pgroup, o => o.Ignore()) // TODO: add a field for this
-                .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
-                .ForMember(p => p.toupdate, o => o.Ignore()) // No longer required.
                 .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.Reservation.ProjectId))))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.Reservation.ProjectId))))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
@@ -129,7 +128,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
                 .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
                 .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey))
-                .ForMember(p => p.oddlead_role, o => o.Ignore()) // TODO: add a field for this
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.ViewKey))
                 .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate))
                 .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
@@ -138,6 +136,16 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.min_time, o => o.MapFrom(s => s.FirstUpdate.Timestamp))
                 .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.G6team))
                 .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
+
+                // TODO: don't think were using latest_projects anymore - verify then delete
+                .ForMember(p => p.subcat, o => o.Ignore()) 
+                .ForMember(p => p.oddlead, o => o.Ignore())
+                .ForMember(p => p.servicelead, o => o.Ignore())
+                .ForMember(p => p.documents, o => o.Ignore())
+                .ForMember(p => p.pgroup, o => o.Ignore())
+                .ForMember(p => p.link, o => o.Ignore())
+                .ForMember(p => p.toupdate, o => o.Ignore())
+                .ForMember(p => p.oddlead_role, o => o.Ignore())
                 ;
         }
 

@@ -51,6 +51,7 @@ namespace FSAPortfolio.Entities.Organisation
         Delete = 1 << 3,
         ProjectData = 1 << 4,
         EditorCanView = 1 << 5,
+        FilterProject = 1 << 6,
         Default = Create | Read | Update | Delete,
         UpdateOnly = Read | Update,
         DefaultProjectData = Default | ProjectData

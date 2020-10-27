@@ -44,6 +44,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Confidence, o => o.MapFrom(s => s.confidence))
                 .ForMember(p => p.Benefits, o => o.MapFrom(s => s.benefits))
                 .ForMember(p => p.Criticality, o => o.MapFrom(s => s.criticality))
+                .ForMember(p => p.Theme, o => o.MapFrom(s => s.theme))
+                .ForMember(p => p.ProjectType, o => o.MapFrom(s => s.project_type))
+                .ForMember(p => p.StrategicObjectives, o => o.MapFrom(s => s.strategic_objectives))
+                .ForMember(p => p.Programme, o => o.MapFrom(s => s.programme))
                 .ForMember(p => p.Team, o => o.MapFrom(s => s.team))
                 .ForMember(p => p.Lead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.oddlead_email))
                 .ForMember(p => p.ServiceLead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.servicelead_email))
@@ -54,14 +58,18 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => s.project_size))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => s.budgettype))
                 .ForMember(p => p.ProjectData, o => o.MapFrom<ProjectDataInboundResolver>())
-                .ForMember(p => p.Documents, o => o.Ignore()) // TODO: need a mapping for this.
-                                                              // Ignore these
+
+                // TODO: outstanding inbound mappings
+                .ForMember(p => p.Documents, o => o.Ignore()) 
+
+                 // Ignore these
                 .ForMember(p => p.Portfolios, o => o.Ignore())
                 .ForMember(p => p.Updates, o => o.Ignore())
                 .ForMember(p => p.FirstUpdate, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate, o => o.Ignore())
                 .ForMember(p => p.AuditLogs, o => o.Ignore())
                 .ForMember(p => p.Reservation, o => o.Ignore())
+
                 // Ignore the keys
                 .ForMember(p => p.ProjectReservation_Id, o => o.Ignore())
                 .ForMember(p => p.ProjectCategory_Id, o => o.Ignore())

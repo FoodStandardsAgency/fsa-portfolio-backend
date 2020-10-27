@@ -147,6 +147,7 @@
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\LegacyProjectsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="DTO\GetProjectQueryDTO.cs" />
     <Compile Include="DTO\GetProjectDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -158,6 +159,7 @@
     <Compile Include="Mapping\Organisation\PortfolioConfigurationMappingProfile.cs" />
     <Compile Include="Mapping\Projects\PostgresProjectMappingProfile.cs" />
     <Compile Include="Mapping\Projects\ProjectDataResolvers.cs" />
+    <Compile Include="Mapping\Projects\ProjectQueryModelProfile.cs" />
     <Compile Include="Mapping\Projects\ProjectViewModelProfile.cs" />
     <Compile Include="Mapping\Projects\ProjectOptionsMappingProfile.cs" />
     <Compile Include="Mapping\Projects\ProjectUpdateModelProfile.cs" />
@@ -169,6 +171,8 @@
     <Compile Include="Models\ProjectLabelConfigModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\ProjectOptionsModel.cs" />
+    <Compile Include="Models\ProjectQueryModel.cs" />
+    <Compile Include="Models\ProjectQueryResultProjectModel.cs" />
     <Compile Include="Models\ProjectUpdateModel.cs" />
     <Compile Include="Models\ProjectViewModel.cs" />
     <Compile Include="Models\SyncRequestModel.cs" />

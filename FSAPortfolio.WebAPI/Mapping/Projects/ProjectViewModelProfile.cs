@@ -50,20 +50,28 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey))
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.ViewKey))
                 .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate))
+
+                .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
+                .ForMember(p => p.project_type, o => o.MapFrom(s => s.ProjectType))
+                .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives))
+                .ForMember(p => p.programme, o => o.MapFrom(s => s.Programme))
+
+
                 .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.G6team))
                 .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
                 .ForMember(p => p.first_completed, o => o.MapFrom<FirstCompletedResolver, Project>(s => s))
                 .ForMember(p => p.pgroup, o => o.MapFrom<PriorityGroupResolver, int?>(s => s.Priority))
 
+                // TODO: add persistence and mappings for outstanding fields
                 // Outstanding
-                .ForMember(p => p.oddlead, o => o.Ignore()) // TODO: add a field for the lead name
-                .ForMember(p => p.oddlead_role, o => o.Ignore()) // TODO: add a field for this
-                .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email)) // TODO: add a field for this
-                .ForMember(p => p.servicelead, o => o.Ignore()) // TODO: add a field for the lead name
+                .ForMember(p => p.oddlead, o => o.Ignore()) 
+                .ForMember(p => p.oddlead_role, o => o.Ignore())
+                .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email))
+                .ForMember(p => p.servicelead, o => o.Ignore())
                 .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
-                .ForMember(p => p.milestones, o => o.Ignore())// TODO: add a field for this
-                .ForMember(p => p.documents, o => o.MapFrom(s => s.Documents.OrderBy(d => d.Order))) // TODO: add a field for this
-                .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.milestones, o => o.Ignore())
+                .ForMember(p => p.documents, o => o.MapFrom(s => s.Documents.OrderBy(d => d.Order)))
+                .ForMember(p => p.link, o => o.Ignore())
 
                 // Latest update and update history
                 .ForMember(p => p.id, o => o.MapFrom(s => s.LatestUpdate.SyncId))

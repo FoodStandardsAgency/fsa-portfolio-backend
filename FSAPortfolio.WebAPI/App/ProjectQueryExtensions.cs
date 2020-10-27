@@ -78,6 +78,11 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Updates.Select(u => u.Phase))
                 ;
         }
+        public static IQueryable<Project> IncludeQueryResult(this IQueryable<Project> query)
+        {
+            return query.Include(p => p.Reservation);
+        }
+
 
         public static IQueryable<Project> IncludeLabelConfigs(this IQueryable<Project> query)
         {
