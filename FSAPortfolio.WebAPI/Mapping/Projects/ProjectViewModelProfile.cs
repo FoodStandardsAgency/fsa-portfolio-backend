@@ -1,20 +1,8 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration.Annotations;
-using FSAPortfolio.Entities;
-using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.App.Sync;
-using FSAPortfolio.WebAPI.Controllers;
 using FSAPortfolio.WebAPI.Models;
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Web;
-using System.Data.Entity;
-using System.Reflection;
-using Newtonsoft.Json;
 
 namespace FSAPortfolio.WebAPI.Mapping.Projects
 {
@@ -38,32 +26,23 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         private void Project__ProjectViewModel()
         {
             CreateMap<Project, ProjectViewModel>()
-                .ForMember(p => p.id, o => o.MapFrom(s => s.LatestUpdate.SyncId))
                 .ForMember(p => p.project_id, o => o.MapFrom(s => s.Reservation.ProjectId))
                 .ForMember(p => p.project_name, o => o.MapFrom(s => s.Name))
                 .ForMember(p => p.start_date, o => o.MapFrom(s => s.StartDate))
                 .ForMember(p => p.short_desc, o => o.MapFrom(s => s.Description))
-                .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.ViewKey))
                 .ForMember(p => p.category, o => o.MapFrom(s => s.Category.ViewKey))
                 .ForMember(p => p.subcat, o => o.MapFrom(s => s.Subcategories.Select(sc => sc.ViewKey).ToArray()))
-                .ForMember(p => p.rag, o => o.MapFrom(s => s.LatestUpdate.RAGStatus.ViewKey))
-                .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Timestamp.Date == DateTime.Today ? s.LatestUpdate.Text : null))
-                .ForMember(p => p.UpdateHistory, o => o.MapFrom<UpdateHistoryResolver>())
-                .ForMember(p => p.LastUpdate, o => o.MapFrom<LastUpdateResolver>())
+
                 .ForMember(p => p.priority_main, o => o.MapFrom(s => s.Priority.HasValue ? s.Priority.Value.ToString("D2") : string.Empty))
                 .ForMember(p => p.funded, o => o.MapFrom(s => s.Funded))
                 .ForMember(p => p.confidence, o => o.MapFrom(s => s.Confidence))
                 .ForMember(p => p.priorities, o => o.MapFrom(s => s.Priorities))
                 .ForMember(p => p.benefits, o => o.MapFrom(s => s.Benefits))
                 .ForMember(p => p.criticality, o => o.MapFrom(s => s.Criticality))
-                .ForMember(p => p.budget, o => o.MapFrom(s => Convert.ToInt32(s.LatestUpdate.Budget)))
-                .ForMember(p => p.spent, o => o.MapFrom(s => Convert.ToInt32(s.LatestUpdate.Spent)))
-                .ForMember(p => p.timestamp, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
 
                 .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => new RelatedProjectModel() { ProjectId = rp.Reservation.ProjectId, Name = rp.Name })))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.Reservation.ProjectId))))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
-                .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
                 .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
                 .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
                 .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
@@ -71,27 +50,37 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey))
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.ViewKey))
                 .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate))
+                .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.G6team))
+                .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
+                .ForMember(p => p.first_completed, o => o.MapFrom<FirstCompletedResolver, Project>(s => s))
+                .ForMember(p => p.pgroup, o => o.MapFrom<PriorityGroupResolver, int?>(s => s.Priority))
+
+                // Outstanding
+                .ForMember(p => p.oddlead, o => o.Ignore()) // TODO: add a field for the lead name
+                .ForMember(p => p.oddlead_role, o => o.Ignore()) // TODO: add a field for this
+                .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email)) // TODO: add a field for this
+                .ForMember(p => p.servicelead, o => o.Ignore()) // TODO: add a field for the lead name
+                .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
+                .ForMember(p => p.milestones, o => o.Ignore())// TODO: add a field for this
+                .ForMember(p => p.documents, o => o.MapFrom(s => s.Documents.OrderBy(d => d.Order))) // TODO: add a field for this
+                .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
+
+                // Latest update and update history
+                .ForMember(p => p.id, o => o.MapFrom(s => s.LatestUpdate.SyncId))
+                .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.ViewKey))
+                .ForMember(p => p.rag, o => o.MapFrom(s => s.LatestUpdate.RAGStatus.ViewKey))
+                .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
+                .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Timestamp.Date == DateTime.Today ? s.LatestUpdate.Text : null))
+                .ForMember(p => p.budget, o => o.MapFrom(s => Convert.ToInt32(s.LatestUpdate.Budget)))
+                .ForMember(p => p.spent, o => o.MapFrom(s => Convert.ToInt32(s.LatestUpdate.Spent)))
                 .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
                 .ForMember(p => p.p_comp, o => o.MapFrom(s => s.LatestUpdate.PercentageComplete))
                 .ForMember(p => p.max_time, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
                 .ForMember(p => p.min_time, o => o.MapFrom(s => s.FirstUpdate.Timestamp))
-                .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.G6team))
-                .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
-                .ForMember(p => p.first_completed, o => o.MapFrom<FirstCompletedResolver, Project>(s => s))
-
-                .ForMember(p => p.oddlead, o => o.Ignore()) // TODO: add a field for the lead name
-                .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email))
-                .ForMember(p => p.servicelead, o => o.Ignore()) // TODO: add a field for the lead name
-                .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
-
-                .ForMember(p => p.documents, o => o.MapFrom(s => s.Documents.OrderBy(d => d.Order))) // TODO: add a field for this
-
-                .ForMember(p => p.pgroup, o => o.MapFrom<PriorityGroupResolver, int?>(s => s.Priority))
-                .ForMember(p => p.link, o => o.Ignore()) // TODO: add a field for this
-
-                .ForMember(p => p.oddlead_role, o => o.Ignore()) // TODO: add a field for this
-
-                .ForMember(p => p.milestones, o => o.Ignore())
+                .ForMember(p => p.timestamp, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
+                .ForMember(p => p.LastUpdate, o => o.MapFrom<LastUpdateResolver>())
+                .ForMember(p => p.LastStatusUpdate, o => o.MapFrom<LastStatusUpdateResolver>())
+                .ForMember(p => p.UpdateHistory, o => o.MapFrom<UpdateHistoryResolver>())
 
                 // Below this line are project data items
                 .ForMember(p => p.business_case_number, o => o.Ignore())
@@ -130,6 +119,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Text, o => o.MapFrom(s => s.Text))
                 .ForMember(d => d.Timestamp, o => o.MapFrom(s => s.Timestamp))
                 ;
+            CreateMap<ProjectUpdateItem, StatusUpdateHistoryModel>()
+                .ForMember(d => d.RAGStatus, o => o.MapFrom(s => s.RAGStatus.ViewKey))
+                .ForMember(d => d.Timestamp, o => o.MapFrom(s => s.Timestamp))
+                ;
+
         }
 
 
@@ -171,7 +165,23 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             object lastUpdate;
             if (context.Items.TryGetValue(nameof(ProjectViewModel.LastUpdate), out lastUpdate) && (lastUpdate as bool? ?? false))
             {
-                result = context.Mapper.Map<UpdateHistoryModel>(source.Updates.Where(u => u.Timestamp.Date != DateTime.Today && !string.IsNullOrWhiteSpace(u.Text)).OrderBy(u => u.Timestamp).FirstOrDefault());
+                var lastTextUpdate = source.Updates.Where(u => u.Timestamp.Date != DateTime.Today && !string.IsNullOrWhiteSpace(u.Text)).OrderBy(u => u.Timestamp).FirstOrDefault();
+                result = context.Mapper.Map<UpdateHistoryModel>(lastTextUpdate);
+            }
+            return result;
+        }
+    }
+
+    public class LastStatusUpdateResolver : IValueResolver<Project, ProjectModel, StatusUpdateHistoryModel>
+    {
+        public StatusUpdateHistoryModel Resolve(Project source, ProjectModel destination, StatusUpdateHistoryModel destMember, ResolutionContext context)
+        {
+            StatusUpdateHistoryModel result = null;
+            object lastUpdate;
+            if (context.Items.TryGetValue(nameof(ProjectViewModel.LastUpdate), out lastUpdate) && (lastUpdate as bool? ?? false))
+            {
+                var lastTextUpdate = source.Updates.Where(u => u.Id != source.LatestUpdate_Id).OrderBy(u => u.Timestamp).FirstOrDefault();
+                result = context.Mapper.Map<StatusUpdateHistoryModel>(lastTextUpdate);
             }
             return result;
         }
@@ -184,8 +194,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             string pgroup = PriorityGroupConstants.NotSetName;
             if (sourceMember.HasValue)
             {
-                if(sourceMember.Value > 15) pgroup = PriorityGroupConstants.HighName;
-                else if(sourceMember.Value > 8) pgroup = PriorityGroupConstants.MediumName;
+                if(sourceMember.Value >= PriorityGroupConstants.HighGroupCutoff) pgroup = PriorityGroupConstants.HighName;
+                else if(sourceMember.Value >= PriorityGroupConstants.MediumGroupCutoff) pgroup = PriorityGroupConstants.MediumName;
                 else pgroup = PriorityGroupConstants.LowName;
             }
             return pgroup;

@@ -71,6 +71,8 @@ namespace FSAPortfolio.Entities.Projects
 
     public static class PriorityGroupConstants
     {
+        public static int HighGroupCutoff = int.Parse(ConfigurationManager.AppSettings["PriorityGroup.High.Cutoff"] ?? "15");
+        public static int MediumGroupCutoff = int.Parse(ConfigurationManager.AppSettings["PriorityGroup.High.Cutoff"] ?? "8");
         public static string HighName = ConfigurationManager.AppSettings["PriorityGroup.High.Name"] ?? "high";
         public static string MediumName = ConfigurationManager.AppSettings["PriorityGroup.Medium.Name"] ?? "medium";
         public static string LowName = ConfigurationManager.AppSettings["PriorityGroup.Low.Name"] ?? "low";

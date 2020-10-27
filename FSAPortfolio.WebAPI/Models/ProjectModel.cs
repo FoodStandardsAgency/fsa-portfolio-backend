@@ -113,6 +113,15 @@ namespace FSAPortfolio.WebAPI.Models
         public DateTime Timestamp { get; set; }
     }
 
+    public class StatusUpdateHistoryModel
+    {
+        [JsonProperty("rag")]
+        public string RAGStatus { get; set; }
+
+        [JsonProperty("timestamp")]
+        public DateTime Timestamp { get; set; }
+    }
+
     public class RelatedProjectModel
     { 
         [JsonProperty("project_id")]
