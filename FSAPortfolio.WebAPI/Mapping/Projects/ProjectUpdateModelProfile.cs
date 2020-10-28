@@ -34,7 +34,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Name, o => o.MapFrom(s => s.project_name))
                 .ForMember(p => p.StartDate, o => o.MapFrom(s => s.start_date))
                 .ForMember(p => p.ActualStartDate, o => o.MapFrom(s => s.actstart))
-                .ForMember(p => p.ExpectedEndDate, o => o.MapFrom(s => s.expend))
+                .ForMember(p => p.ExpectedEndDate, o => o.MapFrom<EndOfMonthResolver, DateTime?>(s => s.expend))
                 .ForMember(p => p.HardEndDate, o => o.MapFrom(s => s.hardend))
                 .ForMember(p => p.ActualEndDate, o => o.MapFrom(s => s.actual_end_date))
                 .ForMember(p => p.Description, o => o.MapFrom(s => s.short_desc))
@@ -103,14 +103,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
-    public class IntResolver : IMemberValueResolver<object, object, string, int>
-    {
-        public int Resolve(object source, object destination, string sourceMember, int destMember, ResolutionContext context)
-        {
-            int result;
-            return int.TryParse(sourceMember, out result) ? result : 0;
-        }
-    }
     public class NullableIntResolver : IMemberValueResolver<object, object, string, int?>
     {
         public int? Resolve(object source, object destination, string sourceMember, int? destMember, ResolutionContext context)
@@ -205,7 +197,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
-
     public class ConfigRAGStatusResolver : IMemberValueResolver<object, ProjectUpdateItem, string, ProjectRAGStatus>
     {
         public ProjectRAGStatus Resolve(object source, ProjectUpdateItem destination, string sourceMember, ProjectRAGStatus destMember, ResolutionContext context)
@@ -231,4 +222,16 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
+    public class EndOfMonthResolver : IMemberValueResolver<ProjectUpdateModel, Project, DateTime?, DateTime?>
+    {
+        public DateTime? Resolve(ProjectUpdateModel source, Project destination, DateTime? sourceMember, DateTime? destMember, ResolutionContext context)
+        {
+            DateTime? result = null;
+            if(sourceMember.HasValue)
+            {
+                result = new DateTime(sourceMember.Value.Year, sourceMember.Value.Month, DateTime.DaysInMonth(sourceMember.Value.Year, sourceMember.Value.Month));
+            }
+            return result;
+        }
+    }
 }

@@ -56,10 +56,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Description, o => o.MapFrom(s => s.short_desc))
                 .ForMember(p => p.Priority, o => o.MapFrom<NullableIntResolver, string>(s => s.priority_main))
                 .ForMember(p => p.Directorate, o => o.MapFrom(s => s.direct.ToLower()))
-                .ForMember(p => p.Funded, o => o.MapFrom<IntResolver, string>(s => s.funded))
-                .ForMember(p => p.Confidence, o => o.MapFrom<IntResolver, string>(s => s.confidence))
-                .ForMember(p => p.Benefits, o => o.MapFrom<IntResolver, string>(s => s.benefits))
-                .ForMember(p => p.Criticality, o => o.MapFrom<IntResolver, string>(s => s.criticality))
+                .ForMember(p => p.Funded, o => o.MapFrom<PostgresIntResolver, string>(s => s.funded))
+                .ForMember(p => p.Confidence, o => o.MapFrom<PostgresIntResolver, string>(s => s.confidence))
+                .ForMember(p => p.Benefits, o => o.MapFrom<PostgresIntResolver, string>(s => s.benefits))
+                .ForMember(p => p.Criticality, o => o.MapFrom<PostgresIntResolver, string>(s => s.criticality))
                 .ForMember(p => p.Team, o => o.MapFrom(s => string.IsNullOrWhiteSpace(s.team) ? null : s.team))
                 .ForMember(p => p.Lead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.oddlead_email))
                 .ForMember(p => p.ServiceLead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.servicelead_email))
@@ -150,6 +150,16 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
 
     }
+
+    public class PostgresIntResolver : IMemberValueResolver<object, object, string, int>
+    {
+        public int Resolve(object source, object destination, string sourceMember, int destMember, ResolutionContext context)
+        {
+            int result;
+            return int.TryParse(sourceMember, out result) ? result : 0;
+        }
+    }
+
 
     public class PostgresDateResolver : IMemberValueResolver<object, object, string, DateTime?>
     {
