@@ -466,7 +466,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 }
                 else
                 {
-                    logFailure(projectId, "details count = {projectDetails.Count()}");
+                    logFailure(projectId, $"Details count = {projectDetails.Count()}");
                 }
             }
 
