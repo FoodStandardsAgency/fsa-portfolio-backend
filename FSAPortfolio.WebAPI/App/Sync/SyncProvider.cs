@@ -375,7 +375,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         portfolios.Reset();
                         portfolios.MoveNext();
                     }
-                if (!SyncProject(id, portfolios.Current)) break;
+                SyncProject(id, portfolios.Current);
                 //}
                 //catch(Exception e)
                 //{
@@ -470,7 +470,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 else
                 {
                     log.Add($"Not synching - details count = {projectDetails.Count()}");
-                    synched = true;
                 }
             }
 
