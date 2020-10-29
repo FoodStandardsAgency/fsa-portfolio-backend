@@ -34,8 +34,10 @@ namespace FSAPortfolio.WebAPI.App.Config
                 context.ProjectCategories,
                 "categories",
                 "project category or subcategory",
-                "cat"
+                ViewKeyPrefix.Category,
+                CategoryConstants.MaxCount
                 );
+
             UpdateProjectOptions(
                 config,
                 nameof(ProjectModel.phase),
@@ -44,8 +46,10 @@ namespace FSAPortfolio.WebAPI.App.Config
                 context.ProjectPhases,
                 "phases",
                 "project phase",
-                "phase"
+                ViewKeyPrefix.Phase,
+                PhaseConstants.MaxCount
                 );
+
             UpdateProjectOptions(
                 config,
                 nameof(ProjectModel.onhold),
@@ -54,8 +58,10 @@ namespace FSAPortfolio.WebAPI.App.Config
                 context.ProjectOnHoldStatuses,
                 "statuses",
                 "project status",
-                "status"
+                ViewKeyPrefix.Status,
+                OnHoldConstants.MaxCount
                 );
+
             UpdateProjectOptions(
                 config,
                 nameof(ProjectModel.project_size),
@@ -64,7 +70,20 @@ namespace FSAPortfolio.WebAPI.App.Config
                 context.ProjectSizes,
                 "sizes",
                 "project size",
-                "size"
+                ViewKeyPrefix.ProjectSize,
+                ProjectSizeConstants.MaxCount
+                );
+
+            UpdateProjectOptions(
+                config,
+                nameof(ProjectModel.budgettype),
+                context.Projects.Select(p => p.BudgetType),
+                config.BudgetTypes,
+                context.BudgetTypes,
+                "budget types",
+                "project budget type",
+                ViewKeyPrefix.BudgetType,
+                BudgetTypeConstants.MaxCount
                 );
 
 
@@ -200,7 +219,8 @@ namespace FSAPortfolio.WebAPI.App.Config
             DbSet<T> dbSet,
             string collectionDescription,
             string optionDescription,
-            string viewKeyPrefix
+            string viewKeyPrefix,
+            int? maxOptionCount = null
             ) where T : class, IProjectOption, new()
         {
             var labelConfig = config.Labels.Single(l => l.FieldName == fieldName);
@@ -209,6 +229,12 @@ namespace FSAPortfolio.WebAPI.App.Config
                 .Where(n => !string.IsNullOrWhiteSpace(n))
                 .Select(n => n.Trim())
                 .ToArray();
+
+            if (maxOptionCount.HasValue && optionNames.Length > maxOptionCount.Value)
+            {
+                throw new PortfolioConfigurationException($"Can't update {collectionDescription}: {optionNames.Length} is over the {optionDescription} limit of {maxOptionCount.Value}.");
+            }
+
 
             // If the option has no matching name, check the options has no existing assignments and then delete it
             var unmatchedOptionsQuery =
@@ -274,6 +300,8 @@ namespace FSAPortfolio.WebAPI.App.Config
                     option.ViewKey = $"{viewKeyPrefix}{i}";
                     optionCollection.Add(option);
                 }
+                var lastOption = optionCollection.LastOrDefault();
+                if(lastOption != null && maxOptionCount.HasValue) lastOption.ViewKey = $"{viewKeyPrefix}{maxOptionCount.Value - 1}";
             }
             else
             {

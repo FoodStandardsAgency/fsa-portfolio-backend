@@ -163,7 +163,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                 foreach (var portfolio in context.Portfolios)
                 {
-                    portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == "completed");
+                    portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == $"{ViewKeyPrefix.Phase}5");
                 }
                 context.SaveChanges();
 
@@ -228,20 +228,22 @@ namespace FSAPortfolio.WebAPI.App.Sync
             portfolio.ShortName = shortName;
             portfolio.IDPrefix = viewKey.ToUpper();
 
-            Action<string, int> phaseFactory = (k, o) => {
+            Action<int> phaseFactory = (o) => {
                 string phaseName;
-                if (!SyncMaps.phaseMap.TryGetValue(new Tuple<string, string>(viewKey, k), out phaseName))
+                string vk = $"{ViewKeyPrefix.Phase}{o}";
+                if (!SyncMaps.phaseMap.TryGetValue(new Tuple<string, string>(viewKey, vk), out phaseName))
                 phaseName = SyncMaps.phaseMap.First().Value;
-                var phase = portfolio.Configuration.Phases.SingleOrDefault(p => p.ViewKey == k);
+                var phase = portfolio.Configuration.Phases.SingleOrDefault(p => p.ViewKey == vk);
                 if (phase == null)
                 {
-                    phase = new ProjectPhase() { ViewKey = k, Order = o };
+                    phase = new ProjectPhase() { ViewKey = vk, Order = o };
                     portfolio.Configuration.Phases.Add(phase);
                 }
                 phase.Name = phaseName;
             };
-            Func<string, int, ProjectOnHoldStatus> onHoldFactory = (k, o) =>
+            Func<int, ProjectOnHoldStatus> onHoldFactory = (o) =>
             {
+                string k = $"{ViewKeyPrefix.Status}{o}";
                 var onhold = portfolio.Configuration.OnHoldStatuses.SingleOrDefault(p => p.ViewKey == k);
                 if (onhold == null)
                 {
@@ -263,8 +265,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 rag.Order = SyncMaps.ragMap[k].Item2;
                 return rag;
             };
-            Action<string, int> categoryFactory = (k, o) =>
+            Action<int> categoryFactory = (o) =>
             {
+                string k = $"{ViewKeyPrefix.Category}{o}";
                 var category = portfolio.Configuration.Categories.SingleOrDefault(p => p.ViewKey == k);
                 if (category == null)
                 {
@@ -275,8 +278,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 category.Name = SyncMaps.categoryMap.ContainsKey(tk) ? SyncMaps.categoryMap[tk] : SyncMaps.categoryMap[new Tuple<string, string>("odd", k)];
                 category.Order = o;
             };
-            Func<string, int, ProjectSize> sizeFactory = (k, o) =>
+            Func<int, ProjectSize> sizeFactory = (o) =>
             {
+                string k = $"{ViewKeyPrefix.ProjectSize}{o}";
                 var projectSize = portfolio.Configuration.ProjectSizes.SingleOrDefault(p => p.ViewKey == k);
                 if (projectSize == null)
                 {
@@ -286,8 +290,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 projectSize.Name = SyncMaps.sizeMap[k];
                 return projectSize;
             };
-            Func<string, int, BudgetType> budgetTypeFactory = (k, o) =>
+            Func<int, BudgetType> budgetTypeFactory = (o) =>
             {
+                string k = $"{ViewKeyPrefix.BudgetType}{o}";
                 var budgetType = portfolio.Configuration.BudgetTypes.SingleOrDefault(p => p.ViewKey == k);
                 if (budgetType == null)
                 {
@@ -309,34 +314,34 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 return group;
             };
 
-            phaseFactory("backlog", 0);
-            phaseFactory("discovery", 1);
-            phaseFactory("alpha", 2);
-            phaseFactory("beta", 3);
-            phaseFactory("live", 4);
-            phaseFactory("completed", 5);
+            phaseFactory(0);
+            phaseFactory(1);
+            phaseFactory(2);
+            phaseFactory(3);
+            phaseFactory(4);
+            phaseFactory(5);
             ragFactory(RagConstants.RedViewKey);
             ragFactory(RagConstants.AmberViewKey);
             ragFactory(RagConstants.GreenViewKey);
             ragFactory(RagConstants.NoneViewKey);
-            onHoldFactory("n", 0);
-            onHoldFactory("y", 1);
-            onHoldFactory("b", 2);
-            onHoldFactory("c", 3);
-            categoryFactory("cap", 0);
-            categoryFactory("data", 1);
-            categoryFactory("sm", 2);
-            categoryFactory("ser", 3);
-            categoryFactory("it", 4);
-            categoryFactory("res", 5);
-            sizeFactory("s", 0);
-            sizeFactory("m", 1);
-            sizeFactory("l", 2);
-            sizeFactory("x", 3);
-            budgetTypeFactory(BudgetTypeConstants.NotSetViewKey, 0);
-            budgetTypeFactory("admin", 1);
-            budgetTypeFactory("progr", 2);
-            budgetTypeFactory("capit", 3);
+            onHoldFactory(0);
+            onHoldFactory(1);
+            onHoldFactory(2);
+            onHoldFactory(3);
+            categoryFactory(0);
+            categoryFactory(1);
+            categoryFactory(2);
+            categoryFactory(3);
+            categoryFactory(4);
+            categoryFactory(5);
+            sizeFactory(0);
+            sizeFactory(1);
+            sizeFactory(2);
+            sizeFactory(3);
+            budgetTypeFactory(0);
+            budgetTypeFactory(1);
+            budgetTypeFactory(2);
+            budgetTypeFactory(3);
             labelGroupFactory(DefaultFieldLabels.FieldGroupName_ProjectIDs, 0);
             labelGroupFactory(DefaultFieldLabels.FieldGroupName_AboutTheProject, 1);
             labelGroupFactory(DefaultFieldLabels.FieldGroupName_ProjectTeam, 2);

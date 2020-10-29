@@ -8,6 +8,7 @@ namespace FSAPortfolio.Entities.Projects
 {
     public static class PhaseConstants
     {
+        public const int MaxCount = 5;
         public static string BacklogName = ConfigurationManager.AppSettings["Phase.Backlog.Name"] ?? "Backlog";
         public static string DiscoveryName = ConfigurationManager.AppSettings["Phase.Discovery.Name"] ?? "Discovery";
         public static string AlphaName = ConfigurationManager.AppSettings["Phase.Alpha.Name"] ?? "Alpha";
@@ -18,6 +19,7 @@ namespace FSAPortfolio.Entities.Projects
 
     public static class OnHoldConstants
     {
+        public const int MaxCount = 10;
         public static string NoName = ConfigurationManager.AppSettings["OnHold.No.Name"] ?? "No";
         public static string OnHoldName = ConfigurationManager.AppSettings["OnHold.OnHold.Name"] ?? "On hold";
         public static string BlockedName = ConfigurationManager.AppSettings["OnHold.Blocked.Name"] ?? "Blocked";
@@ -43,6 +45,7 @@ namespace FSAPortfolio.Entities.Projects
     }
     public static class CategoryConstants
     {
+        public const int MaxCount = 10;
         public static string CapabilityName = ConfigurationManager.AppSettings["Category.Capability.Name"] ?? "Developing our digital capability";
         public static string DataName = ConfigurationManager.AppSettings["Category.Data.Name"] ?? "Data driven FSA";
         public static string ServiceMgmtName = ConfigurationManager.AppSettings["Category.Service.Name"] ?? "IT Service management";
@@ -54,6 +57,7 @@ namespace FSAPortfolio.Entities.Projects
 
     public static class ProjectSizeConstants
     {
+        public const int MaxCount = 6;
         public static string SmallName = ConfigurationManager.AppSettings["Size.Small.Name"] ?? "Small";
         public static string MediumName = ConfigurationManager.AppSettings["Size.Medium.Name"] ?? "Medium";
         public static string LargeName = ConfigurationManager.AppSettings["Size.Large.Name"] ?? "Large";
@@ -63,6 +67,7 @@ namespace FSAPortfolio.Entities.Projects
 
     public static class BudgetTypeConstants
     {
+        public const int MaxCount = 8;
         public static string AdminName = ConfigurationManager.AppSettings["BudgetType.Admin.Name"] ?? "Admin";
         public static string ProgrammeName = ConfigurationManager.AppSettings["BudgetType.Programme.Name"] ?? "Programme";
         public static string CapitalName = ConfigurationManager.AppSettings["BudgetType.Capital.Name"] ?? "Capital";

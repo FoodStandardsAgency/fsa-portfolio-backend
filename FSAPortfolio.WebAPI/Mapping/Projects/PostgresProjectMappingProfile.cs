@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
+using FSAPortfolio.WebAPI.App.Sync;
 
 namespace FSAPortfolio.WebAPI.Mapping.Projects
 {
@@ -36,8 +37,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Text, o => o.MapFrom(s => s.update))
                 .ForMember(p => p.PercentageComplete, o => o.MapFrom(s => s.p_comp))
                 .ForMember(p => p.RAGStatus, o => o.MapFrom<ConfigRAGStatusResolver, string>(s => s.rag))
-                .ForMember(p => p.Phase, o => o.MapFrom<ConfigPhaseStatusResolver, string>(s => s.phase))
-                .ForMember(p => p.OnHoldStatus, o => o.MapFrom<ConfigOnHoldStatusResolver, string>(s => s.onhold))
+                .ForMember(p => p.Phase, o => o.MapFrom<ConfigPhaseStatusResolver, string>(s => SyncMaps.phaseKeyMap[s.phase ?? "backlog"]))
+                .ForMember(p => p.OnHoldStatus, o => o.MapFrom<ConfigOnHoldStatusResolver, string>(s => SyncMaps.onholdKeyMap[s.onhold ?? "n"]))
                 .ForMember(p => p.Budget, o => o.MapFrom<DecimalResolver, string>(s => s.budget))
                 .ForMember(p => p.Spent, o => o.MapFrom<DecimalResolver, string>(s => s.spent))
                 .ForMember(p => p.ExpectedCurrentPhaseEnd, o => o.MapFrom<PostgresDateResolver, string>(s => s.expendp))
@@ -65,9 +66,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.ServiceLead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.servicelead_email))
                 .ForMember(p => p.RelatedProjects, o => o.MapFrom<PostgresProjectCollectionResolver, string>(s => s.rels))
                 .ForMember(p => p.DependantProjects, o => o.MapFrom<PostgresProjectCollectionResolver, string>(s => s.dependencies))
-                .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => s.category))
-                .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => s.project_size))
-                .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => s.budgettype))
+                .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => SyncMaps.categoryKeyMap[s.category ?? "cap"]))
+                .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => SyncMaps.sizeKeyMap[s.project_size ?? string.Empty]))
+                .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => SyncMaps.budgetTypeKeyMap[s.budgettype ?? "none"]))
 
                 // TODO: These need migration mappings
                 .ForMember(p => p.Documents, o => o.Ignore())

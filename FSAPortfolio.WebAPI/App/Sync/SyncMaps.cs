@@ -8,57 +8,101 @@ namespace FSAPortfolio.WebAPI.App.Sync
 {
     public class SyncMaps
     {
+        public static readonly Dictionary<string, string> budgetTypeKeyMap = new Dictionary<string, string>()
+        {
+            { "none", $"{ViewKeyPrefix.BudgetType}0" },
+            { "admin", $"{ViewKeyPrefix.BudgetType}1" },
+            { "progr", $"{ViewKeyPrefix.BudgetType}2" },
+            { "capit", $"{ViewKeyPrefix.BudgetType}3"}
+        };
+        public static readonly Dictionary<string, string> sizeKeyMap = new Dictionary<string, string>()
+        {
+            { string.Empty, $"{ViewKeyPrefix.ProjectSize}0" },
+            { "s", $"{ViewKeyPrefix.ProjectSize}1" },
+            { "m", $"{ViewKeyPrefix.ProjectSize}2" },
+            { "l", $"{ViewKeyPrefix.ProjectSize}3" },
+            { "x", $"{ViewKeyPrefix.ProjectSize}4" }
+        };
+        public static readonly Dictionary<string, string> onholdKeyMap = new Dictionary<string, string>()
+        {
+            { "n", $"{ViewKeyPrefix.Status}0" },
+            { "y", $"{ViewKeyPrefix.Status}1" },
+            { "b", $"{ViewKeyPrefix.Status}2" },
+            { "c", $"{ViewKeyPrefix.Status}3" }
+        };
+        public static readonly Dictionary<string, string> categoryKeyMap = new Dictionary<string, string>()
+        {
+            { "cap", $"{ViewKeyPrefix.Category}0" },
+            { "data", $"{ViewKeyPrefix.Category}1" },
+            { "sm", $"{ViewKeyPrefix.Category}2" },
+            { "ser", $"{ViewKeyPrefix.Category}3" },
+            { "it", $"{ViewKeyPrefix.Category}4" },
+            { "res", $"{ViewKeyPrefix.Category}5" },
+        };
+        public static readonly Dictionary<string, string> phaseKeyMap = new Dictionary<string, string>()
+        {
+            { "backlog", $"{ViewKeyPrefix.Phase}0" },
+            { "discovery", $"{ViewKeyPrefix.Phase}1" },
+            { "alpha", $"{ViewKeyPrefix.Phase}2" },
+            { "beta", $"{ViewKeyPrefix.Phase}3" },
+            { "live", $"{ViewKeyPrefix.Phase}4" },
+            { "completed", $"{ViewKeyPrefix.Phase}5" },
+        };
+
+
+
         public static readonly Dictionary<Tuple<string, string>, string> phaseMap = new Dictionary<Tuple<string, string>, string>()
         {
-            { new Tuple<string, string>("odd", "backlog"), PhaseConstants.BacklogName },
-            { new Tuple<string, string>("odd", "discovery"), PhaseConstants.DiscoveryName },
-            { new Tuple<string, string>("odd", "alpha"), PhaseConstants.AlphaName },
-            { new Tuple<string, string>("odd", "beta"), PhaseConstants.BetaName },
-            { new Tuple<string, string>("odd", "live"), PhaseConstants.LiveName },
-            { new Tuple<string, string>("odd", "completed"), PhaseConstants.CompletedName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Phase}0"), PhaseConstants.BacklogName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Phase}1"), PhaseConstants.DiscoveryName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Phase}2"), PhaseConstants.AlphaName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Phase}3"), PhaseConstants.BetaName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Phase}4"), PhaseConstants.LiveName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Phase}5"), PhaseConstants.CompletedName },
 
             // TODO: change the view keys for other portfolios to match labels (can't at moment as it affects syncing)
-            { new Tuple<string, string>("serd", "backlog"), "In development" },
-            { new Tuple<string, string>("serd", "discovery"), "Awaiting decision" },
-            { new Tuple<string, string>("serd", "alpha"), "Waiting to start" },
-            { new Tuple<string, string>("serd", "beta"), "Underway" },
-            { new Tuple<string, string>("serd", "completed"), "Complete" },
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Phase}0"), "In development" },
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Phase}1"), "Awaiting decision" },
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Phase}2"), "Waiting to start" },
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Phase}3"), "Underway" },
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Phase}5"), "Complete" },
 
-            { new Tuple<string, string>("abc", "discovery"), "Feasibility" },
-            { new Tuple<string, string>("abc", "alpha"), "Appraise & select" },
-            { new Tuple<string, string>("abc", "beta"), "Define" },
-            { new Tuple<string, string>("abc", "live"), "Deliver" },
-            { new Tuple<string, string>("abc", "completed"), "Embed/close" },
+            { new Tuple<string, string>("abc", $"{ViewKeyPrefix.Phase}1"), "Feasibility" },
+            { new Tuple<string, string>("abc", $"{ViewKeyPrefix.Phase}2"), "Appraise & select" },
+            { new Tuple<string, string>("abc", $"{ViewKeyPrefix.Phase}3"), "Define" },
+            { new Tuple<string, string>("abc", $"{ViewKeyPrefix.Phase}4"), "Deliver" },
+            { new Tuple<string, string>("abc", $"{ViewKeyPrefix.Phase}5"), "Embed/close" },
 
-            { new Tuple<string, string>("fhp", "backlog"), PhaseConstants.BacklogName },
-            { new Tuple<string, string>("fhp", "discovery"), PhaseConstants.DiscoveryName },
-            { new Tuple<string, string>("fhp", "alpha"), PhaseConstants.AlphaName },
-            { new Tuple<string, string>("fhp", "beta"), PhaseConstants.BetaName },
-            { new Tuple<string, string>("fhp", "live"), PhaseConstants.LiveName },
-            { new Tuple<string, string>("fhp", "completed"), PhaseConstants.CompletedName },
+            { new Tuple<string, string>("fhp", $"{ViewKeyPrefix.Phase}0"), PhaseConstants.BacklogName },
+            { new Tuple<string, string>("fhp", $"{ViewKeyPrefix.Phase}1"), PhaseConstants.DiscoveryName },
+            { new Tuple<string, string>("fhp", $"{ViewKeyPrefix.Phase}2"), PhaseConstants.AlphaName },
+            { new Tuple<string, string>("fhp", $"{ViewKeyPrefix.Phase}3"), PhaseConstants.BetaName },
+            { new Tuple<string, string>("fhp", $"{ViewKeyPrefix.Phase}4"), PhaseConstants.LiveName },
+            { new Tuple<string, string>("fhp", $"{ViewKeyPrefix.Phase}5"), PhaseConstants.CompletedName },
 
-            { new Tuple<string, string>("otp", "backlog"), PhaseConstants.BacklogName },
-            { new Tuple<string, string>("otp", "discovery"), PhaseConstants.DiscoveryName },
-            { new Tuple<string, string>("otp", "alpha"), PhaseConstants.AlphaName },
-            { new Tuple<string, string>("otp", "beta"), PhaseConstants.BetaName },
-            { new Tuple<string, string>("otp", "live"), PhaseConstants.LiveName },
-            { new Tuple<string, string>("otp", "completed"), PhaseConstants.CompletedName },
+            { new Tuple<string, string>("otp", $"{ViewKeyPrefix.Phase}0"), PhaseConstants.BacklogName },
+            { new Tuple<string, string>("otp", $"{ViewKeyPrefix.Phase}1"), PhaseConstants.DiscoveryName },
+            { new Tuple<string, string>("otp", $"{ViewKeyPrefix.Phase}2"), PhaseConstants.AlphaName },
+            { new Tuple<string, string>("otp", $"{ViewKeyPrefix.Phase}3"), PhaseConstants.BetaName },
+            { new Tuple<string, string>("otp", $"{ViewKeyPrefix.Phase}4"), PhaseConstants.LiveName },
+            { new Tuple<string, string>("otp", $"{ViewKeyPrefix.Phase}5"), PhaseConstants.CompletedName },
 
-            { new Tuple<string, string>("test", "backlog"), PhaseConstants.BacklogName },
-            { new Tuple<string, string>("test", "discovery"), PhaseConstants.DiscoveryName },
-            { new Tuple<string, string>("test", "alpha"), PhaseConstants.AlphaName },
-            { new Tuple<string, string>("test", "beta"), PhaseConstants.BetaName },
-            { new Tuple<string, string>("test", "live"), PhaseConstants.LiveName },
-            { new Tuple<string, string>("test", "completed"), PhaseConstants.CompletedName }
+            { new Tuple<string, string>("test", $"{ViewKeyPrefix.Phase}0"), PhaseConstants.BacklogName },
+            { new Tuple<string, string>("test", $"{ViewKeyPrefix.Phase}1"), PhaseConstants.DiscoveryName },
+            { new Tuple<string, string>("test", $"{ViewKeyPrefix.Phase}2"), PhaseConstants.AlphaName },
+            { new Tuple<string, string>("test", $"{ViewKeyPrefix.Phase}3"), PhaseConstants.BetaName },
+            { new Tuple<string, string>("test", $"{ViewKeyPrefix.Phase}4"), PhaseConstants.LiveName },
+            { new Tuple<string, string>("test", $"{ViewKeyPrefix.Phase}5"), PhaseConstants.CompletedName }
 
         };
         public static readonly Dictionary<string, string> onholdMap = new Dictionary<string, string>()
         {
-            { "n", OnHoldConstants.NoName },
-            { "y", OnHoldConstants.OnHoldName },
-            { "b", OnHoldConstants.BlockedName },
-            { "c", OnHoldConstants.CovidName }
+            { $"{ViewKeyPrefix.Status}0", OnHoldConstants.NoName },
+            { $"{ViewKeyPrefix.Status}1", OnHoldConstants.OnHoldName },
+            { $"{ViewKeyPrefix.Status}2", OnHoldConstants.BlockedName },
+            { $"{ViewKeyPrefix.Status}3", OnHoldConstants.CovidName }
         };
+
         public static readonly Dictionary<string, Tuple<string, int>> ragMap = new Dictionary<string, Tuple<string, int>>()
         {
             { RagConstants.NoneViewKey, new Tuple<string, int>(RagConstants.NoneName, 0) },
@@ -70,41 +114,43 @@ namespace FSAPortfolio.WebAPI.App.Sync
         };
         public static readonly Dictionary<Tuple<string, string>, string> categoryMap = new Dictionary<Tuple<string, string>, string>()
         {
-            { new Tuple<string, string>("odd", "data"), CategoryConstants.DataName },
-            { new Tuple<string, string>("odd", "cap"), CategoryConstants.CapabilityName },
-            { new Tuple<string, string>("odd", "ser"), CategoryConstants.SupportName },
-            { new Tuple<string, string>("odd", "it"), CategoryConstants.ITName },
-            { new Tuple<string, string>("odd", "res"), CategoryConstants.ResilienceName },
-            { new Tuple<string, string>("odd", "sm"), CategoryConstants.ServiceMgmtName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}0"), CategoryConstants.CapabilityName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}1"), CategoryConstants.DataName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}2"), CategoryConstants.ServiceMgmtName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}3"), CategoryConstants.SupportName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}4"), CategoryConstants.ITName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}5"), CategoryConstants.ResilienceName },
 
-            { new Tuple<string, string>("serd", "cap"), "Best regulator"},
-            { new Tuple<string, string>("serd", "data"), "Food hypersensitivity"},
-            { new Tuple<string, string>("serd", "sm"), "Foodborne disease"},
-            { new Tuple<string, string>("serd", "ser"), "Chemical contaminants"},
-            { new Tuple<string, string>("serd", "it"), "Novel food and processes"},
-            { new Tuple<string, string>("serd", "res"), "Antimicrobial resistance"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}0"), "Best regulator"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}1"), "Food hypersensitivity"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}2"), "Foodborne disease"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}3"), "Chemical contaminants"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}4"), "Novel food and processes"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}5"), "Antimicrobial resistance"},
 
-            { new Tuple<string, string>("abc","cap"), "Category / Swimlane 1"},
-            { new Tuple<string, string>("abc","data"), "Category / Swimlane 2"},
-            { new Tuple<string, string>("abc","sm"), "Category / Swimlane 3"},
-            { new Tuple<string, string>("abc","ser"), "Category / Swimlane 4"},
-            { new Tuple<string, string>("abc","it"), "Category / Swimlane 5"},
-            { new Tuple<string, string>("abc","res"), "Category / Swimlane 6"}
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}0"), "Category / Swimlane 1"},
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}1"), "Category / Swimlane 2"},
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}2"), "Category / Swimlane 3"},
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}3"), "Category / Swimlane 4"},
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}4"), "Category / Swimlane 5"},
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}5"), "Category / Swimlane 6"}
 
         };
         public static readonly Dictionary<string, string> sizeMap = new Dictionary<string, string>()
         {
-            { "s", ProjectSizeConstants.SmallName },
-            { "m", ProjectSizeConstants.MediumName },
-            { "l", ProjectSizeConstants.LargeName },
-            { "x", ProjectSizeConstants.ExtraLargeName }
+            { $"{ViewKeyPrefix.ProjectSize}0", ProjectSizeConstants.NotSetName },
+            { $"{ViewKeyPrefix.ProjectSize}1", ProjectSizeConstants.SmallName },
+            { $"{ViewKeyPrefix.ProjectSize}2", ProjectSizeConstants.MediumName },
+            { $"{ViewKeyPrefix.ProjectSize}3", ProjectSizeConstants.LargeName },
+            { $"{ViewKeyPrefix.ProjectSize}4", ProjectSizeConstants.ExtraLargeName }
         };
+
         public static readonly Dictionary<string, string> budgetTypeMap = new Dictionary<string, string>()
         {
-            { "none", BudgetTypeConstants.NotSetName },
-            { "admin", BudgetTypeConstants.AdminName },
-            { "progr", BudgetTypeConstants.ProgrammeName },
-            { "capit", BudgetTypeConstants.CapitalName }
+            { $"{ViewKeyPrefix.BudgetType}0", BudgetTypeConstants.NotSetName },
+            { $"{ViewKeyPrefix.BudgetType}1", BudgetTypeConstants.AdminName },
+            { $"{ViewKeyPrefix.BudgetType}2", BudgetTypeConstants.ProgrammeName },
+            { $"{ViewKeyPrefix.BudgetType}3", BudgetTypeConstants.CapitalName }
         };
     }
 }
