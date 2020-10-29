@@ -467,6 +467,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         log.Add($"Destination project is null!");
                     }
                 }
+                else
+                {
+                    log.Add($"Not synching - details count = {projectDetails.Count()}");
+                    synched = true;
+                }
             }
 
             return synched;
