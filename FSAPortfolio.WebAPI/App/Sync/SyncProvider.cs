@@ -462,6 +462,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         log.Add($"Syncing project {projectId} complete.");
                         synched = true;
                     }
+                    else
+                    {
+                        log.Add($"Destination project is null!");
+                    }
                 }
             }
 
@@ -525,14 +529,13 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 if (ame.MemberMap.DestinationName == "Size")
                 {
                     log.Add($"Source project size = {latestSourceUpdate.project_size}");
-                    return null;
                 }
                 else
                 {
                     throw ame;
                 }
             }
-
+            return null;
         }
     }
 }
