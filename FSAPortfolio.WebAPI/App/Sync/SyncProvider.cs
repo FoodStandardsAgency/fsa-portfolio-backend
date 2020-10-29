@@ -387,14 +387,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
         internal bool SyncProject(string projectId, string portfolioShortName = null)
         {
-            log.Add($"Syncing project {projectId}...");
             bool synched = false;
 
             using (var source = new MigratePortfolioContext())
             using (var dest = new PortfolioContext())
             {
                 var sourceProjectItems = source.projects.Where(p => p.project_id == projectId);
-                log.Add($"{sourceProjectItems.Count()} project items");
 
                 var projectDetails = from pi in sourceProjectItems
                                      group pi by new
@@ -457,23 +455,27 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                     if (destProject != null)
                     {
-                        log.Add($"Syncing updates...");
                         SyncUpdates(dest, sourceProjectDetail, destProject);
-                        log.Add($"Syncing project {projectId} complete.");
+                        log.Add($"{projectId} Ok.");
                         synched = true;
                     }
                     else
                     {
-                        log.Add($"Destination project is null!");
+                        logFailure(projectId, "Destination project is null!");
                     }
                 }
                 else
                 {
-                    log.Add($"Not synching - details count = {projectDetails.Count()}");
+                    logFailure(projectId, "details count = {projectDetails.Count()}");
                 }
             }
 
             return synched;
+        }
+
+        private void logFailure(string projectId, string message)
+        {
+            log.Add($"{projectId} FAIL! {message}"); ;
         }
 
         private void SyncUpdates(PortfolioContext dest, IGrouping<object, project> sourceProjectDetail, Project destProject)
@@ -532,11 +534,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
             {
                 if (ame.MemberMap.DestinationName == "Size")
                 {
-                    log.Add($"Source project size = {latestSourceUpdate.project_size}");
+                    log.Add($"MAPPING ERROR: Source project size = {latestSourceUpdate.project_size}");
                 }
                 else
                 {
-                    throw ame;
+                    log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}");
                 }
             }
             return null;

@@ -18,6 +18,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         public static readonly Dictionary<string, string> sizeKeyMap = new Dictionary<string, string>()
         {
             { string.Empty, $"{ViewKeyPrefix.ProjectSize}0" },
+            { "o", $"{ViewKeyPrefix.ProjectSize}0" },
             { "s", $"{ViewKeyPrefix.ProjectSize}1" },
             { "m", $"{ViewKeyPrefix.ProjectSize}2" },
             { "l", $"{ViewKeyPrefix.ProjectSize}3" },
