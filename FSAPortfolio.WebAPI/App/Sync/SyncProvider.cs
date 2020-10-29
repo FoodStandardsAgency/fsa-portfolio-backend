@@ -457,6 +457,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                     if (destProject != null)
                     {
+                        log.Add($"Syncing updates...");
                         SyncUpdates(dest, sourceProjectDetail, destProject);
                         log.Add($"Syncing project {projectId} complete.");
                         synched = true;
