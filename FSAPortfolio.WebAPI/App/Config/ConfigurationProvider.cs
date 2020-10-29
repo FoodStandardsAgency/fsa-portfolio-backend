@@ -21,8 +21,58 @@ namespace FSAPortfolio.WebAPI.App.Config
             this.context = context;
         }
 
-        // TODO: add audit log for this - especially if going from 5 to 3
-        public async Task UpdateRAGStatusOptions(PortfolioConfiguration config)
+        internal async Task UpdateCollections(PortfolioConfiguration config)
+        {
+            await UpdateRAGStatusOptions(config);
+            //UpdateCategoryOptions(config);
+
+            UpdateProjectOptions(
+                config,
+                nameof(ProjectModel.category),
+                context.Projects.Select(p => p.Category).Union(context.Projects.SelectMany(p => p.Subcategories)),
+                config.Categories,
+                context.ProjectCategories,
+                "categories",
+                "project category or subcategory",
+                "cat"
+                );
+            UpdateProjectOptions(
+                config,
+                nameof(ProjectModel.phase),
+                context.ProjectUpdates.Select(p => p.Phase),
+                config.Phases,
+                context.ProjectPhases,
+                "phases",
+                "project phase",
+                "phase"
+                );
+            UpdateProjectOptions(
+                config,
+                nameof(ProjectModel.onhold),
+                context.ProjectUpdates.Select(p => p.OnHoldStatus),
+                config.OnHoldStatuses,
+                context.ProjectOnHoldStatuses,
+                "statuses",
+                "project status",
+                "status"
+                );
+            UpdateProjectOptions(
+                config,
+                nameof(ProjectModel.project_size),
+                context.Projects.Select(p => p.Size),
+                config.ProjectSizes,
+                context.ProjectSizes,
+                "sizes",
+                "project size",
+                "size"
+                );
+
+
+            await context.SaveChangesAsync();
+
+        }
+
+        private async Task UpdateRAGStatusOptions(PortfolioConfiguration config)
         {
             var labelConfig = config.Labels.Single(l => l.FieldName == nameof(ProjectModel.rag));
             int options = int.Parse(labelConfig.FieldOptions);
@@ -61,9 +111,192 @@ namespace FSAPortfolio.WebAPI.App.Config
                         throw new ArgumentOutOfRangeException($"The label configuration for fieldname=[{nameof(ProjectModel.rag)}] has an unrecognised value. Should be 3 or 5.");
                 }
 
-                await context.SaveChangesAsync();
             }
 
         }
+
+        private void UpdateCategoryOptions(PortfolioConfiguration config)
+        {
+            var labelConfig = config.Labels.Single(l => l.FieldName == nameof(ProjectModel.category));
+            var categoryNames = labelConfig.FieldOptions
+                .Split(',')
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Select(n => n.Trim())
+                .ToArray();
+
+            var categoriesQuery = context.Projects.Select(p => p.Category).Union(context.Projects.SelectMany(p => p.Subcategories));
+
+            // If the category has no matching name, check the category has no projects assigned and then delete it
+            var unmatchedCategoriesQuery =
+                // Get categories that don't have a match in the new list
+                from category in config.Categories
+                join name in categoryNames on category.Name equals name into names
+                from name in names.DefaultIfEmpty()
+                where name == null
+                select category;
+
+            // Join this to all uses of the resulting categories
+            var unableToDeleteQuery =
+                from category in unmatchedCategoriesQuery
+                join projectCategory in categoriesQuery on category.Id equals projectCategory.Id into projectCategories
+                from projectCategory in projectCategories
+                group projectCategory by category into projects
+                select new { category = projects.Key, projectCount = projects.Count() };
+
+            var unableToDelete = unableToDeleteQuery.ToList();
+            if(unableToDelete.Count > 0)
+            {
+                // Can't do this update while the categories are assigned to projects
+                Func<string, int, string> categoryError = (n, c) => {
+                    return c == 1 ?
+                    $"[{n}] is used as a project category or subcategory ({c} occurrence)" :
+                    $"[{n}] is used as a project category or subcategory ({c} occurrences)";
+                };
+                throw new PortfolioConfigurationException($"Can't update categories: {string.Join("; ", unableToDelete.Select(c => categoryError(c.category.Name, c.projectCount)))}");
+            }
+            else
+            {
+                var unmatchedCategories = unmatchedCategoriesQuery.ToList();
+                foreach (var category in unmatchedCategories)
+                {
+                    config.Categories.Remove(category);
+                    context.ProjectCategories.Remove(category);
+                }
+            }
+
+            // If name has no matching category, add a category
+            var matchedNamesQuery =
+                from name in categoryNames
+                join category in config.Categories on name equals category.Name into categories
+                from category in categories.DefaultIfEmpty()
+                select new { name, category };
+            var matchedNames = matchedNamesQuery.ToList();
+            int viewKey = 0;
+
+            config.Categories.Clear();
+            for (int i = 0; i < matchedNames.Count(); i++)
+            {
+                var match = matchedNames.ElementAt(i);
+                ProjectCategory category = match.category;
+                if (match.category == null)
+                {
+                    category = new ProjectCategory() { Name = match.name };
+                }
+
+                // Assign next viewkey
+                while (matchedNames.Any(m => m.category.Order == viewKey)) viewKey++;
+
+                category.Order = i;
+                category.ViewKey = viewKey++.ToString();
+                config.Categories.Add(category);
+            }
+        }
+
+        private void UpdateProjectOptions<T>(
+            PortfolioConfiguration config,
+            string fieldName,
+            IQueryable<T> existingQuery,
+            ICollection<T> optionCollection,
+            DbSet<T> dbSet,
+            string collectionDescription,
+            string optionDescription,
+            string viewKeyPrefix
+            ) where T : class, IProjectOption, new()
+        {
+            var labelConfig = config.Labels.Single(l => l.FieldName == fieldName);
+            var optionNames = labelConfig.FieldOptions
+                .Split(',')
+                .Where(n => !string.IsNullOrWhiteSpace(n))
+                .Select(n => n.Trim())
+                .ToArray();
+
+            // If the option has no matching name, check the options has no existing assignments and then delete it
+            var unmatchedOptionsQuery =
+                // Get options that don't have a match in the new list
+                from existingOption in optionCollection
+                join name in optionNames on existingOption.Name equals name into names
+                from name in names.DefaultIfEmpty()
+                where name == null
+                select existingOption;
+
+            var unableToDeleteQuery =
+                // Join this to all uses of the option
+                from option in unmatchedOptionsQuery
+                join existingOption in existingQuery on option.Id equals existingOption.Id into usedOptions
+                from usedOption in usedOptions
+                group usedOption by option into options
+                select new { category = options.Key, projectCount = options.Count() };
+
+            var unableToDelete = unableToDeleteQuery.ToList();
+            if (unableToDelete.Count > 0)
+            {
+                // Can't do this update while the categories are assigned to projects
+                Func<string, int, string> categoryError = (n, c) => {
+                    return c == 1 ?
+                    $"[{n}] is used as a {optionDescription} ({c} occurrence)" :
+                    $"[{n}] is used as a {optionDescription} ({c} occurrences)";
+                };
+                throw new PortfolioConfigurationException($"Can't update {collectionDescription}: {string.Join("; ", unableToDelete.Select(c => categoryError(c.category.Name, c.projectCount)))}");
+            }
+            else
+            {
+                var unmatchedOptions = unmatchedOptionsQuery.ToList();
+                foreach (var option in unmatchedOptions)
+                {
+                    optionCollection.Remove(option);
+                    dbSet.Remove(option);
+                }
+            }
+
+            // If name has no matching option, add a option
+            var matchedNamesQuery =
+                from name in optionNames
+                join option in optionCollection on name equals option.Name into options
+                from option in options.DefaultIfEmpty()
+                select new { name, option };
+            var matchedNames = matchedNamesQuery.ToList();
+            int viewKey = 0;
+
+            if (fieldName == nameof(ProjectModel.phase))
+            {
+                // Write over the existing elements - add any new ones
+                for (int i = 0; i < matchedNames.Count(); i++)
+                {
+                    var match = matchedNames.ElementAt(i);
+                    T option = optionCollection.ElementAtOrDefault(i);
+                    if (match.option == null)
+                    {
+                        option = new T();
+                        optionCollection.Add(option);
+                    }
+                    option.Name = match.name;
+                    option.Order = i;
+                    option.ViewKey = $"{viewKeyPrefix}{i}";
+                    optionCollection.Add(option);
+                }
+            }
+            else
+            {
+                optionCollection.Clear();
+                for (int i = 0; i < matchedNames.Count(); i++)
+                {
+                    var match = matchedNames.ElementAt(i);
+                    T option = match.option;
+                    if (match.option == null)
+                    {
+                        option = new T() { Name = match.name };
+                    }
+
+                    // Assign next viewkey
+                    while (matchedNames.Any(m => m.option?.Order == viewKey)) viewKey++;
+
+                    option.Order = i;
+                    option.ViewKey = $"{viewKeyPrefix}{viewKey++}";
+                    optionCollection.Add(option);
+                }
+            }
+        }
+
+
     }
 }
