@@ -8,7 +8,7 @@ namespace FSAPortfolio.Entities.Projects
 {
     public static class PhaseConstants
     {
-        public const int MaxCount = 5;
+        public const int MaxCount = 6;
         public static string BacklogName = ConfigurationManager.AppSettings["Phase.Backlog.Name"] ?? "Backlog";
         public static string DiscoveryName = ConfigurationManager.AppSettings["Phase.Discovery.Name"] ?? "Discovery";
         public static string AlphaName = ConfigurationManager.AppSettings["Phase.Alpha.Name"] ?? "Alpha";

@@ -59,9 +59,13 @@ namespace FSAPortfolio.WebAPI.Controllers
 
                 }
             }
-            catch (Exception e)
+            catch(PortfolioConfigurationException pce)
             {
-                throw e;
+                var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
+                {
+                    ReasonPhrase = pce.Message
+                };
+                throw new HttpResponseException(resp);
             }
         }
 
