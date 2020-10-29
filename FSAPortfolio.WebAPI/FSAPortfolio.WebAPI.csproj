@@ -131,6 +131,7 @@
   <ItemGroup>
     <Compile Include="App\AuditProvider.cs" />
     <Compile Include="App\Config\ConfigurationProvider.cs" />
+    <Compile Include="App\Config\PortfolioConfigurationException.cs" />
     <Compile Include="App\PortfolioExtensions.cs" />
     <Compile Include="App\ConfigurationExtensions.cs" />
     <Compile Include="App\ProjectQueryExtensions.cs" />
@@ -153,8 +154,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Mapping\Organisation\CategoryMappingProfile.cs" />
+    <Compile Include="Mapping\Organisation\Resolvers\OutboundLabelInputValueResolver.cs" />
     <Compile Include="Mapping\Organisation\PortfolioMappingProfile.cs" />
-    <Compile Include="Mapping\PortfolioConfigUpdateProfile.cs" />
+    <Compile Include="Mapping\Organisation\PortfolioConfigUpdateProfile.cs" />
     <Compile Include="Mapping\PortfolioMapper.cs" />
     <Compile Include="Mapping\Organisation\PortfolioConfigurationMappingProfile.cs" />
     <Compile Include="Mapping\Projects\PostgresProjectMappingProfile.cs" />

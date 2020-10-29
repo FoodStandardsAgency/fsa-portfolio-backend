@@ -50,10 +50,12 @@ namespace FSAPortfolio.WebAPI.Controllers
                         context.PortfolioConfigAuditLogs, 
                         DateTime.Now);
 
+                    // Map the collections here: don't do this in mapping because can't use async in resolvers
+                    var configProvider = new ConfigurationProvider(context);
+                    await configProvider.UpdateCollections(config);
+
                     await context.SaveChangesAsync();
 
-                    var configProvider = new ConfigurationProvider(context);
-                    await configProvider.UpdateRAGStatusOptions(config);
 
                 }
             }

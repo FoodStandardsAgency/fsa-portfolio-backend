@@ -28,6 +28,5 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(c => c.LabelGroups)
                 ;
         }
-
     }
 }
