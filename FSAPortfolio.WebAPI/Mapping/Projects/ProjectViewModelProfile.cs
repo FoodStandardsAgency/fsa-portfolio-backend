@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.WebAPI.Mapping.Projects.Resolvers;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Linq;

@@ -18,6 +18,7 @@ using FSAPortfolio.WebAPI.App.Projects;
 using FSAPortfolio.WebAPI.Mapping.Projects;
 using FSAPortfolio.Entities.Organisation;
 using System.Linq.Expressions;
+using AutoMapper;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -27,48 +28,61 @@ namespace FSAPortfolio.WebAPI.Controllers
         [HttpPost]
         public async Task Post([FromBody] ProjectUpdateModel update)
         {
-            using (var context = new PortfolioContext())
+            try
             {
-                // Load and map the project
-                var provider = new ProjectProvider(context, update.project_id);
-                var reservation = await provider.GetProjectReservationAsync();
-                if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
-                else
+                using (var context = new PortfolioContext())
                 {
-                    var project = reservation?.Project;
-                    if (project == null)
+                    // Load and map the project
+                    var provider = new ProjectProvider(context, update.project_id);
+                    var reservation = await provider.GetProjectReservationAsync();
+                    if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+                    else
                     {
-                        project = provider.CreateNewProject(reservation);
-                    }
-                    PortfolioMapper.ProjectMapper.Map(update, project, opt =>
-                    {
-                        opt.Items[nameof(PortfolioContext)] = context;
-                    });
-                    if (project.AuditLogs != null) provider.LogAuditChanges(project);
-                    await context.SaveChangesAsync();
+                        var project = reservation?.Project;
+                        if (project == null)
+                        {
+                            project = provider.CreateNewProject(reservation);
+                        }
+                        PortfolioMapper.ProjectMapper.Map(update, project, opt =>
+                        {
+                            opt.Items[nameof(PortfolioContext)] = context;
+                        });
+                        if (project.AuditLogs != null) provider.LogAuditChanges(project);
+                        await context.SaveChangesAsync();
 
-                    // Get the last update and create a new one if necessary
-                    ProjectUpdateItem lastUpdate = project.LatestUpdate;
-                    ProjectUpdateItem projectUpdate = lastUpdate;
-                    if (projectUpdate == null || projectUpdate.Timestamp.Date != DateTime.Today)
-                    {
-                        // Create a new update
-                        projectUpdate = new ProjectUpdateItem() { Project = project };
-                    }
+                        // Get the last update and create a new one if necessary
+                        ProjectUpdateItem lastUpdate = project.LatestUpdate;
+                        ProjectUpdateItem projectUpdate = lastUpdate;
+                        if (projectUpdate == null || projectUpdate.Timestamp.Date != DateTime.Today)
+                        {
+                            // Create a new update
+                            projectUpdate = new ProjectUpdateItem() { Project = project };
+                        }
 
-                    // Map the data to the update and add if not a duplicate
-                    PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[nameof(PortfolioContext)] = context);
-                    if (!projectUpdate.IsDuplicate(lastUpdate))
-                    {
-                        project.Updates.Add(projectUpdate);
-                        project.LatestUpdate = projectUpdate;
-                        project.LatestUpdate.Timestamp = DateTime.Now;
-                    }
+                        // Map the data to the update and add if not a duplicate
+                        PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[nameof(PortfolioContext)] = context);
+                        if (!projectUpdate.IsDuplicate(lastUpdate))
+                        {
+                            project.Updates.Add(projectUpdate);
+                            project.LatestUpdate = projectUpdate;
+                            project.LatestUpdate.Timestamp = DateTime.Now;
+                        }
 
-                    // Save
-                    await context.SaveChangesAsync();
+                        // Save
+                        await context.SaveChangesAsync();
+                    }
                 }
-
+            }
+            catch(AutoMapperMappingException ame)
+            {
+                if(ame.InnerException is FSAPortfolio.WebAPI.App.Config.PortfolioConfigurationException)
+                {
+                    var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
+                    {
+                        ReasonPhrase = ame.InnerException.Message
+                    };
+                    throw new HttpResponseException(resp);
+                }
             }
         }
 

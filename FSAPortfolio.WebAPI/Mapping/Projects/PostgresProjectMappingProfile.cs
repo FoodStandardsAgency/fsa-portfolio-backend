@@ -10,6 +10,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using FSAPortfolio.WebAPI.App.Sync;
+using FSAPortfolio.WebAPI.Mapping.Projects.Resolvers;
 
 namespace FSAPortfolio.WebAPI.Mapping.Projects
 {

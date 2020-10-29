@@ -15,6 +15,7 @@ using System.Web;
 using System.Data.Entity;
 using System.Reflection;
 using Newtonsoft.Json;
+using FSAPortfolio.WebAPI.Mapping.Projects.Resolvers;
 
 namespace FSAPortfolio.WebAPI.Mapping.Projects
 {
@@ -84,6 +85,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             CreateMap<LinkModel, Document>()
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Link, o => o.MapFrom(s => s.Link))
+                .ForMember(p => p.Id, o => o.Ignore())
+                .ForMember(p => p.Order, o => o.Ignore())
                 ;
 
         }
@@ -158,73 +161,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 }
             }
             return result;
-        }
-    }
-
-
-    public class ConfigCategoryResolver : IMemberValueResolver<object, Project, string, ProjectCategory>
-    {
-        public ProjectCategory Resolve(object source, Project destination, string sourceMember, ProjectCategory destMember, ResolutionContext context)
-        {
-            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
-            return destination.Reservation.Portfolio.Configuration.Categories.SingleOrDefault(c => c.ViewKey == sourceMember);
-        }
-    }
-    public class ConfigSubcategoryResolver : IMemberValueResolver<object, Project, string[], ICollection<ProjectCategory>>
-    {
-        public ICollection<ProjectCategory> Resolve(object source, Project destination, string[] sourceMember, ICollection<ProjectCategory> destMember, ResolutionContext context)
-        {
-            ICollection<ProjectCategory> result = null;
-            if (sourceMember != null && sourceMember.Length > 0)
-            {
-                var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
-                result = destination.Reservation.Portfolio.Configuration.Categories.Where(c => sourceMember.Contains(c.ViewKey)).ToList();
-            }
-            return result;
-        }
-    }
-    public class ConfigProjectSizeResolver : IMemberValueResolver<object, Project, string, ProjectSize>
-    {
-        public ProjectSize Resolve(object source, Project destination, string sourceMember, ProjectSize destMember, ResolutionContext context)
-        {
-            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
-            return destination.Reservation.Portfolio.Configuration.ProjectSizes.SingleOrDefault(c => c.ViewKey == sourceMember);
-        }
-    }
-    public class ConfigBudgetTypeResolver : IMemberValueResolver<object, Project, string, BudgetType>
-    {
-        public BudgetType Resolve(object source, Project destination, string sourceMember, BudgetType destMember, ResolutionContext context)
-        {
-            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
-            ICollection<BudgetType> budgetTypes = destination.Reservation.Portfolio.Configuration.BudgetTypes;
-            return
-                budgetTypes.SingleOrDefault(c => c.ViewKey == sourceMember) ??
-                budgetTypes.SingleOrDefault(c => c.ViewKey == BudgetTypeConstants.NotSetViewKey);
-        }
-    }
-
-    public class ConfigRAGStatusResolver : IMemberValueResolver<object, ProjectUpdateItem, string, ProjectRAGStatus>
-    {
-        public ProjectRAGStatus Resolve(object source, ProjectUpdateItem destination, string sourceMember, ProjectRAGStatus destMember, ResolutionContext context)
-        {
-            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
-            return destination.Project.Reservation.Portfolio.Configuration.RAGStatuses.SingleOrDefault(c => c.ViewKey == sourceMember);
-        }
-    }
-    public class ConfigPhaseStatusResolver : IMemberValueResolver<object, ProjectUpdateItem, string, ProjectPhase>
-    {
-        public ProjectPhase Resolve(object source, ProjectUpdateItem destination, string sourceMember, ProjectPhase destMember, ResolutionContext context)
-        {
-            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
-            return destination.Project.Reservation.Portfolio.Configuration.Phases.SingleOrDefault(c => c.ViewKey == sourceMember);
-        }
-    }
-    public class ConfigOnHoldStatusResolver : IMemberValueResolver<object, ProjectUpdateItem, string, ProjectOnHoldStatus>
-    {
-        public ProjectOnHoldStatus Resolve(object source, ProjectUpdateItem destination, string sourceMember, ProjectOnHoldStatus destMember, ResolutionContext context)
-        {
-            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
-            return destination.Project.Reservation.Portfolio.Configuration.OnHoldStatuses.SingleOrDefault(c => c.ViewKey == sourceMember);
         }
     }
 
