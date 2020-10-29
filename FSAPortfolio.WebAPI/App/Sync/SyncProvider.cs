@@ -375,7 +375,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         portfolios.Reset();
                         portfolios.MoveNext();
                     }
-                    SyncProject(id, portfolios.Current);
+                if (!SyncProject(id, portfolios.Current)) break;
                 //}
                 //catch(Exception e)
                 //{
@@ -384,6 +384,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 //}
             }
         }
+
         internal bool SyncProject(string projectId, string portfolioShortName = null)
         {
             log.Add($"Syncing project {projectId}...");
@@ -407,7 +408,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 // Only proceed if have a project with a single name throughout its history
                 if (projectDetails.Count() == 1)
                 {
-                    synched = true;
                     var sourceProjectDetail = projectDetails.Single();
 
                     // First sync the project
@@ -430,13 +430,14 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         var yrStart = pid.Length - 7;
                         destProject = new Project()
                         {
-                            Reservation = new ProjectReservation() {
+                            Reservation = new ProjectReservation()
+                            {
                                 ProjectId = pid,
-                                Year = int.Parse(pid.Substring(yrStart, 2)) + 2000, 
+                                Year = int.Parse(pid.Substring(yrStart, 2)) + 2000,
                                 Month = int.Parse(pid.Substring(yrStart + 2, 2)),
                                 Index = int.Parse(pid.Substring(yrStart + 4)),
                                 ReservedAt = DateTime.Now
-                                },
+                            },
                             Updates = new List<ProjectUpdateItem>(),
                             Portfolios = new List<Portfolio>()
                         };
@@ -452,55 +453,85 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
 
 
-                    mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
+                    destProject = MapProject(dest, sourceProjectDetail, destProject, latestSourceUpdate);
 
-                    destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
-
-
-                    // Now sync the updates
-                    project lastUpdate = null;
-                    foreach (var sourceUpdate in sourceProjectDetail.OrderBy(u => u.timestamp))
+                    if (destProject != null)
                     {
-                        var destUpdate = destProject.Updates.SingleOrDefault(u => u.SyncId == sourceUpdate.id);
-                        if (lastUpdate == null || !lastUpdate.IsDuplicate(sourceUpdate))
-                        {
-                            if (destUpdate == null)
-                            {
-                                destUpdate = new ProjectUpdateItem()
-                                {
-                                    SyncId = sourceUpdate.id,
-                                    Project = destProject
-                                };
-                                destProject.Updates.Add(destUpdate);
-                            }
-                            mapper.Map(sourceUpdate, destUpdate, opt =>
-                            {
-                                opt.Items[nameof(PortfolioContext)] = dest;
-                            });
-                            if (lastUpdate != null && (lastUpdate.update?.Equals(sourceUpdate.update) ?? false))
-                            {
-                                destUpdate.Text = null;
-                            }
-                        }
-                        else
-                        {
-                            if(destUpdate != null) dest.ProjectUpdates.Remove(destUpdate);
-                        }
-                        lastUpdate = sourceUpdate;
+                        SyncUpdates(dest, sourceProjectDetail, destProject);
+                        log.Add($"Syncing project {projectId} complete.");
+                        synched = true;
                     }
-
-                    dest.SaveChanges();
-
-                    // Set the latest update
-                    var updates = destProject.Updates.OrderBy(u => u.Timestamp);
-                    destProject.FirstUpdate = updates.First();
-                    destProject.LatestUpdate = updates.Last();
-                    dest.SaveChanges();
-                    log.Add($"Syncing project {projectId} complete.");
                 }
             }
+
             return synched;
         }
 
+        private void SyncUpdates(PortfolioContext dest, IGrouping<object, project> sourceProjectDetail, Project destProject)
+        {
+            // Now sync the updates
+            project lastUpdate = null;
+            foreach (var sourceUpdate in sourceProjectDetail.OrderBy(u => u.timestamp))
+            {
+                var destUpdate = destProject.Updates.SingleOrDefault(u => u.SyncId == sourceUpdate.id);
+                if (lastUpdate == null || !lastUpdate.IsDuplicate(sourceUpdate))
+                {
+                    if (destUpdate == null)
+                    {
+                        destUpdate = new ProjectUpdateItem()
+                        {
+                            SyncId = sourceUpdate.id,
+                            Project = destProject
+                        };
+                        destProject.Updates.Add(destUpdate);
+                    }
+                    mapper.Map(sourceUpdate, destUpdate, opt =>
+                    {
+                        opt.Items[nameof(PortfolioContext)] = dest;
+                    });
+                    if (lastUpdate != null && (lastUpdate.update?.Equals(sourceUpdate.update) ?? false))
+                    {
+                        destUpdate.Text = null;
+                    }
+                }
+                else
+                {
+                    if (destUpdate != null) dest.ProjectUpdates.Remove(destUpdate);
+                }
+                lastUpdate = sourceUpdate;
+            }
+
+            dest.SaveChanges();
+
+
+            // Set the latest update
+            var updates = destProject.Updates.OrderBy(u => u.Timestamp);
+            destProject.FirstUpdate = updates.First();
+            destProject.LatestUpdate = updates.Last();
+            dest.SaveChanges();
+        }
+
+        private Project MapProject(PortfolioContext dest, IGrouping<object, project> sourceProjectDetail, Project destProject, project latestSourceUpdate)
+        {
+            try
+            {
+                mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
+                destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
+                return destProject;
+            }
+            catch (AutoMapperMappingException ame)
+            {
+                if (ame.MemberMap.DestinationName == "Size")
+                {
+                    log.Add($"Source project size = {latestSourceUpdate.project_size}");
+                    return null;
+                }
+                else
+                {
+                    throw ame;
+                }
+            }
+
+        }
     }
 }
