@@ -232,7 +232,7 @@ namespace FSAPortfolio.WebAPI.App.Config
 
             if (maxOptionCount.HasValue && optionNames.Length > maxOptionCount.Value)
             {
-                throw new PortfolioConfigurationException($"Can't update {collectionDescription}: {optionNames.Length} is over the {optionDescription} limit of {maxOptionCount.Value}.");
+                throw new PortfolioConfigurationException($"Can't update {collectionDescription}: you entered {optionNames.Length} {collectionDescription}; the {optionDescription} limit is {maxOptionCount.Value}.");
             }
 
 
