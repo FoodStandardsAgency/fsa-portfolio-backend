@@ -34,7 +34,7 @@ namespace FSAPortfolio.WebAPI.Models
         public readonly IEnumerable<DropDownItemModel> StrategicObjectives = new DropDownItemModel[] {
             new DropDownItemModel(){ Display = "None", Value = "none", Order = 0 },
             new DropDownItemModel(){ Display = "FSA wide", Value = "fsa", Order = 1 },
-            new DropDownItemModel(){ Display = "Communications", Value = "communcations", Order = 2 }
+            new DropDownItemModel(){ Display = "Communications", Value = "communications", Order = 2 }
         };
 
         [JsonProperty(nameof(ProjectEditViewModel.rels))]

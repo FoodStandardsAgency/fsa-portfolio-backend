@@ -34,7 +34,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Name, o => o.MapFrom(s => s.project_name))
                 .ForMember(p => p.StartDate, o => o.MapFrom(s => s.start_date))
                 .ForMember(p => p.ActualStartDate, o => o.MapFrom(s => s.actstart))
-                .ForMember(p => p.ExpectedEndDate, o => o.MapFrom<EndOfMonthResolver, DateTime?>(s => s.expend))
+                .ForMember(p => p.ExpectedEndDate, o => o.MapFrom(s => s.expend))
                 .ForMember(p => p.HardEndDate, o => o.MapFrom(s => s.hardend))
                 .ForMember(p => p.ActualEndDate, o => o.MapFrom(s => s.actual_end_date))
                 .ForMember(p => p.Description, o => o.MapFrom(s => s.short_desc))
@@ -60,7 +60,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.ProjectData, o => o.MapFrom<ProjectDataInboundResolver>())
 
                 // TODO: outstanding inbound mappings
-                .ForMember(p => p.Documents, o => o.Ignore()) 
+                .ForMember(p => p.Documents, o => o.MapFrom(s => s.documents)) 
 
                  // Ignore these
                 .ForMember(p => p.Portfolios, o => o.Ignore())
@@ -80,6 +80,12 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.FirstUpdate_Id, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate_Id, o => o.Ignore())
             ;
+
+            CreateMap<LinkModel, Document>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Link, o => o.MapFrom(s => s.Link))
+                ;
+
         }
 
         private void ProjectUpdateModel__ProjectUpdateItem()

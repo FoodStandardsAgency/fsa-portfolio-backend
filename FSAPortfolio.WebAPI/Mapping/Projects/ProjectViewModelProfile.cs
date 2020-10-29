@@ -82,7 +82,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.id, o => o.MapFrom(s => s.LatestUpdate.SyncId))
                 .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.ViewKey))
                 .ForMember(p => p.rag, o => o.MapFrom(s => s.LatestUpdate.RAGStatus.ViewKey))
-                .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
+                .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.ViewKey))
                 .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Timestamp.Date == DateTime.Today ? s.LatestUpdate.Text : null))
                 .ForMember(p => p.budget, o => o.MapFrom(s => Convert.ToInt32(s.LatestUpdate.Budget)))
                 .ForMember(p => p.spent, o => o.MapFrom(s => Convert.ToInt32(s.LatestUpdate.Spent)))
@@ -119,6 +119,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.UpdateHistory, o => o.MapFrom<UpdateHistoryResolver>())
                 .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => new RelatedProjectModel() { ProjectId = rp.Reservation.ProjectId, Name = rp.Name })))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects.Select(rp => new RelatedProjectModel() { ProjectId = rp.Reservation.ProjectId, Name = rp.Name })))
+                .ForMember(p => p.category, o => o.MapFrom(s => s.Category.Name))
+                .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.Name))
+                .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
+
                 ;
 
             CreateMap<Project, ProjectEditViewModel>()
