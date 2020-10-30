@@ -73,6 +73,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
         }
         public static void Map(Project source, ProjectModel model)
         {
+            // Project data properties
             foreach(var dataItem in source.ProjectData)
             {
                 PropertyInfo property;
@@ -81,6 +82,15 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
                     property.SetValue(model, JsonConvert.DeserializeObject(dataItem.Value, property.PropertyType));
                 }
             }
+
+            // Unmodelled properties
+            var unmodelledPropertiesQuery = from l in source.Reservation.Portfolio.Configuration.Labels
+                                            where l.Flags.HasFlag(PortfolioFieldFlags.NotModelled)
+                                            join d in source.ProjectData on l.Id equals d.Label_Id into unmd
+                                            from d in unmd.DefaultIfEmpty()
+                                            select new ProjectPropertyModel() { FieldName = l.FieldName, ProjectDataValue = d?.Value };
+
+            model.Properties = unmodelledPropertiesQuery.ToList();
         }
     }
 

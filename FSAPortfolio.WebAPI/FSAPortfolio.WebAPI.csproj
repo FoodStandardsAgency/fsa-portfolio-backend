@@ -168,6 +168,8 @@
     <Compile Include="Mapping\Projects\ProjectUpdateModelProfile.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectOptionsResolvers.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectUpdateItemOptionsResolvers.cs" />
+    <Compile Include="Models\JsonConverters\NonReentrantJsonConverter.cs" />
+    <Compile Include="Models\JsonConverters\ProjectEditViewModelConverter.cs" />
     <Compile Include="Models\PortfolioConfigLabelRequests.cs" />
     <Compile Include="Models\PortfolioConfigModel.cs" />
     <Compile Include="Models\PortfolioConfigUpdateRequest.cs" />

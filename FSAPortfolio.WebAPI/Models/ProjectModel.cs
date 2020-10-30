@@ -89,8 +89,8 @@ namespace FSAPortfolio.WebAPI.Models
         public DateTime? fsaproc_assurance_gatecompleted { get; set; }
         public string fsaproc_assurance_nextgate { get; set; }
 
-        
-
+        [JsonIgnore]
+        public IEnumerable<ProjectPropertyModel> Properties { get; set; }
     }
 
     public class LinkModel
@@ -120,6 +120,10 @@ namespace FSAPortfolio.WebAPI.Models
         public DateTime Timestamp { get; set; }
     }
 
-
+    public class ProjectPropertyModel
+    {
+        public string FieldName { get; set; }
+        public string ProjectDataValue { get; set; }
+    }
 
 }
