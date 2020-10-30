@@ -38,11 +38,14 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
                     var dataItem = dataItems?.SingleOrDefault(i => i.Label.Id == label.Id);
                     if (label.Flags.HasFlag(PortfolioFieldFlags.NotModelled))
                     {
-                        ProjectPropertyModel projectProperty = null;
-                        source.Properties.TryGetValue(label.FieldName, out projectProperty);
-                        if (!string.IsNullOrWhiteSpace(projectProperty?.ProjectDataValue))
+                        if (source.Properties != null)
                         {
-                            dataValue = new ProjectDataItem() { Label = label, Value = projectProperty.ProjectDataValue };
+                            ProjectPropertyModel projectProperty = null;
+                            source.Properties.TryGetValue(label.FieldName, out projectProperty);
+                            if (!string.IsNullOrWhiteSpace(projectProperty?.ProjectDataValue))
+                            {
+                                dataValue = new ProjectDataItem() { Label = label, Value = projectProperty.ProjectDataValue };
+                            }
                         }
                     }
                     else

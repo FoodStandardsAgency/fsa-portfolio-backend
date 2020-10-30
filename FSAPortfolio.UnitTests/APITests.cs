@@ -58,7 +58,7 @@ namespace FSAPortfolio.UnitTests
             // Get the project json and compare with what was sent as an update
             var projectResponse = client.GetAsync($"api/Projects/{project.project_id}/edit").Result;
             Assert.AreEqual(HttpStatusCode.OK, projectResponse.StatusCode);
-            var dto = JsonConvert.DeserializeObject<GetProjectDTO<ProjectUpdateModel>>(projectResponse.Content.ReadAsStringAsync().Result);
+            var dto = JsonConvert.DeserializeObject<GetProjectDTO<ProjectEditViewModel>>(projectResponse.Content.ReadAsStringAsync().Result);
             var updatedProject = dto.Project;
 
             var unmatched = project.GetUnequalProperties(updatedProject,
