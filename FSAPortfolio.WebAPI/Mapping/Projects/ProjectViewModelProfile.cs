@@ -129,6 +129,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             CreateMap<Project, ProjectEditViewModel>()
                 .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => rp.Reservation.ProjectId)))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects.Select(rp => rp.Reservation.ProjectId)))
+                .ForMember(d => d.Properties, o => o.Ignore())
                 .AfterMap<ProjectEditViewModelOutboundMapper>()
                 ;
 

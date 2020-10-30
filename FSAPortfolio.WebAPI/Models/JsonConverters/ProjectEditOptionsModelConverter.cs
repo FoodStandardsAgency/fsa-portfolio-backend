@@ -43,10 +43,7 @@ namespace FSAPortfolio.WebAPI.Models.JsonConverters
         {
             foreach (var p in value.Properties())
             {
-                if (p.Value is JObject)
-                    WriteJson(writer, (JObject)p.Value);
-                else
-                    p.WriteTo(writer);
+                p.WriteTo(writer);
             }
         }
     }
