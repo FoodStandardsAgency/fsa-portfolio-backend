@@ -61,7 +61,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Phase}4"), PhaseConstants.LiveName },
             { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Phase}5"), PhaseConstants.CompletedName },
 
-            // TODO: change the view keys for other portfolios to match labels (can't at moment as it affects syncing)
             { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Phase}0"), "In development" },
             { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Phase}1"), "Awaiting decision" },
             { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Phase}2"), "Waiting to start" },

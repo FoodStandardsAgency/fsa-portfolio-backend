@@ -59,8 +59,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => s.project_size))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => s.budgettype))
                 .ForMember(p => p.ProjectData, o => o.MapFrom<ProjectDataInboundResolver>())
-
-                // TODO: outstanding inbound mappings
                 .ForMember(p => p.Documents, o => o.MapFrom(s => s.documents)) 
 
                  // Ignore these

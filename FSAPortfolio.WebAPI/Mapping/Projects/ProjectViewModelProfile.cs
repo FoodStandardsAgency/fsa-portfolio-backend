@@ -67,6 +67,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives))
                 .ForMember(p => p.programme, o => o.MapFrom(s => s.Programme))
                 .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
+                .ForMember(p => p.documents, o => o.MapFrom(s => s.Documents.OrderBy(d => d.Order)))
 
                 // TODO: add persistence and mappings for outstanding fields
                 // Outstanding
@@ -76,7 +77,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.servicelead, o => o.Ignore())
                 .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
                 .ForMember(p => p.milestones, o => o.Ignore())
-                .ForMember(p => p.documents, o => o.MapFrom(s => s.Documents.OrderBy(d => d.Order)))
                 .ForMember(p => p.link, o => o.Ignore())
 
                 // Latest update and update history
