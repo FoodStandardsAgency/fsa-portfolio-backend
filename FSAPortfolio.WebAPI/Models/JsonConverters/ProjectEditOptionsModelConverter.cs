@@ -28,9 +28,12 @@ namespace FSAPortfolio.WebAPI.Models.JsonConverters
             {
                 foreach (var property in value.ProjectDataOptions)
                 {
-                    writer.WritePropertyName(property.FieldName);
-                    JToken options = JToken.FromObject(property.Options);
-                    options.WriteTo(writer);
+                    if (property.Options != null)
+                    {
+                        writer.WritePropertyName(property.FieldName);
+                        JToken options = JToken.FromObject(property.Options);
+                        options.WriteTo(writer);
+                    }
                 }
             }
             writer.WriteEndObject();

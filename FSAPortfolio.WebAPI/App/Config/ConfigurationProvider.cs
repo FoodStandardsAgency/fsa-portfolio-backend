@@ -279,9 +279,10 @@ namespace FSAPortfolio.WebAPI.App.Config
                 from name in optionNames
                 join option in optionCollection on name equals option.Name into options
                 from option in options.DefaultIfEmpty()
+                orderby option.Order
                 select new { name, option };
             var matchedNames = matchedNamesQuery.ToList();
-            int viewKey = 0;
+            int viewKeyIndex = 0;
 
             if (fieldName == nameof(ProjectModel.phase))
             {
@@ -316,11 +317,16 @@ namespace FSAPortfolio.WebAPI.App.Config
                     }
 
                     // Assign next viewkey
-                    while (matchedNames.Any(m => m.option?.Order == viewKey)) viewKey++;
+                    do
+                    {
+                        option.ViewKey = $"{viewKeyPrefix}{viewKeyIndex++}";
+                    }
+                    while (matchedNames.Any(m => m.option != option && m.option.ViewKey == option.ViewKey));
 
+                    // Assign order and add to collection
                     option.Order = i;
-                    option.ViewKey = $"{viewKeyPrefix}{viewKey++}";
                     optionCollection.Add(option);
+
                 }
             }
         }

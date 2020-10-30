@@ -22,7 +22,7 @@ namespace FSAPortfolio.WebAPI.Models.JsonConverters
             JObject model = (JObject)FromObject(value, serializer);
 
             writer.WriteStartObject();
-            WriteJson(writer, model);
+            WritePropertiesJson(writer, model);
 
             if (value.Properties != null)
             {
@@ -35,14 +35,11 @@ namespace FSAPortfolio.WebAPI.Models.JsonConverters
             writer.WriteEndObject();
         }
 
-        private void WriteJson(JsonWriter writer, JObject value)
+        private void WritePropertiesJson(JsonWriter writer, JObject value)
         {
             foreach (var p in value.Properties())
             {
-                if (p.Value is JObject)
-                    WriteJson(writer, (JObject)p.Value);
-                else
-                    p.WriteTo(writer);
+                p.WriteTo(writer);
             }
         }
     }

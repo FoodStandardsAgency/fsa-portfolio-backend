@@ -11,7 +11,7 @@ using System.Web;
 namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
 {
     public abstract class BaseProjectOptionResolver<T> : IMemberValueResolver<object, Project, string, T>
-        where T : class, new()
+        where T : class, IProjectOption, new()
     {
         private string option;
 
@@ -25,7 +25,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
             T result = null;
             if (!string.IsNullOrWhiteSpace(sourceMember))
             {
-                result = GetOption(destination, sourceMember);
+                result =  sourceMember == destMember?.ViewKey ? destMember : GetOption(destination, sourceMember);
                 if (result == null) throw new PortfolioConfigurationException($"Unrecognised {option} key [{sourceMember}]");
             }
             return result;

@@ -171,7 +171,6 @@
     <Compile Include="Mapping\Projects\Resolvers\ProjectUpdateItemOptionsResolvers.cs" />
     <Compile Include="Models\JsonConverters\NonReentrantJsonConverter.cs" />
     <Compile Include="Models\JsonConverters\ProjectEditOptionsModelConverter.cs" />
-    <Compile Include="Models\JsonConverters\ProjectUpdateModelConverter.cs" />
     <Compile Include="Models\JsonConverters\ProjectEditViewModelConverter.cs" />
     <Compile Include="Models\PortfolioConfigLabelRequests.cs" />
     <Compile Include="Models\PortfolioConfigModel.cs" />

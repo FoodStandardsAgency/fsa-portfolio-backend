@@ -30,6 +30,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
                         dropDownOptions.Options = new LabelDropDownResolver(label.FieldName).Resolve(source, destination, null, context);
                         options.Add(dropDownOptions);
                         break;
+                    case PortfolioFieldType.MultiOptionList:
+                        var selectPickerOptions = new ProjectDataOptionsModel() { FieldName = label.FieldName }; 
+                        selectPickerOptions.Options = new SelectPickerResolver(label.FieldName, $"Select from the list...");
+                        options.Add(selectPickerOptions);
+                        break;
                 }
             }
             destination.ProjectDataOptions = options;

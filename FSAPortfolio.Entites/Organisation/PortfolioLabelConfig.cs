@@ -24,7 +24,7 @@ namespace FSAPortfolio.Entities.Organisation
         OptionList = 30, // Editable option lists
         MultiOptionList = 31,
 
-        PredefinedList = 41, // Predefined option lists
+        PredefinedList = 41, // Predefined option lists (these can't be unmodelled because don't know where to get the options if they are predefined!)
         PredefinedMultiList = 42,
         PredefinedSearchableList = 43,
         PredefinedField = 44,
