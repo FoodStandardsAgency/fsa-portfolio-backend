@@ -8,28 +8,29 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.Models.JsonConverters
 {
-    public class ProjectEditViewModelConverter : NonReentrantJsonConverter<ProjectEditViewModel>
+    public class ProjectEditOptionsModelConverter : NonReentrantJsonConverter<ProjectEditOptionsModel>
     {
         public override bool CanRead => false;
 
-        public override ProjectEditViewModel ReadJson(JsonReader reader, Type objectType, ProjectEditViewModel existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override ProjectEditOptionsModel ReadJson(JsonReader reader, Type objectType, ProjectEditOptionsModel existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             throw new NotImplementedException();
         }
 
-        public override void WriteJson(JsonWriter writer, ProjectEditViewModel value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, ProjectEditOptionsModel value, JsonSerializer serializer)
         {
             JObject model = (JObject)FromObject(value, serializer);
 
             writer.WriteStartObject();
             WriteJson(writer, model);
 
-            if (value.Properties != null)
+            if (value.ProjectDataOptions != null)
             {
-                foreach (var property in value.Properties)
+                foreach (var property in value.ProjectDataOptions)
                 {
                     writer.WritePropertyName(property.FieldName);
-                    writer.WriteValue(property.ProjectDataValue);
+                    JToken options = JToken.FromObject(property.Options);
+                    options.WriteTo(writer);
                 }
             }
             writer.WriteEndObject();

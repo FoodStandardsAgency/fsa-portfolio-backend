@@ -30,7 +30,7 @@ namespace FSAPortfolio.WebAPI.Mapping
                 cfg.AddProfile<ProjectViewModelProfile>();
                 cfg.AddProfile<ProjectUpdateModelProfile>();
                 cfg.AddProfile<ProjectQueryModelProfile>();
-                cfg.AddProfile<ProjectOptionsMappingProfile>();
+                cfg.AddProfile<ProjectEditOptionsMappingProfile>();
             });
             ProjectMapper = projectConfig.CreateMapper();
 

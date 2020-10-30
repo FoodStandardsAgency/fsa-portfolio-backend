@@ -1,9 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using FSAPortfolio.WebAPI.Models.JsonConverters;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace FSAPortfolio.WebAPI.Models
 {
-    public class ProjectOptionsModel
+    [JsonConverter(typeof(ProjectEditOptionsModelConverter))]
+    public class ProjectEditOptionsModel
     {
 
         [JsonProperty(nameof(ProjectModel.phase))]
@@ -97,6 +99,9 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.criticality))]
         public IEnumerable<DropDownItemModel> CriticalityItems { get; set; }
 
+        [JsonIgnore]
+        public IEnumerable<ProjectDataOptionsModel> ProjectDataOptions { get; set; }
+
 
     }
 
@@ -125,6 +130,12 @@ namespace FSAPortfolio.WebAPI.Models
     {
         [JsonProperty("tokens")]
         public string SearchTokens { get; set; }
+    }
+
+    public class ProjectDataOptionsModel
+    {
+        public string FieldName { get; set; }
+        public object Options { get; set; }
     }
 
 }

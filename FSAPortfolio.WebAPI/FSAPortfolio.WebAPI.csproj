@@ -164,11 +164,14 @@
     <Compile Include="Mapping\Projects\Resolvers\ProjectDataResolvers.cs" />
     <Compile Include="Mapping\Projects\ProjectQueryModelProfile.cs" />
     <Compile Include="Mapping\Projects\ProjectViewModelProfile.cs" />
-    <Compile Include="Mapping\Projects\ProjectOptionsMappingProfile.cs" />
+    <Compile Include="Mapping\Projects\ProjectEditOptionsMappingProfile.cs" />
     <Compile Include="Mapping\Projects\ProjectUpdateModelProfile.cs" />
-    <Compile Include="Mapping\Projects\Resolvers\ProjectOptionsResolvers.cs" />
+    <Compile Include="Mapping\Projects\Resolvers\ProjectEditOptionsResolvers.cs" />
+    <Compile Include="Mapping\Projects\Resolvers\ProjectStatusOptionsResolvers.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectUpdateItemOptionsResolvers.cs" />
     <Compile Include="Models\JsonConverters\NonReentrantJsonConverter.cs" />
+    <Compile Include="Models\JsonConverters\ProjectEditOptionsModelConverter.cs" />
+    <Compile Include="Models\JsonConverters\ProjectUpdateModelConverter.cs" />
     <Compile Include="Models\JsonConverters\ProjectEditViewModelConverter.cs" />
     <Compile Include="Models\PortfolioConfigLabelRequests.cs" />
     <Compile Include="Models\PortfolioConfigModel.cs" />
@@ -177,7 +180,7 @@
     <Compile Include="Models\PortfolioSummaryModel.cs" />
     <Compile Include="Models\ProjectLabelConfigModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
-    <Compile Include="Models\ProjectOptionsModel.cs" />
+    <Compile Include="Models\ProjectEditOptionsModel.cs" />
     <Compile Include="Models\ProjectQueryModel.cs" />
     <Compile Include="Models\ProjectQueryResultProjectModel.cs" />
     <Compile Include="Models\ProjectUpdateModel.cs" />

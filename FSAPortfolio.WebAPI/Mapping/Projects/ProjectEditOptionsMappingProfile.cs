@@ -2,6 +2,7 @@
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.App.Sync;
+using FSAPortfolio.WebAPI.Mapping.Projects.Resolvers;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,13 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.Mapping.Projects
 {
-    public class ProjectOptionsMappingProfile : Profile
+    public class ProjectEditOptionsMappingProfile : Profile
     {
-        public ProjectOptionsMappingProfile()
+        public ProjectEditOptionsMappingProfile()
         {
             PortfolioConfiguration_ProjectLabelConfigModel();
 
-            CreateMap<PortfolioConfiguration, ProjectOptionsModel>()
+            CreateMap<PortfolioConfiguration, ProjectEditOptionsModel>()
                 .ForMember(d => d.PhaseItems, o => o.MapFrom(config => config.Phases.OrderBy(p => p.Order)))
                 .ForMember(d => d.RAGStatusItems, o => o.MapFrom(config => config.RAGStatuses.OrderBy(p => p.Order)))
                 .ForMember(d => d.OnHoldStatusItems, o => o.MapFrom(config => config.OnHoldStatuses.OrderBy(p => p.Order)))
@@ -45,6 +46,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.PrioritiesItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.priorities))))
                 .ForMember(d => d.BenefitItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.benefits))))
                 .ForMember(d => d.CriticalityItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.criticality))))
+                .AfterMap<ProjectDataOptionsOutboundMapper>()
                 ;
 
 
@@ -103,7 +105,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
-    public class LabelDropDownResolver : IValueResolver<PortfolioConfiguration, ProjectOptionsModel, IEnumerable<DropDownItemModel>>
+    public class LabelDropDownResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, IEnumerable<DropDownItemModel>>
     {
         private string fieldName;
 
@@ -112,7 +114,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             this.fieldName = fieldName;
         }
 
-        public IEnumerable<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectOptionsModel destination, IEnumerable<DropDownItemModel> destMember, ResolutionContext context)
+        public IEnumerable<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, IEnumerable<DropDownItemModel> destMember, ResolutionContext context)
         {
             IEnumerable<DropDownItemModel> items = null;
             var label = source.Labels.SingleOrDefault(l => l.FieldName == fieldName);
@@ -128,7 +130,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
-    public class SelectPickerResolver : IValueResolver<PortfolioConfiguration, ProjectOptionsModel, SelectPickerModel>
+    public class SelectPickerResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, SelectPickerModel>
     {
         private string fieldName;
         private string header;
@@ -139,7 +141,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             this.header = header;
         }
 
-        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
+        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
         {
             SelectPickerModel model = null;
             var label = source.Labels.SingleOrDefault(l => l.FieldName == fieldName);
@@ -158,7 +160,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     }
 
     // TODO: implement resolver using AD integration
-    public class StubPersonResolver : IValueResolver<PortfolioConfiguration, ProjectOptionsModel, SelectPickerModel>
+    public class StubPersonResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, SelectPickerModel>
     {
         private string fieldName;
         private bool addNoneOption;
@@ -169,7 +171,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             this.addNoneOption = addNoneOption;
         }
 
-        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
+        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
         {
             SelectPickerModel model = addNoneOption ? new SelectPickerModel()
             {
@@ -197,7 +199,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     }
 
     // TODO: implement resolver using AD integration
-    public class StubRoleResolver : IValueResolver<PortfolioConfiguration, ProjectOptionsModel, SelectPickerModel>
+    public class StubRoleResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, SelectPickerModel>
     {
         private string fieldName;
 
@@ -206,7 +208,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             this.fieldName = fieldName;
         }
 
-        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
+        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
         {
             SelectPickerModel model = new SelectPickerModel()
             {
@@ -224,7 +226,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     }
 
     // TODO: implement resolver using AD integration
-    public class StubTeamResolver : IValueResolver<PortfolioConfiguration, ProjectOptionsModel, SelectPickerModel>
+    public class StubTeamResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, SelectPickerModel>
     {
         private string fieldName;
 
@@ -233,7 +235,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             this.fieldName = fieldName;
         }
 
-        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
+        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
         {
             SelectPickerModel model = model = new SelectPickerModel()
             {

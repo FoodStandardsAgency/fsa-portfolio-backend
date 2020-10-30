@@ -38,7 +38,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 cfg.AddProfile<ProjectViewModelProfile>();
                 cfg.AddProfile<ProjectUpdateModelProfile>();
                 cfg.AddProfile<ProjectQueryModelProfile>();
-                cfg.AddProfile<ProjectOptionsMappingProfile>();
+                cfg.AddProfile<ProjectEditOptionsMappingProfile>();
                 cfg.AddProfile<PortfolioConfigurationMappingProfile>();
             });
             mapper = config.CreateMapper();

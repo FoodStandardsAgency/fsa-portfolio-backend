@@ -53,9 +53,9 @@ namespace FSAPortfolio.WebAPI.App.Projects
             return reservation;
         }
 
-        public async Task<ProjectOptionsModel> GetNewProjectOptionsAsync(PortfolioConfiguration config)
+        public async Task<ProjectEditOptionsModel> GetNewProjectOptionsAsync(PortfolioConfiguration config)
         {
-            var options = PortfolioMapper.ProjectMapper.Map<ProjectOptionsModel>(config);
+            var options = PortfolioMapper.ProjectMapper.Map<ProjectEditOptionsModel>(config);
 
             var directorates = await context.Directorates.OrderBy(d => d.Order).Select(d => new DropDownItemModel() { Display = d.Name, Value = d.ViewKey, Order = d.Order }).ToListAsync();
             directorates.Insert(0, new DropDownItemModel() { Display = "None", Value = "", Order = 0 });
