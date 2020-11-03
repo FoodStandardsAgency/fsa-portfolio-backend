@@ -194,11 +194,17 @@
                         ActualEndDate = c.DateTime(),
                         LatestUpdate_Id = c.Int(),
                         FirstUpdate_Id = c.Int(),
+                        KeyContact1_Id = c.Int(),
+                        KeyContact2_Id = c.Int(),
+                        KeyContact3_Id = c.Int(),
                     })
                 .PrimaryKey(t => t.ProjectReservation_Id)
                 .ForeignKey("dbo.BudgetTypes", t => t.BudgetType_Id)
                 .ForeignKey("dbo.ProjectCategories", t => t.ProjectCategory_Id)
                 .ForeignKey("dbo.ProjectUpdateItems", t => t.FirstUpdate_Id)
+                .ForeignKey("dbo.People", t => t.KeyContact1_Id)
+                .ForeignKey("dbo.People", t => t.KeyContact2_Id)
+                .ForeignKey("dbo.People", t => t.KeyContact3_Id)
                 .ForeignKey("dbo.ProjectUpdateItems", t => t.LatestUpdate_Id)
                 .ForeignKey("dbo.People", t => t.Lead_Id)
                 .ForeignKey("dbo.ProjectReservations", t => t.ProjectReservation_Id)
@@ -211,7 +217,10 @@
                 .Index(t => t.Lead_Id)
                 .Index(t => t.ServiceLead_Id)
                 .Index(t => t.LatestUpdate_Id)
-                .Index(t => t.FirstUpdate_Id);
+                .Index(t => t.FirstUpdate_Id)
+                .Index(t => t.KeyContact1_Id)
+                .Index(t => t.KeyContact2_Id)
+                .Index(t => t.KeyContact3_Id);
             
             CreateTable(
                 "dbo.ProjectAuditLogs",
@@ -276,7 +285,7 @@
                         Firstname = c.String(maxLength: 250),
                         Email = c.String(maxLength: 250),
                         G6team = c.String(maxLength: 50),
-                        ActiveDirectoryPrincipleName = c.String(maxLength: 150),
+                        ActiveDirectoryPrincipalName = c.String(maxLength: 150),
                         ActiveDirectoryId = c.String(maxLength: 150),
                         Department = c.String(maxLength: 150),
                         Timestamp = c.DateTime(nullable: false),
@@ -459,6 +468,9 @@
             DropForeignKey("dbo.ProjectDataItems", "Label_Id", "dbo.PortfolioLabelConfigs");
             DropForeignKey("dbo.Projects", "Lead_Id", "dbo.People");
             DropForeignKey("dbo.Projects", "LatestUpdate_Id", "dbo.ProjectUpdateItems");
+            DropForeignKey("dbo.Projects", "KeyContact3_Id", "dbo.People");
+            DropForeignKey("dbo.Projects", "KeyContact2_Id", "dbo.People");
+            DropForeignKey("dbo.Projects", "KeyContact1_Id", "dbo.People");
             DropForeignKey("dbo.Projects", "FirstUpdate_Id", "dbo.ProjectUpdateItems");
             DropForeignKey("dbo.ProjectUpdateItems", "RAGStatus_Id", "dbo.ProjectRAGStatus");
             DropForeignKey("dbo.ProjectUpdateItems", "Phase_Id", "dbo.ProjectPhases");
@@ -509,6 +521,9 @@
             DropIndex("dbo.ProjectUpdateItems", new[] { "OnHoldStatus_Id" });
             DropIndex("dbo.ProjectUpdateItems", new[] { "Project_Id" });
             DropIndex("dbo.ProjectAuditLogs", new[] { "Project_Id" });
+            DropIndex("dbo.Projects", new[] { "KeyContact3_Id" });
+            DropIndex("dbo.Projects", new[] { "KeyContact2_Id" });
+            DropIndex("dbo.Projects", new[] { "KeyContact1_Id" });
             DropIndex("dbo.Projects", new[] { "FirstUpdate_Id" });
             DropIndex("dbo.Projects", new[] { "LatestUpdate_Id" });
             DropIndex("dbo.Projects", new[] { "ServiceLead_Id" });

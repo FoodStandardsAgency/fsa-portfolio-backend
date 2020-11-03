@@ -56,6 +56,11 @@ namespace FSAPortfolio.WebAPI.Models
         public string new_flag { get; set; }
         public DateTime? first_completed { get; set; }
 
+        public ProjectPersonModel key_contact1 { get; set; }
+        public ProjectPersonModel key_contact2 { get; set; }
+        public ProjectPersonModel key_contact3 { get; set; }
+
+
         // New fields
         public string business_case_number { get; set; }
         public string fs_number { get; set; }
@@ -66,9 +71,6 @@ namespace FSAPortfolio.WebAPI.Models
         public string programme { get; set; }
         public string programme_description { get; set; }
 
-        public string key_contact1 { get; set; }
-        public string key_contact2 { get; set; }
-        public string key_contact3 { get; set; }
         public string supplier { get; set; }
 
         public string milestones { get; set; }

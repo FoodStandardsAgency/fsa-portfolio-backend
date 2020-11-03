@@ -60,6 +60,12 @@ namespace FSAPortfolio.Entities.Projects
 
         public virtual Person Lead { get; set; }
         public int? Lead_Id { get; set; }
+
+
+        public virtual Person KeyContact1 { get; set; }
+        public virtual Person KeyContact2 { get; set; }
+        public virtual Person KeyContact3 { get; set; }
+
         public virtual Person ServiceLead { get; set; }
         public int? ServiceLead_Id { get; set; }
 

@@ -29,6 +29,9 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(r => r.Project.DependantProjects)
                 .Include(r => r.Project.Documents)
                 .Include(r => r.Project.Lead)
+                .Include(r => r.Project.KeyContact1)
+                .Include(r => r.Project.KeyContact2)
+                .Include(r => r.Project.KeyContact3)
                 ;
         }
         public static IQueryable<ProjectReservation> ProjectUpdateIncludes(this IQueryable<ProjectReservation> query)
@@ -68,7 +71,11 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.RelatedProjects)
                 .Include(p => p.DependantProjects)
                 .Include(p => p.Documents)
-                .Include(p => p.Lead);
+                .Include(p => p.Lead)
+                .Include(p => p.KeyContact1)
+                .Include(p => p.KeyContact2)
+                .Include(p => p.KeyContact3)
+                ;
         }
         public static IQueryable<Project> IncludeUpdates(this IQueryable<Project> query)
         {

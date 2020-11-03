@@ -33,7 +33,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.ProjectType, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_type))))
                 .ForMember(d => d.Programme, o => o.MapFrom(new SelectPickerResolver(nameof(ProjectModel.programme), "Select the programmes...")))
 
-                .ForMember(d => d.ODDLead, o => o.MapFrom(new StubPersonResolver(nameof(ProjectUpdateModel.oddlead), addNoneOption: false))) // TODO: do we need these options if using ajax?
+                .ForMember(d => d.ODDLead, o => o.MapFrom(new StubPersonResolver(nameof(ProjectEditViewModel.oddlead), addNoneOption: false))) // TODO: do we need these options if using ajax?
                 .ForMember(d => d.ODDLeadRole, o => o.MapFrom(new StubRoleResolver(nameof(ProjectModel.oddlead_role))))
                 .ForMember(d => d.G6Team, o => o.MapFrom(new StubTeamResolver(nameof(ProjectModel.g6team))))
                 .ForMember(d => d.KeyContact1, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.key_contact1))))

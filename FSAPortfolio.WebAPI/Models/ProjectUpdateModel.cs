@@ -13,8 +13,9 @@ namespace FSAPortfolio.WebAPI.Models
     {
         public string[] rels { get; set; }
         public string[] dependencies { get; set; }
-        public string oddlead { get; set; }
-        public string servicelead { get; set; }
+        public ProjectPersonModel oddlead { get; set; }
+        public ProjectPersonModel servicelead { get; set; }
+
 
 
         [JsonIgnore]
@@ -40,8 +41,9 @@ namespace FSAPortfolio.WebAPI.Models
     [JsonConverter(typeof(ProjectEditViewModelConverter))]
     public class ProjectEditViewModel : ProjectModel
     {
-        public string oddlead { get; set; }
-        public string servicelead { get; set; }
+        public ProjectPersonModel oddlead { get; set; }
+        public ProjectPersonModel servicelead { get; set; }
+
         public string[] rels { get; set; }
         public string[] dependencies { get; set; }
         [JsonIgnore]
@@ -54,5 +56,15 @@ namespace FSAPortfolio.WebAPI.Models
         public string ProjectDataValue { get; set; }
     }
 
+    public class ProjectPersonModel
+    {
+        private string displayName;
+
+        [JsonProperty("text")]
+        public string DisplayName { get; set; }
+
+        [JsonProperty("value")]
+        public string Value { get; set; }
+    }
 
 }

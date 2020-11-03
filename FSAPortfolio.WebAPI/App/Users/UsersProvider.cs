@@ -49,12 +49,6 @@ namespace FSAPortfolio.WebAPI.App.Users
             return users;
         }
 
-        internal async Task MapAsync(ProjectUpdateModel update, Project project)
-        {
-            if (project.Lead?.Email != update.oddlead) project.Lead = await EnsurePersonForPrincipalName(update.oddlead);
-            if (project.ServiceLead?.Email != update.servicelead) project.ServiceLead = await EnsurePersonForPrincipalName(update.servicelead);
-        }
-
         private async Task<AuthenticationResult> AuthenticateAsync()
         {
             IConfidentialClientApplication daemonClient = ConfidentialClientApplicationBuilder.Create(ClientId)
@@ -106,7 +100,7 @@ namespace FSAPortfolio.WebAPI.App.Users
             Person person = null;
             if (!string.IsNullOrWhiteSpace(name))
             {
-                person = context.People.SingleOrDefault(p => p.ActiveDirectoryPrincipleName == name || p.Email == name);
+                person = context.People.SingleOrDefault(p => p.ActiveDirectoryPrincipalName == name || p.Email == name);
                 if (person == null)
                 {
                     var user = await GetUserForPrincipalNameAsync(name);
@@ -124,6 +118,29 @@ namespace FSAPortfolio.WebAPI.App.Users
             }
             return person;
         }
+
+
+        internal async Task MapAsync(ProjectUpdateModel update, Project project)
+        {
+            project.Lead = await EnsureForAsync(update.oddlead, project.Lead);
+            project.ServiceLead = await EnsureForAsync(update.servicelead, project.ServiceLead);
+            project.KeyContact1 = await EnsureForAsync(update.key_contact1, project.KeyContact1);
+            project.KeyContact2 = await EnsureForAsync(update.key_contact2, project.KeyContact2);
+            project.KeyContact3 = await EnsureForAsync(update.key_contact3, project.KeyContact3);
+        }
+
+        private async Task<Person> EnsureForAsync(ProjectPersonModel model, Person currentValue)
+        {
+            Person result = null;
+            if (model?.Value != null)
+            {
+                if (currentValue?.ViewKey != model.Value) result = await EnsurePersonForPrincipalName(model.Value);
+                else result = currentValue;
+            }
+            return result;
+        }
+
+
 
     }
 }

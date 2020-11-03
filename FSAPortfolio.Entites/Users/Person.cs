@@ -24,7 +24,7 @@ namespace FSAPortfolio.Entities.Users
         public string G6team { get; set; }
 
         [StringLength(150)]
-        public string ActiveDirectoryPrincipleName { get; set; }
+        public string ActiveDirectoryPrincipalName { get; set; }
 
         [StringLength(150)]
         public string ActiveDirectoryId { get; set; }
@@ -34,5 +34,29 @@ namespace FSAPortfolio.Entities.Users
 
 
         public DateTime Timestamp { get; set; }
+
+
+        public string DisplayName
+        {
+            get
+            {
+                string result = null;
+                if (!string.IsNullOrWhiteSpace(Firstname) && !string.IsNullOrWhiteSpace(Surname))
+                {
+                    result = $"{Firstname} {Surname}";
+                }
+                else if (!string.IsNullOrWhiteSpace(Email))
+                {
+                    result = Email;
+                }
+                else if (!string.IsNullOrWhiteSpace(ActiveDirectoryPrincipalName))
+                {
+                    result = ActiveDirectoryPrincipalName;
+                }
+                return result;
+            }
+        }
+
+        public string ViewKey => ActiveDirectoryPrincipalName ?? Email;
     }
 }

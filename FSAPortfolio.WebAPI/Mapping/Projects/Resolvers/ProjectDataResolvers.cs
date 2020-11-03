@@ -83,7 +83,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
         }
     }
 
-    public class ProjectModelOutboundMapper : IMappingAction<Project, ProjectModel>
+    public class ProjectModelOutboundMapper<T> : IMappingAction<Project, T>
+        where T : ProjectModel
     {
         /// <summary>
         /// Unmapped <see cref="ProjectModel"/> properties
@@ -91,10 +92,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
         internal static readonly Dictionary<string, PropertyInfo> unmappedProperties;
         static ProjectModelOutboundMapper()
         {
-            var unmappedToProject = PortfolioMapper.GetUnmappedDestinationMembers<Project, ProjectModel>(PortfolioMapper.projectConfig);
+            var unmappedToProject = PortfolioMapper.GetUnmappedDestinationMembers<Project, T>(PortfolioMapper.projectConfig);
             unmappedProperties = unmappedToProject.ToDictionary(p => p.Name);
         }
-        public void Process(Project source, ProjectModel destination, ResolutionContext context)
+        public void Process(Project source, T destination, ResolutionContext context)
         {
             // Project data properties
             foreach (var dataItem in source.ProjectData)

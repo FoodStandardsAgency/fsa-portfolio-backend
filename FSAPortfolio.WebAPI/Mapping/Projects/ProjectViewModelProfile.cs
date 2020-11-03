@@ -70,6 +70,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
                 .ForMember(p => p.documents, o => o.MapFrom(s => s.Documents.OrderBy(d => d.Order)))
 
+                .ForMember(p => p.key_contact1, o => o.MapFrom(s => s.KeyContact1))
+                .ForMember(p => p.key_contact2, o => o.MapFrom(s => s.KeyContact2))
+                .ForMember(p => p.key_contact3, o => o.MapFrom(s => s.KeyContact3))
+
                 // TODO: add persistence and mappings for outstanding fields
                 // Outstanding
                 .ForMember(p => p.oddlead_role, o => o.Ignore())
@@ -95,9 +99,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.fs_number, o => o.Ignore())
                 .ForMember(p => p.risk_rating, o => o.Ignore())
                 .ForMember(p => p.programme_description, o => o.Ignore())
-                .ForMember(p => p.key_contact1, o => o.Ignore())
-                .ForMember(p => p.key_contact2, o => o.Ignore())
-                .ForMember(p => p.key_contact3, o => o.Ignore())
                 .ForMember(p => p.supplier, o => o.Ignore())
                 .ForMember(p => p.how_get_green, o => o.Ignore())
                 .ForMember(p => p.forward_look, o => o.Ignore())
@@ -108,7 +109,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.fsaproc_assurance_gatenumber, o => o.Ignore())
                 .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.Ignore())
                 .ForMember(p => p.fsaproc_assurance_nextgate, o => o.Ignore())
-                .AfterMap<ProjectModelOutboundMapper>()
                 ;
 
             CreateMap<Project, ProjectViewModel>()
@@ -124,15 +124,22 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.servicelead, o => o.MapFrom<ProjectPersonViewResolver, Person>(s => s.ServiceLead))
                 .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email))
                 .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
+                .AfterMap<ProjectModelOutboundMapper<ProjectViewModel>>()
                 ;
 
             CreateMap<Project, ProjectEditViewModel>()
                 .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => rp.Reservation.ProjectId)))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects.Select(rp => rp.Reservation.ProjectId)))
                 .ForMember(d => d.Properties, o => o.Ignore())
-                .ForMember(p => p.oddlead, o => o.MapFrom(s => s.Lead.Email))
-                .ForMember(p => p.servicelead, o => o.MapFrom(s => s.ServiceLead.Email))
+                .ForMember(p => p.oddlead, o => o.MapFrom(s => s.Lead))
+                .ForMember(p => p.servicelead, o => o.MapFrom(s => s.ServiceLead))
+                .AfterMap<ProjectModelOutboundMapper<ProjectEditViewModel>>()
                 .AfterMap<ProjectEditViewModelOutboundMapper>()
+                ;
+
+            CreateMap<Person, ProjectPersonModel>()
+                .ForMember(p => p.DisplayName, o => o.MapFrom(s => s.DisplayName))
+                .ForMember(p => p.Value, o => o.MapFrom(s => s.ViewKey))
                 ;
 
             CreateMap<Document, LinkModel>()

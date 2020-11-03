@@ -31,7 +31,7 @@ namespace FSAPortfolio.WebAPI.Mapping.ActiveDirectory
                 .ForMember(d => d.Firstname, o => o.MapFrom(s => s.givenName))
                 .ForMember(d => d.Surname, o => o.MapFrom(s => s.surname))
                 .ForMember(d => d.Department, o => o.MapFrom(s => s.department))
-                .ForMember(d => d.ActiveDirectoryPrincipleName, o => o.MapFrom(s => s.userPrincipalName))
+                .ForMember(d => d.ActiveDirectoryPrincipalName, o => o.MapFrom(s => s.userPrincipalName))
                 .ForMember(d => d.ActiveDirectoryId, o => o.MapFrom(s => s.id))
                 ;
         }

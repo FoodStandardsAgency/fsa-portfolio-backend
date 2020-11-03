@@ -13,22 +13,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
     {
         public string Resolve(Project source, ProjectModel destination, Person sourceMember, string destMember, ResolutionContext context)
         {
-            string result = null;
-            if(sourceMember != null)
-            {
-                if (!string.IsNullOrWhiteSpace(sourceMember.Firstname) && !string.IsNullOrWhiteSpace(sourceMember.Surname))
-                {
-                    result = $"{sourceMember.Firstname} {sourceMember.Surname}";
-                }
-                else if (!string.IsNullOrWhiteSpace(sourceMember.Email))
-                {
-                    result = sourceMember.Email;
-                }
-                else if (!string.IsNullOrWhiteSpace(sourceMember.ActiveDirectoryPrincipleName))
-                {
-                    result = sourceMember.ActiveDirectoryPrincipleName;
-                }
-            }
+            string result = sourceMember?.DisplayName;
             return result;
         }
     }
