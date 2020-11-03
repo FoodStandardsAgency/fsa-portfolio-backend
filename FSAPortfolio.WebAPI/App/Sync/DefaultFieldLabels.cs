@@ -121,7 +121,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_AboutTheProject, "Dependencies", nameof(ProjectEditViewModel.dependencies), false, false, false, PortfolioFieldType.ProjectMultiSelect),
                 Factory(FieldGroupName_AboutTheProject, "Key documents", nameof(ProjectModel.documents), true, false, false, PortfolioFieldType.LinkedItemList),
 
-                Factory(FieldGroupName_ProjectTeam, "Project lead", nameof(ProjectModel.oddlead), false, false, false, PortfolioFieldType.ADUserSearch, flags: FilterProject),
+                Factory(FieldGroupName_ProjectTeam, "Project lead", nameof(ProjectEditViewModel.oddlead), false, false, false, PortfolioFieldType.ADUserSearch, flags: FilterProject),
                 Factory(FieldGroupName_ProjectTeam, "Lead role", nameof(ProjectModel.oddlead_role), false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_ProjectTeam, "Lead team", nameof(ProjectModel.g6team), false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 1", nameof(ProjectModel.key_contact1), false, false, false, PortfolioFieldType.ADUserSearch, flags: ProjectData),
@@ -189,8 +189,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
             SetMasterLabel(labels, nameof(ProjectModel.subcat), nameof(ProjectModel.category));
             SetMasterLabel(labels, nameof(ProjectModel.programme_description), nameof(ProjectModel.programme));
-            SetMasterLabel(labels, nameof(ProjectModel.oddlead_role), nameof(ProjectModel.oddlead));
-            SetMasterLabel(labels, nameof(ProjectModel.g6team), nameof(ProjectModel.oddlead));
+            SetMasterLabel(labels, nameof(ProjectModel.oddlead_role), nameof(ProjectEditViewModel.oddlead));
+            SetMasterLabel(labels, nameof(ProjectModel.g6team), nameof(ProjectEditViewModel.oddlead));
             SetMasterLabel(labels, nameof(ProjectModel.how_get_green), nameof(ProjectModel.rag));
 
             return labels;

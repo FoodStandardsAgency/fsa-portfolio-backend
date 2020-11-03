@@ -10,6 +10,8 @@ namespace FSAPortfolio.WebAPI.Models
     {
         public string oddlead_email { get; set; } // TODO: view only! Move to view model
         public string servicelead_email { get; set; } // TODO: view only! Move to view model
+        public string oddlead { get; set; }
+        public string servicelead { get; set; }
 
 
         [JsonProperty("updates")]

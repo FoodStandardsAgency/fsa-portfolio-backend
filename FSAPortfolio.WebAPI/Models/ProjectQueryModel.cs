@@ -41,7 +41,7 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.programme))]
         public string[] Programmes { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.oddlead))]
+        [JsonProperty(nameof(ProjectUpdateModel.oddlead))]
         public string[] Leads { get; set; }
     }
 

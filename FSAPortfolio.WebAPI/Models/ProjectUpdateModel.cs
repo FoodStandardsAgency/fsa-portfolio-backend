@@ -13,6 +13,9 @@ namespace FSAPortfolio.WebAPI.Models
     {
         public string[] rels { get; set; }
         public string[] dependencies { get; set; }
+        public string oddlead { get; set; }
+        public string servicelead { get; set; }
+
 
         [JsonIgnore]
         public IDictionary<string, ProjectPropertyModel> Properties { get; set; }
@@ -37,6 +40,8 @@ namespace FSAPortfolio.WebAPI.Models
     [JsonConverter(typeof(ProjectEditViewModelConverter))]
     public class ProjectEditViewModel : ProjectModel
     {
+        public string oddlead { get; set; }
+        public string servicelead { get; set; }
         public string[] rels { get; set; }
         public string[] dependencies { get; set; }
         [JsonIgnore]

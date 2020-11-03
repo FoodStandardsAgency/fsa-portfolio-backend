@@ -70,10 +70,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
                 .ForMember(p => p.documents, o => o.MapFrom(s => s.Documents.OrderBy(d => d.Order)))
 
-                .ForMember(p => p.oddlead, o => o.MapFrom<ProjectPersonViewResolver, Person>(s => s.Lead))
-                .ForMember(p => p.servicelead, o => o.MapFrom<ProjectPersonViewResolver, Person>(s => s.ServiceLead))
-
-
                 // TODO: add persistence and mappings for outstanding fields
                 // Outstanding
                 .ForMember(p => p.oddlead_role, o => o.Ignore())
@@ -124,6 +120,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.category, o => o.MapFrom(s => s.Category.Name))
                 .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.Name))
                 .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
+                .ForMember(p => p.oddlead, o => o.MapFrom<ProjectPersonViewResolver, Person>(s => s.Lead))
+                .ForMember(p => p.servicelead, o => o.MapFrom<ProjectPersonViewResolver, Person>(s => s.ServiceLead))
                 .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email))
                 .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
                 ;
@@ -132,6 +130,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => rp.Reservation.ProjectId)))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects.Select(rp => rp.Reservation.ProjectId)))
                 .ForMember(d => d.Properties, o => o.Ignore())
+                .ForMember(p => p.oddlead, o => o.MapFrom(s => s.Lead.Email))
+                .ForMember(p => p.servicelead, o => o.MapFrom(s => s.ServiceLead.Email))
                 .AfterMap<ProjectEditViewModelOutboundMapper>()
                 ;
 

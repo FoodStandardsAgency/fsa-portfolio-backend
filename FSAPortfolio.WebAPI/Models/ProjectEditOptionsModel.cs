@@ -59,7 +59,7 @@ namespace FSAPortfolio.WebAPI.Models
         public IEnumerable<DropDownItemModel> ProjectType { get; set; }
 
         // People
-        [JsonProperty(nameof(ProjectModel.oddlead))]
+        [JsonProperty(nameof(ProjectUpdateModel.oddlead))]
         public SelectPickerModel ODDLead { get; set; }
 
         [JsonProperty(nameof(ProjectModel.oddlead_role))]
