@@ -20,7 +20,7 @@ namespace FSAPortfolio.WebAPI.Controllers
 
         // Get: api/Users/search
         [AcceptVerbs("GET")]
-        public async Task<UserSearchResponseModel> SearchUsers([FromUri] string term)
+        public async Task<UserSearchResponseModel> SearchUsers([FromUri] string portfolio, [FromUri] string term)
         {
             var provider = new UsersProvider();
             var result = await provider.GetUsersAsync(term);

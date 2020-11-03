@@ -34,8 +34,8 @@ namespace FSAPortfolio.Entities.Organisation
         RAGChoice = 52,
         NamedLink = 53,
         LinkedItemList = 54,
-        ProjectUpdateText = 55
-
+        ProjectUpdateText = 55,
+        ADUserSearch = 56
     }
 
     /// <summary>
@@ -93,6 +93,7 @@ namespace FSAPortfolio.Entities.Organisation
             this[PortfolioFieldType.NamedLink] = "Named hyperlink";
             this[PortfolioFieldType.LinkedItemList] = "List of items with links";
             this[PortfolioFieldType.ProjectUpdateText] = "Project update text";
+            this[PortfolioFieldType.ADUserSearch] = "Select single user from Active Directory";
         }
     }
 

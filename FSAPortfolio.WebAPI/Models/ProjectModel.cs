@@ -32,9 +32,7 @@ namespace FSAPortfolio.WebAPI.Models
         public string rag { get; set; }
         public string update { get; set; }
         public string oddlead { get; set; }
-        public string oddlead_email { get; set; }
         public string servicelead { get; set; }
-        public string servicelead_email { get; set; }
         public string priority_main { get; set; } // TODO: make this an int
         public int funded { get; set; }
         public int confidence { get; set; }

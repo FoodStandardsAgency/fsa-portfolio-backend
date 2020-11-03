@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,15 @@ namespace FSAPortfolio.WebAPI.Mapping.ActiveDirectory
                 .ForMember(d => d.Surname, o => o.MapFrom(s => s.surname))
                 .ForMember(d => d.UserPrincipalName, o => o.MapFrom(s => s.userPrincipalName))
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.id))
+                ;
+
+            CreateMap<MicrosoftGraphUserModel, Person>()
+                .ForMember(d => d.Id, o => o.Ignore())
+                .ForMember(d => d.Email, o => o.MapFrom(s => s.mail ?? s.userPrincipalName))
+                .ForMember(d => d.Firstname, o => o.MapFrom(s => s.givenName))
+                .ForMember(d => d.Surname, o => o.MapFrom(s => s.surname))
+                .ForMember(d => d.ActiveDirectoryPrincipleName, o => o.MapFrom(s => s.userPrincipalName))
+                .ForMember(d => d.ActiveDirectoryId, o => o.MapFrom(s => s.id))
                 ;
         }
     }

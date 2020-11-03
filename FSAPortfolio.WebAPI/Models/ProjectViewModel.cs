@@ -8,6 +8,10 @@ namespace FSAPortfolio.WebAPI.Models
 {
     public class ProjectViewModel : ProjectModel
     {
+        public string oddlead_email { get; set; } // TODO: view only! Move to view model
+        public string servicelead_email { get; set; } // TODO: view only! Move to view model
+
+
         [JsonProperty("updates")]
         public UpdateHistoryModel[] UpdateHistory { get; set; }
 

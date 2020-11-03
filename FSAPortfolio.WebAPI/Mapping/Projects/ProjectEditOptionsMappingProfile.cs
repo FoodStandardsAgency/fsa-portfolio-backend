@@ -178,21 +178,21 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             {
                 Header = "Select the person...",
                 Items = new SelectPickerItemModel[] {
-                    new SelectPickerItemModel() { Display = "None", Order = 0 },
-                    new SelectPickerItemModel() { Display = "Person0 (p0@a.b.com)", Value = "p0id", SearchTokens="Person0, p0@a.b.com", Order = 1 },
-                    new SelectPickerItemModel() { Display = "Person1 (p1@a.b.com)", Value = "p1id", SearchTokens="Person1, p1@a.b.com", Order = 2 },
-                    new SelectPickerItemModel() { Display = "Person2 (p2@a.b.com)", Value = "p2id", SearchTokens="Person2, p2@a.b.com", Order = 3 },
-                    new SelectPickerItemModel() { Display = "Person3 (p3@a.b.com)", Value = "p3id", SearchTokens="Person3, p3@a.b.com", Order = 4 },
+                    new SelectPickerItemModel() { Display = "None", Order = 0 }
+                    //new SelectPickerItemModel() { Display = "Person0 (p0@a.b.com)", Value = "p0id", SearchTokens="Person0, p0@a.b.com", Order = 1 },
+                    //new SelectPickerItemModel() { Display = "Person1 (p1@a.b.com)", Value = "p1id", SearchTokens="Person1, p1@a.b.com", Order = 2 },
+                    //new SelectPickerItemModel() { Display = "Person2 (p2@a.b.com)", Value = "p2id", SearchTokens="Person2, p2@a.b.com", Order = 3 },
+                    //new SelectPickerItemModel() { Display = "Person3 (p3@a.b.com)", Value = "p3id", SearchTokens="Person3, p3@a.b.com", Order = 4 },
                 }
             } :
             new SelectPickerModel()
             {
                 Header = "Select the person...",
                 Items = new SelectPickerItemModel[] {
-                    new SelectPickerItemModel() { Display = "Person0 (p0@a.b.com)", Value = "p0id", SearchTokens="Person0, p0@a.b.com", Order = 1 },
-                    new SelectPickerItemModel() { Display = "Person1 (p1@a.b.com)", Value = "p1id", SearchTokens="Person1, p1@a.b.com", Order = 2 },
-                    new SelectPickerItemModel() { Display = "Person2 (p2@a.b.com)", Value = "p2id", SearchTokens="Person2, p2@a.b.com", Order = 3 },
-                    new SelectPickerItemModel() { Display = "Person3 (p3@a.b.com)", Value = "p3id", SearchTokens="Person3, p3@a.b.com", Order = 4 },
+                    //new SelectPickerItemModel() { Display = "Person0 (p0@a.b.com)", Value = "p0id", SearchTokens="Person0, p0@a.b.com", Order = 1 },
+                    //new SelectPickerItemModel() { Display = "Person1 (p1@a.b.com)", Value = "p1id", SearchTokens="Person1, p1@a.b.com", Order = 2 },
+                    //new SelectPickerItemModel() { Display = "Person2 (p2@a.b.com)", Value = "p2id", SearchTokens="Person2, p2@a.b.com", Order = 3 },
+                    //new SelectPickerItemModel() { Display = "Person3 (p3@a.b.com)", Value = "p3id", SearchTokens="Person3, p3@a.b.com", Order = 4 },
                 }
             };
             return model;

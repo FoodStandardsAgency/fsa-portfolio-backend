@@ -22,6 +22,14 @@ namespace FSAPortfolio.Entities.Users
 
         [StringLength(50)]
         public string G6team { get; set; }
+
+        [StringLength(150)]
+        public string ActiveDirectoryPrincipleName { get; set; }
+
+        [StringLength(150)]
+        public string ActiveDirectoryId { get; set; }
+
+
         public DateTime Timestamp { get; set; }
     }
 }

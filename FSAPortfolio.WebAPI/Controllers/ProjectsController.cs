@@ -19,6 +19,7 @@ using FSAPortfolio.WebAPI.Mapping.Projects;
 using FSAPortfolio.Entities.Organisation;
 using System.Linq.Expressions;
 using AutoMapper;
+using FSAPortfolio.WebAPI.App.Users;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -34,6 +35,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 {
                     // Load and map the project
                     var provider = new ProjectProvider(context, update.project_id);
+                    var userProvider = new UsersProvider(context);
                     var reservation = await provider.GetProjectReservationAsync();
                     if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
                     else
@@ -43,10 +45,15 @@ namespace FSAPortfolio.WebAPI.Controllers
                         {
                             project = provider.CreateNewProject(reservation);
                         }
+
+                        // Map the model to the project - map the leads manually because they can require an async AD lookup
                         PortfolioMapper.ProjectMapper.Map(update, project, opt =>
                         {
                             opt.Items[nameof(PortfolioContext)] = context;
                         });
+                        await userProvider.MapAsync(update, project);
+
+                        // Audit and save
                         if (project.AuditLogs != null) provider.LogAuditChanges(project);
                         await context.SaveChangesAsync();
 
@@ -75,7 +82,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
             catch(AutoMapperMappingException ame)
             {
-                if(ame.InnerException is FSAPortfolio.WebAPI.App.Config.PortfolioConfigurationException)
+                if (ame.InnerException is FSAPortfolio.WebAPI.App.Config.PortfolioConfigurationException)
                 {
                     var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
                     {
@@ -83,6 +90,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                     };
                     throw new HttpResponseException(resp);
                 }
+                else throw ame;
             }
         }
 

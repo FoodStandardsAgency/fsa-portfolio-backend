@@ -50,8 +50,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.StrategicObjectives, o => o.MapFrom(s => s.strategic_objectives))
                 .ForMember(p => p.Programme, o => o.MapFrom(s => s.programme))
                 .ForMember(p => p.Team, o => o.MapFrom(s => string.Join(",", s.team)))
-                .ForMember(p => p.Lead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.oddlead_email))
-                .ForMember(p => p.ServiceLead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.servicelead_email))
                 .ForMember(p => p.RelatedProjects, o => o.MapFrom<ProjectCollectionResolver, string[]>(s => s.rels))
                 .ForMember(p => p.DependantProjects, o => o.MapFrom<ProjectCollectionResolver, string[]>(s => s.dependencies))
                 .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => s.category))
@@ -59,9 +57,13 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => s.project_size))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => s.budgettype))
                 .ForMember(p => p.ProjectData, o => o.MapFrom<ProjectDataInboundResolver>())
-                .ForMember(p => p.Documents, o => o.MapFrom(s => s.documents)) 
+                .ForMember(p => p.Documents, o => o.MapFrom(s => s.documents))
 
-                 // Ignore these
+                // Have to be mapped manually as requires async request to AD
+                .ForMember(p => p.Lead, o => o.Ignore())
+                .ForMember(p => p.ServiceLead, o => o.Ignore())
+
+                // Ignore these
                 .ForMember(p => p.Portfolios, o => o.Ignore())
                 .ForMember(p => p.Updates, o => o.Ignore())
                 .ForMember(p => p.FirstUpdate, o => o.Ignore())
@@ -127,14 +129,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
-    public class ProjectLeadResolver : IMemberValueResolver<object, object, string, Person>
-    {
-        public Person Resolve(object source, object destination, string sourceMember, Person destMember, ResolutionContext context)
-        {
-            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
-            return portfolioContext.People.SingleOrDefault(p => p.Email == sourceMember);
-        }
-    }
 
     public class ProjectCollectionResolver : IMemberValueResolver<object, Project, string[], ICollection<Project>>
     {

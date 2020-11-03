@@ -1,11 +1,8 @@
 ﻿using FSAPortfolio.Entities.Organisation;
-using FSAPortfolio.PostgreSQL.Projects;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Web;
 using static FSAPortfolio.Entities.Organisation.PortfolioFieldFlags;
 
 namespace FSAPortfolio.WebAPI.App.Sync
@@ -63,6 +60,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 case PortfolioFieldType.NamedLink:
                 case PortfolioFieldType.LinkedItemList:
                 case PortfolioFieldType.ProjectUpdateText:
+                case PortfolioFieldType.ADUserSearch:
                     inputTypeLocked = true;
                     break;
                 case PortfolioFieldType.OptionList:
@@ -123,12 +121,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_AboutTheProject, "Dependencies", nameof(ProjectEditViewModel.dependencies), false, false, false, PortfolioFieldType.ProjectMultiSelect),
                 Factory(FieldGroupName_AboutTheProject, "Key documents", nameof(ProjectModel.documents), true, false, false, PortfolioFieldType.LinkedItemList),
 
-                Factory(FieldGroupName_ProjectTeam, "Project lead", nameof(ProjectModel.oddlead), false, false, false, PortfolioFieldType.PredefinedSearchableList, flags: FilterProject),
+                Factory(FieldGroupName_ProjectTeam, "Project lead", nameof(ProjectModel.oddlead), false, false, false, PortfolioFieldType.ADUserSearch, flags: FilterProject),
                 Factory(FieldGroupName_ProjectTeam, "Lead role", nameof(ProjectModel.oddlead_role), false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_ProjectTeam, "Lead team", nameof(ProjectModel.g6team), false, false, false, PortfolioFieldType.OptionList),
-                Factory(FieldGroupName_ProjectTeam, "Key contact 1", nameof(ProjectModel.key_contact1), false, false, false, PortfolioFieldType.PredefinedSearchableList, flags: ProjectData),
-                Factory(FieldGroupName_ProjectTeam, "Key contact 2", nameof(ProjectModel.key_contact2), false, false, false, PortfolioFieldType.PredefinedSearchableList, flags: ProjectData),
-                Factory(FieldGroupName_ProjectTeam, "Key contact 3", nameof(ProjectModel.key_contact3), false, false, false, PortfolioFieldType.PredefinedSearchableList, flags: ProjectData),
+                Factory(FieldGroupName_ProjectTeam, "Key contact 1", nameof(ProjectModel.key_contact1), false, false, false, PortfolioFieldType.ADUserSearch, flags: ProjectData),
+                Factory(FieldGroupName_ProjectTeam, "Key contact 2", nameof(ProjectModel.key_contact2), false, false, false, PortfolioFieldType.ADUserSearch, flags: ProjectData),
+                Factory(FieldGroupName_ProjectTeam, "Key contact 3", nameof(ProjectModel.key_contact3), false, false, false, PortfolioFieldType.ADUserSearch, flags: ProjectData),
                 Factory(FieldGroupName_ProjectTeam, "Supplier", nameof(ProjectModel.supplier), false, false, false, PortfolioFieldType.FreeText, flags: ProjectData),
                 Factory(FieldGroupName_ProjectTeam, "Project team", nameof(ProjectModel.team), false, false, false, PortfolioFieldType.PredefinedMultiList, flags: ProjectData),
                 Factory(FieldGroupName_ProjectTeam, $"{FieldGroupName_ProjectTeam} setting 1", "project_team_setting1", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),

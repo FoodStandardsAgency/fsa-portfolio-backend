@@ -175,6 +175,8 @@
     <Compile Include="Mapping\Projects\ProjectEditOptionsMappingProfile.cs" />
     <Compile Include="Mapping\Projects\ProjectUpdateModelProfile.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectEditOptionsResolvers.cs" />
+    <Compile Include="Mapping\Projects\Resolvers\ProjectPersonInboundResolver.cs" />
+    <Compile Include="Mapping\Projects\Resolvers\ProjectPersonViewResolver.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectStatusOptionsResolvers.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectUpdateItemOptionsResolvers.cs" />
     <Compile Include="Models\JsonConverters\NonReentrantJsonConverter.cs" />

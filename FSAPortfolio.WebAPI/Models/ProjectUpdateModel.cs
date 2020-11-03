@@ -13,11 +13,16 @@ namespace FSAPortfolio.WebAPI.Models
     {
         public string[] rels { get; set; }
         public string[] dependencies { get; set; }
+
         [JsonIgnore]
         public IDictionary<string, ProjectPropertyModel> Properties { get; set; }
 
+#pragma warning disable IDE0044 // Add readonly modifier
+#pragma warning disable CS0649 // Never assigned to
         [JsonExtensionData]
         private IDictionary<string, JToken> _additionalData;
+#pragma warning restore IDE0044 // Add readonly modifier
+#pragma warning restore CS0649 // Never assigned to
 
         [OnDeserialized]
         private void OnDeserialized(StreamingContext context)
