@@ -91,5 +91,6 @@
     <Build Include="dbo\Tables\__MigrationHistory.sql" />
     <Build Include="dbo\Views\vwProjects.sql" />
     <Build Include="dbo\Views\vwProjectUpdates.sql" />
+    <None Include="Deployment\00_DropAllTables.sql" />
   </ItemGroup>
 </Project>

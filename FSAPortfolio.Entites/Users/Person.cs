@@ -29,6 +29,9 @@ namespace FSAPortfolio.Entities.Users
         [StringLength(150)]
         public string ActiveDirectoryId { get; set; }
 
+        [StringLength(150)]
+        public string Department { get; set; }
+
 
         public DateTime Timestamp { get; set; }
     }

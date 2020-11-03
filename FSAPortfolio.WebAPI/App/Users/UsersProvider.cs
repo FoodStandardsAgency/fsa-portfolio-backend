@@ -36,7 +36,8 @@ namespace FSAPortfolio.WebAPI.App.Users
             HttpClient client = new HttpClient();
 
             var filter = $"$filter=startswith(displayName,'{term}') or startswith(givenName,'{term}') or startswith(surname,'{term}') or startswith(mail,'{term}') or startswith(userPrincipalName,'{term}')";
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://graph.microsoft.com/v1.0/users?{filter}&$top={count}");
+            var select = "$select=displayName,givenName,surname,mail,userPrincipalName,department";
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://graph.microsoft.com/v1.0/users?{filter}&{select}&$top={count}");
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", auth.AccessToken);
             HttpResponseMessage response = await client.SendAsync(request);
