@@ -276,6 +276,8 @@
                         Firstname = c.String(maxLength: 250),
                         Email = c.String(maxLength: 250),
                         G6team = c.String(maxLength: 50),
+                        ActiveDirectoryPrincipleName = c.String(maxLength: 150),
+                        ActiveDirectoryId = c.String(maxLength: 150),
                         Timestamp = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
