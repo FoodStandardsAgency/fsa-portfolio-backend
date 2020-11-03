@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Organisation;
+using FSAPortfolio.WebAPI.Mapping.ActiveDirectory;
 using FSAPortfolio.WebAPI.Mapping.Organisation;
 using FSAPortfolio.WebAPI.Mapping.Projects;
 using FSAPortfolio.WebAPI.Models;
@@ -17,10 +18,12 @@ namespace FSAPortfolio.WebAPI.Mapping
         internal static MapperConfiguration projectConfig;
         internal static MapperConfiguration configConfig;
         internal static MapperConfiguration updateConfig;
+        internal static MapperConfiguration activeDirectoryConfig;
 
         internal static IMapper ProjectMapper { get; private set; }
         internal static IMapper ConfigMapper { get; private set; }
         internal static IMapper UpdateMapper { get; private set; }
+        internal static IMapper ActiveDirectoryMapper { get; private set; }
         internal static void Configure()
         {
             projectConfig = new MapperConfiguration(cfg =>
@@ -47,6 +50,12 @@ namespace FSAPortfolio.WebAPI.Mapping
                 cfg.AddProfile<PortfolioConfigUpdateProfile>();
             });
             UpdateMapper = updateConfig.CreateMapper();
+
+            activeDirectoryConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<ADUserMappingProfile>();
+            });
+            ActiveDirectoryMapper = activeDirectoryConfig.CreateMapper();
         }
 
         internal static ProjectLabelConfigModel GetProjectLabelConfigModel(PortfolioConfiguration config, PortfolioFieldFlags flags = PortfolioFieldFlags.Read)

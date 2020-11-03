@@ -178,6 +178,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             return await GetProject<ProjectViewModel>(projectId, includeOptions, includeHistory, includeLastUpdate, includeConfig);
         }
+
         [HttpGet]
         public async Task<GetProjectDTO<ProjectEditViewModel>> GetForEdit([FromUri] string projectId)
         {

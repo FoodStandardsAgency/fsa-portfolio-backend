@@ -1,5 +1,7 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.PostgreSQL;
+using FSAPortfolio.WebAPI.App.Users;
+using FSAPortfolio.WebAPI.Mapping;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -16,7 +18,18 @@ namespace FSAPortfolio.WebAPI.Controllers
     public class UsersController : ApiController
     {
 
-        // POST: api/ADUsers
+        // Get: api/Users/search
+        [AcceptVerbs("GET")]
+        public async Task<UserSearchResponseModel> SearchUsers([FromUri] string term)
+        {
+            var provider = new UsersProvider();
+            var result = await provider.GetUsersAsync(term);
+            var response = PortfolioMapper.ActiveDirectoryMapper.Map<UserSearchResponseModel>(result);
+            return response;
+        }
+
+
+        // POST: api/Users/LegacyADUsers
         [AcceptVerbs("POST")]
         public UserModel GetADUser(UserRequestModel userRequest)
         {
@@ -38,7 +51,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             return result;
         }
 
-        // POST: api/Users
+        // POST: api/Users/legacy
         [AcceptVerbs("POST")]
         public UserModel GetUser(UserRequestModel userRequest)
         {

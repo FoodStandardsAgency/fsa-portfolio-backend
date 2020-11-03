@@ -17,13 +17,18 @@ namespace FSAPortfolio.WebAPI
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name: "SearchUsers",
+                routeTemplate: "api/Users/search",
+                defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.SearchUsers) }
+            );
+            config.Routes.MapHttpRoute(
                 name: "GetUserByNameAndHash",
-                routeTemplate: "api/Users",
+                routeTemplate: "api/Users/legacy",
                 defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetUser) }
             );
             config.Routes.MapHttpRoute(
                 name: "GetADUserByName",
-                routeTemplate: "api/ADUsers",
+                routeTemplate: "api/Users/LegacyADUsers",
                 defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetADUser) }
             );
 
