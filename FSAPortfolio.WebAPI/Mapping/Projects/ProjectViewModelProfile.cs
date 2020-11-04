@@ -62,7 +62,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.G6team))
                 .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
                 .ForMember(p => p.first_completed, o => o.MapFrom<FirstCompletedResolver, Project>(s => s))
-                .ForMember(p => p.pgroup, o => o.MapFrom<PriorityGroupResolver>())
+                .ForMember(p => p.pgroup, o => o.MapFrom(s => s.PriorityGroup.Name))
 
                 .ForMember(p => p.project_type, o => o.MapFrom(s => s.ProjectType))
                 .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives))
@@ -219,21 +219,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 result = context.Mapper.Map<StatusUpdateHistoryModel>(lastTextUpdate);
             }
             return result;
-        }
-    }
-
-    public class PriorityGroupResolver : IValueResolver<Project, object, string>
-    {
-        public string Resolve(Project source, object destination, string destMember, ResolutionContext context)
-        {
-            string pgroup = PriorityGroupConstants.NotSetName;
-            if (source.Priority.HasValue)
-            {
-                if(source.Priority.Value >= PriorityGroupConstants.HighGroupCutoff) pgroup = PriorityGroupConstants.HighName;
-                else if(source.Priority.Value >= PriorityGroupConstants.MediumGroupCutoff) pgroup = PriorityGroupConstants.MediumName;
-                else pgroup = PriorityGroupConstants.LowName;
-            }
-            return pgroup;
         }
     }
 }

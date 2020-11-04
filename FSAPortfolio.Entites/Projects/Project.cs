@@ -89,6 +89,22 @@ namespace FSAPortfolio.Entities.Projects
         public virtual ICollection<ProjectAuditLog> AuditLogs { get; set; }
 
         public bool IsNew => FirstUpdate == null ? true : FirstUpdate.Timestamp >= DateTime.Today.AddDays(-PortfolioSettings.NewProjectLimitDays);
-
+        public PriorityGroup PriorityGroup {
+            get {
+                PriorityGroup priorityGroup = null;
+                if (Reservation?.Portfolio?.Configuration != null)
+                {
+                    if (Priority.HasValue)
+                    {
+                        priorityGroup = Reservation.Portfolio.Configuration.PriorityGroups.SingleOrDefault(pg => Priority.Value >= pg.LowLimit && Priority.Value <= pg.HighLimit);
+                    }
+                    else
+                    {
+                        priorityGroup = Reservation.Portfolio.Configuration.PriorityGroups.SingleOrDefault(pg => pg.ViewKey == PriorityGroupConstants.NotSetViewKey);
+                    }
+                }
+                return priorityGroup;
+            }
+        }
     }
 }

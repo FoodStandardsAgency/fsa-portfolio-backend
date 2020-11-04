@@ -8,14 +8,17 @@ namespace FSAPortfolio.WebAPI.Models
 {
     public class PortfolioSummaryModel
     {
-        [JsonProperty("categories")]
-        public IEnumerable<CategorySummaryModel> Categories { get; set; }
+        public const string ByCategory = "category";
+        public const string ByPriorityGroup = "priority";
+
+        [JsonProperty("summaries")]
+        public IEnumerable<ProjectSummaryModel> Summaries { get; set; }
 
         [JsonProperty("phases")]
         public IEnumerable<PhaseSummaryModel> Phases { get; set; }
     }
 
-    public class CategorySummaryModel
+    public class ProjectSummaryModel
     {
         [JsonProperty("name")]
         public string Name { get; set; }

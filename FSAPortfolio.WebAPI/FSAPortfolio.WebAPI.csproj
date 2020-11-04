@@ -166,6 +166,7 @@
     <Compile Include="Mapping\Organisation\Resolvers\OutboundLabelInputValueResolver.cs" />
     <Compile Include="Mapping\Organisation\PortfolioMappingProfile.cs" />
     <Compile Include="Mapping\Organisation\PortfolioConfigUpdateProfile.cs" />
+    <Compile Include="Mapping\Organisation\Resolvers\Summaries\SummaryResolvers.cs" />
     <Compile Include="Mapping\PortfolioMapper.cs" />
     <Compile Include="Mapping\Organisation\PortfolioConfigurationMappingProfile.cs" />
     <Compile Include="Mapping\Projects\PostgresProjectMappingProfile.cs" />

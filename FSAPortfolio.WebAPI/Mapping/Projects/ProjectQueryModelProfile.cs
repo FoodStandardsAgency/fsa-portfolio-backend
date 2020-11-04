@@ -15,11 +15,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             CreateMap<Project[], ProjectQueryResultModel>().ConvertUsing<ProjectQueryTypeConverter>();
 
             CreateMap<Project, ProjectQueryResultProjectModel>()
-                .ForMember(s => s.PortfolioViewKey, o => o.MapFrom(d => d.Reservation.Portfolio.ViewKey))
-                .ForMember(s => s.ProjectId, o => o.MapFrom(d => d.Reservation.ProjectId))
-                .ForMember(s => s.ProjectName, o => o.MapFrom(d => d.Name))
-                .ForMember(s => s.Priority, o => o.MapFrom(d => d.Priority))
-                .ForMember(p => p.PriorityGroup, o => o.MapFrom<PriorityGroupResolver>())
+                .ForMember(d => d.PortfolioViewKey, o => o.MapFrom(s => s.Reservation.Portfolio.ViewKey))
+                .ForMember(d => d.ProjectId, o => o.MapFrom(s => s.Reservation.ProjectId))
+                .ForMember(d => d.ProjectName, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Priority, o => o.MapFrom(s => s.Priority))
+                .ForMember(d => d.PriorityGroup, o => o.MapFrom(s => s.PriorityGroup.Name))
                 ;
 
         }

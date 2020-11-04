@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -15,17 +16,27 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
         public CategoryMappingProfile()
         {
             CreateMap<Portfolio, PortfolioSummaryModel>()
-                .ForMember(d => d.Categories, o => o.MapFrom(s => s.Configuration.Categories.OrderBy(c => c.Order)))
+                .ForMember(d => d.Summaries, o => o.MapFrom<PortfolioSummaryResolver>())
                 .ForMember(d => d.Phases, o => o.MapFrom(s => s.Configuration.Phases.Where(p => p.Id != s.Configuration.CompletedPhase.Id).OrderBy(c => c.Order)))
                 ;
 
-            CreateMap<ProjectCategory, CategorySummaryModel>()
+            // Summary type mappings
+            CreateMap<ProjectCategory, ProjectSummaryModel>()
                 .ForMember(d => d.ViewKey, o => o.MapFrom(s => s.ViewKey))
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
-                .ForMember(d => d.PhaseProjects, o => o.MapFrom<ProjectsGroupedByPhaseResolver>())
+                .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByCategoryResolver>())
                 ;
 
+            CreateMap<PriorityGroup, ProjectSummaryModel>()
+                .ForMember(d => d.ViewKey, o => o.MapFrom(s => s.ViewKey))
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
+                .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByPriorityGroupResolver>())
+                ;
+
+
+            // Phase mappings
             CreateMap<ProjectPhase, PhaseSummaryModel>()
                 .ForMember(d => d.ViewKey, o => o.MapFrom(s => s.ViewKey))
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
@@ -42,21 +53,24 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
         }
     }
 
-    public class ProjectsGroupedByPhaseResolver : IValueResolver<ProjectCategory, CategorySummaryModel, IEnumerable<PhaseProjectsModel>>
+    public class PortfolioSummaryResolver : IValueResolver<Portfolio, PortfolioSummaryModel, IEnumerable<ProjectSummaryModel>>
     {
-        public IEnumerable<PhaseProjectsModel> Resolve(ProjectCategory source, CategorySummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
+        public IEnumerable<ProjectSummaryModel> Resolve(Portfolio source, PortfolioSummaryModel destination, IEnumerable<ProjectSummaryModel> destMember, ResolutionContext context)
         {
-            var q = from ph in source.Configuration.Phases.Where(p => p.Id != source.Configuration.CompletedPhase.Id) // Non-completed phases...
-                    join pr in source.Configuration.Portfolio.Projects.Where(p => p.ProjectCategory_Id == source.Id && p.LatestUpdate?.Phase != null)
-                        on ph.Id equals pr.LatestUpdate.Phase.Id into projects // ... get projects joined to each phase ...
-                    from pr in projects.DefaultIfEmpty() // ... need to get all phases ...
-                    group pr by ph into phaseGroup // ... group projects by phase ...
-                    select new PhaseProjectsModel() {
-                        ViewKey = phaseGroup.Key.ViewKey,
-                        Order = phaseGroup.Key.Order,
-                        Projects = context.Mapper.Map<IEnumerable<ProjectIndexModel>>(phaseGroup.Where(p => p != null))
-                    };
-            return q.OrderBy(p => p.Order);
+            IEnumerable<ProjectSummaryModel> result;
+            var summaryType = context.Items[nameof(PortfolioSummaryModel)] as string;
+            switch(summaryType)
+            {
+                case PortfolioSummaryModel.ByCategory:
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Categories.OrderBy(c => c.Order));
+                    break;
+                case PortfolioSummaryModel.ByPriorityGroup:
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.PriorityGroups.OrderBy(c => c.Order));
+                    break;
+                default:
+                    throw new ArgumentException($"Unrecognised summary type: {summaryType}");
+            }
+            return result;
         }
     }
 

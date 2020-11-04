@@ -32,7 +32,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<PortfolioSummaryModel> Summary([FromUri(Name = "portfolio")] string viewKey)
+        public async Task<PortfolioSummaryModel> Summary([FromUri(Name = "portfolio")] string viewKey, [FromUri(Name = "type")] string summaryType = PortfolioSummaryModel.ByCategory)
         {
             PortfolioSummaryModel result = null;
             using (var context = new PortfolioContext())
@@ -44,7 +44,11 @@ namespace FSAPortfolio.WebAPI.Controllers
 
                 if (portfolio == null) throw new HttpResponseException(HttpStatusCode.NotFound);
 
-                result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(portfolio);
+                result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(
+                    portfolio, 
+                    opt => { 
+                        opt.Items[nameof(PortfolioSummaryModel)] = summaryType; 
+                    });
             }
             return result;
         }
