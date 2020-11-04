@@ -59,8 +59,8 @@ namespace FSAPortfolio.Entities.Organisation
                     },
                     new PriorityGroup() {
                         ViewKey = PriorityGroupConstants.NotSetViewKey,
-                        LowLimit = 0,
-                        HighLimit = 0,
+                        LowLimit = -1,
+                        HighLimit = -1,
                         Name = PriorityGroupConstants.NotSetName,
                         Configuration = this,
                         Order = 3
