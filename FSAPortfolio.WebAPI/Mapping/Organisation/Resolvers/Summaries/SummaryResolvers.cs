@@ -9,6 +9,33 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
 {
+    public class PortfolioSummaryResolver : IValueResolver<Portfolio, PortfolioSummaryModel, IEnumerable<ProjectSummaryModel>>
+    {
+        public IEnumerable<ProjectSummaryModel> Resolve(Portfolio source, PortfolioSummaryModel destination, IEnumerable<ProjectSummaryModel> destMember, ResolutionContext context)
+        {
+            IEnumerable<ProjectSummaryModel> result;
+            var summaryType = context.Items[nameof(PortfolioSummaryModel)] as string;
+            switch (summaryType)
+            {
+                case PortfolioSummaryModel.ByCategory:
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Categories.OrderBy(c => c.Order));
+                    break;
+                case PortfolioSummaryModel.ByPriorityGroup:
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.PriorityGroups.OrderBy(c => c.Order));
+                    break;
+                case PortfolioSummaryModel.ByRagStatus:
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.RAGStatuses.OrderBy(c => c.Order));
+                    break;
+                case PortfolioSummaryModel.ByOnHoldStatus:
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.OnHoldStatuses.OrderBy(c => c.Order));
+                    break;
+                default:
+                    throw new ArgumentException($"Unrecognised summary type: {summaryType}");
+            }
+            return result;
+        }
+    }
+
     internal static class SummaryLinqQuery
     {
         public static IEnumerable<PhaseProjectsModel> GetQuery(PortfolioConfiguration config, Func<Project, bool> projectPredicate, ResolutionContext context)
@@ -46,4 +73,19 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
         }
     }
 
+    public class PhaseProjectsByRAGResolver : IValueResolver<ProjectRAGStatus, ProjectSummaryModel, IEnumerable<PhaseProjectsModel>>
+    {
+        public IEnumerable<PhaseProjectsModel> Resolve(ProjectRAGStatus source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
+        {
+            return SummaryLinqQuery.GetQuery(source.Configuration, p => p.LatestUpdate.RAGStatus.Id == source.Id, context);
+        }
+    }
+
+    public class PhaseProjectsByOnHoldStatusResolver : IValueResolver<ProjectOnHoldStatus, ProjectSummaryModel, IEnumerable<PhaseProjectsModel>>
+    {
+        public IEnumerable<PhaseProjectsModel> Resolve(ProjectOnHoldStatus source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
+        {
+            return SummaryLinqQuery.GetQuery(source.Configuration, p => p.LatestUpdate.OnHoldStatus.Id == source.Id, context);
+        }
+    }
 }

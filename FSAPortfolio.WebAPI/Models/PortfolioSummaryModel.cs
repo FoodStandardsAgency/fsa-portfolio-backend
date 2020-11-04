@@ -10,6 +10,8 @@ namespace FSAPortfolio.WebAPI.Models
     {
         public const string ByCategory = "category";
         public const string ByPriorityGroup = "priority";
+        public const string ByRagStatus = "rag";
+        public const string ByOnHoldStatus = "status";
 
         [JsonProperty("summaries")]
         public IEnumerable<ProjectSummaryModel> Summaries { get; set; }

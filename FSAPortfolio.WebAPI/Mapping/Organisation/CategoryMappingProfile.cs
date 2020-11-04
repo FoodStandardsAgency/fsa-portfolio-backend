@@ -35,6 +35,20 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
                 .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByPriorityGroupResolver>())
                 ;
 
+            CreateMap<ProjectRAGStatus, ProjectSummaryModel>()
+                .ForMember(d => d.ViewKey, o => o.MapFrom(s => s.ViewKey))
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
+                .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByRAGResolver>())
+                ;
+
+            CreateMap<ProjectOnHoldStatus, ProjectSummaryModel>()
+                .ForMember(d => d.ViewKey, o => o.MapFrom(s => s.ViewKey))
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
+                .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByOnHoldStatusResolver>())
+                ;
+
 
             // Phase mappings
             CreateMap<ProjectPhase, PhaseSummaryModel>()
@@ -53,26 +67,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
         }
     }
 
-    public class PortfolioSummaryResolver : IValueResolver<Portfolio, PortfolioSummaryModel, IEnumerable<ProjectSummaryModel>>
-    {
-        public IEnumerable<ProjectSummaryModel> Resolve(Portfolio source, PortfolioSummaryModel destination, IEnumerable<ProjectSummaryModel> destMember, ResolutionContext context)
-        {
-            IEnumerable<ProjectSummaryModel> result;
-            var summaryType = context.Items[nameof(PortfolioSummaryModel)] as string;
-            switch(summaryType)
-            {
-                case PortfolioSummaryModel.ByCategory:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Categories.OrderBy(c => c.Order));
-                    break;
-                case PortfolioSummaryModel.ByPriorityGroup:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.PriorityGroups.OrderBy(c => c.Order));
-                    break;
-                default:
-                    throw new ArgumentException($"Unrecognised summary type: {summaryType}");
-            }
-            return result;
-        }
-    }
+
 
     public class ProjectCountByPhaseResolver : IValueResolver<ProjectPhase, PhaseSummaryModel, int>
     {
