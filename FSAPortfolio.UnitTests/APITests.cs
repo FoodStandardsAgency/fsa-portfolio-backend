@@ -53,13 +53,22 @@ namespace FSAPortfolio.UnitTests
             // Post the project
             var content = new StringContent(projectJson, Encoding.UTF8, "application/json");
             var response = client.PostAsync("api/Projects", content).Result;
+            var response1Content = response.Content.ReadAsStringAsync().Result;
             Assert.AreEqual(HttpStatusCode.NoContent, response.StatusCode);
 
             // Get the project json and compare with what was sent as an update
             var projectResponse = client.GetAsync($"api/Projects/{project.project_id}/edit").Result;
+            var response2Content = projectResponse.Content.ReadAsStringAsync().Result;
             Assert.AreEqual(HttpStatusCode.OK, projectResponse.StatusCode);
-            var dto = JsonConvert.DeserializeObject<GetProjectDTO<ProjectEditViewModel>>(projectResponse.Content.ReadAsStringAsync().Result);
+            var dto = JsonConvert.DeserializeObject<GetProjectDTO<ProjectEditViewModel>>(response2Content);
             var updatedProject = dto.Project;
+
+            // Equalise null display names because api fills these if null or empty
+            if (project.oddlead != null && project.oddlead.DisplayName == null) project.oddlead.DisplayName = project.oddlead.Value;
+            if (project.key_contact1 != null && project.key_contact1.DisplayName == null) project.key_contact1.DisplayName = project.key_contact1.Value;
+            if (project.key_contact2 != null && project.key_contact2.DisplayName == null) project.key_contact2.DisplayName = project.key_contact2.Value;
+            if (project.key_contact3 != null && project.key_contact3.DisplayName == null) project.key_contact3.DisplayName = project.key_contact3.Value;
+
 
             var unmatched = project.GetUnequalProperties(updatedProject,
                 nameof(project.id),
@@ -67,9 +76,7 @@ namespace FSAPortfolio.UnitTests
                 nameof(project.min_time),
                 nameof(project.max_time),
                 nameof(project.pgroup),
-                nameof(project.new_flag),
-                // TODO: remove these ignores when implemented
-                nameof(project.oddlead)
+                nameof(project.new_flag)
                 );
             unmatched.RemoveAll(un => un.Item1 == nameof(project.update) && un.Item2 == "\"\"" && un.Item3 == "null");
             unmatched.RemoveAll(un => un.Item1 == nameof(project.key_contact1) && un.Item2 == "\"\"" && un.Item3 == "null");

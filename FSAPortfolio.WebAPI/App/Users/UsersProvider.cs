@@ -7,6 +7,7 @@ using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System;
 using System.Configuration;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -100,7 +101,9 @@ namespace FSAPortfolio.WebAPI.App.Users
             Person person = null;
             if (!string.IsNullOrWhiteSpace(name))
             {
-                person = context.People.SingleOrDefault(p => p.ActiveDirectoryPrincipalName == name || p.Email == name);
+                person = 
+                    context.People.Local.SingleOrDefault(p => p.ActiveDirectoryPrincipalName == name || p.Email == name) ??
+                    await context.People.SingleOrDefaultAsync(p => p.ActiveDirectoryPrincipalName == name || p.Email == name);
                 if (person == null)
                 {
                     var user = await GetUserForPrincipalNameAsync(name);
@@ -114,6 +117,7 @@ namespace FSAPortfolio.WebAPI.App.Users
                         person = new Person() { Email = name };
                     }
                     person.Timestamp = DateTime.Now;
+                    context.People.Add(person);
                 }
             }
             return person;

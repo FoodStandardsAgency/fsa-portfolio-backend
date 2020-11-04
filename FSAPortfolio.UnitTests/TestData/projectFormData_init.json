@@ -23,10 +23,10 @@
       "link": "testLink"
     }
   ],
-  "oddlead": "p0id",
-  "key_contact1": "p0id",
-  "key_contact2": "",
-  "key_contact3": "",
+  "oddlead": { "value": "p0id" },
+  "key_contact1": { "value": "p0id" },
+  "key_contact2": null,
+  "key_contact3": null,
   "supplier": "",
   "team": [ "t0id", "t2id" ],
   "start_date": "2020-02",

@@ -58,8 +58,6 @@ namespace FSAPortfolio.WebAPI.Models
 
     public class ProjectPersonModel
     {
-        private string displayName;
-
         [JsonProperty("text")]
         public string DisplayName { get; set; }
 

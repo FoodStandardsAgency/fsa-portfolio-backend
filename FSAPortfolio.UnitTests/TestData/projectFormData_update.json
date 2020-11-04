@@ -23,10 +23,10 @@
       "link": "updateDocLink"
     }
   ],
-  "oddlead": "p1id",
-  "key_contact1": "p1id",
-  "key_contact2": "p1id",
-  "key_contact3": "p1id",
+  "oddlead": { "value": "p1id" },
+  "key_contact1": { "value": "p1id" },
+  "key_contact2": { "value": "p1id" },
+  "key_contact3": { "value": "p1id" },
   "supplier": "Update",
   "team": [ "t1id", "t3id" ],
   "start_date": "2020-03",
