@@ -26,6 +26,7 @@ namespace FSAPortfolio.WebAPI.App
         {
             return query
                 .Include(p => p.Projects.Select(pr => pr.Reservation))
+                .Include(p => p.Projects.Select(pr => pr.Lead))
                 .Include(p => p.Projects.Select(pr => pr.Category))
                 .Include(p => p.Projects.Select(pr => pr.LatestUpdate.Phase))
                 ;
