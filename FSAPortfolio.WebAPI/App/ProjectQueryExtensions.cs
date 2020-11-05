@@ -76,6 +76,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.KeyContact1)
                 .Include(p => p.KeyContact2)
                 .Include(p => p.KeyContact3)
+                .Include(p => p.Team)
                 ;
         }
         public static IQueryable<Project> IncludeUpdates(this IQueryable<Project> query)
