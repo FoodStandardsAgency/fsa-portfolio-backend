@@ -27,7 +27,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.RAGStatuses.OrderBy(c => c.Order));
                     break;
                 case PortfolioSummaryModel.ByPhase:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.OrderBy(c => c.Order));
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.Where(p => p.Id != source.Configuration.CompletedPhase.Id).OrderBy(c => c.Order));
                     break;
                 default:
                     throw new ArgumentException($"Unrecognised summary type: {summaryType}");
