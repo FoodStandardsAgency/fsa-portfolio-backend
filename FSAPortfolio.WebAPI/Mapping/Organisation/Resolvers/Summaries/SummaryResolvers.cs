@@ -26,8 +26,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
                 case PortfolioSummaryModel.ByRagStatus:
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.RAGStatuses.OrderBy(c => c.Order));
                     break;
-                case PortfolioSummaryModel.ByOnHoldStatus:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.OnHoldStatuses.OrderBy(c => c.Order));
+                case PortfolioSummaryModel.ByPhase:
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.OrderBy(c => c.Order));
                     break;
                 default:
                     throw new ArgumentException($"Unrecognised summary type: {summaryType}");
@@ -81,11 +81,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
         }
     }
 
-    public class PhaseProjectsByOnHoldStatusResolver : IValueResolver<ProjectOnHoldStatus, ProjectSummaryModel, IEnumerable<PhaseProjectsModel>>
+    public class PhaseProjectsByPhaseResolver : IValueResolver<ProjectPhase, ProjectSummaryModel, IEnumerable<PhaseProjectsModel>>
     {
-        public IEnumerable<PhaseProjectsModel> Resolve(ProjectOnHoldStatus source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
+        public IEnumerable<PhaseProjectsModel> Resolve(ProjectPhase source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
         {
-            return SummaryLinqQuery.GetQuery(source.Configuration, p => p.LatestUpdate.OnHoldStatus.Id == source.Id, context);
+            return SummaryLinqQuery.GetQuery(source.Configuration, p => p.LatestUpdate.Phase.Id == source.Id, context);
         }
     }
 }
