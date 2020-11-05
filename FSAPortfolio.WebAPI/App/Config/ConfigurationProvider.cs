@@ -24,7 +24,6 @@ namespace FSAPortfolio.WebAPI.App.Config
         internal async Task UpdateCollections(PortfolioConfiguration config)
         {
             await UpdateRAGStatusOptions(config);
-            //UpdateCategoryOptions(config);
 
             UpdateProjectOptions(
                 config,
@@ -132,83 +131,6 @@ namespace FSAPortfolio.WebAPI.App.Config
 
             }
 
-        }
-
-        private void UpdateCategoryOptions(PortfolioConfiguration config)
-        {
-            var labelConfig = config.Labels.Single(l => l.FieldName == nameof(ProjectModel.category));
-            var categoryNames = labelConfig.FieldOptions
-                .Split(',')
-                .Where(n => !string.IsNullOrWhiteSpace(n))
-                .Select(n => n.Trim())
-                .ToArray();
-
-            var categoriesQuery = context.Projects.Select(p => p.Category).Union(context.Projects.SelectMany(p => p.Subcategories));
-
-            // If the category has no matching name, check the category has no projects assigned and then delete it
-            var unmatchedCategoriesQuery =
-                // Get categories that don't have a match in the new list
-                from category in config.Categories
-                join name in categoryNames on category.Name equals name into names
-                from name in names.DefaultIfEmpty()
-                where name == null
-                select category;
-
-            // Join this to all uses of the resulting categories
-            var unableToDeleteQuery =
-                from category in unmatchedCategoriesQuery
-                join projectCategory in categoriesQuery on category.Id equals projectCategory.Id into projectCategories
-                from projectCategory in projectCategories
-                group projectCategory by category into projects
-                select new { category = projects.Key, projectCount = projects.Count() };
-
-            var unableToDelete = unableToDeleteQuery.ToList();
-            if(unableToDelete.Count > 0)
-            {
-                // Can't do this update while the categories are assigned to projects
-                Func<string, int, string> categoryError = (n, c) => {
-                    return c == 1 ?
-                    $"[{n}] is used as a project category or subcategory ({c} occurrence)" :
-                    $"[{n}] is used as a project category or subcategory ({c} occurrences)";
-                };
-                throw new PortfolioConfigurationException($"Can't update categories: {string.Join("; ", unableToDelete.Select(c => categoryError(c.category.Name, c.projectCount)))}");
-            }
-            else
-            {
-                var unmatchedCategories = unmatchedCategoriesQuery.ToList();
-                foreach (var category in unmatchedCategories)
-                {
-                    config.Categories.Remove(category);
-                    context.ProjectCategories.Remove(category);
-                }
-            }
-
-            // If name has no matching category, add a category
-            var matchedNamesQuery =
-                from name in categoryNames
-                join category in config.Categories on name equals category.Name into categories
-                from category in categories.DefaultIfEmpty()
-                select new { name, category };
-            var matchedNames = matchedNamesQuery.ToList();
-            int viewKey = 0;
-
-            config.Categories.Clear();
-            for (int i = 0; i < matchedNames.Count(); i++)
-            {
-                var match = matchedNames.ElementAt(i);
-                ProjectCategory category = match.category;
-                if (match.category == null)
-                {
-                    category = new ProjectCategory() { Name = match.name };
-                }
-
-                // Assign next viewkey
-                while (matchedNames.Any(m => m.category.Order == viewKey)) viewKey++;
-
-                category.Order = i;
-                category.ViewKey = viewKey++.ToString();
-                config.Categories.Add(category);
-            }
         }
 
         private void UpdateProjectOptions<T>(
@@ -330,7 +252,6 @@ namespace FSAPortfolio.WebAPI.App.Config
                 }
             }
         }
-
 
     }
 }

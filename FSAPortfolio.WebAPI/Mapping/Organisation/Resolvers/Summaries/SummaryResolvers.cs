@@ -29,6 +29,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
                 case PortfolioSummaryModel.ByPhase:
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.Where(p => p.Id != source.Configuration.CompletedPhase.Id).OrderBy(c => c.Order));
                     break;
+                case PortfolioSummaryModel.ByTeam:
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Projects.Where(p => p.LatestUpdate_Id != source.Configuration.CompletedPhase.Id).Select(p => new Team() { ViewKey = p.Lead?.G6team }));
+                    break;
                 default:
                     throw new ArgumentException($"Unrecognised summary type: {summaryType}");
             }
@@ -86,6 +89,14 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
         public IEnumerable<PhaseProjectsModel> Resolve(ProjectPhase source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
         {
             return SummaryLinqQuery.GetQuery(source.Configuration, p => p.LatestUpdate.Phase.Id == source.Id, context);
+        }
+    }
+
+    public class PhaseProjectsByTeamResolver : IValueResolver<Team, ProjectSummaryModel, IEnumerable<PhaseProjectsModel>>
+    {
+        public IEnumerable<PhaseProjectsModel> Resolve(Team source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
+        {
+            return SummaryLinqQuery.GetQuery(source.Config, p => p.Lead?.G6team == source.ViewKey, context);
         }
     }
 }

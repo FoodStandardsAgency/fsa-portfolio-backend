@@ -49,6 +49,13 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
                 .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByPhaseResolver>())
                 ;
 
+            CreateMap<Team, ProjectSummaryModel>()
+                .ForMember(d => d.ViewKey, o => o.MapFrom(s => s.ViewKey))
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
+                .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByTeamResolver>())
+                ;
+
 
             // Phase mappings
             CreateMap<ProjectPhase, PhaseSummaryModel>()
