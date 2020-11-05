@@ -43,6 +43,9 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonProperty(nameof(ProjectUpdateModel.oddlead))]
         public string[] Leads { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.priority_main))]
+        public int[] Priorities { get; set; }
     }
 
 }

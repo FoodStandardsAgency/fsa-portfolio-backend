@@ -77,9 +77,13 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 ProjectQueryResultModel result = null;
                 var filteredQuery = from p in context.Projects.IncludeQueryResult() where p.Reservation.Portfolio.ViewKey == searchTerms.PortfolioViewKey select p;
-                if(!string.IsNullOrWhiteSpace(searchTerms.Name))
+                if (!string.IsNullOrWhiteSpace(searchTerms.Name))
                 {
                     filteredQuery = filteredQuery.Where(p => p.Name.Contains(searchTerms.Name) || p.Reservation.ProjectId.Contains(searchTerms.Name));
+                }
+                if (searchTerms.Priorities != null && searchTerms.Priorities.Length > 0)
+                {
+                    filteredQuery = filteredQuery.Where(p => p.Priority.HasValue && searchTerms.Priorities.Contains(p.Priority.Value));
                 }
                 filteredQuery = AddExactMatchFilter(searchTerms.Phases, filteredQuery, p => searchTerms.Phases.Contains(p.LatestUpdate.Phase.ViewKey));
                 filteredQuery = AddExactMatchFilter(searchTerms.Themes, filteredQuery, p => searchTerms.Themes.Contains(p.Theme));
