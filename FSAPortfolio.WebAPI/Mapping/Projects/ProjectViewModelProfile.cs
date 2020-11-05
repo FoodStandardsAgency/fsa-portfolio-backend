@@ -122,7 +122,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.servicelead, o => o.MapFrom<ProjectPersonViewResolver, Person>(s => s.ServiceLead))
                 .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email))
                 .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
-                .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
+                .ForMember(p => p.team, o => o.MapFrom(s => string.Join(", ", s.Team.Select(p => p.DisplayName))))
                 .AfterMap<ProjectModelOutboundMapper<ProjectViewModel>>()
                 ;
 

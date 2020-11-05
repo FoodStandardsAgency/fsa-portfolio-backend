@@ -14,7 +14,7 @@ namespace FSAPortfolio.WebAPI.Models
         public string oddlead { get; set; }
         public string servicelead { get; set; }
 
-        public ProjectPersonModel[] team { get; set; }
+        public string team { get; set; }
 
 
 
