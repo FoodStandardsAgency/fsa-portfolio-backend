@@ -34,7 +34,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
                         source.Projects.Where(p => p.LatestUpdate_Id != source.Configuration.CompletedPhase.Id)
                         .Where(p => p.Lead?.G6team != null)
                         .Select(p => p.Lead.G6team).Distinct()
-                        .Select(p => new Team() { ViewKey = p }));
+                        .Select(p => new Team() { ViewKey = p, Config = source.Configuration }));
                     break;
                 default:
                     throw new ArgumentException($"Unrecognised summary type: {summaryType}");
@@ -100,7 +100,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
     {
         public IEnumerable<PhaseProjectsModel> Resolve(Team source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
         {
-            return SummaryLinqQuery.GetQuery(source.Config, p => p.Lead?.G6team == source.ViewKey, context);
+            return SummaryLinqQuery.GetQuery(source.Config, p => p.Lead != null && p.Lead.G6team == source.ViewKey, context);
         }
     }
 }
