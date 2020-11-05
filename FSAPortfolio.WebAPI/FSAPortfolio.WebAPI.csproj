@@ -154,7 +154,6 @@
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\LegacyProjectsController.cs" />
-    <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DTO\GetProjectQueryDTO.cs" />
     <Compile Include="DTO\GetProjectDTO.cs" />

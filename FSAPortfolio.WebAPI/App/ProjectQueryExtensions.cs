@@ -32,6 +32,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(r => r.Project.KeyContact1)
                 .Include(r => r.Project.KeyContact2)
                 .Include(r => r.Project.KeyContact3)
+                .Include(r => r.Project.Team)
                 ;
         }
         public static IQueryable<ProjectReservation> ProjectUpdateIncludes(this IQueryable<ProjectReservation> query)

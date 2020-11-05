@@ -26,7 +26,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             IEnumerable<PortfolioModel> result = null;
             using (var context = new PortfolioContext())
             {
-                result = PortfolioMapper.ConfigMapper.Map<IEnumerable<PortfolioModel>>(context.Portfolios);
+                result = PortfolioMapper.ConfigMapper.Map<IEnumerable<PortfolioModel>>(await context.Portfolios.ToListAsync());
             }
             return result;
         }

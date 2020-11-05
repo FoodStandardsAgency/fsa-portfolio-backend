@@ -131,6 +131,25 @@ namespace FSAPortfolio.WebAPI.App.Users
             project.KeyContact1 = await EnsureForAsync(update.key_contact1, project.KeyContact1);
             project.KeyContact2 = await EnsureForAsync(update.key_contact2, project.KeyContact2);
             project.KeyContact3 = await EnsureForAsync(update.key_contact3, project.KeyContact3);
+            await MapTeamAsync(update, project);
+        }
+
+        internal async Task MapTeamAsync(ProjectUpdateModel update, Project project)
+        {
+            project.Team.Clear();
+            if (update?.team != null && update.team.Length > 0)
+            {
+                foreach (var id in update.team)
+                {
+                    var person = await EnsurePersonForPrincipalName(id);
+                    if (person != null)
+                    {
+                        project.Team.Add(person);
+                    }
+
+                }
+            }
+
         }
 
         private async Task<Person> EnsureForAsync(ProjectPersonModel model, Person currentValue)
@@ -143,8 +162,5 @@ namespace FSAPortfolio.WebAPI.App.Users
             }
             return result;
         }
-
-
-
     }
 }
