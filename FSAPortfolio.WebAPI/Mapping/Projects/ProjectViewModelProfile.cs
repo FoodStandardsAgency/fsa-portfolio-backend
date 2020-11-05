@@ -199,10 +199,14 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             UpdateHistoryModel result = null;
             object lastUpdate;
-            if (context.Items.TryGetValue(nameof(ProjectViewModel.LastUpdate), out lastUpdate) && (lastUpdate as bool? ?? false))
+            if (context.Items.TryGetValue(nameof(ProjectViewModel.LastUpdate), out lastUpdate))
             {
-                var lastTextUpdate = source.Updates.Where(u => u.Timestamp.Date != DateTime.Today && !string.IsNullOrWhiteSpace(u.Text)).OrderBy(u => u.Timestamp).FirstOrDefault();
-                result = context.Mapper.Map<UpdateHistoryModel>(lastTextUpdate);
+                var lastUpdateValue = (lastUpdate as bool?);
+                if (lastUpdateValue.HasValue && lastUpdateValue.Value)
+                {
+                    var lastTextUpdate = source.Updates.Where(u => u.Timestamp.Date != DateTime.Today && !string.IsNullOrWhiteSpace(u.Text)).OrderBy(u => u.Timestamp).FirstOrDefault();
+                    result = context.Mapper.Map<UpdateHistoryModel>(lastTextUpdate);
+                }
             }
             return result;
         }
@@ -214,10 +218,14 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             StatusUpdateHistoryModel result = null;
             object lastUpdate;
-            if (context.Items.TryGetValue(nameof(ProjectViewModel.LastUpdate), out lastUpdate) && (lastUpdate as bool? ?? false))
+            if (context.Items.TryGetValue(nameof(ProjectViewModel.LastUpdate), out lastUpdate))
             {
-                var lastTextUpdate = source.Updates.Where(u => u.Id != source.LatestUpdate_Id).OrderBy(u => u.Timestamp).FirstOrDefault();
-                result = context.Mapper.Map<StatusUpdateHistoryModel>(lastTextUpdate);
+                var lastUpdateValue = (lastUpdate as bool?);
+                if (lastUpdateValue.HasValue && lastUpdateValue.Value)
+                {
+                    var lastTextUpdate = source.Updates.Where(u => u.Id != source.LatestUpdate_Id).OrderBy(u => u.Timestamp).FirstOrDefault();
+                    result = context.Mapper.Map<StatusUpdateHistoryModel>(lastTextUpdate);
+                }
             }
             return result;
         }
