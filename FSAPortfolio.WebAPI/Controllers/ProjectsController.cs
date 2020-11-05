@@ -218,7 +218,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                     Project = PortfolioMapper.ProjectMapper.Map<T>(project, opt =>
                     {
                         opt.Items[nameof(ProjectViewModel.UpdateHistory)] = includeHistory;
-                        opt.Items[nameof(ProjectViewModel.LastUpdate)] = includeLastUpdate;
+                        opt.Items[nameof(ProjectEditViewModel.LastUpdate)] = includeLastUpdate;
                     })
                 };
                 if (includeConfig) result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration);

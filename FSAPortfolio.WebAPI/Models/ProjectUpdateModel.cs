@@ -45,6 +45,9 @@ namespace FSAPortfolio.WebAPI.Models
         public ProjectPersonModel servicelead { get; set; }
         public ProjectPersonModel[] team { get; set; }
 
+        [JsonProperty("lastupdate")]
+        public UpdateHistoryModel LastUpdate { get; set; }
+
         public string[] rels { get; set; }
         public string[] dependencies { get; set; }
         [JsonIgnore]

@@ -111,7 +111,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 ;
 
             CreateMap<Project, ProjectViewModel>()
-                .ForMember(p => p.LastUpdate, o => o.MapFrom<LastUpdateResolver>())
                 .ForMember(p => p.LastStatusUpdate, o => o.MapFrom<LastStatusUpdateResolver>())
                 .ForMember(p => p.UpdateHistory, o => o.MapFrom<UpdateHistoryResolver>())
                 .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => new RelatedProjectModel() { ProjectId = rp.Reservation.ProjectId, Name = rp.Name })))
@@ -128,6 +127,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 ;
 
             CreateMap<Project, ProjectEditViewModel>()
+                .ForMember(p => p.LastUpdate, o => o.MapFrom<LastUpdateResolver>())
                 .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => rp.Reservation.ProjectId)))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects.Select(rp => rp.Reservation.ProjectId)))
                 .ForMember(d => d.Properties, o => o.Ignore())
@@ -199,7 +199,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             UpdateHistoryModel result = null;
             object lastUpdate;
-            if (context.Items.TryGetValue(nameof(ProjectViewModel.LastUpdate), out lastUpdate))
+            if (context.Items.TryGetValue(nameof(ProjectEditViewModel.LastUpdate), out lastUpdate))
             {
                 var lastUpdateValue = (lastUpdate as bool?);
                 if (lastUpdateValue.HasValue && lastUpdateValue.Value)
@@ -218,7 +218,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             StatusUpdateHistoryModel result = null;
             object lastUpdate;
-            if (context.Items.TryGetValue(nameof(ProjectViewModel.LastUpdate), out lastUpdate))
+            if (context.Items.TryGetValue(nameof(ProjectEditViewModel.LastUpdate), out lastUpdate))
             {
                 var lastUpdateValue = (lastUpdate as bool?);
                 if (lastUpdateValue.HasValue && lastUpdateValue.Value)
