@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Organisation;
+using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Sync;
 using FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers;
 using FSAPortfolio.WebAPI.Models;
@@ -39,7 +40,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
 
             CreateMap<PortfolioLabelConfig, PortfolioLabelModel>()
                 .ForMember(d => d.FieldName, o => o.MapFrom(s => s.FieldName))
-                .ForMember(d => d.FieldGroup, o => o.MapFrom(s => s.Group == null ? DefaultFieldLabels.FieldGroupName_Ungrouped : s.Group.Name))
+                .ForMember(d => d.FieldGroup, o => o.MapFrom(s => s.Group == null ? FieldGroupConstants.FieldGroupName_Ungrouped : s.Group.Name))
                 .ForMember(d => d.GroupOrder, o => o.MapFrom(s => s.Group.Order))
                 .ForMember(d => d.FieldOrder, o => o.MapFrom(s => s.FieldOrder))
                 .ForMember(d => d.FieldTitle, o => o.MapFrom(s => s.FieldTitle))

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FSAPortfolio.WebAPI.App;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,7 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("portfolio")]
         public string PortfolioViewKey { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.project_id))]
+        [JsonProperty(ProjectPropertyConstants.ProjectId)]
         public string ProjectId { get; set; }
 
         [JsonProperty(nameof(ProjectModel.project_name))]

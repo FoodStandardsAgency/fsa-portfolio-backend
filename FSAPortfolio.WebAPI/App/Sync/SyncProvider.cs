@@ -342,15 +342,15 @@ namespace FSAPortfolio.WebAPI.App.Sync
             budgetTypeFactory(1);
             budgetTypeFactory(2);
             budgetTypeFactory(3);
-            labelGroupFactory(DefaultFieldLabels.FieldGroupName_ProjectIDs, 0);
-            labelGroupFactory(DefaultFieldLabels.FieldGroupName_AboutTheProject, 1);
-            labelGroupFactory(DefaultFieldLabels.FieldGroupName_ProjectTeam, 2);
-            labelGroupFactory(DefaultFieldLabels.FieldGroupName_ProjectPlan, 3);
-            labelGroupFactory(DefaultFieldLabels.FieldGroupName_ProgressIndicators, 4);
-            labelGroupFactory(DefaultFieldLabels.FieldGroupName_Updates, 5);
-            labelGroupFactory(DefaultFieldLabels.FieldGroupName_Prioritisation, 6);
-            labelGroupFactory(DefaultFieldLabels.FieldGroupName_Budget, 7);
-            labelGroupFactory(DefaultFieldLabels.FieldGroupName_FSAProcesses, 8);
+            labelGroupFactory(FieldGroupConstants.FieldGroupName_ProjectIDs, 0);
+            labelGroupFactory(FieldGroupConstants.FieldGroupName_AboutTheProject, 1);
+            labelGroupFactory(FieldGroupConstants.FieldGroupName_ProjectTeam, 2);
+            labelGroupFactory(FieldGroupConstants.FieldGroupName_ProjectPlan, 3);
+            labelGroupFactory(FieldGroupConstants.FieldGroupName_ProgressIndicators, 4);
+            labelGroupFactory(FieldGroupConstants.FieldGroupName_Updates, 5);
+            labelGroupFactory(FieldGroupConstants.FieldGroupName_Prioritisation, 6);
+            labelGroupFactory(FieldGroupConstants.FieldGroupName_Budget, 7);
+            labelGroupFactory(FieldGroupConstants.FieldGroupName_FSAProcesses, 8);
         }
 
         internal void SyncAllProjects()

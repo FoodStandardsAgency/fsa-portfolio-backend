@@ -89,7 +89,15 @@ namespace FSAPortfolio.WebAPI.App
         }
         public static IQueryable<Project> IncludeQueryResult(this IQueryable<Project> query)
         {
-            return query.Include(p => p.Reservation);
+            return query.Include(p => p.Reservation)
+                .Include(p => p.Category)
+                .Include(p => p.Subcategories)
+                .Include(p => p.Lead)
+                .Include(p => p.KeyContact1)
+                .Include(p => p.KeyContact2)
+                .Include(p => p.KeyContact3)
+                .Include(p => p.Team)
+                ;
         }
 
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static FSAPortfolio.Entities.Organisation.PortfolioFieldFlags;
+using static FSAPortfolio.WebAPI.App.FieldGroupConstants;
 
 namespace FSAPortfolio.WebAPI.App.Sync
 {
@@ -17,16 +18,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
         private static string fundedOptions = string.Join(", ", Enumerable.Range(0, 5));
 
 
-        internal const string FieldGroupName_Ungrouped = "Ungrouped fields";
-        internal const string FieldGroupName_ProjectIDs = "Project IDs";
-        internal const string FieldGroupName_AboutTheProject = "About the project";
-        internal const string FieldGroupName_ProjectTeam = "Project team";
-        internal const string FieldGroupName_ProjectPlan = "Project plan";
-        internal const string FieldGroupName_ProgressIndicators = "Progress indicators";
-        internal const string FieldGroupName_Updates = "Updates";
-        internal const string FieldGroupName_Prioritisation = "Prioritisation";
-        internal const string FieldGroupName_Budget = "Budget";
-        internal const string FieldGroupName_FSAProcesses = "FSA Processes";
 
         private int fieldOrder = 0;
 
@@ -101,7 +92,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             var labels = new PortfolioLabelConfig[]
             {
                 //      FieldGroup      FieldTitle     FieldName                    Included IncludeLock AdmLock FieldType FieldTypeLocked
-                Factory(FieldGroupName_ProjectIDs, "Project ID", nameof(ProjectModel.project_id), true, true, true, PortfolioFieldType.Auto),
+                Factory(FieldGroupName_ProjectIDs, "Project ID", ProjectPropertyConstants.ProjectId, true, true, true, PortfolioFieldType.Auto),
                 Factory(FieldGroupName_ProjectIDs, "Business Case Number", nameof(ProjectModel.business_case_number), true, false, false, PortfolioFieldType.FreeText, flags: ProjectData|EditorCanView),
                 Factory(FieldGroupName_ProjectIDs, "FS Number", nameof(ProjectModel.fs_number), false, false, false, PortfolioFieldType.FreeText, flags: ProjectData|EditorCanView),
 
@@ -122,7 +113,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_AboutTheProject, "Dependencies", nameof(ProjectEditViewModel.dependencies), false, false, false, PortfolioFieldType.ProjectMultiSelect),
                 Factory(FieldGroupName_AboutTheProject, "Key documents", nameof(ProjectModel.documents), true, false, false, PortfolioFieldType.LinkedItemList),
 
-                Factory(FieldGroupName_ProjectTeam, "Project lead", nameof(ProjectEditViewModel.oddlead), false, false, false, PortfolioFieldType.ADUserSearch, flags: FilterProject),
+                Factory(FieldGroupName_ProjectTeam, "Project lead", ProjectPropertyConstants.ProjectLead, false, false, false, PortfolioFieldType.ADUserSearch, flags: FilterProject),
                 Factory(FieldGroupName_ProjectTeam, "Lead role", nameof(ProjectModel.oddlead_role), false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_ProjectTeam, "Lead team", nameof(ProjectModel.g6team), false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 1", nameof(ProjectModel.key_contact1), false, false, false, PortfolioFieldType.ADUserSearch),
@@ -190,8 +181,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
             SetMasterLabel(labels, nameof(ProjectModel.subcat), nameof(ProjectModel.category));
             SetMasterLabel(labels, nameof(ProjectModel.programme_description), nameof(ProjectModel.programme));
-            SetMasterLabel(labels, nameof(ProjectModel.oddlead_role), nameof(ProjectEditViewModel.oddlead));
-            SetMasterLabel(labels, nameof(ProjectModel.g6team), nameof(ProjectEditViewModel.oddlead));
+            SetMasterLabel(labels, nameof(ProjectModel.oddlead_role), ProjectPropertyConstants.ProjectLead);
+            SetMasterLabel(labels, nameof(ProjectModel.g6team), ProjectPropertyConstants.ProjectLead);
             SetMasterLabel(labels, nameof(ProjectModel.how_get_green), nameof(ProjectModel.rag));
 
             return labels;

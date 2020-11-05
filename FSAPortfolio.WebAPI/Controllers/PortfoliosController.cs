@@ -1,6 +1,7 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Projects;
 using FSAPortfolio.WebAPI.DTO;
@@ -61,11 +62,15 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 var provider = new PortfolioProvider(context, viewKey);
                 var config = await provider.GetConfigAsync();
+                var customFields = provider.GetCustomFilterLabels(config);
+
                 result = new GetProjectQueryDTO()
                 {
-                    Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.FilterProject|PortfolioFieldFlags.FilterRequired),
+                    Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.FilterProject|PortfolioFieldFlags.FilterRequired, customFields),
                     Options = await provider.GetNewProjectOptionsAsync(config)
                 };
+
+
             }
             return result;
         }
@@ -81,21 +86,57 @@ namespace FSAPortfolio.WebAPI.Controllers
                 {
                     filteredQuery = filteredQuery.Where(p => p.Name.Contains(searchTerms.Name) || p.Reservation.ProjectId.Contains(searchTerms.Name));
                 }
-                if (searchTerms.Priorities != null && searchTerms.Priorities.Length > 0)
-                {
-                    filteredQuery = filteredQuery.Where(p => p.Priority.HasValue && searchTerms.Priorities.Contains(p.Priority.Value));
-                }
-                filteredQuery = AddExactMatchFilter(searchTerms.Phases, filteredQuery, p => searchTerms.Phases.Contains(p.LatestUpdate.Phase.ViewKey));
                 filteredQuery = AddExactMatchFilter(searchTerms.Themes, filteredQuery, p => searchTerms.Themes.Contains(p.Theme));
                 filteredQuery = AddExactMatchFilter(searchTerms.ProjectTypes, filteredQuery, p => searchTerms.ProjectTypes.Contains(p.ProjectType));
-                filteredQuery = AddExactMatchFilter(searchTerms.RAGStatuses, filteredQuery, p => searchTerms.RAGStatuses.Contains(p.LatestUpdate.RAGStatus.ViewKey));
-                filteredQuery = AddExactMatchFilter(searchTerms.OnHoldStatuses, filteredQuery, p => searchTerms.OnHoldStatuses.Contains(p.LatestUpdate.OnHoldStatus.ViewKey));
                 filteredQuery = AddExactMatchFilter(searchTerms.Categories, filteredQuery, p => searchTerms.Categories.Contains(p.Category.ViewKey) || searchTerms.Categories.Intersect(p.Subcategories.Select(sc => sc.ViewKey)).Any());
                 filteredQuery = AddExactMatchFilter(searchTerms.Directorates, filteredQuery, p => searchTerms.Directorates.Contains(p.Directorate));
                 filteredQuery = AddExactMatchFilter(searchTerms.StrategicObjectives, filteredQuery, p => searchTerms.StrategicObjectives.Contains(p.StrategicObjectives));
                 filteredQuery = AddExactMatchFilter(searchTerms.Programmes, filteredQuery, p => searchTerms.Programmes.Contains(p.Programme));
 
-                // TODO: add filters for leads etc
+                // Project team
+                if (!string.IsNullOrWhiteSpace(searchTerms.TeamMemberName))
+                {
+                    filteredQuery = filteredQuery.Where(p =>
+                        p.Lead.Firstname.StartsWith(searchTerms.TeamMemberName) ||
+                        p.Lead.Surname.StartsWith(searchTerms.TeamMemberName) ||
+                        p.Lead.Email.StartsWith(searchTerms.TeamMemberName) ||
+                        p.KeyContact1.Firstname.StartsWith(searchTerms.TeamMemberName) ||
+                        p.KeyContact1.Surname.StartsWith(searchTerms.TeamMemberName) ||
+                        p.KeyContact1.Email.StartsWith(searchTerms.TeamMemberName) ||
+                        p.KeyContact2.Firstname.StartsWith(searchTerms.TeamMemberName) ||
+                        p.KeyContact2.Surname.StartsWith(searchTerms.TeamMemberName) ||
+                        p.KeyContact2.Email.StartsWith(searchTerms.TeamMemberName) ||
+                        p.KeyContact3.Firstname.StartsWith(searchTerms.TeamMemberName) ||
+                        p.KeyContact3.Surname.StartsWith(searchTerms.TeamMemberName) ||
+                        p.KeyContact3.Email.StartsWith(searchTerms.TeamMemberName) ||
+                        p.Team.Any(t =>
+                            t.Firstname.StartsWith(searchTerms.TeamMemberName) ||
+                            t.Surname.StartsWith(searchTerms.TeamMemberName) ||
+                            t.Email.StartsWith(searchTerms.TeamMemberName))
+                        );
+                }
+                // TODO: project lead search
+                if (!string.IsNullOrWhiteSpace(searchTerms.ProjectLeadName))
+                {
+                    filteredQuery = filteredQuery.Where(p =>
+                        p.Lead.Firstname.StartsWith(searchTerms.TeamMemberName) ||
+                        p.Lead.Surname.StartsWith(searchTerms.TeamMemberName) ||
+                        p.Lead.Email.StartsWith(searchTerms.TeamMemberName)
+                        );
+                }
+
+                // Progress
+                filteredQuery = AddExactMatchFilter(searchTerms.Phases, filteredQuery, p => searchTerms.Phases.Contains(p.LatestUpdate.Phase.ViewKey));
+                filteredQuery = AddExactMatchFilter(searchTerms.RAGStatuses, filteredQuery, p => searchTerms.RAGStatuses.Contains(p.LatestUpdate.RAGStatus.ViewKey));
+                filteredQuery = AddExactMatchFilter(searchTerms.OnHoldStatuses, filteredQuery, p => searchTerms.OnHoldStatuses.Contains(p.LatestUpdate.OnHoldStatus.ViewKey));
+
+                // Prioritisation
+                if (searchTerms.Priorities != null && searchTerms.Priorities.Length > 0)
+                {
+                    filteredQuery = filteredQuery.Where(p => p.Priority.HasValue && searchTerms.Priorities.Contains(p.Priority.Value));
+                }
+
+
 
                 result = PortfolioMapper.ProjectMapper.Map<ProjectQueryResultModel>(await filteredQuery.OrderByDescending(p => p.Priority).ToArrayAsync());
                 return result;

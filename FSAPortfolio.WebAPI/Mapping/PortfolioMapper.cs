@@ -58,9 +58,12 @@ namespace FSAPortfolio.WebAPI.Mapping
             ActiveDirectoryMapper = activeDirectoryConfig.CreateMapper();
         }
 
-        internal static ProjectLabelConfigModel GetProjectLabelConfigModel(PortfolioConfiguration config, PortfolioFieldFlags flags = PortfolioFieldFlags.Read)
+        internal static ProjectLabelConfigModel GetProjectLabelConfigModel(PortfolioConfiguration config, PortfolioFieldFlags flags = PortfolioFieldFlags.Read, IEnumerable<PortfolioLabelConfig> customLabels = null)
         {
-            return ProjectMapper.Map<ProjectLabelConfigModel>(config, opts => opts.Items[nameof(PortfolioFieldFlags)] = flags);
+            return ProjectMapper.Map<ProjectLabelConfigModel>(config, opts => { 
+                opts.Items[nameof(PortfolioFieldFlags)] = flags;
+                if (customLabels != null) opts.Items[nameof(PortfolioLabelConfig)] = customLabels;
+            });
         }
 
         internal static PropertyInfo[] GetUnmappedSourceMembers<TSource, TDest>(MapperConfiguration config)

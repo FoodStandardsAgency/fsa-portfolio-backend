@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FSAPortfolio.WebAPI.App;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,12 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonProperty(nameof(ProjectModel.project_name))]
         public string Name { get; set; }
+
+        [JsonProperty(FilterFieldConstants.TeamMemberNameFilter)]
+        public string TeamMemberName { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.ProjectLead)]
+        public string ProjectLeadName { get; set; }
 
         [JsonProperty(nameof(ProjectModel.phase))]
         public string[] Phases { get; set; }
@@ -41,7 +48,7 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.programme))]
         public string[] Programmes { get; set; }
 
-        [JsonProperty(nameof(ProjectUpdateModel.oddlead))]
+        [JsonProperty(ProjectPropertyConstants.ProjectLead)]
         public string[] Leads { get; set; }
 
         [JsonProperty(nameof(ProjectModel.priority_main))]

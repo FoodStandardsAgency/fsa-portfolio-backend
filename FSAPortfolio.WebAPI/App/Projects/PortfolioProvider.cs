@@ -87,5 +87,21 @@ namespace FSAPortfolio.WebAPI.App.Projects
             return options;
         }
 
+        internal PortfolioLabelConfig[] GetCustomFilterLabels(PortfolioConfiguration config)
+        {
+            var customLabels = new PortfolioLabelConfig[] {
+                    new PortfolioLabelConfig()
+                    {
+                        Included = true,
+                        Group = config.LabelGroups.SingleOrDefault(g => g.Name == FieldGroupConstants.FieldGroupName_ProjectTeam),
+                        Label = FilterFieldConstants.TeamMemberNameName,
+                        FieldName = FilterFieldConstants.TeamMemberNameFilter,
+                        FieldType = PortfolioFieldType.FreeText
+                    }
+                };
+            return customLabels;
+
+        }
+
     }
 }

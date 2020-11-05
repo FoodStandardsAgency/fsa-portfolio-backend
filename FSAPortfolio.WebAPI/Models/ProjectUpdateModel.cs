@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.WebAPI.Models.JsonConverters;
+﻿using FSAPortfolio.WebAPI.App;
+using FSAPortfolio.WebAPI.Models.JsonConverters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -13,6 +14,8 @@ namespace FSAPortfolio.WebAPI.Models
     {
         public string[] rels { get; set; }
         public string[] dependencies { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.ProjectLead)]
         public ProjectPersonModel oddlead { get; set; }
         public ProjectPersonModel servicelead { get; set; }
         public string[] team { get; set; }
@@ -41,7 +44,9 @@ namespace FSAPortfolio.WebAPI.Models
     [JsonConverter(typeof(ProjectEditViewModelConverter))]
     public class ProjectEditViewModel : ProjectModel
     {
+        [JsonProperty(ProjectPropertyConstants.ProjectLead)]
         public ProjectPersonModel oddlead { get; set; }
+
         public ProjectPersonModel servicelead { get; set; }
         public ProjectPersonModel[] team { get; set; }
 

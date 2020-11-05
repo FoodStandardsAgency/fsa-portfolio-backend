@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Sync;
 using FSAPortfolio.WebAPI.Mapping.Projects.Resolvers;
 using FSAPortfolio.WebAPI.Models;
@@ -33,7 +34,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.ProjectType, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_type))))
                 .ForMember(d => d.Programme, o => o.MapFrom(new SelectPickerResolver(nameof(ProjectModel.programme), "Select the programmes...")))
 
-                .ForMember(d => d.ODDLead, o => o.MapFrom(new StubPersonResolver(nameof(ProjectEditViewModel.oddlead), addNoneOption: false))) // TODO: do we need these options if using ajax?
+                .ForMember(d => d.ODDLead, o => o.MapFrom(new StubPersonResolver(ProjectPropertyConstants.ProjectLead, addNoneOption: false))) // TODO: do we need these options if using ajax?
                 .ForMember(d => d.ODDLeadRole, o => o.MapFrom(new StubRoleResolver(nameof(ProjectModel.oddlead_role))))
                 .ForMember(d => d.G6Team, o => o.MapFrom(new StubTeamResolver(nameof(ProjectModel.g6team))))
                 .ForMember(d => d.KeyContact1, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.key_contact1))))
@@ -73,7 +74,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
             CreateMap<PortfolioLabelConfig, ProjectLabelModel>()
                 .ForMember(d => d.FieldName, o => o.MapFrom(s => s.FieldName))
-                .ForMember(d => d.FieldGroup, o => o.MapFrom(s => s.Group == null ? DefaultFieldLabels.FieldGroupName_Ungrouped : s.Group.Name))
+                .ForMember(d => d.FieldGroup, o => o.MapFrom(s => s.Group == null ? FieldGroupConstants.FieldGroupName_Ungrouped : s.Group.Name))
                 .ForMember(d => d.GroupOrder, o => o.MapFrom(s => s.Group.Order))
                 .ForMember(d => d.FieldOrder, o => o.MapFrom(s => s.FieldOrder))
                 .ForMember(d => d.FieldTitle, o => o.MapFrom(s => s.FieldTitle))
@@ -99,10 +100,21 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                                                       ResolutionContext context)
         {
             var flags = (PortfolioFieldFlags)context.Items[nameof(PortfolioFieldFlags)];
-            return context.Mapper.Map<ICollection<ProjectLabelModel>>(sourceMember.Where(s => (s.Flags & flags) != 0))
+
+            var labels = sourceMember.Where(s => (s.Flags & flags) != 0);
+
+            object value;
+            if(context.Items.TryGetValue(nameof(PortfolioLabelConfig), out value))
+            {
+                IEnumerable<PortfolioLabelConfig> customLabels = (IEnumerable<PortfolioLabelConfig>)value;
+                labels = labels.Union(customLabels);
+            }
+
+            var models = context.Mapper.Map<ICollection<ProjectLabelModel>>(labels)
                                  .OrderBy(l => l.GroupOrder)
                                  .ThenBy(l => l.FieldOrder)
                                  .ToList();
+            return models;
         }
     }
 
