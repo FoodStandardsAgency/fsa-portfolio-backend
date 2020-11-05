@@ -115,13 +115,13 @@ namespace FSAPortfolio.WebAPI.Controllers
                             t.Email.StartsWith(searchTerms.TeamMemberName))
                         );
                 }
-                // TODO: project lead search
+                // Project lead search
                 if (!string.IsNullOrWhiteSpace(searchTerms.ProjectLeadName))
                 {
                     filteredQuery = filteredQuery.Where(p =>
-                        p.Lead.Firstname.StartsWith(searchTerms.TeamMemberName) ||
-                        p.Lead.Surname.StartsWith(searchTerms.TeamMemberName) ||
-                        p.Lead.Email.StartsWith(searchTerms.TeamMemberName)
+                        p.Lead.Firstname.StartsWith(searchTerms.ProjectLeadName) ||
+                        p.Lead.Surname.StartsWith(searchTerms.ProjectLeadName) ||
+                        p.Lead.Email.StartsWith(searchTerms.ProjectLeadName)
                         );
                 }
 
@@ -135,8 +135,6 @@ namespace FSAPortfolio.WebAPI.Controllers
                 {
                     filteredQuery = filteredQuery.Where(p => p.Priority.HasValue && searchTerms.Priorities.Contains(p.Priority.Value));
                 }
-
-
 
                 result = PortfolioMapper.ProjectMapper.Map<ProjectQueryResultModel>(await filteredQuery.OrderByDescending(p => p.Priority).ToArrayAsync());
                 return result;

@@ -18,9 +18,6 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(FilterFieldConstants.TeamMemberNameFilter)]
         public string TeamMemberName { get; set; }
 
-        [JsonProperty(ProjectPropertyConstants.ProjectLead)]
-        public string ProjectLeadName { get; set; }
-
         [JsonProperty(nameof(ProjectModel.phase))]
         public string[] Phases { get; set; }
 
@@ -49,7 +46,7 @@ namespace FSAPortfolio.WebAPI.Models
         public string[] Programmes { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.ProjectLead)]
-        public string[] Leads { get; set; }
+        public string ProjectLeadName { get; set; }
 
         [JsonProperty(nameof(ProjectModel.priority_main))]
         public int[] Priorities { get; set; }
