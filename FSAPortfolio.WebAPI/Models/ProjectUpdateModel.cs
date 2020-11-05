@@ -15,7 +15,7 @@ namespace FSAPortfolio.WebAPI.Models
         public string[] dependencies { get; set; }
         public ProjectPersonModel oddlead { get; set; }
         public ProjectPersonModel servicelead { get; set; }
-
+        public string[] team { get; set; }
 
 
         [JsonIgnore]
@@ -43,6 +43,7 @@ namespace FSAPortfolio.WebAPI.Models
     {
         public ProjectPersonModel oddlead { get; set; }
         public ProjectPersonModel servicelead { get; set; }
+        public ProjectPersonModel[] team { get; set; }
 
         public string[] rels { get; set; }
         public string[] dependencies { get; set; }

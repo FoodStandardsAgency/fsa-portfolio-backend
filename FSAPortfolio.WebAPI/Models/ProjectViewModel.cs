@@ -8,10 +8,13 @@ namespace FSAPortfolio.WebAPI.Models
 {
     public class ProjectViewModel : ProjectModel
     {
-        public string oddlead_email { get; set; } // TODO: view only! Move to view model
-        public string servicelead_email { get; set; } // TODO: view only! Move to view model
+        // TODO: move lead and servicelead over to ProjectPersonModel; then move all instances back into ProjectModel
+        public string oddlead_email { get; set; } 
+        public string servicelead_email { get; set; }
         public string oddlead { get; set; }
         public string servicelead { get; set; }
+
+        public ProjectPersonModel[] team { get; set; }
 
 
 

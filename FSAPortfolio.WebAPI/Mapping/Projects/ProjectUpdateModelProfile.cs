@@ -49,7 +49,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.ProjectType, o => o.MapFrom(s => s.project_type))
                 .ForMember(p => p.StrategicObjectives, o => o.MapFrom(s => s.strategic_objectives))
                 .ForMember(p => p.Programme, o => o.MapFrom(s => s.programme))
-                .ForMember(p => p.Team, o => o.MapFrom(s => string.Join(",", s.team)))
+                .ForMember(p => p.Team, o => o.MapFrom<PersonCollectionResolver, string[]>(s => s.team))
                 .ForMember(p => p.RelatedProjects, o => o.MapFrom<ProjectCollectionResolver, string[]>(s => s.rels))
                 .ForMember(p => p.DependantProjects, o => o.MapFrom<ProjectCollectionResolver, string[]>(s => s.dependencies))
                 .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => s.category))
@@ -153,6 +153,30 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                             result.Add(project);
                         }
                     }
+                }
+            }
+            return result;
+        }
+    }
+
+    public class PersonCollectionResolver : IMemberValueResolver<object, Project, string[], ICollection<Person>>
+    {
+        public ICollection<Person> Resolve(object source, Project destination, string[] people, ICollection<Person> destMember, ResolutionContext context)
+        {
+            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
+            var result = new List<Person>();
+            if (people != null && people.Length > 0)
+            {
+                foreach (var id in people)
+                {
+                    var person = 
+                        portfolioContext.People.Local.SingleOrDefault(p => p.Email == id|| p.ActiveDirectoryPrincipalName == id) ??
+                        portfolioContext.People.SingleOrDefault(p => p.Email == id || p.ActiveDirectoryPrincipalName == id);
+                    if(person != null)
+                    {
+                        result.Add(person);
+                    }
+
                 }
             }
             return result;

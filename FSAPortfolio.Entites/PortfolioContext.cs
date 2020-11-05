@@ -129,6 +129,12 @@ namespace FSAPortfolio.Entities
             });
             modelBuilder.Entity<Project>().HasMany(p => p.AuditLogs).WithRequired(l => l.Project).HasForeignKey(u => u.Project_Id);
             modelBuilder.Entity<Project>().HasMany(p => p.ProjectData).WithRequired(l => l.Project).HasForeignKey(u => u.Project_Id);
+            modelBuilder.Entity<Project>().HasMany(p => p.Team).WithMany().Map(mc =>
+            {
+                mc.MapLeftKey("Project_Id");
+                mc.MapRightKey("Person_Id");
+                mc.ToTable("ProjectTeamMembers");
+            });
             modelBuilder.Entity<Project>().HasOptional(p => p.LatestUpdate).WithMany().HasForeignKey(p => p.LatestUpdate_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.FirstUpdate).WithMany().HasForeignKey(p => p.FirstUpdate_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.Lead).WithMany().HasForeignKey(p => p.Lead_Id);

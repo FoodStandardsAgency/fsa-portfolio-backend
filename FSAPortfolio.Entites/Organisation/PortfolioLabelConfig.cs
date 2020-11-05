@@ -35,7 +35,8 @@ namespace FSAPortfolio.Entities.Organisation
         NamedLink = 53,
         LinkedItemList = 54,
         ProjectUpdateText = 55,
-        ADUserSearch = 56
+        ADUserSearch = 56,
+        ADUserMultiSearch = 57
     }
 
     /// <summary>
@@ -94,6 +95,7 @@ namespace FSAPortfolio.Entities.Organisation
             this[PortfolioFieldType.LinkedItemList] = "List of items with links";
             this[PortfolioFieldType.ProjectUpdateText] = "Project update text";
             this[PortfolioFieldType.ADUserSearch] = "Select single user from Active Directory";
+            this[PortfolioFieldType.ADUserMultiSearch] = "Select multiple users from Active Directory";
         }
     }
 

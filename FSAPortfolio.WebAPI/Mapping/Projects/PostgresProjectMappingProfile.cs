@@ -62,7 +62,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Confidence, o => o.MapFrom<PostgresIntResolver, string>(s => s.confidence))
                 .ForMember(p => p.Benefits, o => o.MapFrom<PostgresIntResolver, string>(s => s.benefits))
                 .ForMember(p => p.Criticality, o => o.MapFrom<PostgresIntResolver, string>(s => s.criticality))
-                .ForMember(p => p.Team, o => o.MapFrom(s => string.IsNullOrWhiteSpace(s.team) ? null : s.team))
+                .ForMember(p => p.Team, o => o.MapFrom<PostgresTeamCollectionResolver, string>(s => s.team))
                 .ForMember(p => p.Lead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.oddlead_email))
                 .ForMember(p => p.ServiceLead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.servicelead_email))
                 .ForMember(p => p.RelatedProjects, o => o.MapFrom<PostgresProjectCollectionResolver, string>(s => s.rels))
@@ -201,5 +201,36 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             return result;
         }
     }
+
+    public class PostgresTeamCollectionResolver : IMemberValueResolver<object, Project, string, ICollection<Person>>
+    {
+        public ICollection<Person> Resolve(object source, Project destination, string sourceMember, ICollection<Person> destMember, ResolutionContext context)
+        {
+            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
+            var result = new List<Person>();
+            if (!string.IsNullOrEmpty(sourceMember))
+            {
+                var peoplesNames = sourceMember.Split(',');
+                foreach (var personsName in peoplesNames)
+                {
+                    var names = personsName.Split(' ');
+                    if(names.Length == 2)
+                    {
+                        var firstName = names[0];
+                        var surname = names[1];
+                        var person =
+                            portfolioContext.People.Local.SingleOrDefault(p => string.Equals(firstName, p.Firstname, StringComparison.OrdinalIgnoreCase)) ??
+                            portfolioContext.People.SingleOrDefault(p => string.Equals(firstName, p.Firstname, StringComparison.OrdinalIgnoreCase));
+                        if(person != null)
+                        {
+                            result.Add(person);
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+    }
+
 
 }

@@ -77,7 +77,7 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.key_contact3))]
         public SelectPickerModel KeyContact3 { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.team))]
+        [JsonProperty(nameof(ProjectEditViewModel.team))]
         public SelectPickerModel Team { get; set; }
 
 
@@ -101,8 +101,6 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonIgnore]
         public IEnumerable<ProjectDataOptionsModel> ProjectDataOptions { get; set; }
-
-
     }
 
     public class DropDownItemModel

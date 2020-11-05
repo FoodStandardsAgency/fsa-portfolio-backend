@@ -44,7 +44,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.benefits, o => o.MapFrom(s => s.Benefits))
                 .ForMember(p => p.criticality, o => o.MapFrom(s => s.Criticality))
 
-                .ForMember(p => p.team, o => o.MapFrom(s => s.Team == null ? null : s.Team.Split(',')))
                 .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
                 .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
                 .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
@@ -124,6 +123,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.servicelead, o => o.MapFrom<ProjectPersonViewResolver, Person>(s => s.ServiceLead))
                 .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email))
                 .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
+                .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
                 .AfterMap<ProjectModelOutboundMapper<ProjectViewModel>>()
                 ;
 
@@ -133,6 +133,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Properties, o => o.Ignore())
                 .ForMember(p => p.oddlead, o => o.MapFrom(s => s.Lead))
                 .ForMember(p => p.servicelead, o => o.MapFrom(s => s.ServiceLead))
+                .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
                 .AfterMap<ProjectModelOutboundMapper<ProjectEditViewModel>>()
                 .AfterMap<ProjectEditViewModelOutboundMapper>()
                 ;
