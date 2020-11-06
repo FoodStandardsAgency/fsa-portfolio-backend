@@ -83,14 +83,14 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
         }
     }
 
-    public class ProjectModelOutboundMapper<T> : IMappingAction<Project, T>
-        where T : ProjectModel
+    public class ProjectDataOutboundMapper<T> : IMappingAction<Project, T>
+        where T : class
     {
         /// <summary>
         /// Unmapped <see cref="ProjectModel"/> properties
         /// </summary>
         internal static readonly Dictionary<string, PropertyInfo> unmappedProperties;
-        static ProjectModelOutboundMapper()
+        static ProjectDataOutboundMapper()
         {
             var unmappedToProject = PortfolioMapper.GetUnmappedDestinationMembers<Project, T>(PortfolioMapper.projectConfig);
             unmappedProperties = unmappedToProject.ToDictionary(p => p.Name);
@@ -110,9 +110,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
 
     }
 
-    public class ProjectEditViewModelOutboundMapper : IMappingAction<Project, ProjectEditViewModel>
+
+
+    public class ProjectJsonPropertiesOutboundMapper : IMappingAction<Project, IJsonProperties>
     {
-        public void Process(Project source, ProjectEditViewModel destination, ResolutionContext context)
+        public void Process(Project source, IJsonProperties destination, ResolutionContext context)
         {
             // Unmodelled properties
             var unmodelledPropertiesQuery = from l in source.Reservation.Portfolio.Configuration.Labels

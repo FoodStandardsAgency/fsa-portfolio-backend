@@ -60,7 +60,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
                 .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.G6team))
                 .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
-                .ForMember(p => p.first_completed, o => o.MapFrom<FirstCompletedResolver, Project>(s => s))
+                .ForMember(p => p.first_completed, o => o.MapFrom<FirstCompletedResolver>())
                 .ForMember(p => p.pgroup, o => o.MapFrom(s => s.PriorityGroup.Name))
 
                 .ForMember(p => p.project_type, o => o.MapFrom(s => s.ProjectType))
@@ -123,7 +123,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email))
                 .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
                 .ForMember(p => p.team, o => o.MapFrom(s => string.Join(", ", s.Team.Select(p => p.DisplayName))))
-                .AfterMap<ProjectModelOutboundMapper<ProjectViewModel>>()
+                .AfterMap<ProjectDataOutboundMapper<ProjectViewModel>>()
                 ;
 
             CreateMap<Project, ProjectEditViewModel>()
@@ -134,8 +134,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.oddlead, o => o.MapFrom(s => s.Lead))
                 .ForMember(p => p.servicelead, o => o.MapFrom(s => s.ServiceLead))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
-                .AfterMap<ProjectModelOutboundMapper<ProjectEditViewModel>>()
-                .AfterMap<ProjectEditViewModelOutboundMapper>()
+                .AfterMap<ProjectDataOutboundMapper<ProjectEditViewModel>>()
+                .AfterMap<ProjectJsonPropertiesOutboundMapper>()
                 ;
 
             CreateMap<Person, ProjectPersonModel>()
@@ -165,14 +165,15 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
     }
 
-    public class FirstCompletedResolver : IMemberValueResolver<Project, ProjectModel, Project, DateTime?>
+    public class FirstCompletedResolver : IValueResolver<Project, object, DateTime?>
     {
-        public DateTime? Resolve(Project source, ProjectModel destination, Project sourceMember, DateTime? destMember, ResolutionContext context)
+        public DateTime? Resolve(Project source, object destination, DateTime? destMember, ResolutionContext context)
         {
             var completedPhase = source.Reservation.Portfolio.Configuration.CompletedPhase;
             var firstCompletePhase = source.Updates.Where(u => u.Phase == completedPhase).OrderBy(u => u.Timestamp).FirstOrDefault();
             return firstCompletePhase?.Timestamp;
         }
+
     }
 
     public class UpdateHistoryResolver : IValueResolver<Project, ProjectModel, UpdateHistoryModel[]>

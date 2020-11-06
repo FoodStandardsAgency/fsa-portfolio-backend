@@ -19,6 +19,6 @@ namespace FSAPortfolio.Entities.Projects
         public string Link { get; set; }
         public int Order { get; set; }
 
-
+        public string ExportText => Name;
     }
 }

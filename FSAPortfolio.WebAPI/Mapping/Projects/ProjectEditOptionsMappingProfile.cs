@@ -99,9 +99,21 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                                                       IEnumerable<ProjectLabelModel> destMember,
                                                       ResolutionContext context)
         {
-            var flags = (PortfolioFieldFlags)context.Items[nameof(PortfolioFieldFlags)];
+            IEnumerable<PortfolioLabelConfig> labels = sourceMember;
+            var flagsKey = nameof(PortfolioFieldFlags);
+            var includedOnlyKey = nameof(PortfolioLabelConfig.Included);
 
-            var labels = sourceMember.Where(s => (s.Flags & flags) != 0);
+            if (context.Items.ContainsKey(flagsKey))
+            {
+                var flags = (PortfolioFieldFlags)context.Items[flagsKey];
+                labels = labels.Where(s => (s.Flags & flags) != 0);
+            }
+
+            if (context.Items.ContainsKey(includedOnlyKey))
+            {
+                var includedOnly = (bool)context.Items[includedOnlyKey];
+                if(includedOnly) labels = labels.Where(s => s.Included);
+            }
 
             object value;
             if(context.Items.TryGetValue(nameof(PortfolioLabelConfig), out value))

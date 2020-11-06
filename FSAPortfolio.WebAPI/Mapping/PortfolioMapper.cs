@@ -34,6 +34,7 @@ namespace FSAPortfolio.WebAPI.Mapping
                 cfg.AddProfile<ProjectUpdateModelProfile>();
                 cfg.AddProfile<ProjectQueryModelProfile>();
                 cfg.AddProfile<ProjectEditOptionsMappingProfile>();
+                cfg.AddProfile<ProjectExportModelProfile>();
             });
             ProjectMapper = projectConfig.CreateMapper();
 
@@ -58,10 +59,15 @@ namespace FSAPortfolio.WebAPI.Mapping
             ActiveDirectoryMapper = activeDirectoryConfig.CreateMapper();
         }
 
-        internal static ProjectLabelConfigModel GetProjectLabelConfigModel(PortfolioConfiguration config, PortfolioFieldFlags flags = PortfolioFieldFlags.Read, IEnumerable<PortfolioLabelConfig> customLabels = null)
+        internal static ProjectLabelConfigModel GetProjectLabelConfigModel(
+            PortfolioConfiguration config,
+            PortfolioFieldFlags flags = PortfolioFieldFlags.Read,
+            bool includedOnly = false,
+            IEnumerable<PortfolioLabelConfig> customLabels = null)
         {
             return ProjectMapper.Map<ProjectLabelConfigModel>(config, opts => { 
                 opts.Items[nameof(PortfolioFieldFlags)] = flags;
+                if (includedOnly) opts.Items[nameof(PortfolioLabelConfig.Included)] = includedOnly;
                 if (customLabels != null) opts.Items[nameof(PortfolioLabelConfig)] = customLabels;
             });
         }

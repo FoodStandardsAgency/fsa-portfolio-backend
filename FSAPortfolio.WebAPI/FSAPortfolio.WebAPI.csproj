@@ -159,6 +159,7 @@
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\LegacyProjectsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
+    <Compile Include="DTO\GetProjectExportDTO.cs" />
     <Compile Include="DTO\GetProjectQueryDTO.cs" />
     <Compile Include="DTO\GetProjectDTO.cs" />
     <Compile Include="Global.asax.cs">
@@ -173,6 +174,7 @@
     <Compile Include="Mapping\PortfolioMapper.cs" />
     <Compile Include="Mapping\Organisation\PortfolioConfigurationMappingProfile.cs" />
     <Compile Include="Mapping\Projects\PostgresProjectMappingProfile.cs" />
+    <Compile Include="Mapping\Projects\ProjectExportModelProfile.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectDataResolvers.cs" />
     <Compile Include="Mapping\Projects\ProjectQueryModelProfile.cs" />
     <Compile Include="Mapping\Projects\ProjectViewModelProfile.cs" />
@@ -183,6 +185,7 @@
     <Compile Include="Mapping\Projects\Resolvers\ProjectPersonViewResolver.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectStatusOptionsResolvers.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectUpdateItemOptionsResolvers.cs" />
+    <Compile Include="Models\IJsonProperties.cs" />
     <Compile Include="Models\JsonConverters\NonReentrantJsonConverter.cs" />
     <Compile Include="Models\JsonConverters\ProjectEditOptionsModelConverter.cs" />
     <Compile Include="Models\JsonConverters\ProjectEditViewModelConverter.cs" />
@@ -192,6 +195,7 @@
     <Compile Include="Models\PortfolioConfigUpdateRequest.cs" />
     <Compile Include="Models\PortfolioModel.cs" />
     <Compile Include="Models\PortfolioSummaryModel.cs" />
+    <Compile Include="Models\ProjectExportModel.cs" />
     <Compile Include="Models\ProjectLabelConfigModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\ProjectEditOptionsModel.cs" />

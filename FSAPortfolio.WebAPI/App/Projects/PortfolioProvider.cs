@@ -22,11 +22,12 @@ namespace FSAPortfolio.WebAPI.App.Projects
             this.portfolioViewKey = portfolioViewKey;
         }
 
-        public async Task<PortfolioConfiguration> GetConfigAsync()
+        public async Task<PortfolioConfiguration> GetConfigAsync(bool includedOnly = false)
         {
-            return await (from c in context.PortfolioConfigurations.IncludeFullConfiguration()
-                            where c.Portfolio.ViewKey == portfolioViewKey
-                          select c).SingleAsync();
+            var query = (from c in context.PortfolioConfigurations.IncludeFullConfiguration()
+                         where c.Portfolio.ViewKey == portfolioViewKey
+                         select c);
+            return await query.SingleAsync();
         }
 
         public async Task<ProjectReservation> GetProjectReservationAsync(PortfolioConfiguration config)

@@ -52,6 +52,11 @@ namespace FSAPortfolio.WebAPI
                 routeTemplate: "api/Portfolios/{portfolio}/projects",
                 defaults: new { controller = ControllerName<PortfoliosController>(), action = nameof(PortfoliosController.GetFilteredProjectsAsync) }
             );
+            config.Routes.MapHttpRoute(
+                name: "PortfolioExport",
+                routeTemplate: "api/Portfolios/{portfolio}/export",
+                defaults: new { controller = ControllerName<PortfoliosController>(), action = nameof(PortfoliosController.GetExportProjectsAsync) }
+            );
 
             #endregion
 

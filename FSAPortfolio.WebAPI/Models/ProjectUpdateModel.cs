@@ -42,7 +42,7 @@ namespace FSAPortfolio.WebAPI.Models
     }
 
     [JsonConverter(typeof(ProjectEditViewModelConverter))]
-    public class ProjectEditViewModel : ProjectModel
+    public class ProjectEditViewModel : ProjectModel, IJsonProperties
     {
         [JsonProperty(ProjectPropertyConstants.ProjectLead)]
         public ProjectPersonModel oddlead { get; set; }
@@ -55,6 +55,7 @@ namespace FSAPortfolio.WebAPI.Models
 
         public string[] rels { get; set; }
         public string[] dependencies { get; set; }
+
         [JsonIgnore]
         public IEnumerable<ProjectPropertyModel> Properties { get; set; }
     }

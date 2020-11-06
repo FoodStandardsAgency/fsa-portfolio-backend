@@ -66,7 +66,7 @@ namespace FSAPortfolio.WebAPI.Controllers
 
                 result = new GetProjectQueryDTO()
                 {
-                    Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.FilterProject|PortfolioFieldFlags.FilterRequired, customFields),
+                    Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.FilterProject|PortfolioFieldFlags.FilterRequired, customLabels: customFields),
                     Options = await provider.GetNewProjectOptionsAsync(config)
                 };
 
@@ -88,6 +88,25 @@ namespace FSAPortfolio.WebAPI.Controllers
                 filteredQuery = filterBuilder.Query;
 
                 result = PortfolioMapper.ProjectMapper.Map<ProjectQueryResultModel>(await filteredQuery.OrderByDescending(p => p.Priority).ToArrayAsync());
+                return result;
+            }
+        }
+
+        [HttpGet]
+        public async Task<GetProjectExportDTO> GetExportProjectsAsync([FromUri(Name = "portfolio")] string viewKey)
+        {
+            using (var context = new PortfolioContext())
+            {
+                var projectQuery = from p in context.Projects.IncludeProject() 
+                                   where p.Reservation.Portfolio.ViewKey == viewKey && p.LatestUpdate.Phase.Id != p.Reservation.Portfolio.Configuration.CompletedPhase.Id
+                                   select p;
+                var provider = new PortfolioProvider(context, viewKey);
+                var config = await provider.GetConfigAsync();
+                GetProjectExportDTO result = new GetProjectExportDTO()
+                {
+                    Config = PortfolioMapper.GetProjectLabelConfigModel(config, includedOnly: true),
+                    Projects = PortfolioMapper.ProjectMapper.Map<IEnumerable<ProjectExportModel>>(await projectQuery.OrderByDescending(p => p.Priority).ToArrayAsync())
+                };
                 return result;
             }
         }
