@@ -41,6 +41,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 case PortfolioFieldType.PredefinedField:
                 case PortfolioFieldType.Date:
                 case PortfolioFieldType.Month:
+                case PortfolioFieldType.NullableBoolean:
                 case PortfolioFieldType.Percentage:
                 case PortfolioFieldType.Budget:
                 case PortfolioFieldType.SmallFreeTextArea:

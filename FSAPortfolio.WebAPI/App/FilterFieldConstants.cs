@@ -9,5 +9,18 @@ namespace FSAPortfolio.WebAPI.App
     {
         internal const string TeamMemberNameName = "Name";
         internal const string TeamMemberNameFilter = "projectname_filter";
+
+        internal const string NoUpdatesName = "Show projects with no updates";
+        internal const string NoUpdatesFilter = "noupdates_filter";
+
+        internal const string LastUpdateName = "Last update before";
+        internal const string LastUpdateFilter = "lastupdate_filter";
+
+        internal const string PastIntendedStartDateName = "Past intended start date";
+        internal const string PastIntendedStartDateFilter = "paststart_filter";
+
+        internal const string MissedEndDateName = "Missed end date or deadline";
+        internal const string MissedEndDateFilter = "missedend_filter";
+
     }
 }

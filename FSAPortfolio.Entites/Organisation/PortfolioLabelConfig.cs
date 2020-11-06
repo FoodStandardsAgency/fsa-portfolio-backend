@@ -15,6 +15,7 @@ namespace FSAPortfolio.Entities.Organisation
         Percentage = 11,
         Budget = 12,
         Month = 13,
+        NullableBoolean = 14,
 
         FreeText = 20, // Text input
         SmallFreeTextArea = 21,
@@ -73,6 +74,8 @@ namespace FSAPortfolio.Entities.Organisation
             this[PortfolioFieldType.Month] = "Select month and year";
             this[PortfolioFieldType.Percentage] = "Percentage";
             this[PortfolioFieldType.Budget] = "Budget amount";
+            this[PortfolioFieldType.NullableBoolean] = "Select yes, no (with none selected option)";
+            
 
 
             this[PortfolioFieldType.FreeText] = "Free text input";

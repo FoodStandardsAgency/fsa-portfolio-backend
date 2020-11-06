@@ -97,7 +97,40 @@ namespace FSAPortfolio.WebAPI.App.Projects
                         Label = FilterFieldConstants.TeamMemberNameName,
                         FieldName = FilterFieldConstants.TeamMemberNameFilter,
                         FieldType = PortfolioFieldType.FreeText
+                    },
+                    new PortfolioLabelConfig()
+                    {
+                        Included = true,
+                        Group = config.LabelGroups.SingleOrDefault(g => g.Name == FieldGroupConstants.FieldGroupName_Updates),
+                        Label = FilterFieldConstants.LastUpdateName,
+                        FieldName = FilterFieldConstants.LastUpdateFilter,
+                        FieldType = PortfolioFieldType.Date
+                    },
+                    new PortfolioLabelConfig()
+                    {
+                        Included = true,
+                        Group = config.LabelGroups.SingleOrDefault(g => g.Name == FieldGroupConstants.FieldGroupName_Updates),
+                        Label = FilterFieldConstants.NoUpdatesName,
+                        FieldName = FilterFieldConstants.NoUpdatesFilter,
+                        FieldType = PortfolioFieldType.NullableBoolean
+                    },
+                    new PortfolioLabelConfig()
+                    {
+                        Included = true,
+                        Group = config.LabelGroups.SingleOrDefault(g => g.Name == FieldGroupConstants.FieldGroupName_ProjectPlan),
+                        Label = FilterFieldConstants.PastIntendedStartDateName,
+                        FieldName = FilterFieldConstants.PastIntendedStartDateFilter,
+                        FieldType = PortfolioFieldType.NullableBoolean
+                    },
+                    new PortfolioLabelConfig()
+                    {
+                        Included = true,
+                        Group = config.LabelGroups.SingleOrDefault(g => g.Name == FieldGroupConstants.FieldGroupName_ProjectPlan),
+                        Label = FilterFieldConstants.MissedEndDateName,
+                        FieldName = FilterFieldConstants.MissedEndDateFilter,
+                        FieldType = PortfolioFieldType.NullableBoolean
                     }
+
                 };
             return customLabels;
 

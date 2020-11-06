@@ -50,6 +50,20 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonProperty(nameof(ProjectModel.priority_main))]
         public int[] Priorities { get; set; }
+
+
+
+        [JsonProperty(FilterFieldConstants.LastUpdateFilter)]
+        public DateTime? LastUpdateBefore { get; set; }
+
+        [JsonProperty(FilterFieldConstants.NoUpdatesFilter)]
+        public bool? NoUpdates { get; set; }
+
+        [JsonProperty(FilterFieldConstants.PastIntendedStartDateFilter)]
+        public bool? PastStartDate { get; set; }
+
+        [JsonProperty(FilterFieldConstants.MissedEndDateFilter)]
+        public bool? MissedEndDate { get; set; }
     }
 
 }

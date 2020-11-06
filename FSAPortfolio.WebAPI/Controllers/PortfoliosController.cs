@@ -138,6 +138,29 @@ namespace FSAPortfolio.WebAPI.Controllers
                     filteredQuery = filteredQuery.Where(p => p.Priority.HasValue && searchTerms.Priorities.Contains(p.Priority.Value));
                 }
 
+                // Updates
+                filteredQuery = AddExactMatchFilter(searchTerms.LastUpdateBefore, filteredQuery, p => p.LatestUpdate.Timestamp < searchTerms.LastUpdateBefore.Value);
+                filteredQuery = AddExactMatchFilter(searchTerms.NoUpdates, filteredQuery, p => p.Updates.Any(u => u.Text != null && u.Text != string.Empty) != searchTerms.NoUpdates.Value);
+
+                // Key dates
+                filteredQuery = AddExactMatchFilter(searchTerms.PastStartDate, filteredQuery, 
+                    p => searchTerms.PastStartDate.Value == 
+                    ((p.StartDate > DateTime.Today && p.ActualStartDate == null) || p.ActualStartDate > p.StartDate));
+
+                filteredQuery = AddExactMatchFilter(searchTerms.MissedEndDate, filteredQuery, 
+                    p => searchTerms.MissedEndDate.Value ==
+                    (((!p.ActualEndDate.HasValue) && p.ExpectedEndDate < DateTime.Today)
+                    ||
+                    (p.ActualEndDate > p.ExpectedEndDate)
+                    ||
+                    (!p.ActualEndDate.HasValue && p.HardEndDate < DateTime.Today)
+                    ||
+                    (p.ActualEndDate > p.HardEndDate)
+                    ||
+                    (p.LatestUpdate.ExpectedCurrentPhaseEnd.HasValue && p.LatestUpdate.ExpectedCurrentPhaseEnd < DateTime.Today))
+                    );
+
+
                 result = PortfolioMapper.ProjectMapper.Map<ProjectQueryResultModel>(await filteredQuery.OrderByDescending(p => p.Priority).ToArrayAsync());
                 return result;
             }
@@ -146,6 +169,14 @@ namespace FSAPortfolio.WebAPI.Controllers
         private IQueryable<Project> AddExactMatchFilter(string[] terms, IQueryable<Project> query, Expression<Func<Project, bool>> filter)
         {
             return (terms != null && terms.Length > 0) ? query.Where(filter) : query;
+        }
+        private IQueryable<Project> AddExactMatchFilter(DateTime? term, IQueryable<Project> query, Expression<Func<Project, bool>> filter)
+        {
+            return term.HasValue ? query.Where(filter) : query;
+        }
+        private IQueryable<Project> AddExactMatchFilter(bool? term, IQueryable<Project> query, Expression<Func<Project, bool>> filter)
+        {
+            return term.HasValue ? query.Where(filter) : query;
         }
 
     }
