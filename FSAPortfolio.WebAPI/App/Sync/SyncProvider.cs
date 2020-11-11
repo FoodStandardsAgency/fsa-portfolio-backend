@@ -146,7 +146,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
 
                     var teamViewKey = sourcePerson.g6team;
-                    if (destPerson.Team == null && destPerson.Team.ViewKey != teamViewKey)
+                    if (destPerson.Team == null && destPerson.Team?.ViewKey != teamViewKey)
                     {
                         var team = portfolio.Teams.SingleOrDefault(t => t.ViewKey == teamViewKey);
                         if (team == null)

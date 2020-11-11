@@ -58,7 +58,7 @@ namespace FSAPortfolio.WebAPI.App
         {
             return query
                 .Include(p => p.Reservation.Portfolio.Configuration.CompletedPhase)
-                .Include(p => p.ProjectData)
+                .Include(p => p.ProjectData.Select(pd => pd.Label))
                 .Include(p => p.FirstUpdate.OnHoldStatus)
                 .Include(p => p.FirstUpdate.RAGStatus)
                 .Include(p => p.FirstUpdate.Phase)
