@@ -390,21 +390,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
             using (var source = new MigratePortfolioContext())
             using (var dest = new PortfolioContext())
             {
-                var sourceProjectItems = source.projects.Where(p => p.project_id == projectId);
-
-                var projectDetails = from pi in sourceProjectItems
-                                     group pi by new
-                                     {
-                                         pi.project_id,
-                                         pi.project_name
-                                     }
-                                     into projectDetailGroup
-                                     select projectDetailGroup;
+                var sourceProjectItems = source.projects.Where(p => p.project_id == projectId).ToList();
 
                 // Only proceed if have a project with a single name throughout its history
-                if (projectDetails.Count() == 1)
+                if (sourceProjectItems.Count() > 0)
                 {
-                    var sourceProjectDetail = projectDetails.Single();
+                    var latestSourceUpdate = sourceProjectItems.OrderByDescending(p => p.timestamp).First();
 
                     // First sync the project
                     var destProject = dest.Projects.FullConfigIncludes()
@@ -417,12 +408,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         .Include(p => p.BudgetType)
                         .Include(p => p.RelatedProjects)
                         .Include(p => p.DependantProjects)
-                        .SingleOrDefault(p => p.Reservation.ProjectId == sourceProjectDetail.Key.project_id);
+                        .SingleOrDefault(p => p.Reservation.ProjectId == latestSourceUpdate.project_id);
 
-                    var latestSourceUpdate = sourceProjectDetail.OrderBy(d => d.timestamp).Last();
                     if (destProject == null)
                     {
-                        var pid = sourceProjectDetail.Key.project_id.Trim();
+                        var pid = latestSourceUpdate.project_id.Trim();
                         var yrStart = pid.Length - 7;
                         destProject = new Project()
                         {
@@ -450,11 +440,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
 
 
-                    destProject = MapProject(dest, sourceProjectDetail, destProject, latestSourceUpdate);
+                    destProject = MapProject(dest, sourceProjectItems, destProject, latestSourceUpdate);
 
                     if (destProject != null)
                     {
-                        SyncUpdates(dest, sourceProjectDetail, destProject);
+                        SyncUpdates(dest, sourceProjectItems, destProject);
                         log.Add($"{projectId} Ok.");
                         synched = true;
                     }
@@ -465,7 +455,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 }
                 else
                 {
-                    logFailure(projectId, $"Details count = {projectDetails.Count()}");
+                    logFailure(projectId, $"Details count = {sourceProjectItems.Count()}");
                 }
             }
 
@@ -477,7 +467,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             log.Add($"{projectId} FAIL! {message}"); ;
         }
 
-        private void SyncUpdates(PortfolioContext dest, IGrouping<object, project> sourceProjectDetail, Project destProject)
+        private void SyncUpdates(PortfolioContext dest, IEnumerable<project> sourceProjectDetail, Project destProject)
         {
             // Now sync the updates
             project lastUpdate = null;
@@ -521,7 +511,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             dest.SaveChanges();
         }
 
-        private Project MapProject(PortfolioContext dest, IGrouping<object, project> sourceProjectDetail, Project destProject, project latestSourceUpdate)
+        private Project MapProject(PortfolioContext dest, IEnumerable<project> sourceProjectDetail, Project destProject, project latestSourceUpdate)
         {
             try
             {
