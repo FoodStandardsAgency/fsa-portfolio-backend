@@ -219,7 +219,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                     {
                         var firstName = names[0];
                         var surname = names[1];
-                        if (!!result.Any(p => nameCheck(firstName, surname, p)))
+                        if (!result.Any(p => nameCheck(firstName, surname, p)))
                         {
                             var person =
                                 portfolioContext.People.Local.SingleOrDefault(p => nameCheck(firstName, surname, p)) ??
