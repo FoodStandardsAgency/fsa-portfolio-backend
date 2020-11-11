@@ -25,6 +25,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
     internal class SyncProvider
     {
         private ICollection<string> log;
+        private const bool randomiseProjectPortfolios = false;
 
 
         IMapper mapper;
@@ -144,10 +145,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 context.SaveChanges();
             }
         }
-
-    
-
-
 
         internal void SyncPortfolios()
         {
@@ -356,36 +353,37 @@ namespace FSAPortfolio.WebAPI.App.Sync
         internal void SyncAllProjects()
         {
             IEnumerable<string> projectIds;
-            IEnumerator<string> portfolios;
+            IEnumerator<string> portfolios = null;
             using (var source = new MigratePortfolioContext())
             {
                 projectIds = source.projects.Select(p => p.project_id).Distinct().ToArray();
             }
-            using (var source = new PortfolioContext())
+            if (randomiseProjectPortfolios)
             {
-                portfolios = source.Portfolios.Select(p => p.ShortName).ToList().GetEnumerator();
+                using (var source = new PortfolioContext())
+                {
+                    portfolios = source.Portfolios.Select(p => p.ShortName).ToList().GetEnumerator();
+                }
             }
 
             foreach (var id in projectIds)
             {
-                //try
-                //{
-                    if(!portfolios.MoveNext())
+                string portfolio = "odd";
+
+                if (randomiseProjectPortfolios && portfolios != null)
+                {
+                    if (!portfolios.MoveNext())
                     {
                         portfolios.Reset();
                         portfolios.MoveNext();
                     }
-                SyncProject(id, portfolios.Current);
-                //}
-                //catch(Exception e)
-                //{
-                //    log.Add($"Project {id} failed to sync: {e.Message}");
-                //    throw e;
-                //}
+                    portfolio = portfolios.Current;
+                }
+                SyncProject(id, portfolio);
             }
         }
 
-        internal bool SyncProject(string projectId, string portfolioShortName = null)
+        internal bool SyncProject(string projectId, string portfolioViewKey = null)
         {
             bool synched = false;
 
@@ -443,9 +441,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
 
                     // Add to the given portfolio if not already in one
-                    if (!string.IsNullOrEmpty(portfolioShortName) && destProject.Portfolios.Count == 0)
+                    if (!string.IsNullOrEmpty(portfolioViewKey) && destProject.Portfolios.Count == 0)
                     {
-                        var portfolio = dest.Portfolios.IncludeConfig().Single(p => p.ShortName == portfolioShortName);
+                        var portfolio = dest.Portfolios.IncludeConfig().Single(p => p.ShortName == portfolioViewKey);
                         destProject.Portfolios.Add(portfolio);
                         destProject.Reservation.Portfolio = portfolio;
                     }
