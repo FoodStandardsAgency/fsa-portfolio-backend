@@ -220,7 +220,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                         var surname = names[1];
                         var person =
                             portfolioContext.People.Local.SingleOrDefault(p => string.Equals(firstName, p.Firstname, StringComparison.OrdinalIgnoreCase)) ??
-                            portfolioContext.People.SingleOrDefault(p => string.Equals(firstName, p.Firstname, StringComparison.OrdinalIgnoreCase));
+                            portfolioContext.People.AsEnumerable().SingleOrDefault(p => string.Equals(firstName, p.Firstname, StringComparison.OrdinalIgnoreCase));
                         if(person != null)
                         {
                             result.Add(person);
