@@ -39,7 +39,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.actual_end_date, o => o.MapFrom(s => s.ActualEndDate))
                 .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.Name))
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.Name))
-                .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate)) // TODO: resolve this and use relation to directorates table
+                .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate.Name))
 
                 .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
                 .ForMember(p => p.project_type, o => o.MapFrom(s => s.ProjectType))

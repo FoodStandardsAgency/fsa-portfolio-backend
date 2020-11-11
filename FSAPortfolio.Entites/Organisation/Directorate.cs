@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FSAPortfolio.Entities.Projects;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FSAPortfolio.Entities.Organisation
 {
-    public class Directorate
+    public class Directorate : IProjectOption
     {
         public int Id { get; set; }
 

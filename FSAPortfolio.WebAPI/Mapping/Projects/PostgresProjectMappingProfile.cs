@@ -57,7 +57,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.ActualEndDate, o => o.Ignore()) // Isn't one!?
                 .ForMember(p => p.Description, o => o.MapFrom(s => s.short_desc))
                 .ForMember(p => p.Priority, o => o.MapFrom<NullableIntResolver, string>(s => s.priority_main))
-                .ForMember(p => p.Directorate, o => o.MapFrom(s => s.direct.ToLower()))
+                .ForMember(p => p.Directorate, o => o.MapFrom<DirectorateResolver, string>(s => s.direct))
                 .ForMember(p => p.Funded, o => o.MapFrom<PostgresIntResolver, string>(s => s.funded))
                 .ForMember(p => p.Confidence, o => o.MapFrom<PostgresIntResolver, string>(s => s.confidence))
                 .ForMember(p => p.Benefits, o => o.MapFrom<PostgresIntResolver, string>(s => s.benefits))
@@ -134,7 +134,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
                 .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey))
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.ViewKey))
-                .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate))
+                .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate.ViewKey))
                 .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
                 .ForMember(p => p.p_comp, o => o.MapFrom(s => s.LatestUpdate.PercentageComplete))
                 .ForMember(p => p.max_time, o => o.MapFrom(s => s.LatestUpdate.Timestamp))

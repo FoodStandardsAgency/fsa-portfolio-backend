@@ -22,8 +22,7 @@ namespace FSAPortfolio.Entities.Projects
         [StringLength(1000)]
         public string Description { get; set; }
 
-        [StringLength(150)]
-        public string Directorate { get; set; }
+        public Directorate Directorate { get; set; }
 
         [StringLength(50)]
         public string Theme { get; set; }

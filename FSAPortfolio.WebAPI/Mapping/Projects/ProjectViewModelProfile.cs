@@ -50,7 +50,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.actual_end_date, o => o.MapFrom(s => s.ActualEndDate))
                 .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey))
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.ViewKey))
-                .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate))
+                .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate.ViewKey))
 
                 .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
                 .ForMember(p => p.project_type, o => o.MapFrom(s => s.ProjectType))

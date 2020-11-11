@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities;
+using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.App.Config;
 using FSAPortfolio.WebAPI.Models;
@@ -19,13 +20,13 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
         {
             this.option = option;
         }
-        protected abstract T GetOption(Project destination, string viewKey);
+        protected abstract T GetOption(Project destination, string viewKey, ResolutionContext context);
         public T Resolve(object source, Project destination, string sourceMember, T destMember, ResolutionContext context)
         {
             T result = null;
             if (!string.IsNullOrWhiteSpace(sourceMember))
             {
-                result =  sourceMember == destMember?.ViewKey ? destMember : GetOption(destination, sourceMember);
+                result =  sourceMember == destMember?.ViewKey ? destMember : GetOption(destination, sourceMember, context);
                 if (result == null) throw new PortfolioConfigurationException($"Unrecognised {option} key [{sourceMember}]");
             }
             return result;
@@ -36,8 +37,20 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
     {
         public ConfigCategoryResolver() : base(nameof(ProjectUpdateModel.category)) { }
 
-        protected override ProjectCategory GetOption(Project destination, string viewKey)
+        protected override ProjectCategory GetOption(Project destination, string viewKey, ResolutionContext context)
             => destination.Reservation.Portfolio.Configuration.Categories.SingleOrDefault(c => c.ViewKey == viewKey);
+    }
+    public class DirectorateResolver : BaseProjectOptionResolver<Directorate>
+    {
+        public DirectorateResolver() : base(nameof(ProjectUpdateModel.direct)) { }
+
+        protected override Directorate GetOption(Project destination, string viewKey, ResolutionContext context)
+        {
+            // TODO: this is a database query each time - could cache directorates.
+            var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
+            var directorate = portfolioContext.Directorates.SingleOrDefault(c => c.ViewKey == viewKey);
+            return directorate;
+        }
     }
 
     public class ConfigSubcategoryResolver : IMemberValueResolver<object, Project, string[], ICollection<ProjectCategory>>
@@ -64,14 +77,14 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
     public class ConfigProjectSizeResolver : BaseProjectOptionResolver<ProjectSize>
     {
         public ConfigProjectSizeResolver() : base(nameof(ProjectUpdateModel.project_size)) { }
-        protected override ProjectSize GetOption(Project destination, string viewKey)
+        protected override ProjectSize GetOption(Project destination, string viewKey, ResolutionContext context)
             => destination.Reservation.Portfolio.Configuration.ProjectSizes.SingleOrDefault(c => c.ViewKey == viewKey);
     }
 
     public class ConfigBudgetTypeResolver : BaseProjectOptionResolver<BudgetType>
     {
         public ConfigBudgetTypeResolver() : base(nameof(ProjectUpdateModel.budgettype)) { }
-        protected override BudgetType GetOption(Project destination, string viewKey)
+        protected override BudgetType GetOption(Project destination, string viewKey, ResolutionContext context)
         {
             ICollection<BudgetType> budgetTypes = destination.Reservation.Portfolio.Configuration.BudgetTypes;
             return
