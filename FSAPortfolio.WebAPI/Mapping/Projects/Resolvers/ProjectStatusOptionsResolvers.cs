@@ -15,8 +15,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
         where T : class, IProjectOption, new()
     {
         private string option;
+        private bool allowNullOption;
 
-        protected BaseProjectOptionResolver(string option)
+        protected BaseProjectOptionResolver(string option, bool allowNullOption = false)
         {
             this.option = option;
         }
@@ -27,7 +28,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
             if (!string.IsNullOrWhiteSpace(sourceMember))
             {
                 result =  sourceMember == destMember?.ViewKey ? destMember : GetOption(destination, sourceMember, context);
-                if (result == null) throw new PortfolioConfigurationException($"Unrecognised {option} key [{sourceMember}]");
+                if (result == null && !allowNullOption) throw new PortfolioConfigurationException($"Unrecognised {option} key [{sourceMember}]");
             }
             return result;
         }
@@ -42,7 +43,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
     }
     public class DirectorateResolver : BaseProjectOptionResolver<Directorate>
     {
-        public DirectorateResolver() : base(nameof(ProjectUpdateModel.direct)) { }
+        public DirectorateResolver() : base(nameof(ProjectUpdateModel.direct), allowNullOption: true) { }
 
         protected override Directorate GetOption(Project destination, string viewKey, ResolutionContext context)
         {

@@ -17,7 +17,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "PEOP", "people" },
             { "RC", "comp" },
             { "SERD", "science" },
-            { "SLG", "stratergy" },
+            { "SLG", "strategy" },
             { "WAL", "wales" }
         };
 
