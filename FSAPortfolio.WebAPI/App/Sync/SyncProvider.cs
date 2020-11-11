@@ -335,6 +335,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             sizeFactory(1);
             sizeFactory(2);
             sizeFactory(3);
+            sizeFactory(4);
             budgetTypeFactory(0);
             budgetTypeFactory(1);
             budgetTypeFactory(2);
@@ -514,35 +515,32 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
         private Project MapProject(PortfolioContext dest, IEnumerable<project> sourceProjectDetail, Project destProject, project latestSourceUpdate)
         {
-            mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
-            destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
-            return destProject;
-            //try
-            //{
-            //    mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
-            //    destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
-            //    return destProject;
-            //}
-            //catch (AutoMapperMappingException ame)
-            //{
-            //    if (ame.MemberMap.DestinationName == "Size")
-            //    {
-            //        log.Add($"MAPPING ERROR: Source project size = {latestSourceUpdate.project_size}");
-            //    }
-            //    else
-            //    {
-            //        switch(ame.MemberMap.DestinationName)
-            //        {
-            //            case "Team":
-            //                log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source team = {latestSourceUpdate.team}");
-            //                break;
-            //            default:
-            //                log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}");
-            //                break;
-            //        }
-            //    }
-            //}
-            //return null;
+            try
+            {
+                mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
+                destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
+                return destProject;
+            }
+            catch (AutoMapperMappingException ame)
+            {
+                if (ame.MemberMap.DestinationName == "Size")
+                {
+                    log.Add($"MAPPING ERROR: Source project size = {latestSourceUpdate.project_size}");
+                }
+                else
+                {
+                    switch(ame.MemberMap.DestinationName)
+                    {
+                        case "Team":
+                            log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source team = {latestSourceUpdate.team}");
+                            break;
+                        default:
+                            log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}");
+                            break;
+                    }
+                }
+            }
+            return null;
         }
     }
 }
