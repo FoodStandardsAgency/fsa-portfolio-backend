@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FSAPortfolio.Entities.Projects;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,10 +8,7 @@ using System.Threading.Tasks;
 
 namespace FSAPortfolio.Entities.Organisation
 {
-    /// <summary>
-    /// TODO: This is a hack - need to look at teams again!
-    /// </summary>
-    public class Team
+    public class Team : IProjectOption
     {
         public int Id { get; set; }
         public string ViewKey { get; set; }
