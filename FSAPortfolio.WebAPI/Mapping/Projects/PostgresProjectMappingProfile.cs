@@ -207,7 +207,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         public ICollection<Person> Resolve(object source, Project destination, string sourceMember, ICollection<Person> destMember, ResolutionContext context)
         {
             var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
-            var result = new List<Person>();
+            var result = destMember?.ToList() ?? new List<Person>();
             if (!string.IsNullOrEmpty(sourceMember))
             {
                 Func<string, string, Person, bool> nameCheck = (f, s, p) => string.Equals(f, p.Firstname, StringComparison.OrdinalIgnoreCase) && string.Equals(s, p.Surname, StringComparison.OrdinalIgnoreCase);

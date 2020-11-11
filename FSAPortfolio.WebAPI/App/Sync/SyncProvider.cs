@@ -408,6 +408,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         .Include(p => p.BudgetType)
                         .Include(p => p.RelatedProjects)
                         .Include(p => p.DependantProjects)
+                        .Include(p => p.Team)
                         .SingleOrDefault(p => p.Reservation.ProjectId == latestSourceUpdate.project_id);
 
                     if (destProject == null)
