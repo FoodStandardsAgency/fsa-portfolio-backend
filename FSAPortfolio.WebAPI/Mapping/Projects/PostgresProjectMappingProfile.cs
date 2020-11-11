@@ -210,6 +210,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             var result = new List<Person>();
             if (!string.IsNullOrEmpty(sourceMember))
             {
+                Func<string, string, Person, bool> nameCheck = (f, s, p) => string.Equals(f, p.Firstname, StringComparison.OrdinalIgnoreCase) && string.Equals(s, p.Surname, StringComparison.OrdinalIgnoreCase);
                 var peoplesNames = sourceMember.Split(',');
                 foreach (var personsName in peoplesNames)
                 {
@@ -219,8 +220,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                         var firstName = names[0];
                         var surname = names[1];
                         var person =
-                            portfolioContext.People.Local.SingleOrDefault(p => string.Equals(firstName, p.Firstname, StringComparison.OrdinalIgnoreCase)) ??
-                            portfolioContext.People.AsEnumerable().SingleOrDefault(p => string.Equals(firstName, p.Firstname, StringComparison.OrdinalIgnoreCase));
+                            portfolioContext.People.Local.SingleOrDefault(p => nameCheck(firstName, surname, p)) ??
+                            portfolioContext.People.AsEnumerable().SingleOrDefault(p => nameCheck(firstName, surname, p));
                         if(person != null)
                         {
                             result.Add(person);
