@@ -49,6 +49,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
 
             CreateMap<IProjectOption, DropDownItemModel>()
+                .Include<Directorate, DropDownItemModel>()
                 .ForMember(d => d.Display, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Value, o => o.MapFrom(s => s.ViewKey))
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
