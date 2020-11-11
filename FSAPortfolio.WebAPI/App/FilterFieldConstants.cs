@@ -7,7 +7,7 @@ namespace FSAPortfolio.WebAPI.App
 {
     internal static class FilterFieldConstants
     {
-        internal const string TeamMemberNameName = "Name";
+        internal const string TeamMemberNameName = "Project team";
         internal const string TeamMemberNameFilter = "projectname_filter";
 
         internal const string NoUpdatesName = "Show projects with no updates";

@@ -97,7 +97,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_ProjectIDs, "Business Case Number", nameof(ProjectModel.business_case_number), true, false, false, PortfolioFieldType.FreeText, flags: ProjectData|EditorCanView),
                 Factory(FieldGroupName_ProjectIDs, "FS Number", nameof(ProjectModel.fs_number), false, false, false, PortfolioFieldType.FreeText, flags: ProjectData|EditorCanView),
 
-                Factory(FieldGroupName_AboutTheProject, "Project name", nameof(ProjectModel.project_name), true, true, false, PortfolioFieldType.FreeText, flags: EditorCanView|FilterProject),
+                Factory(FieldGroupName_AboutTheProject, "Project title", nameof(ProjectModel.project_name), true, true, false, PortfolioFieldType.FreeText, flags: EditorCanView|FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Short description", nameof(ProjectModel.short_desc), true, false, false, PortfolioFieldType.MediumFreeTextArea, flags: EditorCanView),
                 Factory(FieldGroupName_AboutTheProject, "Risk rating", nameof(ProjectModel.risk_rating), false, false, false, PortfolioFieldType.OptionList, flags: ProjectData),
                 Factory(FieldGroupName_AboutTheProject, "Theme", nameof(ProjectModel.theme), true, false, false, PortfolioFieldType.OptionList, flags: FilterProject, options: "Theme1, Theme2, Theme3"),
@@ -116,7 +116,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                 Factory(FieldGroupName_ProjectTeam, "Project lead", ProjectPropertyConstants.ProjectLead, false, false, false, PortfolioFieldType.ADUserSearch, flags: FilterProject),
                 Factory(FieldGroupName_ProjectTeam, "Lead role", nameof(ProjectModel.oddlead_role), false, false, false, PortfolioFieldType.OptionList),
-                Factory(FieldGroupName_ProjectTeam, "Lead team", nameof(ProjectModel.g6team), false, false, false, PortfolioFieldType.OptionList),
+                Factory(FieldGroupName_ProjectTeam, "Lead team", nameof(ProjectModel.g6team), false, false, false, PortfolioFieldType.OptionList, flags: FilterProject),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 1", nameof(ProjectModel.key_contact1), false, false, false, PortfolioFieldType.ADUserSearch),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 2", nameof(ProjectModel.key_contact2), false, false, false, PortfolioFieldType.ADUserSearch),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 3", nameof(ProjectModel.key_contact3), false, false, false, PortfolioFieldType.ADUserSearch),

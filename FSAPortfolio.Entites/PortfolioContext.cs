@@ -18,6 +18,7 @@ namespace FSAPortfolio.Entities
         {
             Configuration.LazyLoadingEnabled = LazyLoad;
         }
+
         public PortfolioContext(ConnectionStringSettings cs)
             : base(cs.ConnectionString)
         {
