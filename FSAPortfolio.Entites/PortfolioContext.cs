@@ -146,6 +146,7 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Project>().HasOptional(p => p.KeyContact1).WithMany();
             modelBuilder.Entity<Project>().HasOptional(p => p.KeyContact2).WithMany();
             modelBuilder.Entity<Project>().HasOptional(p => p.KeyContact3).WithMany();
+            modelBuilder.Entity<Project>().HasOptional(p => p.Directorate).WithMany();
 
             modelBuilder.Entity<ProjectDataItem>().HasKey(p => p.Id);
             modelBuilder.Entity<ProjectDataItem>().HasRequired(p => p.Label).WithMany().HasForeignKey(p => p.Label_Id);
