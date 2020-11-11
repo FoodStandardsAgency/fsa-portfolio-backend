@@ -146,18 +146,18 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
 
                     //// TODO: check if team doesn't match current value.
-                    //if(destPerson.Team == null && adUser != null)
-                    //{
-                    //    // TODO: need a viewkey map here from department -> team viewkey (can we use the source team though!?)
-                    //    var team = portfolio.Teams.SingleOrDefault(t => t.ViewKey == adUser.department);
-                    //    var teamViewKey = sourcePerson.g6team;
-                    //    if(team == null)
-                    //    {
-                    //        team = new Team() { Name = adUser.department, ViewKey = teamViewKey };
-                    //        portfolio.Teams.Add(team);
-                    //    }
-                    //    destPerson.Team = team;
-                    //}
+                    if (destPerson.Team == null && adUser != null)
+                    {
+                        // TODO: need a viewkey map here from department -> team viewkey (can we use the source team though!?)
+                        var teamViewKey = sourcePerson.g6team;
+                        var team = portfolio.Teams.SingleOrDefault(t => t.ViewKey == teamViewKey);
+                        if (team == null)
+                        {
+                            team = new Team() { Name = adUser.department, ViewKey = teamViewKey };
+                            portfolio.Teams.Add(team);
+                        }
+                        destPerson.Team = team;
+                    }
                 }
 
                 dest.SaveChanges();
