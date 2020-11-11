@@ -8,6 +8,19 @@ namespace FSAPortfolio.WebAPI.App.Sync
 {
     public class SyncMaps
     {
+        public static readonly Dictionary<string, string> directorateKeyMap = new Dictionary<string, string>()
+        {
+            { "IR", "inc" },
+            { "FO", "field" },
+            { "FP", "finance" },
+            { "FSP", "policy" },
+            { "PEOP", "people" },
+            { "RC", "comp" },
+            { "SERD", "science" },
+            { "SLG", "stratergy" },
+            { "WAL", "wales" }
+        };
+
         public static readonly Dictionary<string, string> budgetTypeKeyMap = new Dictionary<string, string>()
         {
             { "none", $"{ViewKeyPrefix.BudgetType}0" },

@@ -558,6 +558,14 @@ namespace FSAPortfolio.WebAPI.App.Sync
         {
             try
             {
+                if (SyncMaps.directorateKeyMap.ContainsKey(latestSourceUpdate.direct))
+                {
+                    latestSourceUpdate.direct = SyncMaps.directorateKeyMap[latestSourceUpdate.direct];
+                }
+                else
+                {
+                    latestSourceUpdate.direct = latestSourceUpdate.direct?.ToLower();
+                }
                 mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
                 destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
                 return destProject;
