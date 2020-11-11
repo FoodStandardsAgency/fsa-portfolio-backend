@@ -441,9 +441,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
 
                     // Add to the given portfolio if not already in one
-                    if (!string.IsNullOrEmpty(portfolioViewKey) && destProject.Portfolios.Count == 0)
+                    if (!string.IsNullOrEmpty(portfolioViewKey))
                     {
                         var portfolio = dest.Portfolios.IncludeConfig().Single(p => p.ShortName == portfolioViewKey);
+                        destProject.Portfolios.Clear();
                         destProject.Portfolios.Add(portfolio);
                         destProject.Reservation.Portfolio = portfolio;
                     }
