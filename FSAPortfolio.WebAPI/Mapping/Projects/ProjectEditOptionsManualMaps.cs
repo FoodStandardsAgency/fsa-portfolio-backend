@@ -15,9 +15,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         internal static async Task MapAsync(PortfolioContext context, PortfolioConfiguration config, IEnumerable<Project> projects, ProjectEditOptionsModel options)
         {
-            var directorates = PortfolioMapper.ProjectMapper.Map<List<DropDownItemModel>>(await context.Directorates.OrderBy(d => d.Order).ToListAsync());
-            directorates.Insert(0, new DropDownItemModel() { Display = "None", Value = "", Order = 0 });
-            options.Directorates = directorates;
+            var directorates = await context.Directorates.OrderBy(d => d.Order).ToListAsync();
+            var directorateItems = PortfolioMapper.ProjectMapper.Map<List<DropDownItemModel>>(directorates);
+            directorateItems.Insert(0, new DropDownItemModel() { Display = "None", Value = "", Order = 0 });
+            options.Directorates = directorateItems;
 
             var teams = PortfolioMapper.ProjectMapper.Map<List<DropDownItemModel>>(config.Portfolio.Teams.OrderBy(d => d.Order));
             options.G6Team = teams;
