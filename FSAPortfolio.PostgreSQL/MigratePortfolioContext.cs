@@ -11,7 +11,7 @@ namespace FSAPortfolio.PostgreSQL
     public partial class MigratePortfolioContext : DbContext
     {
         public MigratePortfolioContext()
-            : this(ConfigurationManager.ConnectionStrings["MigratePortfolioContext"])
+            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["Migration.ConnectionString"] ?? "MigratePortfolioContext"])
         {
         }
 
