@@ -8,6 +8,15 @@ namespace FSAPortfolio.WebAPI.App.Sync
 {
     public class SyncMaps
     {
+        public static readonly Dictionary<string, Tuple<string, int>> teamNameMap = new Dictionary<string, Tuple<string, int>>()
+        {
+            { "Data", new Tuple<string, int>("Data", 1) },
+            { "Digital", new Tuple<string, int>("Digital", 2) },
+            { "KIM", new Tuple<string, int>("Knowledge and Information Management and Security", 3) },
+            { "IT", new Tuple<string, int>("FSA IT", 4) }
+        };
+
+
         public static readonly Dictionary<string, string> directorateKeyMap = new Dictionary<string, string>()
         {
             { "IR", "inc" },
