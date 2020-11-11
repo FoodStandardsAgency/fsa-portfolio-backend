@@ -55,6 +55,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
                 ;
 
+            CreateMap<Directorate, DropDownItemModel>();
+
             CreateMap<IEnumerable<ProjectCategory>, SelectPickerModel>()
                 .ConvertUsing(s => new SelectPickerModel()
                 {
