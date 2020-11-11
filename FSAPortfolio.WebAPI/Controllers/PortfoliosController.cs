@@ -47,8 +47,9 @@ namespace FSAPortfolio.WebAPI.Controllers
 
                 result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(
                     portfolio, 
-                    opt => { 
-                        opt.Items[nameof(PortfolioSummaryModel)] = summaryType; 
+                    opt => {
+                        opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
+                        opt.Items[nameof(PortfolioSummaryModel)] = summaryType;
                     });
             }
             return result;

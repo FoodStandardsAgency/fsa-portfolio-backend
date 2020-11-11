@@ -70,26 +70,28 @@ namespace FSAPortfolio.WebAPI.App.Users
             // Build the uri
             var uri = new UriBuilder($"https://graph.microsoft.com/v1.0/users/{term}");
             AuthenticationResult auth = await AuthenticateAsync();
-            HttpClient client = new HttpClient();
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri.ToString());
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", auth.AccessToken);
-            HttpResponseMessage response = await client.SendAsync(request);
+            using (HttpClient client = new HttpClient())
+            {
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri.ToString());
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", auth.AccessToken);
+                HttpResponseMessage response = await client.SendAsync(request);
 
-            if (response.IsSuccessStatusCode)
-            {
-                string json = await response.Content.ReadAsStringAsync();
-                user = JsonConvert.DeserializeObject<MicrosoftGraphUserModel>(json);
-            }
-            else
-            {
-                switch (response.StatusCode)
+                if (response.IsSuccessStatusCode)
                 {
-                    case HttpStatusCode.NotFound:
-                        user = null;
-                        break;
-                    default:
-                        throw new HttpResponseException(response.StatusCode);
+                    string json = await response.Content.ReadAsStringAsync();
+                    user = JsonConvert.DeserializeObject<MicrosoftGraphUserModel>(json);
+                }
+                else
+                {
+                    switch (response.StatusCode)
+                    {
+                        case HttpStatusCode.NotFound:
+                            user = null;
+                            break;
+                        default:
+                            throw new HttpResponseException(response.StatusCode);
+                    }
                 }
             }
 
@@ -136,7 +138,7 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         internal async Task MapTeamAsync(ProjectUpdateModel update, Project project)
         {
-            project.Team.Clear();
+            project.People.Clear();
             if (update?.team != null && update.team.Length > 0)
             {
                 foreach (var id in update.team)
@@ -144,7 +146,7 @@ namespace FSAPortfolio.WebAPI.App.Users
                     var person = await EnsurePersonForPrincipalName(id);
                     if (person != null)
                     {
-                        project.Team.Add(person);
+                        project.People.Add(person);
                     }
 
                 }

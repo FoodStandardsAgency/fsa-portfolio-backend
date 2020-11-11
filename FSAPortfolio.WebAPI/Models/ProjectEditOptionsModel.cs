@@ -66,19 +66,7 @@ namespace FSAPortfolio.WebAPI.Models
         public SelectPickerModel ODDLeadRole { get; set; }
 
         [JsonProperty(nameof(ProjectModel.g6team))]
-        public SelectPickerModel G6Team { get; set; }
-
-        [JsonProperty(nameof(ProjectModel.key_contact1))]
-        public SelectPickerModel KeyContact1 { get; set; }
-
-        [JsonProperty(nameof(ProjectModel.key_contact2))]
-        public SelectPickerModel KeyContact2 { get; set; }
-
-        [JsonProperty(nameof(ProjectModel.key_contact3))]
-        public SelectPickerModel KeyContact3 { get; set; }
-
-        [JsonProperty(nameof(ProjectEditViewModel.team))]
-        public SelectPickerModel Team { get; set; }
+        public IEnumerable<DropDownItemModel> G6Team { get; set; }
 
 
         [JsonProperty(nameof(ProjectModel.priority_main))]

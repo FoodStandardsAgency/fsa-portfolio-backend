@@ -54,7 +54,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                     p.KeyContact3.Firstname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.KeyContact3.Surname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.KeyContact3.Email.ToLower().StartsWith(searchTerms.TeamMemberName) ||
-                    p.Team.Any(t =>
+                    p.People.Any(t =>
                         t.Firstname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
                         t.Surname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
                         t.Email.ToLower().StartsWith(searchTerms.TeamMemberName))

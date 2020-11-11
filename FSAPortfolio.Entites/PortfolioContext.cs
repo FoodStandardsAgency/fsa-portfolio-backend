@@ -59,6 +59,9 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<User>().HasRequired(u => u.AccessGroup).WithMany().HasForeignKey(u => u.AccessGroupId);
 
             modelBuilder.Entity<Person>().HasKey(u => u.Id);
+            modelBuilder.Entity<Person>().HasOptional(u => u.Team).WithMany();
+
+            modelBuilder.Entity<Team>().HasKey(u => u.Id);
 
             modelBuilder.Entity<AccessGroup>().HasKey(u => u.Id);
 
@@ -72,6 +75,7 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Portfolio>().HasIndex(p => p.ViewKey).IsUnique();
             modelBuilder.Entity<Portfolio>().HasIndex(p => p.IDPrefix).IsUnique();
             modelBuilder.Entity<Portfolio>().HasMany(p => p.Projects).WithMany(p => p.Portfolios);
+            modelBuilder.Entity<Portfolio>().HasMany(p => p.Teams).WithRequired(p => p.Portfolio);
             modelBuilder.Entity<Portfolio>().HasRequired(p => p.Configuration).WithRequiredPrincipal(c => c.Portfolio);
 
             modelBuilder.Entity<PortfolioConfiguration>().HasKey(p => p.Portfolio_Id);
@@ -130,7 +134,7 @@ namespace FSAPortfolio.Entities
             });
             modelBuilder.Entity<Project>().HasMany(p => p.AuditLogs).WithRequired(l => l.Project).HasForeignKey(u => u.Project_Id);
             modelBuilder.Entity<Project>().HasMany(p => p.ProjectData).WithRequired(l => l.Project).HasForeignKey(u => u.Project_Id);
-            modelBuilder.Entity<Project>().HasMany(p => p.Team).WithMany().Map(mc =>
+            modelBuilder.Entity<Project>().HasMany(p => p.People).WithMany().Map(mc =>
             {
                 mc.MapLeftKey("Project_Id");
                 mc.MapRightKey("Person_Id");

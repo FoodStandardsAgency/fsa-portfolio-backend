@@ -60,7 +60,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
                 // Have to be mapped manually as requires async request to AD
                 .ForMember(p => p.Lead, o => o.Ignore())
-                .ForMember(p => p.Team, o => o.Ignore())
+                .ForMember(p => p.People, o => o.Ignore())
                 .ForMember(p => p.ServiceLead, o => o.Ignore())
                 .ForMember(p => p.KeyContact1, o => o.Ignore())
                 .ForMember(p => p.KeyContact2, o => o.Ignore())

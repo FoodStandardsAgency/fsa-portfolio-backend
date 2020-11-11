@@ -68,7 +68,7 @@ namespace FSAPortfolio.Entities.Projects
         public virtual Person ServiceLead { get; set; }
         public int? ServiceLead_Id { get; set; }
 
-        public virtual ICollection<Person> Team { get; set; }
+        public virtual ICollection<Person> People { get; set; }
 
 
         public int? Priority { get; set; }

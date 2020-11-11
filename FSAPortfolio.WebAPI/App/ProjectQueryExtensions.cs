@@ -32,7 +32,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(r => r.Project.KeyContact1)
                 .Include(r => r.Project.KeyContact2)
                 .Include(r => r.Project.KeyContact3)
-                .Include(r => r.Project.Team)
+                .Include(r => r.Project.People)
                 ;
         }
         public static IQueryable<ProjectReservation> ProjectUpdateIncludes(this IQueryable<ProjectReservation> query)
@@ -76,7 +76,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.KeyContact1)
                 .Include(p => p.KeyContact2)
                 .Include(p => p.KeyContact3)
-                .Include(p => p.Team)
+                .Include(p => p.People)
                 ;
         }
         public static IQueryable<Project> IncludeUpdates(this IQueryable<Project> query)
@@ -96,7 +96,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.KeyContact1)
                 .Include(p => p.KeyContact2)
                 .Include(p => p.KeyContact3)
-                .Include(p => p.Team)
+                .Include(p => p.People)
                 ;
         }
 

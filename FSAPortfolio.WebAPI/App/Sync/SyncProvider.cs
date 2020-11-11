@@ -5,6 +5,7 @@ using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.PostgreSQL;
 using FSAPortfolio.PostgreSQL.Projects;
+using FSAPortfolio.WebAPI.App.Users;
 using FSAPortfolio.WebAPI.Mapping;
 using FSAPortfolio.WebAPI.Mapping.Organisation;
 using FSAPortfolio.WebAPI.Mapping.Projects;
@@ -16,6 +17,7 @@ using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.UI.WebControls;
 
@@ -93,17 +95,21 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
-        internal void SyncPeople()
+        internal async Task SyncPeople(string viewKey = "odd")
         {
             log.Add("Syncing people...");
 
             using (var source = new MigratePortfolioContext())
             using (var dest = new PortfolioContext())
             {
+                // TODO: now need to add portfolios before people - but then add projects after people!
+                var portfolio = await dest.Portfolios.Include(p => p.Teams).SingleAsync(p => p.ViewKey == "odd");
+                var usersProvider = new UsersProvider(dest);
+
                 // Sync the people
                 foreach (var sourcePerson in source.odd_people)
                 {
-                    var destPerson = dest.People.SingleOrDefault(u => u.Email == sourcePerson.email);
+                    var destPerson = dest.People.Include(p => p.Team).SingleOrDefault(u => u.Email == sourcePerson.email);
                     if (destPerson == null)
                     {
                         destPerson = new Person()
@@ -111,11 +117,46 @@ namespace FSAPortfolio.WebAPI.App.Sync
                             Firstname = sourcePerson.firstname,
                             Surname = sourcePerson.surname,
                             Email = sourcePerson.email,
-                            G6team = sourcePerson.g6team,
                             Timestamp = sourcePerson.timestamp
                         };
+
+
+
                         dest.People.Add(destPerson);
                         log.Add($"Added person {destPerson.Firstname} {destPerson.Surname}");
+                    }
+
+                    // Set the active directory user
+                    MicrosoftGraphUserModel adUser = null;
+                    if (destPerson.ActiveDirectoryId == null)
+                    {
+                        if (destPerson.Email != null)
+                        {
+                            adUser = await usersProvider.GetUserForPrincipalNameAsync(destPerson.Email);
+                            if(adUser != null)
+                            {
+                                destPerson.ActiveDirectoryPrincipalName = adUser.userPrincipalName;
+                                destPerson.ActiveDirectoryId = adUser.id;
+                            }
+                            else
+                            {
+                                log.Add($"USER NOT FOUND! {destPerson.Email}");
+                            }
+                        }
+                    }
+
+                    // TODO: check if team doesn't match current value.
+                    if(destPerson.Team == null && adUser != null)
+                    {
+                        // TODO: need a viewkey map here from department -> team viewkey (can we use the source team though!?)
+                        var team = portfolio.Teams.SingleOrDefault(t => t.ViewKey == adUser.department);
+                        var teamViewKey = sourcePerson.g6team;
+                        if(team == null)
+                        {
+                            team = new Team() { Name = adUser.department, ViewKey = teamViewKey };
+                            portfolio.Teams.Add(team);
+                        }
+                        destPerson.Team = team;
                     }
                 }
 
@@ -409,7 +450,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         .Include(p => p.BudgetType)
                         .Include(p => p.RelatedProjects)
                         .Include(p => p.DependantProjects)
-                        .Include(p => p.Team)
+                        .Include(p => p.People)
                         .SingleOrDefault(p => p.Reservation.ProjectId == latestSourceUpdate.project_id);
 
                     if (destProject == null)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FSAPortfolio.Entities.Organisation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,8 +21,7 @@ namespace FSAPortfolio.Entities.Users
         [StringLength(250)]
         public string Email { get; set; }
 
-        [StringLength(50)]
-        public string G6team { get; set; }
+        public Team Team { get; set; }
 
         [StringLength(150)]
         public string ActiveDirectoryPrincipalName { get; set; }

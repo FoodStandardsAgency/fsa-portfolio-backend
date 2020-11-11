@@ -18,8 +18,15 @@ namespace FSAPortfolio.WebAPI.Models
         public string givenName { get; set; }
         public string mail { get; set; }
         public string surname { get; set; }
+
+        
+        [JsonProperty(PropertyName = "userPrincipalName")]
         public string userPrincipalName { get; set; }
+
+        [JsonProperty(PropertyName = "id")]
         public string id { get; set; }
+
+        [JsonProperty(PropertyName = "department")]
         public string department { get; set; }
     }
 

@@ -30,6 +30,7 @@ namespace FSAPortfolio.Entities.Organisation
         public virtual PortfolioConfiguration Configuration { get; set; }
 
         public virtual ICollection<Project> Projects { get; set; }
+        public virtual ICollection<Team> Teams { get; set; }
 
     }
 }

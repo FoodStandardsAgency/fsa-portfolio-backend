@@ -29,12 +29,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
                 case PortfolioSummaryModel.ByPhase:
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.Where(p => p.Id != source.Configuration.CompletedPhase.Id).OrderBy(c => c.Order));
                     break;
-                case PortfolioSummaryModel.ByTeam: // TODO: part of the team hack! Revisit teams!
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(
-                        source.Projects.Where(p => p.LatestUpdate_Id != source.Configuration.CompletedPhase.Id)
-                        .Where(p => p.Lead?.G6team != null)
-                        .Select(p => p.Lead.G6team).Distinct()
-                        .Select(p => new Team() { ViewKey = p, Config = source.Configuration }));
+                case PortfolioSummaryModel.ByTeam:
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Teams.OrderBy(t => t.Order));
                     break;
                 default:
                     throw new ArgumentException($"Unrecognised summary type: {summaryType}");
@@ -100,7 +96,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
     {
         public IEnumerable<PhaseProjectsModel> Resolve(Team source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
         {
-            return SummaryLinqQuery.GetQuery(source.Config, p => p.Lead != null && p.Lead.G6team == source.ViewKey, context);
+            var portfolioConfiguration = context.Items[nameof(PortfolioConfiguration)] as PortfolioConfiguration;
+            return SummaryLinqQuery.GetQuery(portfolioConfiguration, p => p.Lead != null && p.Lead.Team.ViewKey == source.ViewKey, context);
         }
     }
 }

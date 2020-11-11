@@ -92,5 +92,6 @@
     <Build Include="dbo\Views\vwProjects.sql" />
     <Build Include="dbo\Views\vwProjectUpdates.sql" />
     <None Include="Deployment\00_DropAllTables.sql" />
+    <None Include="Deployment\01_Teams.sql" />
   </ItemGroup>
 </Project>

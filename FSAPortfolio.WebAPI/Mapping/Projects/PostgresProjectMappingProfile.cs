@@ -62,7 +62,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Confidence, o => o.MapFrom<PostgresIntResolver, string>(s => s.confidence))
                 .ForMember(p => p.Benefits, o => o.MapFrom<PostgresIntResolver, string>(s => s.benefits))
                 .ForMember(p => p.Criticality, o => o.MapFrom<PostgresIntResolver, string>(s => s.criticality))
-                .ForMember(p => p.Team, o => o.MapFrom<PostgresTeamCollectionResolver, string>(s => s.team))
+                .ForMember(p => p.People, o => o.MapFrom<PostgresTeamCollectionResolver, string>(s => s.team))
                 .ForMember(p => p.Lead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.oddlead_email))
                 .ForMember(p => p.ServiceLead, o => o.MapFrom<ProjectLeadResolver, string>(s => s.servicelead_email))
                 .ForMember(p => p.RelatedProjects, o => o.MapFrom<PostgresProjectCollectionResolver, string>(s => s.rels))
@@ -127,7 +127,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
                 .ForMember(p => p.rels, o => o.MapFrom(s => string.Join(", ", s.RelatedProjects.Select(rp => rp.Reservation.ProjectId))))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => string.Join(", ", s.DependantProjects.Select(rp => rp.Reservation.ProjectId))))
-                .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
+                .ForMember(p => p.team, o => o.MapFrom(s => s.People))
                 .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
                 .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
                 .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
@@ -139,7 +139,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.p_comp, o => o.MapFrom(s => s.LatestUpdate.PercentageComplete))
                 .ForMember(p => p.max_time, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
                 .ForMember(p => p.min_time, o => o.MapFrom(s => s.FirstUpdate.Timestamp))
-                .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.G6team))
+                .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.Team))
                 .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
 
                 // TODO: don't think were using latest_projects anymore - verify then delete

@@ -58,7 +58,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.programme, o => o.MapFrom(s => s.Programme))
 
 
-                .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.G6team))
+                .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.Team))
                 .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
                 .ForMember(p => p.first_completed, o => o.MapFrom<FirstCompletedResolver>())
                 .ForMember(p => p.pgroup, o => o.MapFrom(s => s.PriorityGroup.Name))
@@ -122,7 +122,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.servicelead, o => o.MapFrom<ProjectPersonViewResolver, Person>(s => s.ServiceLead))
                 .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email))
                 .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
-                .ForMember(p => p.team, o => o.MapFrom(s => string.Join(", ", s.Team.Select(p => p.DisplayName))))
+                .ForMember(p => p.team, o => o.MapFrom(s => string.Join(", ", s.People.Select(p => p.DisplayName))))
                 .AfterMap<ProjectDataOutboundMapper<ProjectViewModel>>()
                 ;
 
@@ -133,7 +133,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Properties, o => o.Ignore())
                 .ForMember(p => p.oddlead, o => o.MapFrom(s => s.Lead))
                 .ForMember(p => p.servicelead, o => o.MapFrom(s => s.ServiceLead))
-                .ForMember(p => p.team, o => o.MapFrom(s => s.Team))
+                .ForMember(p => p.team, o => o.MapFrom(s => s.People))
                 .AfterMap<ProjectDataOutboundMapper<ProjectEditViewModel>>()
                 .AfterMap<ProjectJsonPropertiesOutboundMapper>()
                 ;

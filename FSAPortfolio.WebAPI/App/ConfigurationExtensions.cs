@@ -18,6 +18,7 @@ namespace FSAPortfolio.WebAPI.App
         {
             return query
                 .Include(c => c.Portfolio)
+                .Include(c => c.Portfolio.Teams)
                 .Include(c => c.Phases)
                 .Include(c => c.RAGStatuses)
                 .Include(c => c.OnHoldStatuses)

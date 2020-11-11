@@ -29,6 +29,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Directorates, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
                 .ForMember(d => d.RelatedProjects, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
                 .ForMember(d => d.DependantProjects, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
+                .ForMember(d => d.G6Team, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
                 .ForMember(d => d.RiskRating, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.risk_rating))))
                 .ForMember(d => d.Theme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.theme))))
                 .ForMember(d => d.ProjectType, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_type))))
@@ -36,11 +37,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
                 .ForMember(d => d.ODDLead, o => o.MapFrom(new StubPersonResolver(ProjectPropertyConstants.ProjectLead, addNoneOption: false))) // TODO: do we need these options if using ajax?
                 .ForMember(d => d.ODDLeadRole, o => o.MapFrom(new StubRoleResolver(nameof(ProjectModel.oddlead_role))))
-                .ForMember(d => d.G6Team, o => o.MapFrom(new StubTeamResolver(nameof(ProjectModel.g6team))))
-                .ForMember(d => d.KeyContact1, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.key_contact1))))
-                .ForMember(d => d.KeyContact2, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.key_contact2))))
-                .ForMember(d => d.KeyContact3, o => o.MapFrom(new StubPersonResolver(nameof(ProjectModel.key_contact3))))
-                .ForMember(d => d.Team, o => o.MapFrom(new StubTeamResolver(nameof(ProjectEditViewModel.team))))
                 .ForMember(d => d.PriorityItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.priority_main))))
                 .ForMember(d => d.FundedItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.funded))))
                 .ForMember(d => d.ConfidenceItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.confidence))))

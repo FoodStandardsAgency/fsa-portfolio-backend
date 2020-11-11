@@ -2,6 +2,7 @@
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.Mapping;
+using FSAPortfolio.WebAPI.Mapping.Projects;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -58,32 +59,13 @@ namespace FSAPortfolio.WebAPI.App.Projects
         {
             var options = PortfolioMapper.ProjectMapper.Map<ProjectEditOptionsModel>(config);
 
-            var directorates = PortfolioMapper.ProjectMapper.Map<List<DropDownItemModel>>(await context.Directorates.OrderBy(d => d.Order).ToListAsync());
-            directorates.Insert(0, new DropDownItemModel() { Display = "None", Value = "", Order = 0 });
-            options.Directorates = directorates;
-
             var projects = await context.Projects
                 .IncludeProject()
                 .Where(p => p.Reservation.Portfolio_Id == config.Portfolio_Id)
                 .OrderBy(p => p.Reservation.ProjectId)
                 .ToListAsync();
 
-            options.RelatedProjects = new SelectPickerModel() {
-                Header = "Select the related projects (enter a phase or RAG status to narrow list)...",
-                Items = projects.Select((p, i) => new SelectPickerItemModel()
-                {
-                    Value = p.Reservation.ProjectId,
-                    Display = $"{p.Reservation.ProjectId}: {p.Name}",
-                    SearchTokens = $"{p.Category?.Name},{p.LatestUpdate?.Phase?.Name}",
-                    Order = i
-                }).ToList()
-            };
-
-            options.DependantProjects = new SelectPickerModel()
-            {
-                Header = "Select the dependencies (enter a phase or RAG status to narrow list)...",
-                Items = options.RelatedProjects.Items
-            };
+            await ProjectEditOptionsManualMaps.MapAsync(context, config, projects, options);
 
             return options;
         }

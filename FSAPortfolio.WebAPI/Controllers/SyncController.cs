@@ -13,6 +13,7 @@ using FSAPortfolio.WebAPI.Models;
 using System.Net;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Sync;
+using System.Threading.Tasks;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -20,12 +21,12 @@ namespace FSAPortfolio.WebAPI.Controllers
     {
         // GET: api/Sync/SyncAll
         [AcceptVerbs("GET")]
-        public IEnumerable<string> SyncAll()
+        public async Task<IEnumerable<string>> SyncAll()
         {
             List<string> messages = new List<string>();
             var sync = new SyncProvider(messages);
             sync.SyncUsers();
-            sync.SyncPeople();
+            await sync.SyncPeople();
 
             sync.SyncDirectorates();
             sync.SyncPortfolios();
@@ -46,11 +47,11 @@ namespace FSAPortfolio.WebAPI.Controllers
 
         // GET: api/Sync/SyncPeople
         [AcceptVerbs("GET")]
-        public IEnumerable<string> SyncPeople()
+        public async Task<IEnumerable<string>> SyncPeople()
         {
             List<string> messages = new List<string>();
             var sync = new SyncProvider(messages);
-            sync.SyncPeople();
+            await sync.SyncPeople();
             return messages;
         }
 
