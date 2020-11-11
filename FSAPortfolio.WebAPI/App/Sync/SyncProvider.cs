@@ -513,24 +513,24 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
         private Project MapProject(PortfolioContext dest, IEnumerable<project> sourceProjectDetail, Project destProject, project latestSourceUpdate)
         {
-            try
-            {
+            //try
+            //{
                 mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
                 destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
                 return destProject;
-            }
-            catch (AutoMapperMappingException ame)
-            {
-                if (ame.MemberMap.DestinationName == "Size")
-                {
-                    log.Add($"MAPPING ERROR: Source project size = {latestSourceUpdate.project_size}");
-                }
-                else
-                {
-                    log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}");
-                }
-            }
-            return null;
+            //}
+            //catch (AutoMapperMappingException ame)
+            //{
+            //    if (ame.MemberMap.DestinationName == "Size")
+            //    {
+            //        log.Add($"MAPPING ERROR: Source project size = {latestSourceUpdate.project_size}");
+            //    }
+            //    else
+            //    {
+            //        log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}");
+            //    }
+            //}
+            //return null;
         }
     }
 }
