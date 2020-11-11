@@ -122,31 +122,28 @@ namespace FSAPortfolio.WebAPI.App.Sync
                             Email = sourcePerson.email,
                             Timestamp = sourcePerson.timestamp
                         };
-
-
-
                         dest.People.Add(destPerson);
                         log.Add($"Added person {destPerson.Firstname} {destPerson.Surname}");
                     }
 
-                    //// Set the active directory user
-                    //MicrosoftGraphUserModel adUser = null;
-                    //if (destPerson.ActiveDirectoryId == null)
-                    //{
-                    //    if (destPerson.Email != null)
-                    //    {
-                    //        adUser = await usersProvider.GetUserForPrincipalNameAsync(destPerson.Email);
-                    //        if(adUser != null)
-                    //        {
-                    //            destPerson.ActiveDirectoryPrincipalName = adUser.userPrincipalName;
-                    //            destPerson.ActiveDirectoryId = adUser.id;
-                    //        }
-                    //        else
-                    //        {
-                    //            log.Add($"USER NOT FOUND! {destPerson.Email}");
-                    //        }
-                    //    }
-                    //}
+                    // Set the active directory user
+                    MicrosoftGraphUserModel adUser = null;
+                    if (destPerson.ActiveDirectoryId == null)
+                    {
+                        if (destPerson.Email != null)
+                        {
+                            adUser = await usersProvider.GetUserForPrincipalNameAsync(destPerson.Email);
+                            if (adUser != null)
+                            {
+                                destPerson.ActiveDirectoryPrincipalName = adUser.userPrincipalName;
+                                destPerson.ActiveDirectoryId = adUser.id;
+                            }
+                            else
+                            {
+                                log.Add($"USER NOT FOUND! {destPerson.Email}");
+                            }
+                        }
+                    }
 
                     //// TODO: check if team doesn't match current value.
                     //if(destPerson.Team == null && adUser != null)
