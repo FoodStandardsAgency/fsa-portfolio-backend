@@ -20,6 +20,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
         protected BaseProjectOptionResolver(string option, bool allowNullOption = false)
         {
             this.option = option;
+            this.allowNullOption = allowNullOption;
         }
         protected abstract T GetOption(Project destination, string viewKey, ResolutionContext context);
         public T Resolve(object source, Project destination, string sourceMember, T destMember, ResolutionContext context)
