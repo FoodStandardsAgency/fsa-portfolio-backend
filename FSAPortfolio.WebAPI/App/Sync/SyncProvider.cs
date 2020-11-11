@@ -107,9 +107,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 var usersProvider = new UsersProvider(dest);
 
                 // Sync the people
-                foreach (var sourcePerson in source.odd_people)
+                foreach (var sourcePerson in source.odd_people.AsEnumerable().Where(p => !string.IsNullOrWhiteSpace(p.email)))
                 {
-                    var destPerson = dest.People.Include(p => p.Team).SingleOrDefault(u => u.Email == sourcePerson.email);
+                    var destPerson = 
+                        dest.People.Local.SingleOrDefault(u => u.Email == sourcePerson.email) ?? 
+                        dest.People.Include(p => p.Team).SingleOrDefault(u => u.Email == sourcePerson.email);
+
                     if (destPerson == null)
                     {
                         destPerson = new Person()
@@ -574,6 +577,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     {
                         case "Team":
                             log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source team = {latestSourceUpdate.team}");
+                            break;
+                        case "Directorate":
+                            log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source data = {latestSourceUpdate.direct}");
                             break;
                         default:
                             log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}");

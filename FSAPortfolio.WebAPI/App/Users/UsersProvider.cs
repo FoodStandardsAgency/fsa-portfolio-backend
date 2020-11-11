@@ -25,6 +25,8 @@ namespace FSAPortfolio.WebAPI.App.Users
         private string ClientId = ConfigurationManager.AppSettings["Azure.ClientId"];
         private string ClientSecret = ConfigurationManager.AppSettings["Azure.ClientSecret"];
         private const string AuthorityFormat = "https://login.microsoftonline.com/{0}/v2.0";
+        private const string userSelect = "$select=id,displayName,givenName,surname,mail,userPrincipalName,department";
+
 
         public UsersProvider(PortfolioContext context = null)
         {
@@ -37,8 +39,7 @@ namespace FSAPortfolio.WebAPI.App.Users
             HttpClient client = new HttpClient();
 
             var filter = $"$filter=startswith(displayName,'{term}') or startswith(givenName,'{term}') or startswith(surname,'{term}') or startswith(mail,'{term}') or startswith(userPrincipalName,'{term}')";
-            var select = "$select=displayName,givenName,surname,mail,userPrincipalName,department";
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://graph.microsoft.com/v1.0/users?{filter}&{select}&$top={count}");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"https://graph.microsoft.com/v1.0/users?{filter}&{userSelect}&$top={count}");
             request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", auth.AccessToken);
             HttpResponseMessage response = await client.SendAsync(request);
@@ -68,7 +69,7 @@ namespace FSAPortfolio.WebAPI.App.Users
             MicrosoftGraphUserModel user;
 
             // Build the uri
-            var uri = new UriBuilder($"https://graph.microsoft.com/v1.0/users/{term}");
+            var uri = new UriBuilder($"https://graph.microsoft.com/v1.0/users/{term}?{userSelect}");
             AuthenticationResult auth = await AuthenticateAsync();
             using (HttpClient client = new HttpClient())
             {
@@ -163,6 +164,43 @@ namespace FSAPortfolio.WebAPI.App.Users
                 else result = currentValue;
             }
             return result;
+        }
+
+        internal async Task<string> TestAsync(string term)
+        {
+            MicrosoftGraphUserModel user;
+            var select = "$select=id,displayName,givenName,surname,mail,userPrincipalName,department";
+
+            // Build the uri
+            var uri = new UriBuilder($"https://graph.microsoft.com/v1.0/users/{term}?{select}");
+            string json = "No response";
+            AuthenticationResult auth = await AuthenticateAsync();
+            using (HttpClient client = new HttpClient())
+            {
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri.ToString());
+                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", auth.AccessToken);
+                HttpResponseMessage response = await client.SendAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    json = await response.Content.ReadAsStringAsync();
+                    user = JsonConvert.DeserializeObject<MicrosoftGraphUserModel>(json);
+                }
+                else
+                {
+                    switch (response.StatusCode)
+                    {
+                        case HttpStatusCode.NotFound:
+                            user = null;
+                            break;
+                        default:
+                            throw new HttpResponseException(response.StatusCode);
+                    }
+                }
+            }
+
+            return json;
         }
     }
 }

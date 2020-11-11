@@ -26,10 +26,9 @@ namespace FSAPortfolio.WebAPI.Controllers
             List<string> messages = new List<string>();
             var sync = new SyncProvider(messages);
             sync.SyncUsers();
-            await sync.SyncPeople();
-
             sync.SyncDirectorates();
             sync.SyncPortfolios();
+            await sync.SyncPeople();
 
             sync.SyncAllProjects();
             return messages;

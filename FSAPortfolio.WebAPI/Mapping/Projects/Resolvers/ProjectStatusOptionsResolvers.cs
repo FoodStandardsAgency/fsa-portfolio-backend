@@ -48,7 +48,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
         {
             // TODO: this is a database query each time - could cache directorates.
             var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
-            var directorate = portfolioContext.Directorates.SingleOrDefault(c => c.ViewKey == viewKey);
+            var directorate = 
+                portfolioContext.Directorates.Local.SingleOrDefault(c => c.ViewKey == viewKey) 
+                ?? portfolioContext.Directorates.SingleOrDefault(c => c.ViewKey == viewKey);
             return directorate;
         }
     }

@@ -17,6 +17,11 @@ namespace FSAPortfolio.WebAPI
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name: "TestUsers",
+                routeTemplate: "api/Users/test",
+                defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.Test) }
+            );
+            config.Routes.MapHttpRoute(
                 name: "SearchUsers",
                 routeTemplate: "api/Users/search",
                 defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.SearchUsers) }
