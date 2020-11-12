@@ -182,7 +182,11 @@ namespace FSAPortfolio.WebAPI.Controllers
 
 
         [HttpGet]
-        public async Task<GetProjectDTO<ProjectViewModel>> Get([FromUri] string projectId, [FromUri] bool includeOptions = false, [FromUri] bool includeHistory = false, [FromUri] bool includeLastUpdate = false, [FromUri] bool includeConfig = false)
+        public async Task<GetProjectDTO<ProjectViewModel>> Get([FromUri] string projectId,
+                                                               [FromUri] bool includeOptions = false,
+                                                               [FromUri] bool includeHistory = false,
+                                                               [FromUri] bool includeLastUpdate = false,
+                                                               [FromUri] bool includeConfig = false)
         {
             return await GetProject<ProjectViewModel>(projectId, includeOptions, includeHistory, includeLastUpdate, includeConfig);
         }
@@ -190,7 +194,12 @@ namespace FSAPortfolio.WebAPI.Controllers
         [HttpGet]
         public async Task<GetProjectDTO<ProjectEditViewModel>> GetForEdit([FromUri] string projectId)
         {
-            return await GetProject<ProjectEditViewModel>(projectId, includeOptions: true, includeHistory: false, includeLastUpdate: true, includeConfig: true, PortfolioFieldFlags.Update);
+            return await GetProject<ProjectEditViewModel>(projectId,
+                                                          includeOptions: true,
+                                                          includeHistory: false,
+                                                          includeLastUpdate: true,
+                                                          includeConfig: true,
+                                                          flags: PortfolioFieldFlags.Update);
         }
 
         private static async Task<GetProjectDTO<T>> GetProject<T>(string projectId,
