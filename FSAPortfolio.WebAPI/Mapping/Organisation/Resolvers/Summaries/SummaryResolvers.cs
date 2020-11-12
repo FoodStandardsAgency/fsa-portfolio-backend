@@ -97,7 +97,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
         public IEnumerable<PhaseProjectsModel> Resolve(Team source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
         {
             var portfolioConfiguration = context.Items[nameof(PortfolioConfiguration)] as PortfolioConfiguration;
-            return SummaryLinqQuery.GetQuery(portfolioConfiguration, p => p.Lead != null && p.Lead.Team.ViewKey == source.ViewKey, context);
+            return SummaryLinqQuery.GetQuery(portfolioConfiguration, p => p.Lead?.Team != null && p.Lead.Team.ViewKey == source.ViewKey, context);
         }
     }
 }
