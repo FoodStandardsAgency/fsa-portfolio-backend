@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.Entities.Projects;
+﻿using FSAPortfolio.Entities;
+using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -11,29 +12,31 @@ namespace FSAPortfolio.WebAPI.App.Projects
     public class ProjectSearchFilters
     {
         private ProjectQueryModel searchTerms;
-        private IQueryable<Project> filteredQuery;
 
-        internal IQueryable<Project> Query => filteredQuery;
+        internal IQueryable<Project> Query { get; private set; }
 
-        public ProjectSearchFilters(ProjectQueryModel searchTerms, IQueryable<Project> filteredQuery)
+        private PortfolioContext context;
+
+        public ProjectSearchFilters(ProjectQueryModel searchTerms, IQueryable<Project> filteredQuery, PortfolioContext context)
         {
             this.searchTerms = searchTerms;
-            this.filteredQuery = filteredQuery;
+            this.Query = filteredQuery;
+            this.context = context;
         }
 
         internal void BuildFilters()
         {
             if (!string.IsNullOrWhiteSpace(searchTerms.Name))
             {
-                filteredQuery = filteredQuery.Where(p => p.Name.Contains(searchTerms.Name) || p.Reservation.ProjectId.Contains(searchTerms.Name));
+                Query = Query.Where(p => p.Name.Contains(searchTerms.Name) || p.Reservation.ProjectId.Contains(searchTerms.Name));
             }
-            filteredQuery = AddExactMatchFilter(searchTerms.Themes, filteredQuery, p => searchTerms.Themes.Contains(p.Theme));
-            filteredQuery = AddExactMatchFilter(searchTerms.ProjectTypes, filteredQuery, p => searchTerms.ProjectTypes.Contains(p.ProjectType));
-            filteredQuery = AddExactMatchFilter(searchTerms.Categories, filteredQuery, p => searchTerms.Categories.Contains(p.Category.ViewKey) || searchTerms.Categories.Intersect(p.Subcategories.Select(sc => sc.ViewKey)).Any());
-            filteredQuery = AddExactMatchFilter(searchTerms.Directorates, filteredQuery, p => searchTerms.Directorates.Contains(p.Directorate.ViewKey));
-            filteredQuery = AddExactMatchFilter(searchTerms.StrategicObjectives, filteredQuery, p => searchTerms.StrategicObjectives.Contains(p.StrategicObjectives));
-            filteredQuery = AddExactMatchFilter(searchTerms.Programmes, filteredQuery, p => searchTerms.Programmes.Contains(p.Programme));
-            filteredQuery = AddExactMatchFilter(searchTerms.Teams, filteredQuery, p => p.Lead != null && p.Lead.Team != null && searchTerms.Themes.Contains(p.Lead.Team.ViewKey));
+            Query = AddExactMatchFilter(searchTerms.Themes, Query, p => searchTerms.Themes.Contains(p.Theme));
+            Query = AddExactMatchFilter(searchTerms.ProjectTypes, Query, p => searchTerms.ProjectTypes.Contains(p.ProjectType));
+            Query = AddExactMatchFilter(searchTerms.Categories, Query, p => searchTerms.Categories.Contains(p.Category.ViewKey) || searchTerms.Categories.Intersect(p.Subcategories.Select(sc => sc.ViewKey)).Any());
+            Query = AddExactMatchFilter(searchTerms.Directorates, Query, p => searchTerms.Directorates.Contains(p.Directorate.ViewKey));
+            Query = AddExactMatchFilter(searchTerms.StrategicObjectives, Query, p => searchTerms.StrategicObjectives.Contains(p.StrategicObjectives));
+            Query = AddExactMatchFilter(searchTerms.Programmes, Query, p => searchTerms.Programmes.Contains(p.Programme));
+            Query = AddExactMatchFilter(searchTerms.Teams, Query, p => searchTerms.Teams.Contains(p.Lead.Team.ViewKey));
 
             // Project team
             // TODO: add supplier here also (startswith)
@@ -42,7 +45,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             if (!string.IsNullOrWhiteSpace(searchTerms.TeamMemberName))
             {
                 searchTerms.TeamMemberName = searchTerms.TeamMemberName.ToLower();
-                filteredQuery = filteredQuery.Where(p =>
+                Query = Query.Where(p =>
                     p.Lead.Firstname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.Lead.Surname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.Lead.Email.ToLower().StartsWith(searchTerms.TeamMemberName) ||
@@ -65,7 +68,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             if (!string.IsNullOrWhiteSpace(searchTerms.ProjectLeadName))
             {
                 searchTerms.ProjectLeadName = searchTerms.ProjectLeadName.ToLower();
-                filteredQuery = filteredQuery.Where(p =>
+                Query = Query.Where(p =>
                     p.Lead.Firstname.ToLower().StartsWith(searchTerms.ProjectLeadName) ||
                     p.Lead.Surname.ToLower().StartsWith(searchTerms.ProjectLeadName) ||
                     p.Lead.Email.ToLower().StartsWith(searchTerms.ProjectLeadName)
@@ -73,26 +76,26 @@ namespace FSAPortfolio.WebAPI.App.Projects
             }
 
             // Progress
-            filteredQuery = AddExactMatchFilter(searchTerms.Phases, filteredQuery, p => searchTerms.Phases.Contains(p.LatestUpdate.Phase.ViewKey));
-            filteredQuery = AddExactMatchFilter(searchTerms.RAGStatuses, filteredQuery, p => searchTerms.RAGStatuses.Contains(p.LatestUpdate.RAGStatus.ViewKey));
-            filteredQuery = AddExactMatchFilter(searchTerms.OnHoldStatuses, filteredQuery, p => searchTerms.OnHoldStatuses.Contains(p.LatestUpdate.OnHoldStatus.ViewKey));
+            Query = AddExactMatchFilter(searchTerms.Phases, Query, p => searchTerms.Phases.Contains(p.LatestUpdate.Phase.ViewKey));
+            Query = AddExactMatchFilter(searchTerms.RAGStatuses, Query, p => searchTerms.RAGStatuses.Contains(p.LatestUpdate.RAGStatus.ViewKey));
+            Query = AddExactMatchFilter(searchTerms.OnHoldStatuses, Query, p => searchTerms.OnHoldStatuses.Contains(p.LatestUpdate.OnHoldStatus.ViewKey));
 
             // Prioritisation
             if (searchTerms.Priorities != null && searchTerms.Priorities.Length > 0)
             {
-                filteredQuery = filteredQuery.Where(p => p.Priority.HasValue && searchTerms.Priorities.Contains(p.Priority.Value));
+                Query = Query.Where(p => p.Priority.HasValue && searchTerms.Priorities.Contains(p.Priority.Value));
             }
 
             // Updates
-            filteredQuery = AddExactMatchFilter(searchTerms.LastUpdateBefore, filteredQuery, p => p.LatestUpdate.Timestamp < searchTerms.LastUpdateBefore.Value);
-            filteredQuery = AddExactMatchFilter(searchTerms.NoUpdates, filteredQuery, p => p.Updates.Any(u => u.Text != null && u.Text != string.Empty) != searchTerms.NoUpdates.Value);
+            Query = AddExactMatchFilter(searchTerms.LastUpdateBefore, Query, p => p.LatestUpdate.Timestamp < searchTerms.LastUpdateBefore.Value);
+            Query = AddExactMatchFilter(searchTerms.NoUpdates, Query, p => p.Updates.Any(u => u.Text != null && u.Text != string.Empty) != searchTerms.NoUpdates.Value);
 
             // Key dates
-            filteredQuery = AddExactMatchFilter(searchTerms.PastStartDate, filteredQuery,
+            Query = AddExactMatchFilter(searchTerms.PastStartDate, Query,
                 p => searchTerms.PastStartDate.Value ==
                 ((p.StartDate > DateTime.Today && p.ActualStartDate == null) || p.ActualStartDate > p.StartDate));
 
-            filteredQuery = AddExactMatchFilter(searchTerms.MissedEndDate, filteredQuery,
+            Query = AddExactMatchFilter(searchTerms.MissedEndDate, Query,
                 p => searchTerms.MissedEndDate.Value ==
                 (((!p.ActualEndDate.HasValue) && p.ExpectedEndDate < DateTime.Today)
                 ||
