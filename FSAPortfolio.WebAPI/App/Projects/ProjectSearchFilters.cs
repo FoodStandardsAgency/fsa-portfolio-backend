@@ -61,6 +61,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                         t.Email.ToLower().StartsWith(searchTerms.TeamMemberName))
                     );
             }
+
             // Project lead search
             if (!string.IsNullOrWhiteSpace(searchTerms.ProjectLeadName))
             {
@@ -88,22 +89,28 @@ namespace FSAPortfolio.WebAPI.App.Projects
             Query = AddExactMatchFilter(searchTerms.NoUpdates, Query, p => p.Updates.Any(u => u.Text != null && u.Text != string.Empty) != searchTerms.NoUpdates.Value);
 
             // Key dates
+            // TODO: ODD exludes backlog from this filter
             Query = AddExactMatchFilter(searchTerms.PastStartDate, Query,
                 p => searchTerms.PastStartDate.Value ==
-                ((p.StartDate > DateTime.Today && p.ActualStartDate == null) || p.ActualStartDate > p.StartDate));
+                (
+                    p.StartDate != null &&
+                    ((p.StartDate < DateTime.Today && p.ActualStartDate == null) || p.ActualStartDate > p.StartDate)
+                ));
 
+            // TODO: ODD also excludes LIVE phase in this filter
             Query = AddExactMatchFilter(searchTerms.MissedEndDate, Query,
                 p => searchTerms.MissedEndDate.Value ==
-                (((!p.ActualEndDate.HasValue) && p.ExpectedEndDate < DateTime.Today)
-                ||
-                (p.ActualEndDate > p.ExpectedEndDate)
-                ||
-                (!p.ActualEndDate.HasValue && p.HardEndDate < DateTime.Today)
-                ||
-                (p.ActualEndDate > p.HardEndDate)
-                ||
-                (p.LatestUpdate.ExpectedCurrentPhaseEnd.HasValue && p.LatestUpdate.ExpectedCurrentPhaseEnd < DateTime.Today))
-                );
+                (p.LatestUpdate.Phase.Id != p.Reservation.Portfolio.Configuration.CompletedPhase.Id && 
+                    (
+                        ((!p.ActualEndDate.HasValue) && p.ExpectedEndDate < DateTime.Today)
+                        ||
+                        (p.ActualEndDate > p.ExpectedEndDate)
+                        ||
+                        (!p.ActualEndDate.HasValue && p.HardEndDate < DateTime.Today)
+                        ||
+                        (p.ActualEndDate > p.HardEndDate)
+                    )
+                ));
         }
         private IQueryable<Project> AddExactMatchFilter(string[] terms, IQueryable<Project> query, Expression<Func<Project, bool>> filter)
         {
