@@ -49,7 +49,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.programme, o => o.MapFrom(s => s.Programme))
 
 
-                .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.Team))
+                .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.Team.Name))
                 .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
                 .ForMember(p => p.first_completed, o => o.MapFrom<FirstCompletedResolver>())
                 .ForMember(p => p.pgroup, o => o.MapFrom(s => s.PriorityGroup.Name))
