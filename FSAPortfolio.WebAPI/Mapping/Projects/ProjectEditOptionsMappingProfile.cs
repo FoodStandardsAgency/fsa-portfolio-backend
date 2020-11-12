@@ -33,7 +33,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.RiskRating, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.risk_rating))))
                 .ForMember(d => d.Theme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.theme))))
                 .ForMember(d => d.ProjectType, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_type))))
-                .ForMember(d => d.Programme, o => o.MapFrom(new SelectPickerResolver(nameof(ProjectModel.programme), "Select the programmes...")))
+                .ForMember(d => d.Programme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.programme))))
 
                 .ForMember(d => d.ODDLead, o => o.MapFrom(new StubPersonResolver(ProjectPropertyConstants.ProjectLead, addNoneOption: false))) // TODO: do we need these options if using ajax?
                 .ForMember(d => d.ODDLeadRole, o => o.MapFrom(new StubRoleResolver(nameof(ProjectModel.oddlead_role))))
@@ -145,7 +145,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             IEnumerable<DropDownItemModel> items = null;
             var label = source.Labels.SingleOrDefault(l => l.FieldName == fieldName);
-            if(label?.FieldOptions != null)
+            if(!string.IsNullOrEmpty(label?.FieldOptions))
             {
                 items = label.FieldOptions.Split(',').Select((l, i ) => {
                     var value = l.Trim();

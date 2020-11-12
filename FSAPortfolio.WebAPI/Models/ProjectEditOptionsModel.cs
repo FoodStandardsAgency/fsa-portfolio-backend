@@ -47,7 +47,7 @@ namespace FSAPortfolio.WebAPI.Models
         public SelectPickerModel DependantProjects { get; set; }
 
         [JsonProperty(nameof(ProjectModel.programme))]
-        public SelectPickerModel Programme { get; set; }
+        public IEnumerable<DropDownItemModel> Programme { get; set; }
 
 
         [JsonProperty(nameof(ProjectModel.risk_rating))]
