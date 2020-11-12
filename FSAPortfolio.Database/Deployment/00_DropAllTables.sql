@@ -2,6 +2,8 @@ USE [Portfolio]
 GO
 ALTER TABLE [dbo].[Users] DROP CONSTRAINT [FK_dbo.Users_dbo.AccessGroups_AccessGroupId]
 GO
+ALTER TABLE [dbo].[Teams] DROP CONSTRAINT [FK_dbo.Teams_dbo.Portfolios_Portfolio_Id]
+GO
 ALTER TABLE [dbo].[RelatedProjects] DROP CONSTRAINT [FK_dbo.RelatedProjects_dbo.Projects_RelatedProject_Id]
 GO
 ALTER TABLE [dbo].[RelatedProjects] DROP CONSTRAINT [FK_dbo.RelatedProjects_dbo.Projects_Project_Id]
@@ -15,6 +17,10 @@ GO
 ALTER TABLE [dbo].[ProjectUpdateItems] DROP CONSTRAINT [FK_dbo.ProjectUpdateItems_dbo.ProjectOnHoldStatus_OnHoldStatus_Id]
 GO
 ALTER TABLE [dbo].[ProjectUpdateItems] DROP CONSTRAINT [FK_dbo.ProjectUpdateItems_dbo.People_Person_Id]
+GO
+ALTER TABLE [dbo].[ProjectTeamMembers] DROP CONSTRAINT [FK_dbo.ProjectTeamMembers_dbo.Projects_Project_Id]
+GO
+ALTER TABLE [dbo].[ProjectTeamMembers] DROP CONSTRAINT [FK_dbo.ProjectTeamMembers_dbo.People_Person_Id]
 GO
 ALTER TABLE [dbo].[ProjectSubcategories] DROP CONSTRAINT [FK_dbo.ProjectSubcategories_dbo.Projects_Project_Id]
 GO
@@ -41,6 +47,8 @@ GO
 ALTER TABLE [dbo].[Projects] DROP CONSTRAINT [FK_dbo.Projects_dbo.People_KeyContact2_Id]
 GO
 ALTER TABLE [dbo].[Projects] DROP CONSTRAINT [FK_dbo.Projects_dbo.People_KeyContact1_Id]
+GO
+ALTER TABLE [dbo].[Projects] DROP CONSTRAINT [FK_dbo.Projects_dbo.Directorates_Directorate_Id]
 GO
 ALTER TABLE [dbo].[Projects] DROP CONSTRAINT [FK_dbo.Projects_dbo.BudgetTypes_BudgetType_Id]
 GO
@@ -82,90 +90,98 @@ ALTER TABLE [dbo].[PortfolioConfigurations] DROP CONSTRAINT [FK_dbo.PortfolioCon
 GO
 ALTER TABLE [dbo].[PortfolioConfigAuditLogs] DROP CONSTRAINT [FK_dbo.PortfolioConfigAuditLogs_dbo.PortfolioConfigurations_PortfolioConfiguration_Id]
 GO
+ALTER TABLE [dbo].[People] DROP CONSTRAINT [FK_dbo.People_dbo.Teams_Team_Id]
+GO
 ALTER TABLE [dbo].[DependantProjects] DROP CONSTRAINT [FK_dbo.DependantProjects_dbo.Projects_Project_Id]
 GO
 ALTER TABLE [dbo].[DependantProjects] DROP CONSTRAINT [FK_dbo.DependantProjects_dbo.Projects_DependantProject_Id]
 GO
 ALTER TABLE [dbo].[BudgetTypes] DROP CONSTRAINT [FK_dbo.BudgetTypes_dbo.PortfolioConfigurations_Configuration_Id]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 05/11/2020 10:59:46 ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 12/11/2020 12:45:40 ******/
 DROP TABLE [dbo].[Users]
 GO
-/****** Object:  Table [dbo].[RelatedProjects]    Script Date: 05/11/2020 10:59:46 ******/
+/****** Object:  Table [dbo].[Teams]    Script Date: 12/11/2020 12:45:40 ******/
+DROP TABLE [dbo].[Teams]
+GO
+/****** Object:  Table [dbo].[RelatedProjects]    Script Date: 12/11/2020 12:45:40 ******/
 DROP TABLE [dbo].[RelatedProjects]
 GO
-/****** Object:  Table [dbo].[ProjectUpdateItems]    Script Date: 05/11/2020 10:59:46 ******/
+/****** Object:  Table [dbo].[ProjectUpdateItems]    Script Date: 12/11/2020 12:45:40 ******/
 DROP TABLE [dbo].[ProjectUpdateItems]
 GO
-/****** Object:  Table [dbo].[ProjectSubcategories]    Script Date: 05/11/2020 10:59:46 ******/
+/****** Object:  Table [dbo].[ProjectTeamMembers]    Script Date: 12/11/2020 12:45:40 ******/
+DROP TABLE [dbo].[ProjectTeamMembers]
+GO
+/****** Object:  Table [dbo].[ProjectSubcategories]    Script Date: 12/11/2020 12:45:40 ******/
 DROP TABLE [dbo].[ProjectSubcategories]
 GO
-/****** Object:  Table [dbo].[ProjectSizes]    Script Date: 05/11/2020 10:59:46 ******/
+/****** Object:  Table [dbo].[ProjectSizes]    Script Date: 12/11/2020 12:45:40 ******/
 DROP TABLE [dbo].[ProjectSizes]
 GO
-/****** Object:  Table [dbo].[Projects]    Script Date: 05/11/2020 10:59:46 ******/
+/****** Object:  Table [dbo].[Projects]    Script Date: 12/11/2020 12:45:40 ******/
 DROP TABLE [dbo].[Projects]
 GO
-/****** Object:  Table [dbo].[ProjectReservations]    Script Date: 05/11/2020 10:59:46 ******/
+/****** Object:  Table [dbo].[ProjectReservations]    Script Date: 12/11/2020 12:45:40 ******/
 DROP TABLE [dbo].[ProjectReservations]
 GO
-/****** Object:  Table [dbo].[ProjectRAGStatus]    Script Date: 05/11/2020 10:59:46 ******/
+/****** Object:  Table [dbo].[ProjectRAGStatus]    Script Date: 12/11/2020 12:45:40 ******/
 DROP TABLE [dbo].[ProjectRAGStatus]
 GO
-/****** Object:  Table [dbo].[ProjectPhases]    Script Date: 05/11/2020 10:59:46 ******/
+/****** Object:  Table [dbo].[ProjectPhases]    Script Date: 12/11/2020 12:45:40 ******/
 DROP TABLE [dbo].[ProjectPhases]
 GO
-/****** Object:  Table [dbo].[ProjectOnHoldStatus]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[ProjectOnHoldStatus]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[ProjectOnHoldStatus]
 GO
-/****** Object:  Table [dbo].[ProjectDocuments]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[ProjectDocuments]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[ProjectDocuments]
 GO
-/****** Object:  Table [dbo].[ProjectDataItems]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[ProjectDataItems]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[ProjectDataItems]
 GO
-/****** Object:  Table [dbo].[ProjectCategories]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[ProjectCategories]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[ProjectCategories]
 GO
-/****** Object:  Table [dbo].[ProjectAuditLogs]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[ProjectAuditLogs]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[ProjectAuditLogs]
 GO
-/****** Object:  Table [dbo].[Portfolios]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[Portfolios]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[Portfolios]
 GO
-/****** Object:  Table [dbo].[PortfolioProjects]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[PortfolioProjects]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[PortfolioProjects]
 GO
-/****** Object:  Table [dbo].[PortfolioLabelGroups]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[PortfolioLabelGroups]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[PortfolioLabelGroups]
 GO
-/****** Object:  Table [dbo].[PortfolioLabelConfigs]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[PortfolioLabelConfigs]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[PortfolioLabelConfigs]
 GO
-/****** Object:  Table [dbo].[PortfolioConfigurations]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[PortfolioConfigurations]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[PortfolioConfigurations]
 GO
-/****** Object:  Table [dbo].[PortfolioConfigAuditLogs]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[PortfolioConfigAuditLogs]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[PortfolioConfigAuditLogs]
 GO
-/****** Object:  Table [dbo].[People]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[People]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[People]
 GO
-/****** Object:  Table [dbo].[Documents]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[Documents]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[Documents]
 GO
-/****** Object:  Table [dbo].[Directorates]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[Directorates]    Script Date: 12/11/2020 12:45:41 ******/
 DROP TABLE [dbo].[Directorates]
 GO
-/****** Object:  Table [dbo].[DependantProjects]    Script Date: 05/11/2020 10:59:47 ******/
+/****** Object:  Table [dbo].[DependantProjects]    Script Date: 12/11/2020 12:45:42 ******/
 DROP TABLE [dbo].[DependantProjects]
 GO
-/****** Object:  Table [dbo].[BudgetTypes]    Script Date: 05/11/2020 10:59:48 ******/
+/****** Object:  Table [dbo].[BudgetTypes]    Script Date: 12/11/2020 12:45:42 ******/
 DROP TABLE [dbo].[BudgetTypes]
 GO
-/****** Object:  Table [dbo].[AccessGroups]    Script Date: 05/11/2020 10:59:48 ******/
+/****** Object:  Table [dbo].[AccessGroups]    Script Date: 12/11/2020 12:45:42 ******/
 DROP TABLE [dbo].[AccessGroups]
 GO
-/****** Object:  Table [dbo].[__MigrationHistory]    Script Date: 05/11/2020 10:59:48 ******/
+/****** Object:  Table [dbo].[__MigrationHistory]    Script Date: 12/11/2020 12:45:42 ******/
 DROP TABLE [dbo].[__MigrationHistory]
 GO

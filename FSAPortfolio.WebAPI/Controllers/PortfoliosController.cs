@@ -39,6 +39,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             using (var context = new PortfolioContext())
             {
                 var portfolio = await context.Portfolios
+                    .Include(p => p.Teams)
                     .IncludeConfig()
                     .IncludeProjects()
                     .SingleOrDefaultAsync(p => p.ViewKey == viewKey);
@@ -106,7 +107,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 GetProjectExportDTO result = new GetProjectExportDTO()
                 {
                     Config = PortfolioMapper.GetProjectLabelConfigModel(config, includedOnly: true),
-                    Projects = PortfolioMapper.ProjectMapper.Map<IEnumerable<ProjectExportModel>>(await projectQuery.OrderByDescending(p => p.Priority).ToArrayAsync())
+                    Projects = PortfolioMapper.ExportMapper.Map<IEnumerable<ProjectExportModel>>(await projectQuery.OrderByDescending(p => p.Priority).ToArrayAsync())
                 };
                 return result;
             }
