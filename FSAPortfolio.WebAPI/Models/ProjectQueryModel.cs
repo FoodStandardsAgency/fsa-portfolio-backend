@@ -51,6 +51,10 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.priority_main))]
         public int[] Priorities { get; set; }
 
+        [JsonProperty(nameof(ProjectModel.g6team))]
+        public string[] Teams { get; set; }
+
+
 
 
         [JsonProperty(FilterFieldConstants.LastUpdateFilter)]

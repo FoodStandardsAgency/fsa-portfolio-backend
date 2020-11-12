@@ -33,6 +33,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             filteredQuery = AddExactMatchFilter(searchTerms.Directorates, filteredQuery, p => searchTerms.Directorates.Contains(p.Directorate.ViewKey));
             filteredQuery = AddExactMatchFilter(searchTerms.StrategicObjectives, filteredQuery, p => searchTerms.StrategicObjectives.Contains(p.StrategicObjectives));
             filteredQuery = AddExactMatchFilter(searchTerms.Programmes, filteredQuery, p => searchTerms.Programmes.Contains(p.Programme));
+            filteredQuery = AddExactMatchFilter(searchTerms.Teams, filteredQuery, p => searchTerms.Themes.Contains(p.Lead.Team.ViewKey));
 
             // Project team
             // TODO: add supplier here also (startswith)
