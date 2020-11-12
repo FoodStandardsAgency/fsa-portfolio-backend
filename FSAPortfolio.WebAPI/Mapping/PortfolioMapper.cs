@@ -18,11 +18,13 @@ namespace FSAPortfolio.WebAPI.Mapping
         internal static MapperConfiguration projectConfig;
         internal static MapperConfiguration configConfig;
         internal static MapperConfiguration updateConfig;
+        internal static MapperConfiguration exportConfig;
         internal static MapperConfiguration activeDirectoryConfig;
 
         internal static IMapper ProjectMapper { get; private set; }
         internal static IMapper ConfigMapper { get; private set; }
         internal static IMapper UpdateMapper { get; private set; }
+        internal static IMapper ExportMapper { get; private set; }
         internal static IMapper ActiveDirectoryMapper { get; private set; }
         internal static void Configure()
         {
@@ -34,7 +36,6 @@ namespace FSAPortfolio.WebAPI.Mapping
                 cfg.AddProfile<ProjectUpdateModelProfile>();
                 cfg.AddProfile<ProjectQueryModelProfile>();
                 cfg.AddProfile<ProjectEditOptionsMappingProfile>();
-                cfg.AddProfile<ProjectExportModelProfile>();
             });
             ProjectMapper = projectConfig.CreateMapper();
 
@@ -57,6 +58,14 @@ namespace FSAPortfolio.WebAPI.Mapping
                 cfg.AddProfile<ADUserMappingProfile>();
             });
             ActiveDirectoryMapper = activeDirectoryConfig.CreateMapper();
+
+            exportConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AllowNullCollections = true;
+                cfg.AddProfile<ProjectExportModelProfile>();
+            });
+            ExportMapper = exportConfig.CreateMapper();
+
         }
 
         internal static ProjectLabelConfigModel GetProjectLabelConfigModel(

@@ -12,6 +12,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public ProjectExportModelProfile()
         {
+            CreateMap<string, string>().ConvertUsing(s => s != null ? s.Replace(",", "") : null);
+
             // Outbound
             Project__ProjectExportModel();
         }

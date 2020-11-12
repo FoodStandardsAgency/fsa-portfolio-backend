@@ -104,10 +104,11 @@ namespace FSAPortfolio.WebAPI.Controllers
                                    select p;
                 var provider = new PortfolioProvider(context, viewKey);
                 var config = await provider.GetConfigAsync();
+                var projects = await projectQuery.OrderByDescending(p => p.Priority).ToArrayAsync();
                 GetProjectExportDTO result = new GetProjectExportDTO()
                 {
                     Config = PortfolioMapper.GetProjectLabelConfigModel(config, includedOnly: true),
-                    Projects = PortfolioMapper.ExportMapper.Map<IEnumerable<ProjectExportModel>>(await projectQuery.OrderByDescending(p => p.Priority).ToArrayAsync())
+                    Projects = PortfolioMapper.ExportMapper.Map<IEnumerable<ProjectExportModel>>(projects)
                 };
                 return result;
             }
