@@ -190,10 +190,15 @@ namespace FSAPortfolio.WebAPI.Controllers
         [HttpGet]
         public async Task<GetProjectDTO<ProjectEditViewModel>> GetForEdit([FromUri] string projectId)
         {
-            return await GetProject<ProjectEditViewModel>(projectId, includeOptions: true, includeHistory: false, includeLastUpdate: true, includeConfig: true);
+            return await GetProject<ProjectEditViewModel>(projectId, includeOptions: true, includeHistory: false, includeLastUpdate: true, includeConfig: true, PortfolioFieldFlags.Update);
         }
 
-        private static async Task<GetProjectDTO<T>> GetProject<T>(string projectId, bool includeOptions, bool includeHistory, bool includeLastUpdate, bool includeConfig)
+        private static async Task<GetProjectDTO<T>> GetProject<T>(string projectId,
+                                                                  bool includeOptions,
+                                                                  bool includeHistory,
+                                                                  bool includeLastUpdate,
+                                                                  bool includeConfig,
+                                                                  PortfolioFieldFlags flags = PortfolioFieldFlags.Read)
             where T : ProjectModel, new()
         {
             string portfolio;
@@ -221,7 +226,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                         opt.Items[nameof(ProjectEditViewModel.LastUpdate)] = includeLastUpdate;
                     })
                 };
-                if (includeConfig) result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration);
+                if (includeConfig) result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration, flags: flags);
                 if (includeOptions)
                 {
                     var provider = new PortfolioProvider(context, portfolio);

@@ -66,6 +66,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     throw new ArgumentException("Not recognised", nameof(inputType));
             }
 
+            if ((flags & Default) == 0) flags = flags | Default;
+
             var group = config.LabelGroups.FirstOrDefault(g => g.Name == fieldGroup);
             var label = config.Labels.FirstOrDefault(l => l.FieldName == fieldName) ?? new PortfolioLabelConfig();
             label.Configuration_Id = config.Portfolio_Id;
@@ -78,7 +80,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             label.IncludedLock = includedLock;
             label.AdminOnlyLock = adminLock;
             label.FieldTypeLocked = inputTypeLocked;
-            label.Flags = (flags | Default);
+            label.Flags = flags;
             label.FieldOptions = options;
             return label;
         }
@@ -116,7 +118,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                 Factory(FieldGroupName_ProjectTeam, "Project lead", ProjectPropertyConstants.ProjectLead, false, false, false, PortfolioFieldType.ADUserSearch, flags: FilterProject),
                 Factory(FieldGroupName_ProjectTeam, "Lead role", nameof(ProjectModel.oddlead_role), false, false, false, PortfolioFieldType.OptionList),
-                Factory(FieldGroupName_ProjectTeam, "Lead team", nameof(ProjectModel.g6team), false, false, false, PortfolioFieldType.PredefinedList, flags: FilterProject),
+                Factory(FieldGroupName_ProjectTeam, "Lead team", nameof(ProjectModel.g6team), false, false, false, PortfolioFieldType.OptionList, flags: FilterProject | Read),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 1", nameof(ProjectModel.key_contact1), false, false, false, PortfolioFieldType.ADUserSearch),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 2", nameof(ProjectModel.key_contact2), false, false, false, PortfolioFieldType.ADUserSearch),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 3", nameof(ProjectModel.key_contact3), false, false, false, PortfolioFieldType.ADUserSearch),

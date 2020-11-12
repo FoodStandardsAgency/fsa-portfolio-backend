@@ -95,6 +95,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.fsaproc_assurance_gatenumber, o => o.Ignore())
                 .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.Ignore())
                 .ForMember(p => p.fsaproc_assurance_nextgate, o => o.Ignore())
+
+                .ForMember(d => d.Properties, o => o.Ignore())
+
                 // TODO: need these after maps if want project data in export
                 //.AfterMap<ProjectDataOutboundMapper<ProjectExportModel>>()
                 //.AfterMap<ProjectJsonPropertiesOutboundMapper>()
