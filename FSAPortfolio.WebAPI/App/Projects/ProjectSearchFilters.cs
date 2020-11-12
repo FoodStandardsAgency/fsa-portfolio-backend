@@ -15,13 +15,10 @@ namespace FSAPortfolio.WebAPI.App.Projects
 
         internal IQueryable<Project> Query { get; private set; }
 
-        private PortfolioContext context;
-
-        public ProjectSearchFilters(ProjectQueryModel searchTerms, IQueryable<Project> filteredQuery, PortfolioContext context)
+        public ProjectSearchFilters(ProjectQueryModel searchTerms, IQueryable<Project> filteredQuery)
         {
             this.searchTerms = searchTerms;
             this.Query = filteredQuery;
-            this.context = context;
         }
 
         internal void BuildFilters()
