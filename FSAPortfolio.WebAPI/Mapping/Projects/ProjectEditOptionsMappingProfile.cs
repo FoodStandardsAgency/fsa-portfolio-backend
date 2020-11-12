@@ -38,6 +38,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.ODDLead, o => o.MapFrom(new StubPersonResolver(ProjectPropertyConstants.ProjectLead, addNoneOption: false))) // TODO: do we need these options if using ajax?
                 .ForMember(d => d.ODDLeadRole, o => o.MapFrom(new StubRoleResolver(nameof(ProjectModel.oddlead_role))))
                 .ForMember(d => d.PriorityItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.priority_main))))
+                .ForMember(d => d.PriorityGroupItems, o => o.MapFrom(new PriorityGroupLabelDropDownResolver(nameof(ProjectModel.pgroup))))
                 .ForMember(d => d.FundedItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.funded))))
                 .ForMember(d => d.ConfidenceItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.confidence))))
                 .ForMember(d => d.PrioritiesItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.priorities))))
@@ -155,6 +156,22 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             return items;
         }
     }
+
+    public class PriorityGroupLabelDropDownResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, IEnumerable<DropDownItemModel>>
+    {
+        private string fieldName;
+
+        public PriorityGroupLabelDropDownResolver(string fieldName)
+        {
+            this.fieldName = fieldName;
+        }
+
+        public IEnumerable<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, IEnumerable<DropDownItemModel> destMember, ResolutionContext context)
+        {
+            return source.PriorityGroups.Select(pg => new DropDownItemModel() { Display = pg.Name, Value = pg.ViewKey, Order = pg.Order });
+        }
+    }
+
 
     public class SelectPickerResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, SelectPickerModel>
     {

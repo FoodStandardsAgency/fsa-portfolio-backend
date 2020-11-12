@@ -54,6 +54,8 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.g6team))]
         public string[] Teams { get; set; }
 
+        [JsonProperty(FilterFieldConstants.PriorityGroupFilter)]
+        public string[] PriorityGroups { get; set; }
 
 
 
@@ -68,6 +70,7 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonProperty(FilterFieldConstants.MissedEndDateFilter)]
         public bool? MissedEndDate { get; set; }
+
     }
 
 }

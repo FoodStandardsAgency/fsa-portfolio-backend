@@ -54,7 +54,7 @@ namespace FSAPortfolio.Entities.Organisation
         ProjectData = 1 << 4,
         EditorCanView = 1 << 5,
         FilterProject = 1 << 6,
-        FilterRequired = 1 << 7, // Marks the label as being required by the filter view, even if it is not a filter field
+        FilterRequired = 1 << 7, // Marks the label as being required by the filter view, even if it is not a filter field - means the label is used in the filter for something else (e.g. priority in the results)
         NotModelled = 1 << 8, // Doesn't have a property on the model: exists solely in label config and project data
         Default = Create | Read | Update | Delete,
         UpdateOnly = Read | Update,

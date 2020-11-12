@@ -1,4 +1,5 @@
 ﻿using FSAPortfolio.Entities;
+using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.Models;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using LinqKit;
 
 namespace FSAPortfolio.WebAPI.App.Projects
 {
@@ -15,10 +17,13 @@ namespace FSAPortfolio.WebAPI.App.Projects
 
         internal IQueryable<Project> Query { get; private set; }
 
-        public ProjectSearchFilters(ProjectQueryModel searchTerms, IQueryable<Project> filteredQuery)
+        private PortfolioConfiguration config;
+
+        public ProjectSearchFilters(ProjectQueryModel searchTerms, IQueryable<Project> filteredQuery, PortfolioConfiguration config)
         {
             this.searchTerms = searchTerms;
             this.Query = filteredQuery;
+            this.config = config;
         }
 
         internal void BuildFilters()
@@ -79,9 +84,31 @@ namespace FSAPortfolio.WebAPI.App.Projects
             Query = AddExactMatchFilter(searchTerms.OnHoldStatuses, Query, p => searchTerms.OnHoldStatuses.Contains(p.LatestUpdate.OnHoldStatus.ViewKey));
 
             // Prioritisation
-            if (searchTerms.Priorities != null && searchTerms.Priorities.Length > 0)
+            if (searchTerms.PriorityGroups != null && searchTerms.PriorityGroups.Length > 0)
             {
-                Query = Query.Where(p => p.Priority.HasValue && searchTerms.Priorities.Contains(p.Priority.Value));
+                Expression<Func<Project, bool>> priExp = null;
+                foreach (var priorityGroupViewKey in searchTerms.PriorityGroups)
+                {
+                    var priorityGroup = config.PriorityGroups.SingleOrDefault(pg => pg.ViewKey == priorityGroupViewKey);
+                    if(priorityGroup != null)
+                    {
+
+                        // Check if is a ranged priority group or "none set"
+                        Expression<Func<Project, bool>> clause;
+                        if(priorityGroup.ViewKey == PriorityGroupConstants.NotSetViewKey)
+                            clause = p => p.Priority == null;
+                        else
+                            clause = p => p.Priority >= priorityGroup.LowLimit && p.Priority <= priorityGroup.HighLimit;
+
+                        // Combine the clause
+                        if (priExp == null)
+                            priExp = clause;
+                        else
+                            priExp = priExp.Or(clause);
+
+                    }
+                }
+                if (priExp != null) Query = Query.Where(priExp);
             }
 
             // Updates

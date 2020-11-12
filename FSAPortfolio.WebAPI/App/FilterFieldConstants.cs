@@ -22,5 +22,8 @@ namespace FSAPortfolio.WebAPI.App
         internal const string MissedEndDateName = "Missed end date or deadline";
         internal const string MissedEndDateFilter = "missedend_filter";
 
+        internal const string PriorityGroupName = "Priority group";
+        internal const string PriorityGroupFilter = "pgroup_filter";
+
     }
 }

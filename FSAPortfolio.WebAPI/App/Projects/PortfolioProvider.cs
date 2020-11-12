@@ -112,6 +112,14 @@ namespace FSAPortfolio.WebAPI.App.Projects
                         Label = FilterFieldConstants.MissedEndDateName,
                         FieldName = FilterFieldConstants.MissedEndDateFilter,
                         FieldType = PortfolioFieldType.NullableBoolean
+                    },
+                    new PortfolioLabelConfig()
+                    {
+                        Included = true,
+                        Group = config.LabelGroups.SingleOrDefault(g => g.Name == FieldGroupConstants.FieldGroupName_Prioritisation),
+                        Label = FilterFieldConstants.PriorityGroupName,
+                        FieldName = FilterFieldConstants.PriorityGroupFilter,
+                        FieldType = PortfolioFieldType.OptionList
                     }
 
                 };

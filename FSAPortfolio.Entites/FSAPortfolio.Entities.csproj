@@ -68,6 +68,7 @@
     <Compile Include="Organisation\Portfolio.cs" />
     <Compile Include="Organisation\PortfolioLabelConfig.cs" />
     <Compile Include="Organisation\PortfolioConfigAuditLog.cs" />
+    <Compile Include="Organisation\PriorityGroup.cs" />
     <Compile Include="Organisation\Team.cs" />
     <Compile Include="PortfolioContext.cs" />
     <Compile Include="PortfolioSettings.cs" />

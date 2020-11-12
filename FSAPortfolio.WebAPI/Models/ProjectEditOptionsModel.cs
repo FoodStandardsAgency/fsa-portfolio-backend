@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.WebAPI.Models.JsonConverters;
+﻿using FSAPortfolio.WebAPI.App;
+using FSAPortfolio.WebAPI.Models.JsonConverters;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -71,6 +72,10 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonProperty(nameof(ProjectModel.priority_main))]
         public IEnumerable<DropDownItemModel> PriorityItems { get; set; }
+
+        [JsonProperty(FilterFieldConstants.PriorityGroupFilter)]
+        public IEnumerable<DropDownItemModel> PriorityGroupItems { get; set; }
+
 
         [JsonProperty(nameof(ProjectModel.funded))]
         public IEnumerable<DropDownItemModel> FundedItems { get; set; }

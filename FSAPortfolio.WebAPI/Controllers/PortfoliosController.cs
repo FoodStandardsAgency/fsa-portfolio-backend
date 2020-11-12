@@ -84,8 +84,8 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 ProjectQueryResultModel result = null;
                 var filteredQuery = from p in context.Projects.IncludeQueryResult() where p.Reservation.Portfolio.ViewKey == searchTerms.PortfolioViewKey select p;
-
-                var filterBuilder = new ProjectSearchFilters(searchTerms, filteredQuery);
+                var config = await context.PortfolioConfigurations.SingleAsync(p => p.Portfolio.ViewKey == searchTerms.PortfolioViewKey);
+                var filterBuilder = new ProjectSearchFilters(searchTerms, filteredQuery, config);
                 filterBuilder.BuildFilters();
                 filteredQuery = filterBuilder.Query;
 
