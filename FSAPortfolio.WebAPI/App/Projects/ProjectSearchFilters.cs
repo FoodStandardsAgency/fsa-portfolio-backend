@@ -114,7 +114,6 @@ namespace FSAPortfolio.WebAPI.App.Projects
             // Updates
             Query = AddExactMatchFilter(searchTerms.LastUpdateBefore, Query, 
                 p =>
-                    p.LatestUpdate.Phase.Id != p.Reservation.Portfolio.Configuration.CompletedPhase.Id && 
                     p.LatestUpdate.Timestamp < searchTerms.LastUpdateBefore.Value
                 );
 
