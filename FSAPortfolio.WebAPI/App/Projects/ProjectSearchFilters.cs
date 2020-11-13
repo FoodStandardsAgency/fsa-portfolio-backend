@@ -112,7 +112,12 @@ namespace FSAPortfolio.WebAPI.App.Projects
             }
 
             // Updates
-            Query = AddExactMatchFilter(searchTerms.LastUpdateBefore, Query, p => p.LatestUpdate.Timestamp < searchTerms.LastUpdateBefore.Value);
+            Query = AddExactMatchFilter(searchTerms.LastUpdateBefore, Query, 
+                p =>
+                    p.LatestUpdate.Phase.Id != p.Reservation.Portfolio.Configuration.CompletedPhase.Id && 
+                    p.LatestUpdate.Timestamp < searchTerms.LastUpdateBefore.Value
+                );
+
             Query = AddExactMatchFilter(searchTerms.NoUpdates, Query, p => p.Updates.Any(u => u.Text != null && u.Text != string.Empty) != searchTerms.NoUpdates.Value);
 
             // Key dates
