@@ -184,6 +184,7 @@
                         Criticality = c.Int(nullable: false),
                         Lead_Id = c.Int(),
                         ServiceLead_Id = c.Int(),
+                        Supplier = c.String(maxLength: 150),
                         Priority = c.Int(),
                         StartDate = c.DateTime(),
                         ActualStartDate = c.DateTime(),

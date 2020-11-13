@@ -122,7 +122,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_ProjectTeam, "Key contact 1", nameof(ProjectModel.key_contact1), false, false, false, PortfolioFieldType.ADUserSearch),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 2", nameof(ProjectModel.key_contact2), false, false, false, PortfolioFieldType.ADUserSearch),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 3", nameof(ProjectModel.key_contact3), false, false, false, PortfolioFieldType.ADUserSearch),
-                Factory(FieldGroupName_ProjectTeam, "Supplier", nameof(ProjectModel.supplier), false, false, false, PortfolioFieldType.FreeText, flags: ProjectData),
+                Factory(FieldGroupName_ProjectTeam, "Supplier", nameof(ProjectPropertyConstants.Supplier), false, false, false, PortfolioFieldType.FreeText),
                 Factory(FieldGroupName_ProjectTeam, "Project team", nameof(ProjectEditViewModel.team), false, false, false, PortfolioFieldType.ADUserMultiSearch  ),
                 Factory(FieldGroupName_ProjectTeam, $"{FieldGroupName_ProjectTeam} setting 1", "project_team_setting1", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
                 Factory(FieldGroupName_ProjectTeam, $"{FieldGroupName_ProjectTeam} setting 2", "project_team_setting2", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),

@@ -10,5 +10,7 @@ namespace FSAPortfolio.WebAPI.App
         
         public const string ProjectId = "project_id";
         public const string ProjectLead = "oddlead";
+        public const string Supplier = "supplier";
+
     }
 }

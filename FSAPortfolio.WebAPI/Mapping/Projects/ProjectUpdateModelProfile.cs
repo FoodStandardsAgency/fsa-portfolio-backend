@@ -57,6 +57,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => s.budgettype))
                 .ForMember(p => p.ProjectData, o => o.MapFrom<ProjectDataInboundResolver>())
                 .ForMember(p => p.Documents, o => o.MapFrom(s => s.documents))
+                .ForMember(p => p.Supplier, o => o.MapFrom(s => s.supplier))
 
                 // Have to be mapped manually as requires async request to AD
                 .ForMember(p => p.Lead, o => o.Ignore())

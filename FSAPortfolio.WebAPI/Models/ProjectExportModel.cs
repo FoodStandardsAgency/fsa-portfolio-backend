@@ -64,6 +64,7 @@ namespace FSAPortfolio.WebAPI.Models
         public string programme { get; set; }
         public string programme_description { get; set; }
 
+        [JsonProperty(PropertyName = ProjectPropertyConstants.Supplier)]
         public string supplier { get; set; }
 
         public string milestones { get; set; }

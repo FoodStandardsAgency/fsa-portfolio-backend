@@ -51,6 +51,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                     p.Lead.Firstname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.Lead.Surname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.Lead.Email.ToLower().StartsWith(searchTerms.TeamMemberName) ||
+                    p.Supplier.ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.KeyContact1.Firstname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.KeyContact1.Surname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.KeyContact1.Email.ToLower().StartsWith(searchTerms.TeamMemberName) ||
@@ -131,17 +132,16 @@ namespace FSAPortfolio.WebAPI.App.Projects
             // TODO: ODD also excludes LIVE phase in this filter
             Query = AddExactMatchFilter(searchTerms.MissedEndDate, Query,
                 p => searchTerms.MissedEndDate.Value ==
-                (p.LatestUpdate.Phase.Id != p.Reservation.Portfolio.Configuration.CompletedPhase.Id && 
                     (
                         ((!p.ActualEndDate.HasValue) && p.ExpectedEndDate < DateTime.Today)
                         ||
                         (p.ActualEndDate > p.ExpectedEndDate)
                         ||
-                        (!p.ActualEndDate.HasValue && p.HardEndDate < DateTime.Today)
+                        ((!p.ActualEndDate.HasValue) && p.HardEndDate < DateTime.Today)
                         ||
                         (p.ActualEndDate > p.HardEndDate)
                     )
-                ));
+                );
         }
         private IQueryable<Project> AddExactMatchFilter(string[] terms, IQueryable<Project> query, Expression<Func<Project, bool>> filter)
         {

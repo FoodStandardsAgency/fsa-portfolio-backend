@@ -47,7 +47,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.project_type, o => o.MapFrom(s => s.ProjectType))
                 .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives))
                 .ForMember(p => p.programme, o => o.MapFrom(s => s.Programme))
-
+                .ForMember(p => p.supplier, o => o.MapFrom(s => s.Supplier))
 
                 .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.Team.Name))
                 .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
@@ -63,6 +63,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.key_contact1, o => o.MapFrom(s => s.KeyContact1.DisplayName))
                 .ForMember(p => p.key_contact2, o => o.MapFrom(s => s.KeyContact2.DisplayName))
                 .ForMember(p => p.key_contact3, o => o.MapFrom(s => s.KeyContact3.DisplayName))
+                .ForMember(p => p.supplier, o => o.MapFrom(s => s.Supplier))
 
                 // TODO: add persistence and mappings for outstanding fields
                 // Outstanding
@@ -87,7 +88,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.fs_number, o => o.Ignore())
                 .ForMember(p => p.risk_rating, o => o.Ignore())
                 .ForMember(p => p.programme_description, o => o.Ignore())
-                .ForMember(p => p.supplier, o => o.Ignore())
                 .ForMember(p => p.how_get_green, o => o.Ignore())
                 .ForMember(p => p.forward_look, o => o.Ignore())
                 .ForMember(p => p.emerging_issues, o => o.Ignore())

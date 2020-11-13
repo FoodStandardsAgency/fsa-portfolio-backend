@@ -70,6 +70,8 @@ namespace FSAPortfolio.Entities.Projects
 
         public virtual ICollection<Person> People { get; set; }
 
+        [StringLength(150)]
+        public string Supplier { get; set; }
 
         public int? Priority { get; set; }
         public DateTime? StartDate { get; set; }
