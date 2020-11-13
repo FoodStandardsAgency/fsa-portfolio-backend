@@ -26,6 +26,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 .ProjectIncludes()
                 .ProjectUpdateIncludes()
                 .ConfigIncludes()
+                .Include(r => r.Portfolio.Teams)
                 .SingleOrDefaultAsync(r => r.ProjectId == projectId);
         }
 

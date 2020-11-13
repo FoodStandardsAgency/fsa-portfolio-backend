@@ -30,6 +30,7 @@ namespace FSAPortfolio.Entities
         public virtual DbSet<AccessGroup> AccessGroups { get; set; }
         public virtual DbSet<Directorate> Directorates { get; set; }
         public virtual DbSet<Portfolio> Portfolios { get; set; }
+        public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<PortfolioConfiguration> PortfolioConfigurations { get; set; }
         public virtual DbSet<PortfolioLabelConfig> PortfolioConfigurationLabels { get; set; }
 
@@ -59,7 +60,7 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<User>().HasRequired(u => u.AccessGroup).WithMany().HasForeignKey(u => u.AccessGroupId);
 
             modelBuilder.Entity<Person>().HasKey(u => u.Id);
-            modelBuilder.Entity<Person>().HasOptional(u => u.Team).WithMany();
+            modelBuilder.Entity<Person>().HasOptional(u => u.Team).WithMany().HasForeignKey(p => p.Team_Id);
 
             modelBuilder.Entity<Team>().HasKey(u => u.Id);
 
@@ -75,7 +76,12 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Portfolio>().HasIndex(p => p.ViewKey).IsUnique();
             modelBuilder.Entity<Portfolio>().HasIndex(p => p.IDPrefix).IsUnique();
             modelBuilder.Entity<Portfolio>().HasMany(p => p.Projects).WithMany(p => p.Portfolios);
-            modelBuilder.Entity<Portfolio>().HasMany(p => p.Teams).WithRequired(p => p.Portfolio);
+            modelBuilder.Entity<Portfolio>().HasMany(p => p.Teams).WithMany().Map(mc =>
+            {
+                mc.MapLeftKey("Portfolio_Id");
+                mc.MapRightKey("Team_Id");
+                mc.ToTable("PortfolioTeams");
+            }); ;
             modelBuilder.Entity<Portfolio>().HasRequired(p => p.Configuration).WithRequiredPrincipal(c => c.Portfolio);
 
             modelBuilder.Entity<PortfolioConfiguration>().HasKey(p => p.Portfolio_Id);

@@ -1,4 +1,5 @@
 ﻿using FSAPortfolio.Entities;
+using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.Mapping;
@@ -6,6 +7,7 @@ using FSAPortfolio.WebAPI.Models;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
@@ -27,10 +29,15 @@ namespace FSAPortfolio.WebAPI.App.Users
         private const string AuthorityFormat = "https://login.microsoftonline.com/{0}/v2.0";
         private const string userSelect = "$select=id,displayName,givenName,surname,mail,userPrincipalName,department";
 
+        private const string TeamKeyPrefix = "AzureAD.Team.Name.";
+        private Lazy<Dictionary<string, string>> lazyTeamViewKeyMap; // Maps team name to team viewkey
 
         public UsersProvider(PortfolioContext context = null)
         {
             this.context = context;
+            lazyTeamViewKeyMap = new Lazy<Dictionary<string, string>>(() => 
+                ConfigurationManager.AppSettings.AllKeys.Where(k => k.StartsWith(TeamKeyPrefix))
+                .ToDictionary(k => ConfigurationManager.AppSettings[k], k => k.Substring(TeamKeyPrefix.Length)));
         }
 
         public async Task<MicrosoftGraphUserListResponse> GetUsersAsync(string term, int count = 10)
@@ -99,17 +106,18 @@ namespace FSAPortfolio.WebAPI.App.Users
             return user;
         }
 
-        internal async Task<Person> EnsurePersonForPrincipalName(string name)
+        internal async Task<Person> EnsurePersonForPrincipalName(string name, Portfolio portfolio = null)
         {
             Person person = null;
             if (!string.IsNullOrWhiteSpace(name))
             {
+                MicrosoftGraphUserModel user = null;
                 person = 
                     context.People.Local.SingleOrDefault(p => p.ActiveDirectoryPrincipalName == name || p.Email == name) ??
                     await context.People.SingleOrDefaultAsync(p => p.ActiveDirectoryPrincipalName == name || p.Email == name);
                 if (person == null)
                 {
-                    var user = await GetUserForPrincipalNameAsync(name);
+                    user = await GetUserForPrincipalNameAsync(name);
                     if (user != null)
                     {
                         person = PortfolioMapper.ActiveDirectoryMapper.Map<Person>(user);
@@ -122,22 +130,55 @@ namespace FSAPortfolio.WebAPI.App.Users
                     person.Timestamp = DateTime.Now;
                     context.People.Add(person);
                 }
+
+                // Set the team
+                if(person.Team_Id == null)
+                {
+                    // Get the AD user if haven't already
+                    if (user == null && !string.IsNullOrWhiteSpace(person.ActiveDirectoryId))
+                    {
+                        user = await GetUserForPrincipalNameAsync(name);
+                    }
+
+                    // Look up the team from the user's department
+                    if(user != null)
+                    {
+                        // Get the viewkey from the map
+                        string teamViewKey;
+                        if(lazyTeamViewKeyMap.Value.TryGetValue(user.department, out teamViewKey))
+                        {
+                            // Find the team
+                            var team = await context.Teams.SingleOrDefaultAsync(t => t.ViewKey == teamViewKey);
+                            if(team != null)
+                            {
+                                person.Team_Id = team.Id;
+                                if(portfolio.Teams != null)
+                                {
+                                    if(!portfolio.Teams.Contains(team))
+                                    {
+                                        portfolio.Teams.Add(team);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
             return person;
         }
 
 
-        internal async Task MapAsync(ProjectUpdateModel update, Project project)
+        internal async Task MapPeopleAsync(ProjectUpdateModel update, Project project)
         {
-            project.Lead = await EnsureForAsync(update.oddlead, project.Lead);
-            project.ServiceLead = await EnsureForAsync(update.servicelead, project.ServiceLead);
+            project.Lead = await EnsureForAsync(update.oddlead, project.Lead, project.Reservation.Portfolio);
+            project.ServiceLead = await EnsureForAsync(update.servicelead, project.ServiceLead, project.Reservation.Portfolio);
             project.KeyContact1 = await EnsureForAsync(update.key_contact1, project.KeyContact1);
             project.KeyContact2 = await EnsureForAsync(update.key_contact2, project.KeyContact2);
             project.KeyContact3 = await EnsureForAsync(update.key_contact3, project.KeyContact3);
-            await MapTeamAsync(update, project);
+            await MapTeamMembersAsync(update, project);
         }
 
-        internal async Task MapTeamAsync(ProjectUpdateModel update, Project project)
+        internal async Task MapTeamMembersAsync(ProjectUpdateModel update, Project project)
         {
             project.People.Clear();
             if (update?.team != null && update.team.Length > 0)
@@ -155,12 +196,12 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         }
 
-        private async Task<Person> EnsureForAsync(ProjectPersonModel model, Person currentValue)
+        private async Task<Person> EnsureForAsync(ProjectPersonModel model, Person currentValue, Portfolio portfolio = null)
         {
             Person result = null;
             if (model?.Value != null)
             {
-                if (currentValue?.ViewKey != model.Value) result = await EnsurePersonForPrincipalName(model.Value);
+                if (currentValue?.ViewKey != model.Value) result = await EnsurePersonForPrincipalName(model.Value, portfolio);
                 else result = currentValue;
             }
             return result;

@@ -22,6 +22,7 @@ namespace FSAPortfolio.Entities.Users
         public string Email { get; set; }
 
         public Team Team { get; set; }
+        public int? Team_Id { get; set; }
 
         [StringLength(150)]
         public string ActiveDirectoryPrincipalName { get; set; }

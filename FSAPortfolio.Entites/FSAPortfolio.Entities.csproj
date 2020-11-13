@@ -54,13 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\202011051233246_Create.cs" />
-    <Compile Include="Migrations\202011051233246_Create.designer.cs">
-      <DependentUpon>202011051233246_Create.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202011112008291_01_Teams.cs" />
-    <Compile Include="Migrations\202011112008291_01_Teams.designer.cs">
-      <DependentUpon>202011112008291_01_Teams.cs</DependentUpon>
+    <Compile Include="Migrations\202011130917220_Create.cs" />
+    <Compile Include="Migrations\202011130917220_Create.designer.cs">
+      <DependentUpon>202011130917220_Create.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
@@ -99,11 +95,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202011051233246_Create.resx">
-      <DependentUpon>202011051233246_Create.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202011112008291_01_Teams.resx">
-      <DependentUpon>202011112008291_01_Teams.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202011130917220_Create.resx">
+      <DependentUpon>202011130917220_Create.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

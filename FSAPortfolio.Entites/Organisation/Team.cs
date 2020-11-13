@@ -14,7 +14,5 @@ namespace FSAPortfolio.Entities.Organisation
         public string ViewKey { get; set; }
         public string Name { get; set; }
         public int Order { get; set; }
-
-        public virtual Portfolio Portfolio { get; set; }
     }
 }

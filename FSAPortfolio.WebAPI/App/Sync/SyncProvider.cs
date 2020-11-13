@@ -151,10 +151,16 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         var team = portfolio.Teams.SingleOrDefault(t => t.ViewKey == teamViewKey);
                         if (team == null)
                         {
-                            team = new Team() {
-                                ViewKey = teamViewKey,
-                                Name = SyncMaps.teamNameMap[teamViewKey].Item1
-                            };
+                            team = dest.Teams.Local.SingleOrDefault(t => t.ViewKey == teamViewKey) ?? await dest.Teams.SingleOrDefaultAsync(t => t.ViewKey == teamViewKey);
+                            if (team == null)
+                            {
+                                team = new Team()
+                                {
+                                    ViewKey = teamViewKey,
+                                    Name = SyncMaps.teamNameMap[teamViewKey].Item1
+                                };
+                                dest.Teams.Add(team);
+                            }
                             portfolio.Teams.Add(team);
                         }
                         if (team.Order == 0) team.Order = SyncMaps.teamNameMap[teamViewKey].Item2;

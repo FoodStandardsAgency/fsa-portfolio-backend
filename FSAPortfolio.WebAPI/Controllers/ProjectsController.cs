@@ -51,7 +51,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                         {
                             opt.Items[nameof(PortfolioContext)] = context;
                         });
-                        await userProvider.MapAsync(update, project);
+                        await userProvider.MapPeopleAsync(update, project);
 
                         // Audit and save
                         if (project.AuditLogs != null) provider.LogAuditChanges(project);
