@@ -104,8 +104,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.fs_number, o => o.MapFrom(s => s.FSNumber))
                 .ForMember(p => p.risk_rating, o => o.MapFrom(s => s.RiskRating))
                 .ForMember(p => p.programme_description, o => o.MapFrom(s => s.ProgrammeDescription))
-                .ForMember(p => p.link, o => o.MapFrom(s => s.ChannelLink))
-
+                .ForMember(p => p.link, o =>
+                {
+                    o.PreCondition(s => s.ChannelLink.Link != null);
+                    o.MapFrom(s => s.ChannelLink);
+                })
                 .ForMember(p => p.how_get_green, o => o.Ignore())
                 .ForMember(p => p.forward_look, o => o.Ignore())
                 .ForMember(p => p.emerging_issues, o => o.Ignore())
