@@ -27,6 +27,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             // Inbound
             ProjectUpdateModel__Project();
             ProjectUpdateModel__ProjectUpdateItem();
+
+            CreateMap<ProjectDateEditModel, ProjectDate>().ConvertUsing<ProjectDateEditViewResolver>();
+
         }
 
         private void ProjectUpdateModel__Project()
@@ -173,4 +176,44 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             return result;
         }
     }
+
+    public class ProjectDateEditViewResolver : ITypeConverter<ProjectDateEditModel, ProjectDate>
+    {
+        public ProjectDate Convert(ProjectDateEditModel source, ProjectDate destination, ResolutionContext context)
+        {
+            ProjectDate result = new ProjectDate();
+            if (source != null)
+            {
+                if(source.Year.HasValue)
+                {
+                    result.Flags |= ProjectDateFlags.Year;
+                    int day, month;
+                    int year = source.Year.Value;
+
+                    if (source.Month.HasValue)
+                    {
+                        month = source.Month.Value;
+                        result.Flags |= ProjectDateFlags.Month;
+                    }
+                    else
+                    {
+                        month = 12;
+                    }
+
+                    if (source.Day.HasValue)
+                    {
+                        day = source.Day.Value;
+                        result.Flags |= ProjectDateFlags.Day;
+                    }
+                    else
+                    {
+                        day = DateTime.DaysInMonth(year, month);
+                    }
+                    result.Date = new DateTime(year, month, day);
+                }
+            }
+            return result;
+        }
+    }
+
 }

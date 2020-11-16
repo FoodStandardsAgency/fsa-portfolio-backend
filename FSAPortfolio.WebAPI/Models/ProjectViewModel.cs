@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.WebAPI.App;
+﻿using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.WebAPI.App;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,12 @@ namespace FSAPortfolio.WebAPI.Models
         public RelatedProjectModel[] rels { get; set; }
         public RelatedProjectModel[] dependencies { get; set; }
 
+        public ProjectDateViewModel start_date { get; set; }
+        public ProjectDateViewModel expend { get; set; }
+        public ProjectDateViewModel hardend { get; set; }
+        public ProjectDateViewModel actstart { get; set; }
+        public ProjectDateViewModel expendp { get; set; }
+        public ProjectDateViewModel actual_end_date { get; set; }
 
 
     }
@@ -42,6 +49,16 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonProperty("project_name")]
         public string Name { get; set; }
+    }
+
+    public class ProjectDateViewModel
+    {
+        [JsonProperty("date")]
+        public DateTime? Date { get; set; }
+
+        [JsonProperty("flag")]
+        public string Flag { get; set; }
+
     }
 
 }

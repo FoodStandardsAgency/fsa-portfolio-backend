@@ -42,7 +42,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.OnHoldStatus, o => o.MapFrom<string>(new ConfigOnHoldStatusResolver(true), s => SyncMaps.onholdKeyMap[s.onhold ?? "n"]))
                 .ForMember(p => p.Budget, o => o.MapFrom<DecimalResolver, string>(s => s.budget))
                 .ForMember(p => p.Spent, o => o.MapFrom<DecimalResolver, string>(s => s.spent))
-                .ForMember(p => p.ExpectedCurrentPhaseEnd, o => o.MapFrom<PostgresDateResolver, string>(s => s.expendp))
+                .ForMember(p => p.ExpectedCurrentPhaseEnd, o => o.MapFrom<PostgresProjectDateResolver, string>(s => s.expendp))
                 ;
         }
 
@@ -50,11 +50,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             CreateMap<project, Project>()
                 .ForMember(p => p.Name, o => o.MapFrom(s => s.project_name))
-                .ForMember(p => p.StartDate, o => o.MapFrom<PostgresDateResolver, string>(s => s.start_date))
-                .ForMember(p => p.ActualStartDate, o => o.MapFrom<PostgresDateResolver, string>(s => s.actstart))
-                .ForMember(p => p.ExpectedEndDate, o => o.MapFrom<PostgresDateResolver, string>(s => s.expend))
-                .ForMember(p => p.HardEndDate, o => o.MapFrom<PostgresDateResolver, string>(s => s.hardend))
-                .ForMember(p => p.ActualEndDate, o => o.Ignore()) // Isn't one!?
+                .ForMember(p => p.StartDate, o => o.MapFrom<PostgresProjectDateResolver, string>(s => s.start_date))
+                .ForMember(p => p.ActualStartDate, o => o.MapFrom<PostgresProjectDateResolver, string>(s => s.actstart))
+                .ForMember(p => p.ExpectedEndDate, o => o.MapFrom<PostgresProjectDateResolver, string>(s => s.expend))
+                .ForMember(p => p.HardEndDate, o => o.MapFrom<PostgresProjectDateResolver, string>(s => s.hardend))
+                .ForMember(p => p.ActualEndDate, o => o.MapFrom<PostgresProjectDateResolver, string>(s => "00/00/00")) // Isn't one!?
                 .ForMember(p => p.Description, o => o.MapFrom(s => s.short_desc))
                 .ForMember(p => p.Priority, o => o.MapFrom<NullableIntResolver, string>(s => s.priority_main))
                 .ForMember(p => p.Directorate, o => o.MapFrom<DirectorateResolver, string>(s => s.direct))
@@ -166,6 +166,32 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
+
+    public class PostgresProjectDateResolver : IMemberValueResolver<object, object, string, ProjectDate>
+    {
+        public ProjectDate Resolve(object source, object destination, string date, ProjectDate destMember, ResolutionContext context)
+        {
+            ProjectDate result = new ProjectDate();
+            if(!string.IsNullOrWhiteSpace(date))
+            {
+                var parts = date.Split('/');
+                if(parts.Length == 3)
+                {
+                    int day, month, year;
+                    if (int.TryParse(parts[2], out year) && year > 0)
+                    {
+                        result.Flags |= ProjectDateFlags.Year;
+                        if (int.TryParse(parts[0], out day) && day > 0) result.Flags |= ProjectDateFlags.Day;
+                        if (int.TryParse(parts[1], out month) && month > 0) result.Flags |= ProjectDateFlags.Month;
+                        if (month == 0) month = 12;
+                        if (day == 0) day = DateTime.DaysInMonth(year, month);
+                        result.Date = new DateTime(year, month, day);
+                    }
+                }
+            }
+            return result;
+        }
+    }
 
     public class PostgresDateResolver : IMemberValueResolver<object, object, string, DateTime?>
     {

@@ -18,6 +18,14 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             CreateMap<DateTime, string>().ConvertUsing(d => d.ToString(DateOutputFormat));
             CreateMap<DateTime?, string>().ConvertUsing(d => d.HasValue ? d.Value.ToString(DateOutputFormat) : "00/00/00");
 
+            CreateMap<ProjectDate, ProjectDateViewModel>().ConvertUsing<ProjectDateConverter>();
+
+            CreateMap<ProjectDate, ProjectDateEditModel>()
+                .ForMember(d => d.Day, o => o.MapFrom(s => s.Flags.HasFlag(ProjectDateFlags.Day) ? s.Date.Value.Day : default(int?)))
+                .ForMember(d => d.Month, o => o.MapFrom(s => s.Flags.HasFlag(ProjectDateFlags.Month) ? s.Date.Value.Month : default(int?)))
+                .ForMember(d => d.Year, o => o.MapFrom(s => s.Flags.HasFlag(ProjectDateFlags.Year) ? s.Date.Value.Year : default(int?)))
+                ;
+
             // Outbound
             Project__ProjectViewModel();
             ProjectUpdateItem__UpdateHistoryModel();
@@ -32,7 +40,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .Include<Project, ProjectEditViewModel>()
                 .ForMember(p => p.project_id, o => o.MapFrom(s => s.Reservation.ProjectId))
                 .ForMember(p => p.project_name, o => o.MapFrom(s => s.Name))
-                .ForMember(p => p.start_date, o => o.MapFrom(s => s.StartDate))
                 .ForMember(p => p.short_desc, o => o.MapFrom(s => s.Description))
                 .ForMember(p => p.category, o => o.MapFrom(s => s.Category.ViewKey))
                 .ForMember(p => p.subcat, o => o.MapFrom(s => s.Subcategories.Select(sc => sc.ViewKey).ToArray()))
@@ -44,10 +51,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.benefits, o => o.MapFrom(s => s.Benefits))
                 .ForMember(p => p.criticality, o => o.MapFrom(s => s.Criticality))
 
-                .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
-                .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
-                .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
-                .ForMember(p => p.actual_end_date, o => o.MapFrom(s => s.ActualEndDate))
                 .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey))
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.ViewKey))
                 .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate.ViewKey))
@@ -86,7 +89,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.update, o => o.MapFrom(s => s.LatestUpdate.Timestamp.Date == DateTime.Today ? s.LatestUpdate.Text : null))
                 .ForMember(p => p.budget, o => o.MapFrom(s => Convert.ToInt32(s.LatestUpdate.Budget)))
                 .ForMember(p => p.spent, o => o.MapFrom(s => Convert.ToInt32(s.LatestUpdate.Spent)))
-                .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
                 .ForMember(p => p.p_comp, o => o.MapFrom(s => s.LatestUpdate.PercentageComplete))
                 .ForMember(p => p.max_time, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
                 .ForMember(p => p.min_time, o => o.MapFrom(s => s.FirstUpdate.Timestamp))
@@ -122,6 +124,12 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.oddlead_email, o => o.MapFrom(s => s.Lead.Email))
                 .ForMember(p => p.servicelead_email, o => o.MapFrom(s => s.ServiceLead.Email))
                 .ForMember(p => p.team, o => o.MapFrom(s => string.Join(", ", s.People.Select(p => p.DisplayName))))
+                .ForMember(p => p.start_date, o => o.MapFrom(s => s.StartDate))
+                .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
+                .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
+                .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
+                .ForMember(p => p.actual_end_date, o => o.MapFrom(s => s.ActualEndDate))
+                .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
                 .AfterMap<ProjectDataOutboundMapper<ProjectViewModel>>()
                 ;
 
@@ -133,6 +141,12 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.oddlead, o => o.MapFrom(s => s.Lead))
                 .ForMember(p => p.servicelead, o => o.MapFrom(s => s.ServiceLead))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.People))
+                .ForMember(p => p.start_date, o => o.MapFrom(s => s.StartDate))
+                .ForMember(p => p.expend, o => o.MapFrom(s => s.ExpectedEndDate))
+                .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
+                .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
+                .ForMember(p => p.actual_end_date, o => o.MapFrom(s => s.ActualEndDate))
+                .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
                 .AfterMap<ProjectDataOutboundMapper<ProjectEditViewModel>>()
                 .AfterMap<ProjectJsonPropertiesOutboundMapper>()
                 ;
@@ -228,6 +242,19 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 }
             }
             return result;
+        }
+    }
+
+    public class ProjectDateConverter : ITypeConverter<ProjectDate, ProjectDateViewModel>
+    {
+        public ProjectDateViewModel Convert(ProjectDate source, ProjectDateViewModel destination, ResolutionContext context)
+        {
+            ProjectDateViewModel model = new ProjectDateViewModel();
+            model.Date = context.Mapper.Map<DateTime?>(source.Date);
+            if (source.Flags.HasFlag(ProjectDateFlags.Day)) model.Flag = "day";
+            else if (source.Flags.HasFlag(ProjectDateFlags.Month)) model.Flag = "month";
+            else if (source.Flags.HasFlag(ProjectDateFlags.Year)) model.Flag = "year";
+            return model;
         }
     }
 }

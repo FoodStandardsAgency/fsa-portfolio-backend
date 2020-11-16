@@ -26,7 +26,7 @@ namespace FSAPortfolio.Entities.Projects
         public decimal Budget { get; set; }
         public decimal Spent { get; set; }
 
-        public DateTime? ExpectedCurrentPhaseEnd { get; set; }
+        public ProjectDate ExpectedCurrentPhaseEnd { get; set; }
 
         /// <summary>
         /// The update key in the source postgres database.
@@ -42,7 +42,7 @@ namespace FSAPortfolio.Entities.Projects
                 ((PercentageComplete == null && update.PercentageComplete == null) || (PercentageComplete.HasValue && PercentageComplete.Equals(update.PercentageComplete))) &&
                 Budget.Equals(update.Budget) &&
                 Spent.Equals(update.Spent) &&
-                ((ExpectedCurrentPhaseEnd == null && update.ExpectedCurrentPhaseEnd == null) || (ExpectedCurrentPhaseEnd != null && ExpectedCurrentPhaseEnd.Equals(update.ExpectedCurrentPhaseEnd))) &&
+                ((ExpectedCurrentPhaseEnd == null && update.ExpectedCurrentPhaseEnd.Date == null) || (ExpectedCurrentPhaseEnd != null && ExpectedCurrentPhaseEnd.Equals(update.ExpectedCurrentPhaseEnd.Date))) &&
                 (string.IsNullOrWhiteSpace(Text) || string.Equals(Text, update.Text, StringComparison.OrdinalIgnoreCase))
                 ;
         }

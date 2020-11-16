@@ -17,12 +17,12 @@ namespace FSAPortfolio.WebAPI.Models
         public string project_size { get; set; }
         public string short_desc { get; set; }
 
-        public DateTime? start_date { get; set; }
-        public DateTime? expend { get; set; }
-        public DateTime? hardend { get; set; }
-        public DateTime? actstart { get; set; }
-        public DateTime? expendp { get; set; }
-        public DateTime? actual_end_date { get; set; }
+        public string start_date { get; set; }
+        public string expend { get; set; }
+        public string hardend { get; set; }
+        public string actstart { get; set; }
+        public string expendp { get; set; }
+        public string actual_end_date { get; set; }
 
         public string phase { get; set; }
         public string category { get; set; }

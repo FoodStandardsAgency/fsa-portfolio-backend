@@ -125,21 +125,21 @@ namespace FSAPortfolio.WebAPI.App.Projects
             Query = AddExactMatchFilter(searchTerms.PastStartDate, Query,
                 p => searchTerms.PastStartDate.Value ==
                 (
-                    p.StartDate != null &&
-                    ((p.StartDate < DateTime.Today && p.ActualStartDate == null) || p.ActualStartDate > p.StartDate)
+                    p.StartDate.Date != null &&
+                    ((p.StartDate.Date < DateTime.Today && p.ActualStartDate.Date == null) || p.ActualStartDate.Date > p.StartDate.Date)
                 ));
 
             // TODO: ODD also excludes LIVE phase in this filter
             Query = AddExactMatchFilter(searchTerms.MissedEndDate, Query,
                 p => searchTerms.MissedEndDate.Value ==
                     (
-                        ((!p.ActualEndDate.HasValue) && p.ExpectedEndDate < DateTime.Today)
+                        ((!p.ActualEndDate.Date.HasValue) && p.ExpectedEndDate.Date < DateTime.Today)
                         ||
-                        (p.ActualEndDate > p.ExpectedEndDate)
+                        (p.ActualEndDate.Date > p.ExpectedEndDate.Date)
                         ||
-                        ((!p.ActualEndDate.HasValue) && p.HardEndDate < DateTime.Today)
+                        ((!p.ActualEndDate.Date.HasValue) && p.HardEndDate.Date < DateTime.Today)
                         ||
-                        (p.ActualEndDate > p.HardEndDate)
+                        (p.ActualEndDate.Date > p.HardEndDate.Date)
                     )
                 );
         }

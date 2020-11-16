@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.WebAPI.App;
+﻿using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.Models.JsonConverters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,6 +20,14 @@ namespace FSAPortfolio.WebAPI.Models
         public ProjectPersonModel oddlead { get; set; }
         public ProjectPersonModel servicelead { get; set; }
         public string[] team { get; set; }
+
+        public ProjectDateEditModel start_date { get; set; }
+        public ProjectDateEditModel expend { get; set; }
+        public ProjectDateEditModel hardend { get; set; }
+        public ProjectDateEditModel actstart { get; set; }
+        public ProjectDateEditModel expendp { get; set; }
+        public ProjectDateEditModel actual_end_date { get; set; }
+
 
 
         [JsonIgnore]
@@ -56,6 +65,15 @@ namespace FSAPortfolio.WebAPI.Models
         public string[] rels { get; set; }
         public string[] dependencies { get; set; }
 
+
+        public ProjectDateEditModel start_date { get; set; }
+        public ProjectDateEditModel expend { get; set; }
+        public ProjectDateEditModel hardend { get; set; }
+        public ProjectDateEditModel actstart { get; set; }
+        public ProjectDateEditModel expendp { get; set; }
+        public ProjectDateEditModel actual_end_date { get; set; }
+
+
         [JsonIgnore]
         public IEnumerable<ProjectPropertyModel> Properties { get; set; }
     }
@@ -73,6 +91,18 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonProperty("value")]
         public string Value { get; set; }
+    }
+
+    public class ProjectDateEditModel
+    {
+        [JsonProperty("day")]
+        public int? Day { get; set; }
+
+        [JsonProperty("month")]
+        public int? Month { get; set; }
+
+        [JsonProperty("year")]
+        public int? Year { get; set; }
     }
 
 }

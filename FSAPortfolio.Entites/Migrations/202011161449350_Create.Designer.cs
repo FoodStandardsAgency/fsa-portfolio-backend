@@ -13,7 +13,7 @@ namespace FSAPortfolio.Entities.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202011131302086_Create"; }
+            get { return "202011161449350_Create"; }
         }
         
         string IMigrationMetadata.Source

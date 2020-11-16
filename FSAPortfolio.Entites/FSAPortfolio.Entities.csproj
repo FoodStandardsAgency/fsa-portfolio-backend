@@ -54,9 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\202011131302086_Create.cs" />
-    <Compile Include="Migrations\202011131302086_Create.designer.cs">
-      <DependentUpon>202011131302086_Create.cs</DependentUpon>
+    <Compile Include="Migrations\202011161449350_Create.cs" />
+    <Compile Include="Migrations\202011161449350_Create.designer.cs">
+      <DependentUpon>202011161449350_Create.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
@@ -75,6 +75,7 @@
     <Compile Include="Projects\ProjectAuditLog.cs" />
     <Compile Include="Projects\ProjectCategory.cs" />
     <Compile Include="Projects\ProjectConstants.cs" />
+    <Compile Include="Projects\ProjectDate.cs" />
     <Compile Include="Projects\ProjectReservation.cs" />
     <Compile Include="Projects\ProjectStatus.cs" />
     <Compile Include="Projects\ProjectStatusItem.cs" />
@@ -95,8 +96,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202011131302086_Create.resx">
-      <DependentUpon>202011131302086_Create.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202011161449350_Create.resx">
+      <DependentUpon>202011161449350_Create.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

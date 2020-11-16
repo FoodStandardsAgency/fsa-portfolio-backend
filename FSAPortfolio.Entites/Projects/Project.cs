@@ -74,11 +74,11 @@ namespace FSAPortfolio.Entities.Projects
         public string Supplier { get; set; }
 
         public int? Priority { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? ActualStartDate { get; set; }
-        public DateTime? ExpectedEndDate { get; set; }
-        public DateTime? HardEndDate { get; set; }
-        public DateTime? ActualEndDate { get; set; }
+        public ProjectDate StartDate { get; set; }
+        public ProjectDate ActualStartDate { get; set; }
+        public ProjectDate ExpectedEndDate { get; set; }
+        public ProjectDate HardEndDate { get; set; }
+        public ProjectDate ActualEndDate { get; set; }
 
         public virtual ICollection<ProjectUpdateItem> Updates { get; set; }
         public virtual ProjectUpdateItem LatestUpdate { get; set; }
