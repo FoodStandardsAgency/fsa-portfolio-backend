@@ -76,7 +76,8 @@ namespace FSAPortfolio.UnitTests
                 nameof(project.min_time),
                 nameof(project.max_time),
                 nameof(project.pgroup),
-                nameof(project.new_flag)
+                nameof(project.new_flag),
+                nameof(project.team)
                 );
             unmatched.RemoveAll(un => un.Item1 == nameof(project.update) && un.Item2 == "\"\"" && un.Item3 == "null");
             unmatched.RemoveAll(un => un.Item1 == nameof(project.key_contact1) && un.Item2 == "\"\"" && un.Item3 == "null");
@@ -85,6 +86,16 @@ namespace FSAPortfolio.UnitTests
             unmatched.RemoveAll(un => un.Item1 == nameof(project.supplier) && un.Item2 == "\"\"" && un.Item3 == "null");
 
             Assert.AreEqual(0, unmatched.Count, $"Unmatched properties = [{string.Join(", ", unmatched.Select(u => $"{{{u.Item1}:[{u.Item2},{u.Item3}]}}"))}]");
+
+            // Have to compare these manually
+            if (project.team == null || project.team.Length == 0) Assert.IsTrue(updatedProject.team == null || updatedProject.team.Length == 0);
+            else
+            {
+                foreach (var team in updatedProject.team)
+                {
+                    Assert.IsTrue(project.team.Contains(team.Value));
+                }
+            }
         }
 
         private void CompareProperties(object expected, object actual)
