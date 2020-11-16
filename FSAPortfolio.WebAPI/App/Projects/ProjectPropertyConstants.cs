@@ -19,7 +19,10 @@ namespace FSAPortfolio.WebAPI.App
         public const string ActualEndDate = "actual_end_date";
         public const string HardDeadline = "hardend";
 
-
+        public const string business_case_number = "business_case_number";
+        public const string fs_number = "fs_number";
+        public const string risk_rating = "risk_rating";
+        public const string programme_description = "programme_description";
 
     }
 }

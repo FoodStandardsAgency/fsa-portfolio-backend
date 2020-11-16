@@ -80,6 +80,15 @@ namespace FSAPortfolio.Entities.Projects
         public ProjectDate HardEndDate { get; set; }
         public ProjectDate ActualEndDate { get; set; }
 
+        [StringLength(50)]
+        public string BusinessCaseNumber { get; set; }
+        [StringLength(50)]
+        public string FSNumber { get; set; }
+        [StringLength(50)]
+        public string RiskRating { get; set; }
+
+        public string ProgrammeDescription { get; set; }
+
         public virtual ICollection<ProjectUpdateItem> Updates { get; set; }
         public virtual ProjectUpdateItem LatestUpdate { get; set; }
         public int? LatestUpdate_Id { get; set; }

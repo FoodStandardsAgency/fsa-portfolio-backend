@@ -30,7 +30,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.RelatedProjects, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
                 .ForMember(d => d.DependantProjects, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
                 .ForMember(d => d.G6Team, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
-                .ForMember(d => d.RiskRating, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.risk_rating))))
+                .ForMember(d => d.RiskRating, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.risk_rating)))
                 .ForMember(d => d.Theme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.theme))))
                 .ForMember(d => d.ProjectType, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_type))))
                 .ForMember(d => d.Programme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.programme))))

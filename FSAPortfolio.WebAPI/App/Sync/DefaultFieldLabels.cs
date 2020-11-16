@@ -96,12 +96,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
             {
                 //      FieldGroup      FieldTitle     FieldName                    Included IncludeLock AdmLock FieldType FieldTypeLocked
                 Factory(FieldGroupName_ProjectIDs, "Project ID", ProjectPropertyConstants.ProjectId, true, true, true, PortfolioFieldType.Auto),
-                Factory(FieldGroupName_ProjectIDs, "Business Case Number", nameof(ProjectModel.business_case_number), true, false, false, PortfolioFieldType.FreeText, flags: ProjectData|EditorCanView),
-                Factory(FieldGroupName_ProjectIDs, "FS Number", nameof(ProjectModel.fs_number), false, false, false, PortfolioFieldType.FreeText, flags: ProjectData|EditorCanView),
+                Factory(FieldGroupName_ProjectIDs, "Business Case Number", ProjectPropertyConstants.business_case_number, true, false, false, PortfolioFieldType.FreeText, flags: EditorCanView),
+                Factory(FieldGroupName_ProjectIDs, "FS Number", ProjectPropertyConstants.fs_number, false, false, false, PortfolioFieldType.FreeText, flags: EditorCanView),
 
                 Factory(FieldGroupName_AboutTheProject, "Project title", nameof(ProjectModel.project_name), true, true, false, PortfolioFieldType.FreeText, flags: EditorCanView|FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Short description", nameof(ProjectModel.short_desc), true, false, false, PortfolioFieldType.MediumFreeTextArea, flags: EditorCanView),
-                Factory(FieldGroupName_AboutTheProject, "Risk rating", nameof(ProjectModel.risk_rating), false, false, false, PortfolioFieldType.OptionList, flags: ProjectData),
+                Factory(FieldGroupName_AboutTheProject, "Risk rating", ProjectPropertyConstants.risk_rating, false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_AboutTheProject, "Theme", nameof(ProjectModel.theme), true, false, false, PortfolioFieldType.OptionList, flags: FilterProject, options: "Theme1, Theme2, Theme3"),
                 Factory(FieldGroupName_AboutTheProject, "Project type", nameof(ProjectModel.project_type), false, false, false, PortfolioFieldType.OptionList, flags: FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Project size", nameof(ProjectModel.project_size), false, false, false, PortfolioFieldType.OptionList),
@@ -110,7 +110,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_AboutTheProject, "Directorate", nameof(ProjectModel.direct), true, false, false, PortfolioFieldType.PredefinedList, flags: FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Strategic objectives", nameof(ProjectModel.strategic_objectives), false, false, false, PortfolioFieldType.PredefinedList, flags: FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Programme", nameof(ProjectModel.programme), false, false, false, PortfolioFieldType.OptionList, flags: EditorCanView|FilterProject),
-                Factory(FieldGroupName_AboutTheProject, "Programme description", nameof(ProjectModel.programme_description), false, false, false, PortfolioFieldType.MediumFreeTextArea, flags: ProjectData|EditorCanView),
+                Factory(FieldGroupName_AboutTheProject, "Programme description", ProjectPropertyConstants.programme_description, false, false, false, PortfolioFieldType.MediumFreeTextArea, flags: EditorCanView),
                 Factory(FieldGroupName_AboutTheProject, "Project channel (link)", nameof(ProjectModel.link), true, false, false, PortfolioFieldType.NamedLink, flags: ProjectData),
                 Factory(FieldGroupName_AboutTheProject, "Related projects", nameof(ProjectEditViewModel.rels), true, false, false, PortfolioFieldType.ProjectMultiSelect),
                 Factory(FieldGroupName_AboutTheProject, "Dependencies", nameof(ProjectEditViewModel.dependencies), false, false, false, PortfolioFieldType.ProjectMultiSelect),

@@ -60,14 +60,22 @@ namespace FSAPortfolio.WebAPI.Models
 
 
         // New fields
+        [JsonProperty(ProjectPropertyConstants.business_case_number)]
         public string business_case_number { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.fs_number)]
         public string fs_number { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.risk_rating)]
         public string risk_rating { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.programme_description)]
+        public string programme_description { get; set; }
+
         public string theme { get; set; }
         public string project_type { get; set; }
         public string strategic_objectives { get; set; }
         public string programme { get; set; }
-        public string programme_description { get; set; }
 
         [JsonProperty(PropertyName = ProjectPropertyConstants.Supplier)]
         public string supplier { get; set; }

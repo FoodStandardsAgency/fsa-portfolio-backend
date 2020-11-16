@@ -62,6 +62,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Documents, o => o.MapFrom(s => s.documents))
                 .ForMember(p => p.Supplier, o => o.MapFrom(s => s.supplier))
 
+                .ForMember(p => p.BusinessCaseNumber, o => o.MapFrom(s => s.business_case_number))
+                .ForMember(p => p.FSNumber, o => o.MapFrom(s => s.fs_number))
+                .ForMember(p => p.RiskRating, o => o.MapFrom(s => s.risk_rating))
+                .ForMember(p => p.ProgrammeDescription, o => o.MapFrom(s => s.programme_description))
+
                 // Have to be mapped manually as requires async request to AD
                 .ForMember(p => p.Lead, o => o.Ignore())
                 .ForMember(p => p.People, o => o.Ignore())
