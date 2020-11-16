@@ -111,7 +111,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_AboutTheProject, "Strategic objectives", nameof(ProjectModel.strategic_objectives), false, false, false, PortfolioFieldType.PredefinedList, flags: FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Programme", nameof(ProjectModel.programme), false, false, false, PortfolioFieldType.OptionList, flags: EditorCanView|FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Programme description", ProjectPropertyConstants.programme_description, false, false, false, PortfolioFieldType.MediumFreeTextArea, flags: EditorCanView),
-                Factory(FieldGroupName_AboutTheProject, "Project channel (link)", nameof(ProjectModel.link), true, false, false, PortfolioFieldType.NamedLink, flags: ProjectData),
+                Factory(FieldGroupName_AboutTheProject, "Project channel (link)", ProjectPropertyConstants.link, true, false, false, PortfolioFieldType.NamedLink),
                 Factory(FieldGroupName_AboutTheProject, "Related projects", nameof(ProjectEditViewModel.rels), true, false, false, PortfolioFieldType.ProjectMultiSelect),
                 Factory(FieldGroupName_AboutTheProject, "Dependencies", nameof(ProjectEditViewModel.dependencies), false, false, false, PortfolioFieldType.ProjectMultiSelect),
                 Factory(FieldGroupName_AboutTheProject, "Key documents", nameof(ProjectModel.documents), true, false, false, PortfolioFieldType.LinkedItemList),

@@ -159,6 +159,9 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Project>().HasOptional(p => p.Directorate).WithMany();
 
             modelBuilder.ComplexType<ProjectDate>();
+            modelBuilder.ComplexType<ProjectLink>();
+
+            modelBuilder.Entity<Document>().HasKey(p => p.Id);
 
             modelBuilder.Entity<ProjectDataItem>().HasKey(p => p.Id);
             modelBuilder.Entity<ProjectDataItem>().HasRequired(p => p.Label).WithMany().HasForeignKey(p => p.Label_Id);

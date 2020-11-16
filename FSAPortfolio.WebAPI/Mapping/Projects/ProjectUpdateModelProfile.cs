@@ -29,6 +29,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             ProjectUpdateModel__ProjectUpdateItem();
 
             CreateMap<ProjectDateEditModel, ProjectDate>().ConvertUsing<ProjectDateEditViewResolver>();
+            CreateMap<LinkModel, ProjectLink>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Link, o => o.MapFrom(s => s.Link))
+                ;
 
         }
 
@@ -66,6 +70,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.FSNumber, o => o.MapFrom(s => s.fs_number))
                 .ForMember(p => p.RiskRating, o => o.MapFrom(s => s.risk_rating))
                 .ForMember(p => p.ProgrammeDescription, o => o.MapFrom(s => s.programme_description))
+                .ForMember(p => p.ChannelLink, o => o.MapFrom(s => s.link))
 
                 // Have to be mapped manually as requires async request to AD
                 .ForMember(p => p.Lead, o => o.Ignore())

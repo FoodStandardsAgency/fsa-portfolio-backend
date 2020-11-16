@@ -23,6 +23,7 @@ namespace FSAPortfolio.WebAPI.App
         public const string fs_number = "fs_number";
         public const string risk_rating = "risk_rating";
         public const string programme_description = "programme_description";
+        public const string link = "link";
 
     }
 }

@@ -26,6 +26,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Year, o => o.MapFrom(s => s.Flags.HasFlag(ProjectDateFlags.Year) ? s.Date.Value.Year : default(int?)))
                 ;
 
+            CreateMap<ProjectLink, LinkModel>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Link, o => o.MapFrom(s => s.Link))
+                ;
+
             // Outbound
             Project__ProjectViewModel();
             ProjectUpdateItem__UpdateHistoryModel();
@@ -79,7 +84,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 // Outstanding
                 .ForMember(p => p.oddlead_role, o => o.Ignore())
                 .ForMember(p => p.milestones, o => o.Ignore())
-                .ForMember(p => p.link, o => o.Ignore())
 
                 // Latest update and update history
                 .ForMember(p => p.id, o => o.MapFrom(s => s.LatestUpdate.SyncId))
@@ -100,6 +104,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.fs_number, o => o.MapFrom(s => s.FSNumber))
                 .ForMember(p => p.risk_rating, o => o.MapFrom(s => s.RiskRating))
                 .ForMember(p => p.programme_description, o => o.MapFrom(s => s.ProgrammeDescription))
+                .ForMember(p => p.link, o => o.MapFrom(s => s.ChannelLink))
 
                 .ForMember(p => p.how_get_green, o => o.Ignore())
                 .ForMember(p => p.forward_look, o => o.Ignore())

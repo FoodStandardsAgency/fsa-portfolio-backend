@@ -57,6 +57,8 @@ namespace FSAPortfolio.Entities.Projects
         public virtual ICollection<Document> Documents { get; set; }
         public virtual ICollection<ProjectDataItem> ProjectData { get; set; }
 
+        public ProjectLink ChannelLink { get; set; }
+
         public virtual Person Lead { get; set; }
         public int? Lead_Id { get; set; }
 

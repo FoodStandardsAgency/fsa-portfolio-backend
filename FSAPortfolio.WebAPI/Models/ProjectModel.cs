@@ -41,7 +41,7 @@ namespace FSAPortfolio.WebAPI.Models
         public LinkModel[] documents { get; set; }
         public DateTime? timestamp { get; set; }
         public string pgroup { get; set; }
-        public LinkModel link { get; set; }
+
         public string onhold { get; set; }
         public string project_size { get; set; }
         public string oddlead_role { get; set; }
@@ -71,6 +71,11 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonProperty(ProjectPropertyConstants.programme_description)]
         public string programme_description { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.link)]
+        public LinkModel link { get; set; }
+
+
 
         public string theme { get; set; }
         public string project_type { get; set; }

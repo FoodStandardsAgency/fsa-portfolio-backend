@@ -182,6 +182,8 @@
                         Priorities = c.Int(nullable: false),
                         Benefits = c.Int(nullable: false),
                         Criticality = c.Int(nullable: false),
+                        ChannelLink_Name = c.String(maxLength: 150),
+                        ChannelLink_Link = c.String(maxLength: 250),
                         Lead_Id = c.Int(),
                         ServiceLead_Id = c.Int(),
                         Supplier = c.String(maxLength: 150),

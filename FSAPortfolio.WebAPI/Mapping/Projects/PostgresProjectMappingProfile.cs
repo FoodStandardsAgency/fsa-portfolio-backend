@@ -70,6 +70,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => SyncMaps.categoryKeyMap[s.category ?? "cap"]))
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => SyncMaps.sizeKeyMap[s.project_size ?? string.Empty]))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => SyncMaps.budgetTypeKeyMap[s.budgettype ?? "none"]))
+                .ForMember(p => p.ChannelLink, o => o.MapFrom(s => new ProjectLink() { Link = s.link }))
 
                 // TODO: These need migration mappings
                 .ForMember(p => p.Documents, o => o.Ignore())
