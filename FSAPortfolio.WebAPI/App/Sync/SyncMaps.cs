@@ -170,7 +170,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         };
         public static readonly Dictionary<string, string> sizeMap = new Dictionary<string, string>()
         {
-            { $"{ViewKeyPrefix.ProjectSize}0", ProjectSizeConstants.NotSetName },
+            { ViewKeyPrefix.ProjectSizeNotSetViewKey, ProjectSizeConstants.NotSetName },
             { $"{ViewKeyPrefix.ProjectSize}1", ProjectSizeConstants.SmallName },
             { $"{ViewKeyPrefix.ProjectSize}2", ProjectSizeConstants.MediumName },
             { $"{ViewKeyPrefix.ProjectSize}3", ProjectSizeConstants.LargeName },
@@ -179,7 +179,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
         public static readonly Dictionary<string, string> budgetTypeMap = new Dictionary<string, string>()
         {
-            { $"{ViewKeyPrefix.BudgetType}0", BudgetTypeConstants.NotSetName },
+            { ViewKeyPrefix.BudgetTypeNotSetViewKey, BudgetTypeConstants.NotSetName },
             { $"{ViewKeyPrefix.BudgetType}1", BudgetTypeConstants.AdminName },
             { $"{ViewKeyPrefix.BudgetType}2", BudgetTypeConstants.ProgrammeName },
             { $"{ViewKeyPrefix.BudgetType}3", BudgetTypeConstants.CapitalName }

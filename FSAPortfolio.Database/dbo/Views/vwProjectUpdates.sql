@@ -12,7 +12,7 @@ SELECT
 	up.Budget,
 	up.Spent,
 	up.PercentageComplete,
-	up.ExpectedCurrentPhaseEnd,
+	up.ExpectedCurrentPhaseEnd_Date,
 	up.Text as [Update],
 	uprs.[Name] as RAG,
 	upph.[Name] as Phase,

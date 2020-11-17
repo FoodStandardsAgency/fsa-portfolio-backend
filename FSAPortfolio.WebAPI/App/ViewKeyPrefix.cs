@@ -12,5 +12,9 @@ namespace FSAPortfolio.WebAPI.App
         public const string Category = "category";
         public const string BudgetType = "budgettype";
         public const string ProjectSize = "size";
+
+        public static string ProjectSizeNotSetViewKey = $"{ProjectSize}0";
+        public static string BudgetTypeNotSetViewKey = $"{BudgetType}0";
+
     }
 }

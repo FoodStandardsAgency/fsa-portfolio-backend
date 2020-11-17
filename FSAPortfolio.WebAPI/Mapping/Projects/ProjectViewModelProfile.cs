@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
+using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.Mapping.Projects.Resolvers;
 using FSAPortfolio.WebAPI.Models;
 using System;
@@ -139,6 +140,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
                 .ForMember(p => p.actual_end_date, o => o.MapFrom(s => s.ActualEndDate))
                 .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
+                .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey == ViewKeyPrefix.ProjectSizeNotSetViewKey ? null : s.Size.Name))
+                .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.Name))
+                .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate.Name))
                 .AfterMap<ProjectDataOutboundMapper<ProjectViewModel>>()
                 ;
 
