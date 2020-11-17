@@ -41,9 +41,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             Query = AddExactMatchFilter(searchTerms.Teams, Query, p => searchTerms.Teams.Contains(p.Lead.Team.ViewKey));
 
             // Project team
-            // TODO: add supplier here also (startswith)
             // TODO: add team filter (multiselect for team filter - g6team
-            // TODO: switch priority filter to priority group
             if (!string.IsNullOrWhiteSpace(searchTerms.TeamMemberName))
             {
                 searchTerms.TeamMemberName = searchTerms.TeamMemberName.ToLower();
