@@ -100,5 +100,6 @@
     <Build Include="dbo\Tables\PortfolioTeams.sql" />
     <Build Include="dbo\Tables\Documents.sql" />
     <Build Include="dbo\Tables\Directorates.sql" />
+    <None Include="Deployment\01_Suppliers.sql" />
   </ItemGroup>
 </Project>
