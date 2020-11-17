@@ -268,14 +268,16 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public ICollection<Document> Resolve(project source, Project destination, string sourceMember, ICollection<Document> destMember, ResolutionContext context)
         {
-            ICollection<Document> documents = null;
+            List<Document> documents = null;
             if(!string.IsNullOrWhiteSpace(sourceMember))
             {
+                documents = new List<Document>();
                 var parts = sourceMember.Split(',');
                 for(int i = 0; i < parts.Length; i+=2)
                 {
                     var document = new Document() { Name = parts[i] };
                     if (i + 1 < parts.Length) document.Link = parts[i + 1];
+                    documents.Add(document);
                 }
             }
             return documents;
