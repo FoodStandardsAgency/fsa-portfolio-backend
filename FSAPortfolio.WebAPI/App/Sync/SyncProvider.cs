@@ -55,9 +55,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
             using (var dest = new PortfolioContext())
             {
                 // Ensure we have all access groups
-                var accessGroups = SyncMaps.accessGroupKeyMap.Keys.Select(k => new AccessGroup() {
-                    ViewKey = SyncMaps.accessGroupKeyMap[k], 
-                    Description = SyncMaps.accessGroupKeyMap[k] 
+                var agViewKeys = SyncMaps.accessGroupKeyMap.Select(kv => kv.Value).Distinct();
+                var accessGroups = agViewKeys.Select(viewKey => new AccessGroup() {
+                    ViewKey = viewKey, 
+                    Description = viewKey 
                 }).ToArray();
 
                 dest.AccessGroups.AddOrUpdate(a => a.ViewKey, accessGroups);
