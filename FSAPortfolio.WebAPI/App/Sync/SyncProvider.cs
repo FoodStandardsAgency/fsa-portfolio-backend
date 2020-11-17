@@ -56,14 +56,19 @@ namespace FSAPortfolio.WebAPI.App.Sync
             {
                 // Ensure we have all access groups
                 var agViewKeys = SyncMaps.accessGroupKeyMap.Select(kv => kv.Value).Distinct();
-                var accessGroups = agViewKeys.Select(viewKey => new AccessGroup() {
-                    ViewKey = viewKey, 
-                    Description = viewKey 
-                }).ToArray();
-
+                Dictionary<string, AccessGroup> viewKeyLookup = new Dictionary<string, AccessGroup>();
+                foreach(var agvk in agViewKeys)
+                {
+                    if (!viewKeyLookup.ContainsKey(agvk))
+                        viewKeyLookup[agvk] = new AccessGroup()
+                        {
+                            ViewKey = agvk,
+                            Description = agvk
+                        };
+                }
+                var accessGroups = viewKeyLookup.Values.ToArray();
                 dest.AccessGroups.AddOrUpdate(a => a.ViewKey, accessGroups);
                 dest.SaveChanges();
-                var accessGroupLookup = dest.AccessGroups.Where(a => a.ViewKey != null).ToDictionary(a => a.ViewKey);
 
                 // Sync the users
                 foreach (var sourceUser in source.users)
@@ -80,7 +85,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         dest.Users.Add(destUser);
                         log.Add($"Added user {destUser.UserName}");
                     }
-                    destUser.AccessGroup = accessGroupLookup[SyncMaps.accessGroupKeyMap[sourceUser.access_group]];
+                    destUser.AccessGroup = viewKeyLookup[SyncMaps.accessGroupKeyMap[sourceUser.access_group]];
                 }
 
                 dest.SaveChanges();
