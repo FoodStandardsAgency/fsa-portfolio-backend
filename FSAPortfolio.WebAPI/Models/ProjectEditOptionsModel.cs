@@ -63,8 +63,8 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectUpdateModel.oddlead))]
         public SelectPickerModel ODDLead { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.oddlead_role))]
-        public SelectPickerModel ODDLeadRole { get; set; }
+        [JsonProperty(ProjectPropertyConstants.oddlead_role)]
+        public IEnumerable<DropDownItemModel> ODDLeadRole { get; set; }
 
         [JsonProperty(nameof(ProjectModel.g6team))]
         public IEnumerable<DropDownItemModel> G6Team { get; set; }

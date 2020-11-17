@@ -102,7 +102,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
             using (var source = new MigratePortfolioContext())
             using (var dest = new PortfolioContext())
             {
-                // TODO: now need to add portfolios before people - but then add projects after people!
                 var portfolio = await dest.Portfolios.Include(p => p.Teams).SingleAsync(p => p.ViewKey == "odd");
                 var usersProvider = new UsersProvider(dest);
 

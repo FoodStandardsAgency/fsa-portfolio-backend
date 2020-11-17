@@ -72,14 +72,5 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
             return result;
         }
-
-        [AcceptVerbs("GET")]
-        public async Task<string> Test([FromUri] string term)
-        {
-            // TODO: remove this method
-            var provider = new UsersProvider();
-            return await provider.TestAsync(term);
-        }
-
     }
 }

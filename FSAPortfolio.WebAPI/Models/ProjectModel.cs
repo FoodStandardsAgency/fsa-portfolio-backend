@@ -44,6 +44,8 @@ namespace FSAPortfolio.WebAPI.Models
 
         public string onhold { get; set; }
         public string project_size { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.oddlead_role)]
         public string oddlead_role { get; set; }
         public string budgettype { get; set; }
         public string direct { get; set; }

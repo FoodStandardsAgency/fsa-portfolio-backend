@@ -34,9 +34,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Theme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.theme))))
                 .ForMember(d => d.ProjectType, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_type))))
                 .ForMember(d => d.Programme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.programme))))
+                .ForMember(d => d.ODDLeadRole, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.oddlead_role, emptyOption: true)))
 
                 .ForMember(d => d.ODDLead, o => o.MapFrom(new StubPersonResolver(ProjectPropertyConstants.ProjectLead, addNoneOption: false))) // TODO: do we need these options if using ajax?
-                .ForMember(d => d.ODDLeadRole, o => o.MapFrom(new StubRoleResolver(nameof(ProjectModel.oddlead_role))))
                 .ForMember(d => d.PriorityItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.priority_main))))
                 .ForMember(d => d.PriorityGroupItems, o => o.MapFrom(new PriorityGroupLabelDropDownResolver(nameof(ProjectModel.pgroup))))
                 .ForMember(d => d.FundedItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.funded))))
@@ -135,15 +135,17 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     public class LabelDropDownResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, IEnumerable<DropDownItemModel>>
     {
         private string fieldName;
+        private bool emptyOption = false;
 
-        public LabelDropDownResolver(string fieldName)
+        public LabelDropDownResolver(string fieldName, bool emptyOption = false)
         {
             this.fieldName = fieldName;
+            this.emptyOption = emptyOption;
         }
 
         public IEnumerable<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, IEnumerable<DropDownItemModel> destMember, ResolutionContext context)
         {
-            IEnumerable<DropDownItemModel> items = null;
+            List<DropDownItemModel> items = null;
             var label = source.Labels.SingleOrDefault(l => l.FieldName == fieldName);
             if(!string.IsNullOrEmpty(label?.FieldOptions))
             {
@@ -151,7 +153,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                     var value = l.Trim();
                     var display = value;
                     return new DropDownItemModel() { Display = display, Value = value, Order = i };
-                    });
+                    })
+                    .ToList();
+                if (emptyOption)
+                    items.Insert(0, new DropDownItemModel() { Display = "None", Value = null });
             }
             return items;
         }
@@ -202,7 +207,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
-    // TODO: implement resolver using AD integration
     public class StubPersonResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, SelectPickerModel>
     {
         private string fieldName;
@@ -233,7 +237,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
-    // TODO: implement resolver using AD integration
     public class StubRoleResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, SelectPickerModel>
     {
         private string fieldName;
@@ -260,7 +263,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
-    // TODO: implement resolver using AD integration
     public class StubTeamResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, SelectPickerModel>
     {
         private string fieldName;

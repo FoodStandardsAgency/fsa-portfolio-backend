@@ -67,6 +67,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             }
 
             // Project lead search
+            // TODO: split search term by spaces? Currently, searching for "forename surname" won't match anything.
             if (!string.IsNullOrWhiteSpace(searchTerms.ProjectLeadName))
             {
                 searchTerms.ProjectLeadName = searchTerms.ProjectLeadName.ToLower();
@@ -119,7 +120,6 @@ namespace FSAPortfolio.WebAPI.App.Projects
             Query = AddExactMatchFilter(searchTerms.NoUpdates, Query, p => p.Updates.Any(u => u.Text != null && u.Text != string.Empty) != searchTerms.NoUpdates.Value);
 
             // Key dates
-            // TODO: ODD exludes backlog from this filter
             Query = AddExactMatchFilter(searchTerms.PastStartDate, Query,
                 p => searchTerms.PastStartDate.Value ==
                 (
@@ -127,7 +127,6 @@ namespace FSAPortfolio.WebAPI.App.Projects
                     ((p.StartDate.Date < DateTime.Today && p.ActualStartDate.Date == null) || p.ActualStartDate.Date > p.StartDate.Date)
                 ));
 
-            // TODO: ODD also excludes LIVE phase in this filter
             Query = AddExactMatchFilter(searchTerms.MissedEndDate, Query,
                 p => searchTerms.MissedEndDate.Value ==
                     (
