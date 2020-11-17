@@ -17,14 +17,14 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "IT", new Tuple<string, int>("FSA IT", 4) }
         };
 
-
         public static readonly Dictionary<string, string> accessGroupKeyMap = new Dictionary<string, string>()
         {
             { "1", AccessGroupConstants.FSAViewKey },
             { "2", AccessGroupConstants.EditorViewKey },
             { "3", AccessGroupConstants.AdminViewKey },
             { "4", AccessGroupConstants.SupplierViewKey },
-            { "5", AccessGroupConstants.TeamLeaderViewKey }
+            { "5", AccessGroupConstants.EditorViewKey },
+            { "6", AccessGroupConstants.SuperuserViewKey }
         };
 
         public static readonly Dictionary<string, string> directorateKeyMap = new Dictionary<string, string>()

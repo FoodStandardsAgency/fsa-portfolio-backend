@@ -11,6 +11,6 @@ namespace FSAPortfolio.WebAPI.App.Users
         public const string EditorViewKey = "editor";
         public const string AdminViewKey = "admin";
         public const string SupplierViewKey = "supplier";
-        public const string TeamLeaderViewKey = "teamleader";
+        public const string SuperuserViewKey = "superuser";
     }
 }
