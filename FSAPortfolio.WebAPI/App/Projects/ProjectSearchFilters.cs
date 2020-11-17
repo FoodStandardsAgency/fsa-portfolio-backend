@@ -46,22 +46,17 @@ namespace FSAPortfolio.WebAPI.App.Projects
             {
                 searchTerms.TeamMemberName = searchTerms.TeamMemberName.ToLower();
                 Query = Query.Where(p =>
-                    p.Lead.Firstname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
-                    p.Lead.Surname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
+                    (p.Lead.Firstname + " " + p.Lead.Surname).ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.Lead.Email.ToLower().StartsWith(searchTerms.TeamMemberName) ||
-                    p.Supplier.ToLower().StartsWith(searchTerms.TeamMemberName) ||
-                    p.KeyContact1.Firstname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
-                    p.KeyContact1.Surname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
+                    (p.KeyContact1.Firstname + " " + p.KeyContact1.Surname).ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.KeyContact1.Email.ToLower().StartsWith(searchTerms.TeamMemberName) ||
-                    p.KeyContact2.Firstname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
-                    p.KeyContact2.Surname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
+                    (p.KeyContact2.Firstname + " " + p.KeyContact2.Surname).ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.KeyContact2.Email.ToLower().StartsWith(searchTerms.TeamMemberName) ||
-                    p.KeyContact3.Firstname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
-                    p.KeyContact3.Surname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
+                    (p.KeyContact3.Firstname + " " + p.KeyContact3.Surname).ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.KeyContact3.Email.ToLower().StartsWith(searchTerms.TeamMemberName) ||
+                    p.Supplier.ToLower().StartsWith(searchTerms.TeamMemberName) ||
                     p.People.Any(t =>
-                        t.Firstname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
-                        t.Surname.ToLower().StartsWith(searchTerms.TeamMemberName) ||
+                        (t.Firstname + " " + t.Surname).ToLower().StartsWith(searchTerms.TeamMemberName) ||
                         t.Email.ToLower().StartsWith(searchTerms.TeamMemberName))
                     );
             }
@@ -72,8 +67,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             {
                 searchTerms.ProjectLeadName = searchTerms.ProjectLeadName.ToLower();
                 Query = Query.Where(p =>
-                    p.Lead.Firstname.ToLower().StartsWith(searchTerms.ProjectLeadName) ||
-                    p.Lead.Surname.ToLower().StartsWith(searchTerms.ProjectLeadName) ||
+                    (p.Lead.Firstname + " " + p.Lead.Surname).ToLower().StartsWith(searchTerms.ProjectLeadName) ||
                     p.Lead.Email.ToLower().StartsWith(searchTerms.ProjectLeadName)
                     );
             }
