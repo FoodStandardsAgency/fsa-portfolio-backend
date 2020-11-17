@@ -12,6 +12,9 @@ namespace FSAPortfolio.Entities.Users
         public int Id { get; set; }
 
         [StringLength(50)]
-        public string Name { get; set; }
+        public string ViewKey { get; set; }
+
+        [StringLength(50)]
+        public string Description { get; set; }
     }
 }

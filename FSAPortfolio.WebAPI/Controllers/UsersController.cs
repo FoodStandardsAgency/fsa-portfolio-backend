@@ -28,6 +28,33 @@ namespace FSAPortfolio.WebAPI.Controllers
             return response;
         }
 
+        // Get: api/Users/suppliers
+        [AcceptVerbs("GET")]
+        public async Task<SupplierResponseModel> GetSuppliers()
+        {
+            using (var context = new PortfolioContext())
+            {
+                var response = new SupplierResponseModel()
+                {
+                    Suppliers = await context.Users
+                        .Where(u => u.AccessGroup.ViewKey == AccessGroupConstants.SupplierViewKey)
+                        .Select(s => s.UserName)
+                        .ToListAsync()
+                };
+                return response;
+            }
+        }
+
+        // POST: api/Users/addsupplier
+        [AcceptVerbs("POST")]
+        public async Task<AddSupplierResponseModel> AddSupplier([FromBody] AddSupplierModel model)
+        {
+            using (var context = new PortfolioContext())
+            {
+                var provider = new UsersProvider(context);
+                return await provider.AddSupplierAsync(model.UserName, model.PasswordHash);
+            }
+        }
 
         // POST: api/Users/LegacyADUsers
         [AcceptVerbs("POST")]
@@ -44,7 +71,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 {
                     result = new UserModel() { 
                         UserName = user.UserName, 
-                        AccessGroup = user.AccessGroup.Name 
+                        AccessGroup = user.AccessGroup.ViewKey 
                     };
                 }
             }
@@ -66,7 +93,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 {
                     result = new UserModel() { 
                         UserName = user.UserName, 
-                        AccessGroup = user.AccessGroup.Name 
+                        AccessGroup = user.AccessGroup.ViewKey
                     };
                 }
             }

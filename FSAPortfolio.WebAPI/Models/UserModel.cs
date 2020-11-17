@@ -18,7 +18,28 @@ namespace FSAPortfolio.WebAPI.Models
     {
         [JsonProperty("userName")]
         public string UserName { get; set; }
+
         [JsonProperty("accessGroup")]
         public string AccessGroup { get; set; }
+    }
+
+    public class AddSupplierModel
+    {
+        [JsonProperty("userName")]
+        public string UserName { get; set; }
+
+        [JsonProperty("passwordHash")]
+        public string PasswordHash { get; set; }
+    }
+
+    public class SupplierResponseModel
+    {
+        [JsonProperty("suppliers")]
+        public IEnumerable<string> Suppliers { get; set; }
+
+    }
+    public class AddSupplierResponseModel
+    {
+        public string result { get; set; }
     }
 }

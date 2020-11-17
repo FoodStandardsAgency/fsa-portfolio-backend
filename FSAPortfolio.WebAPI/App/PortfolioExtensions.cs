@@ -29,6 +29,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Projects.Select(pr => pr.Lead.Team))
                 .Include(p => p.Projects.Select(pr => pr.Category))
                 .Include(p => p.Projects.Select(pr => pr.LatestUpdate.Phase))
+                .Include(p => p.Projects.Select(pr => pr.FirstUpdate))
                 ;
         }
 

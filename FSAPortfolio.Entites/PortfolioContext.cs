@@ -57,6 +57,7 @@ namespace FSAPortfolio.Entities
             modelBuilder.Conventions.Remove<ManyToManyCascadeDeleteConvention>();
 
             modelBuilder.Entity<User>().HasKey(u => u.Id);
+            modelBuilder.Entity<User>().HasIndex(p => p.UserName).IsUnique();
             modelBuilder.Entity<User>().HasRequired(u => u.AccessGroup).WithMany().HasForeignKey(u => u.AccessGroupId);
 
             modelBuilder.Entity<Person>().HasKey(u => u.Id);

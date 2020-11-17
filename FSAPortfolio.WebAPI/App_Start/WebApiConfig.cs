@@ -22,6 +22,16 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.SearchUsers) }
             );
             config.Routes.MapHttpRoute(
+                name: "GetSuppliers",
+                routeTemplate: "api/Users/suppliers",
+                defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetSuppliers) }
+            );
+            config.Routes.MapHttpRoute(
+                name: "AddSupplier",
+                routeTemplate: "api/Users/addsupplier",
+                defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.AddSupplier) }
+            );
+            config.Routes.MapHttpRoute(
                 name: "GetUserByNameAndHash",
                 routeTemplate: "api/Users/legacy",
                 defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetUser) }

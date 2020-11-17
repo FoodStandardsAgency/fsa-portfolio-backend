@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -30,6 +32,40 @@ namespace FSAPortfolio.WebAPI.App.Users
         private const string userSelect = "$select=id,displayName,givenName,surname,mail,userPrincipalName,department";
 
         private const string TeamKeyPrefix = "AzureAD.Team.Name.";
+
+        internal async Task<AddSupplierResponseModel> AddSupplierAsync(string userName, string passwordHash)
+        {
+            var response = new AddSupplierResponseModel();
+            try
+            {
+                var accessGroup = await context.AccessGroups.SingleAsync(a => a.ViewKey == AccessGroupConstants.SupplierViewKey);
+                context.Users.Add(new User()
+                {
+                    Timestamp = DateTime.Now,
+                    UserName = userName,
+                    PasswordHash = passwordHash,
+                    AccessGroup = accessGroup
+                });
+                await context.SaveChangesAsync();
+                response.result = "Ok";
+            }
+            catch(DbUpdateException updateException)
+            {
+                var duplicateException = updateException.InnerException?.InnerException as SqlException;
+
+                if(duplicateException != null && duplicateException.Message.StartsWith("Cannot insert duplicate key row in object 'dbo.Users' with unique index 'IX_UserName'"))
+                {
+                    response.result = "Duplicate";
+                }
+                else
+                {
+                    throw updateException;
+                }
+            }
+            return response;
+        }
+
+
         private Lazy<Dictionary<string, string>> lazyTeamViewKeyMap; // Maps team name to team viewkey
 
         public UsersProvider(PortfolioContext context = null)

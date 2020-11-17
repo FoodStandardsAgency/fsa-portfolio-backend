@@ -47,30 +47,21 @@ namespace FSAPortfolio.WebAPI.App.Sync
             mapper = config.CreateMapper();
 
         }
+
         internal void SyncUsers()
         {
             log.Add("Syncing users...");
             using (var source = new MigratePortfolioContext())
             using (var dest = new PortfolioContext())
             {
-                var sourceAccessGroups = source.users.Select(u => u.access_group)
-                    .Distinct()
-                    .Select(ag => new AccessGroup() { Name = ag.ToString() })
-                    .ToList();
-
                 // Ensure we have all access groups
-                var accessGroupLookup = dest.AccessGroups?.ToDictionary(ag => ag.Name);
-                foreach (var sourceAccessGroup in sourceAccessGroups)
-                {
-                    var destAccessGroup = dest.AccessGroups.SingleOrDefault(dag => dag.Name == sourceAccessGroup.Name);
-                    if (destAccessGroup == null)
-                    {
-                        destAccessGroup = sourceAccessGroup;
-                        dest.AccessGroups.Add(destAccessGroup);
-                        accessGroupLookup[sourceAccessGroup.Name] = destAccessGroup;
-                        log.Add($"Added access group {destAccessGroup.Name}");
-                    }
-                }
+                var accessGroups = SyncMaps.accessGroupKeyMap.Keys.Select(k => new AccessGroup() {
+                    ViewKey = SyncMaps.accessGroupKeyMap[k], 
+                    Description = SyncMaps.accessGroupKeyMap[k] 
+                }).ToArray();
+
+                dest.AccessGroups.AddOrUpdate(a => a.ViewKey, accessGroups);
+                var accessGroupLookup = dest.AccessGroups.Where(a => a.ViewKey != null).ToDictionary(a => a.ViewKey);
 
                 // Sync the users
                 foreach (var sourceUser in source.users)
@@ -83,14 +74,21 @@ namespace FSAPortfolio.WebAPI.App.Sync
                             UserName = sourceUser.username,
                             PasswordHash = sourceUser.pass_hash,
                             Timestamp = sourceUser.timestamp,
-                            AccessGroup = accessGroupLookup[sourceUser.access_group.ToString()]
                         };
                         dest.Users.Add(destUser);
                         log.Add($"Added user {destUser.UserName}");
                     }
+                    destUser.AccessGroup = accessGroupLookup[SyncMaps.accessGroupKeyMap[sourceUser.access_group]];
                 }
 
                 dest.SaveChanges();
+                var toDelete = dest.AccessGroups.Where(a => a.ViewKey == null).ToArray();
+                if (toDelete.Length > 0)
+                {
+                    dest.AccessGroups.RemoveRange(toDelete);
+                    dest.SaveChanges();
+                }
+
                 log.Add("Sync users complete.");
             }
         }
