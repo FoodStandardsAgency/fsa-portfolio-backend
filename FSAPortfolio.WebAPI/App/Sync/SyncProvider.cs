@@ -61,6 +61,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 }).ToArray();
 
                 dest.AccessGroups.AddOrUpdate(a => a.ViewKey, accessGroups);
+                dest.SaveChanges();
                 var accessGroupLookup = dest.AccessGroups.Where(a => a.ViewKey != null).ToDictionary(a => a.ViewKey);
 
                 // Sync the users
