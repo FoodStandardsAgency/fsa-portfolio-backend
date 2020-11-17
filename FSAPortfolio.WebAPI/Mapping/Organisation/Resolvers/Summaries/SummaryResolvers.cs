@@ -36,7 +36,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
             switch (summaryType)
             {
                 case PortfolioSummaryModel.ByCategory:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Categories.OrderBy(c => c.Order));
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Categories.OrderBy(c => c.Name));
                     break;
                 case PortfolioSummaryModel.ByPriorityGroup:
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.PriorityGroups.OrderBy(c => c.Order));
