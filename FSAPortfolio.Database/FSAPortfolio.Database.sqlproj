@@ -92,5 +92,13 @@
     <Build Include="dbo\Views\vwProjects.sql" />
     <Build Include="dbo\Views\vwProjectUpdates.sql" />
     <None Include="Deployment\00_DropAllTables.sql" />
+    <Build Include="dbo\Tables\Teams.sql" />
+    <Build Include="dbo\Tables\ProjectTeamMembers.sql" />
+    <Build Include="dbo\Tables\ProjectSubcategories.sql" />
+    <Build Include="dbo\Tables\ProjectDocuments.sql" />
+    <Build Include="dbo\Tables\ProjectDataItems.sql" />
+    <Build Include="dbo\Tables\PortfolioTeams.sql" />
+    <Build Include="dbo\Tables\Documents.sql" />
+    <Build Include="dbo\Tables\Directorates.sql" />
   </ItemGroup>
 </Project>

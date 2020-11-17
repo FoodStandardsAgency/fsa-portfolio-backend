@@ -2,7 +2,10 @@
     [ProjectReservation_Id] INT             NOT NULL,
     [Name]                  NVARCHAR (250)  NULL,
     [Description]           NVARCHAR (1000) NULL,
-    [Directorate]           NVARCHAR (150)  NULL,
+    [Theme]                 NVARCHAR (50)   NULL,
+    [ProjectType]           NVARCHAR (50)   NULL,
+    [StrategicObjectives]   NVARCHAR (50)   NULL,
+    [Programme]             NVARCHAR (150)  NULL,
     [ProjectCategory_Id]    INT             NULL,
     [ProjectSize_Id]        INT             NULL,
     [BudgetType_Id]         INT             NULL,
@@ -11,18 +14,38 @@
     [Priorities]            INT             NOT NULL,
     [Benefits]              INT             NOT NULL,
     [Criticality]           INT             NOT NULL,
+    [ChannelLink_Name]      NVARCHAR (MAX)  NULL,
+    [ChannelLink_Link]      NVARCHAR (MAX)  NULL,
     [Lead_Id]               INT             NULL,
     [ServiceLead_Id]        INT             NULL,
-    [Team]                  NVARCHAR (500)  NULL,
+    [Supplier]              NVARCHAR (150)  NULL,
     [Priority]              INT             NULL,
-    [StartDate]             DATETIME        NULL,
-    [ActualStartDate]       DATETIME        NULL,
-    [ExpectedEndDate]       DATETIME        NULL,
-    [HardEndDate]           DATETIME        NULL,
+    [StartDate_Date]        DATETIME        NULL,
+    [StartDate_Flags]       INT             NOT NULL,
+    [ActualStartDate_Date]  DATETIME        NULL,
+    [ActualStartDate_Flags] INT             NOT NULL,
+    [ExpectedEndDate_Date]  DATETIME        NULL,
+    [ExpectedEndDate_Flags] INT             NOT NULL,
+    [HardEndDate_Date]      DATETIME        NULL,
+    [HardEndDate_Flags]     INT             NOT NULL,
+    [ActualEndDate_Date]    DATETIME        NULL,
+    [ActualEndDate_Flags]   INT             NOT NULL,
+    [BusinessCaseNumber]    NVARCHAR (50)   NULL,
+    [FSNumber]              NVARCHAR (50)   NULL,
+    [RiskRating]            NVARCHAR (50)   NULL,
+    [ProgrammeDescription]  NVARCHAR (MAX)  NULL,
     [LatestUpdate_Id]       INT             NULL,
     [FirstUpdate_Id]        INT             NULL,
+    [Directorate_Id]        INT             NULL,
+    [KeyContact1_Id]        INT             NULL,
+    [KeyContact2_Id]        INT             NULL,
+    [KeyContact3_Id]        INT             NULL,
     CONSTRAINT [PK_dbo.Projects] PRIMARY KEY CLUSTERED ([ProjectReservation_Id] ASC),
     CONSTRAINT [FK_dbo.Projects_dbo.BudgetTypes_BudgetType_Id] FOREIGN KEY ([BudgetType_Id]) REFERENCES [dbo].[BudgetTypes] ([Id]),
+    CONSTRAINT [FK_dbo.Projects_dbo.Directorates_Directorate_Id] FOREIGN KEY ([Directorate_Id]) REFERENCES [dbo].[Directorates] ([Id]),
+    CONSTRAINT [FK_dbo.Projects_dbo.People_KeyContact1_Id] FOREIGN KEY ([KeyContact1_Id]) REFERENCES [dbo].[People] ([Id]),
+    CONSTRAINT [FK_dbo.Projects_dbo.People_KeyContact2_Id] FOREIGN KEY ([KeyContact2_Id]) REFERENCES [dbo].[People] ([Id]),
+    CONSTRAINT [FK_dbo.Projects_dbo.People_KeyContact3_Id] FOREIGN KEY ([KeyContact3_Id]) REFERENCES [dbo].[People] ([Id]),
     CONSTRAINT [FK_dbo.Projects_dbo.People_Lead_Id] FOREIGN KEY ([Lead_Id]) REFERENCES [dbo].[People] ([Id]),
     CONSTRAINT [FK_dbo.Projects_dbo.People_ServiceLead_Id] FOREIGN KEY ([ServiceLead_Id]) REFERENCES [dbo].[People] ([Id]),
     CONSTRAINT [FK_dbo.Projects_dbo.ProjectCategories_ProjectCategory_Id] FOREIGN KEY ([ProjectCategory_Id]) REFERENCES [dbo].[ProjectCategories] ([Id]),
@@ -31,6 +54,8 @@
     CONSTRAINT [FK_dbo.Projects_dbo.ProjectUpdateItems_FirstUpdate_Id] FOREIGN KEY ([FirstUpdate_Id]) REFERENCES [dbo].[ProjectUpdateItems] ([Id]),
     CONSTRAINT [FK_dbo.Projects_dbo.ProjectUpdateItems_LatestUpdate_Id] FOREIGN KEY ([LatestUpdate_Id]) REFERENCES [dbo].[ProjectUpdateItems] ([Id])
 );
+
+
 
 
 GO
@@ -71,4 +96,24 @@ CREATE NONCLUSTERED INDEX [IX_ProjectCategory_Id]
 GO
 CREATE NONCLUSTERED INDEX [IX_ProjectReservation_Id]
     ON [dbo].[Projects]([ProjectReservation_Id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_KeyContact3_Id]
+    ON [dbo].[Projects]([KeyContact3_Id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_KeyContact2_Id]
+    ON [dbo].[Projects]([KeyContact2_Id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_KeyContact1_Id]
+    ON [dbo].[Projects]([KeyContact1_Id] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Directorate_Id]
+    ON [dbo].[Projects]([Directorate_Id] ASC);
 

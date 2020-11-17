@@ -9,7 +9,14 @@
 );
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_AccessGroupId]
     ON [dbo].[Users]([AccessGroupId] ASC);
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_UserName]
+    ON [dbo].[Users]([UserName] ASC);
 

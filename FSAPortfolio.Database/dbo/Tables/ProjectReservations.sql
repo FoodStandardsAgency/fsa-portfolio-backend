@@ -1,7 +1,7 @@
-﻿CREATE TABLE [dbo].[ProjectReservations] (
+CREATE TABLE [dbo].[ProjectReservations] (
     [Id]           INT           IDENTITY (1, 1) NOT NULL,
     [Portfolio_Id] INT           NOT NULL,
-    [ProjectId]    NVARCHAR (10) NULL,
+    [ProjectId]    NVARCHAR (20) NULL,
     [Year]         INT           NOT NULL,
     [Month]        INT           NOT NULL,
     [Index]        INT           NOT NULL,
@@ -11,9 +11,10 @@
 );
 
 
+
+
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_Year_Month_Index]
-    ON [dbo].[ProjectReservations]([Year] ASC, [Month] ASC, [Index] ASC);
+
 
 
 GO
@@ -22,6 +23,6 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_ProjectId]
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_Portfolio_Id]
-    ON [dbo].[ProjectReservations]([Portfolio_Id] ASC);
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Portfolio_Id_Year_Month_Index]
+    ON [dbo].[ProjectReservations]([Portfolio_Id] ASC, [Year] ASC, [Month] ASC, [Index] ASC);
 
