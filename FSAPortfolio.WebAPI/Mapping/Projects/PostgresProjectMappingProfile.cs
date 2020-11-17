@@ -235,7 +235,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         public ICollection<Person> Resolve(object source, Project destination, string sourceMember, ICollection<Person> destMember, ResolutionContext context)
         {
             var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
-            var result = destMember?.ToList() ?? new List<Person>();
+            var result = new List<Person>();
             if (!string.IsNullOrEmpty(sourceMember))
             {
                 Func<string, string, Person, bool> nameCheck = (f, s, p) => string.Equals(f, p.Firstname, StringComparison.OrdinalIgnoreCase) && string.Equals(s, p.Surname, StringComparison.OrdinalIgnoreCase);
@@ -268,16 +268,21 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     {
         public ICollection<Document> Resolve(project source, Project destination, string sourceMember, ICollection<Document> destMember, ResolutionContext context)
         {
-            List<Document> documents = null;
+            List<Document> documents = new List<Document>(destMember);
             if(!string.IsNullOrWhiteSpace(sourceMember))
             {
                 documents = new List<Document>();
                 var parts = sourceMember.Split(',');
                 for(int i = 0; i < parts.Length; i+=2)
                 {
-                    var document = new Document() { Name = parts[i] };
-                    if (i + 1 < parts.Length) document.Link = parts[i + 1];
-                    documents.Add(document);
+                    var name = parts[i];
+                    var link = (i + 1 < parts.Length) ? parts[i + 1] : null;
+
+                    if(!documents.Any(d => d.Name == name && d.Link == link))
+                    {
+                        var document = new Document() { Name = name, Link = link };
+                        documents.Add(document);
+                    }
                 }
             }
             return documents;
