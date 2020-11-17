@@ -214,7 +214,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 //result = context.Mapper.Map<UpdateHistoryModel[]>(source.Updates.Where(u => !(u.Timestamp.Date == DateTime.Today && u.Id == source.LatestUpdate_Id)).OrderBy(u => u.Timestamp));
 
                 // History is all updates 
-                result = context.Mapper.Map<UpdateHistoryModel[]>(source.Updates.Where(u => !string.IsNullOrWhiteSpace(u.Text)).OrderBy(u => u.Timestamp));
+                result = context.Mapper.Map<UpdateHistoryModel[]>(source.Updates.Where(u => !string.IsNullOrWhiteSpace(u.Text)).OrderByDescending(u => u.Timestamp));
             }
             return result;
         }
@@ -231,7 +231,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 var lastUpdateValue = (lastUpdate as bool?);
                 if (lastUpdateValue.HasValue && lastUpdateValue.Value)
                 {
-                    var lastTextUpdate = source.Updates.Where(u => u.Timestamp.Date != DateTime.Today && !string.IsNullOrWhiteSpace(u.Text)).OrderBy(u => u.Timestamp).FirstOrDefault();
+                    var lastTextUpdate = source.Updates.Where(u => u.Timestamp.Date != DateTime.Today && !string.IsNullOrWhiteSpace(u.Text)).OrderByDescending(u => u.Timestamp).FirstOrDefault();
                     result = context.Mapper.Map<UpdateHistoryModel>(lastTextUpdate);
                 }
             }
@@ -250,7 +250,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 var lastUpdateValue = (lastUpdate as bool?);
                 if (lastUpdateValue.HasValue && lastUpdateValue.Value)
                 {
-                    var lastTextUpdate = source.Updates.Where(u => u.Id != source.LatestUpdate_Id).OrderBy(u => u.Timestamp).FirstOrDefault();
+                    var lastTextUpdate = source.Updates.Where(u => u.Id != source.LatestUpdate_Id).OrderByDescending(u => u.Timestamp).FirstOrDefault();
                     result = context.Mapper.Map<StatusUpdateHistoryModel>(lastTextUpdate);
                 }
             }
