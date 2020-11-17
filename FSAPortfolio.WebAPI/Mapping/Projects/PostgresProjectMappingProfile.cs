@@ -71,9 +71,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => SyncMaps.sizeKeyMap[s.project_size ?? string.Empty]))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => SyncMaps.budgetTypeKeyMap[s.budgettype ?? "none"]))
                 .ForMember(p => p.ChannelLink, o => o.MapFrom(s => new ProjectLink() { Link = s.link }))
+                .ForMember(p => p.Documents, o => o.MapFrom<PostgresDocumentResolver, string>(s => s.documents))
 
                 // TODO: These need migration mappings
-                .ForMember(p => p.Documents, o => o.Ignore())
                 .ForMember(p => p.Subcategories, o => o.Ignore())
                 // Ignore these
                 .ForMember(p => p.KeyContact1, o => o.Ignore())
@@ -264,5 +264,21 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
-
+    public class PostgresDocumentResolver : IMemberValueResolver<project, Project, string, ICollection<Document>>
+    {
+        public ICollection<Document> Resolve(project source, Project destination, string sourceMember, ICollection<Document> destMember, ResolutionContext context)
+        {
+            ICollection<Document> documents = null;
+            if(!string.IsNullOrWhiteSpace(sourceMember))
+            {
+                var parts = sourceMember.Split(',');
+                for(int i = 0; i < parts.Length; i+=2)
+                {
+                    var document = new Document() { Name = parts[i] };
+                    if (i + 1 < parts.Length) document.Link = parts[i + 1];
+                }
+            }
+            return documents;
+        }
+    }
 }
