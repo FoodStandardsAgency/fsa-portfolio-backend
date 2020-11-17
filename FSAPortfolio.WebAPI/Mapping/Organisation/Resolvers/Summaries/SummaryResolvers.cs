@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.Models;
@@ -9,6 +10,23 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
 {
+    public class ProjectCountByPhaseResolver : IValueResolver<ProjectPhase, PhaseSummaryModel, int>
+    {
+        public int Resolve(ProjectPhase source, PhaseSummaryModel destination, int destMember, ResolutionContext context)
+        {
+            var summaryType = context.Items[nameof(PortfolioSummaryModel)] as string;
+            switch (summaryType)
+            {
+                case PortfolioSummaryModel.NewProjectsByTeam:
+                    var newCutoff = DateTime.Now.AddDays(-PortfolioSettings.NewProjectLimitDays);
+                    return source.Configuration.Portfolio.Projects.Count(p => p.LatestUpdate?.Phase?.Id == source.Id && p.FirstUpdate.Timestamp > newCutoff);
+                default:
+                    return source.Configuration.Portfolio.Projects.Count(p => p.LatestUpdate?.Phase?.Id == source.Id);
+            }
+        }
+    }
+
+
     public class PortfolioSummaryResolver : IValueResolver<Portfolio, PortfolioSummaryModel, IEnumerable<ProjectSummaryModel>>
     {
         public IEnumerable<ProjectSummaryModel> Resolve(Portfolio source, PortfolioSummaryModel destination, IEnumerable<ProjectSummaryModel> destMember, ResolutionContext context)
@@ -30,6 +48,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.Where(p => p.Id != source.Configuration.CompletedPhase.Id).OrderBy(c => c.Order));
                     break;
                 case PortfolioSummaryModel.ByTeam:
+                case PortfolioSummaryModel.NewProjectsByTeam:
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Teams.OrderBy(t => t.Order));
                     break;
                 default:
@@ -97,7 +116,22 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
         public IEnumerable<PhaseProjectsModel> Resolve(Team source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
         {
             var portfolioConfiguration = context.Items[nameof(PortfolioConfiguration)] as PortfolioConfiguration;
-            return SummaryLinqQuery.GetQuery(portfolioConfiguration, p => p.Lead?.Team != null && p.Lead.Team.ViewKey == source.ViewKey, context);
+            var summaryType = context.Items[nameof(PortfolioSummaryModel)] as string;
+            IEnumerable<PhaseProjectsModel> result;
+
+            switch(summaryType)
+            {
+                case PortfolioSummaryModel.NewProjectsByTeam:
+                    var newCutoff = DateTime.Now.AddDays(-PortfolioSettings.NewProjectLimitDays);
+                    result = SummaryLinqQuery.GetQuery(portfolioConfiguration, p => p.Lead?.Team != null && p.Lead.Team.ViewKey == source.ViewKey && p.FirstUpdate.Timestamp > newCutoff, context);
+                    break;
+                case PortfolioSummaryModel.ByTeam:
+                default:
+                    result = SummaryLinqQuery.GetQuery(portfolioConfiguration, p => p.Lead?.Team != null && p.Lead.Team.ViewKey == source.ViewKey, context);
+                    break;
+            }
+
+            return result;
         }
     }
 }

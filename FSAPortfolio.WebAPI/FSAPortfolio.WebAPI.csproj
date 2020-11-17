@@ -169,7 +169,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Mapping\ActiveDirectory\ADUserMappingProfile.cs" />
-    <Compile Include="Mapping\Organisation\CategoryMappingProfile.cs" />
+    <Compile Include="Mapping\Organisation\PortfolioSummariesMappingProfile.cs" />
     <Compile Include="Mapping\Organisation\Resolvers\OutboundLabelInputValueResolver.cs" />
     <Compile Include="Mapping\Organisation\PortfolioMappingProfile.cs" />
     <Compile Include="Mapping\Organisation\PortfolioConfigUpdateProfile.cs" />

@@ -11,9 +11,9 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.Mapping.Organisation
 {
-    public class CategoryMappingProfile : Profile
+    public class PortfolioSummariesMappingProfile : Profile
     {
-        public CategoryMappingProfile()
+        public PortfolioSummariesMappingProfile()
         {
             CreateMap<Portfolio, PortfolioSummaryModel>()
                 .ForMember(d => d.Summaries, o => o.MapFrom<PortfolioSummaryResolver>())
@@ -73,15 +73,4 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
 
         }
     }
-
-
-
-    public class ProjectCountByPhaseResolver : IValueResolver<ProjectPhase, PhaseSummaryModel, int>
-    {
-        public int Resolve(ProjectPhase source, PhaseSummaryModel destination, int destMember, ResolutionContext context)
-        {
-            return source.Configuration.Portfolio.Projects.Count(p => p.LatestUpdate?.Phase?.Id == source.Id);
-        }
-    }
-
 }

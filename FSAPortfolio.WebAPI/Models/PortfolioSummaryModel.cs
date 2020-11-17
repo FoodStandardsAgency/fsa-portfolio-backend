@@ -13,6 +13,7 @@ namespace FSAPortfolio.WebAPI.Models
         public const string ByRagStatus = "rag";
         public const string ByPhase = "phase";
         public const string ByTeam = "team";
+        public const string NewProjectsByTeam = "newbyteam";
 
         [JsonProperty("summaries")]
         public IEnumerable<ProjectSummaryModel> Summaries { get; set; }
