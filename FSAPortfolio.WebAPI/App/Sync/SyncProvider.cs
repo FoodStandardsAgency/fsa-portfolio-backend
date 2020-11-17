@@ -449,7 +449,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
                             log.Add(ve.ErrorMessage);
                         }
                     }
-
                 }
             }
         }
