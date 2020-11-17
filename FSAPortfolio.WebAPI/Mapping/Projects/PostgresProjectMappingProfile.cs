@@ -245,8 +245,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                     var names = personsName.Split(' ');
                     if(names.Length == 2)
                     {
-                        var firstName = names[0];
-                        var surname = names[1];
+                        var firstName = names[0].Trim();
+                        var surname = names[1].Trim();
                         if (!result.Any(p => nameCheck(firstName, surname, p)))
                         {
                             var person =
