@@ -242,11 +242,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 var peoplesNames = sourceMember.Split(',');
                 foreach (var personsName in peoplesNames)
                 {
-                    var names = personsName.Split(' ');
+                    var names = personsName.Split(' ').Where(n => !string.IsNullOrEmpty(n)).ToArray();
                     if(names.Length == 2)
                     {
-                        var firstName = names[0].Trim();
-                        var surname = names[1].Trim();
+                        var firstName = names[0];
+                        var surname = names[1];
                         if (!result.Any(p => nameCheck(firstName, surname, p)))
                         {
                             var person =
