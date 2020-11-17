@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
+using System.Data.Entity.Validation;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -419,9 +420,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 }
             }
 
+
             foreach (var id in projectIds)
             {
-                string portfolio = "odd";
+                    string portfolio = "odd";
 
                 if (randomiseProjectPortfolios && portfolios != null)
                 {
@@ -432,7 +434,23 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
                     portfolio = portfolios.Current;
                 }
-                SyncProject(id, portfolio);
+                try
+                {
+                    SyncProject(id, portfolio);
+                }
+                catch (DbEntityValidationException e)
+                {
+                    log.Add($"FAIL: {id}");
+                    foreach(var eve in e.EntityValidationErrors)
+                    {
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            log.Add($"Property: {ve.PropertyName}");
+                            log.Add(ve.ErrorMessage);
+                        }
+                    }
+
+                }
             }
         }
 
