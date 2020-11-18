@@ -14,7 +14,7 @@ namespace FSAPortfolio.Entities
         {
             int result;
             var setting = ConfigurationManager.AppSettings[key];
-            if(setting == null || !int.TryParse(setting, out result)) result = 0;
+            if(setting == null || !int.TryParse(setting, out result)) result = defaultValue ?? 0;
             return result;
         }
     }

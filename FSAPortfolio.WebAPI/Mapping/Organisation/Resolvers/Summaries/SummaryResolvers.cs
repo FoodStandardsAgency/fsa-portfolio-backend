@@ -49,7 +49,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
                     break;
                 case PortfolioSummaryModel.ByTeam:
                 case PortfolioSummaryModel.NewProjectsByTeam:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Teams.OrderBy(t => t.Order));
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Teams.OrderBy(t => t.Order).Union(new Team[] { new Team() { Name = "None set", Id = 0 } }));
                     break;
                 default:
                     throw new ArgumentException($"Unrecognised summary type: {summaryType}");
@@ -123,7 +123,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
             {
                 case PortfolioSummaryModel.NewProjectsByTeam:
                     var newCutoff = DateTime.Now.AddDays(-PortfolioSettings.NewProjectLimitDays);
-                    result = SummaryLinqQuery.GetQuery(portfolioConfiguration, p => p.Lead?.Team != null && p.Lead.Team.ViewKey == source.ViewKey && p.FirstUpdate.Timestamp > newCutoff, context);
+                    result = SummaryLinqQuery.GetQuery(portfolioConfiguration, p => 
+                        (
+                            (p.Lead?.Team != null && p.Lead.Team.ViewKey == source.ViewKey) ||
+                            (p.Lead?.Team == null && source.Id == 0)) // No team set
+                        && p.FirstUpdate.Timestamp > newCutoff, context);
                     break;
                 case PortfolioSummaryModel.ByTeam:
                 default:
