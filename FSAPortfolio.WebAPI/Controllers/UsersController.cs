@@ -20,11 +20,11 @@ namespace FSAPortfolio.WebAPI.Controllers
 
         // Get: api/Users/search
         [AcceptVerbs("GET")]
-        public async Task<UserSearchResponseModel> SearchUsers([FromUri] string portfolio, [FromUri] string term)
+        public async Task<UserSearchResponseModel> SearchUsers([FromUri] string portfolio, [FromUri] string term, [FromUri(Name = "addnone")] bool includeNone = false)
         {
             var provider = new UsersProvider();
             var result = await provider.GetUsersAsync(term);
-            var response = PortfolioMapper.ActiveDirectoryMapper.Map<UserSearchResponseModel>(result);
+            var response = PortfolioMapper.ActiveDirectoryMapper.Map<UserSearchResponseModel>(result, opt => opt.Items[nameof(ActiveDirectoryUserSelectModel.NoneOption)] = includeNone);
             return response;
         }
 

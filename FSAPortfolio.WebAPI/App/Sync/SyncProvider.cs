@@ -57,18 +57,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
             {
                 // Ensure we have all access groups
                 var agViewKeys = SyncMaps.accessGroupKeyMap.Select(kv => kv.Value).Distinct();
-                var accessGroupLookup = dest.AccessGroups.Where(ag => ag.ViewKey != null).ToDictionary(ag => ag.ViewKey);
-                foreach(var agvk in agViewKeys)
-                {
-                    if (!accessGroupLookup.ContainsKey(agvk))
-                    {
-                        AccessGroup accessGroup = new AccessGroup() { ViewKey = agvk, Description = agvk };
-                        dest.AccessGroups.Add(accessGroup);
-                        accessGroupLookup[agvk] = accessGroup;
-                    }
-                }
+                var accessGroups = agViewKeys.Select(k => new AccessGroup() { ViewKey = k, Description = k }).ToArray();
+                dest.AccessGroups.AddOrUpdate(a => a.ViewKey, accessGroups);
                 dest.SaveChanges();
-                accessGroupLookup = dest.AccessGroups.Where(ag => ag.ViewKey != null).ToDictionary(ag => ag.ViewKey);
+                var accessGroupLookup = dest.AccessGroups.Where(ag => ag.ViewKey != null).ToDictionary(ag => ag.ViewKey);
 
                 // Sync the users
                 foreach (var sourceUser in source.users)

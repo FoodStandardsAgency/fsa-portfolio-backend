@@ -70,6 +70,10 @@
     <Compile Include="Migrations\202011181046426_03_LeadRole.designer.cs">
       <DependentUpon>202011181046426_03_LeadRole.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202011181132051_04_AccessGroupViewKey.cs" />
+    <Compile Include="Migrations\202011181132051_04_AccessGroupViewKey.designer.cs">
+      <DependentUpon>202011181132051_04_AccessGroupViewKey.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
@@ -120,6 +124,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202011181046426_03_LeadRole.resx">
       <DependentUpon>202011181046426_03_LeadRole.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011181132051_04_AccessGroupViewKey.resx">
+      <DependentUpon>202011181132051_04_AccessGroupViewKey.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

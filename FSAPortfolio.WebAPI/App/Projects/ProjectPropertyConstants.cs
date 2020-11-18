@@ -26,8 +26,9 @@ namespace FSAPortfolio.WebAPI.App
         public const string link = "link";
 
         public const string oddlead_role = "oddlead_role";
+        public const string g6team = "g6team";
 
-        
+
 
     }
 }

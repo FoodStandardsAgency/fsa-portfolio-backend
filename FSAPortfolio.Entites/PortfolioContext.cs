@@ -66,6 +66,8 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Team>().HasKey(u => u.Id);
 
             modelBuilder.Entity<AccessGroup>().HasKey(u => u.Id);
+            modelBuilder.Entity<AccessGroup>().HasIndex(p => p.ViewKey).IsUnique();
+            modelBuilder.Entity<AccessGroup>().HasIndex(p => p.Description).IsUnique();
 
             modelBuilder.Entity<Directorate>().HasKey(p => p.Id);
             modelBuilder.Entity<Directorate>().HasIndex(p => p.Name).IsUnique();

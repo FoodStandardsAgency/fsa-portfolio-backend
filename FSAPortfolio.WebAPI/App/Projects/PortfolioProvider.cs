@@ -84,6 +84,14 @@ namespace FSAPortfolio.WebAPI.App.Projects
                     new PortfolioLabelConfig()
                     {
                         Included = true,
+                        Group = config.LabelGroups.SingleOrDefault(g => g.Name == FieldGroupConstants.FieldGroupName_ProjectTeam),
+                        Label = FilterFieldConstants.LeadTeamName,
+                        FieldName = FilterFieldConstants.LeadTeamFilter,
+                        FieldType = PortfolioFieldType.OptionList
+                    },
+                    new PortfolioLabelConfig()
+                    {
+                        Included = true,
                         Group = config.LabelGroups.SingleOrDefault(g => g.Name == FieldGroupConstants.FieldGroupName_Updates),
                         Label = FilterFieldConstants.LastUpdateName,
                         FieldName = FilterFieldConstants.LastUpdateFilter,

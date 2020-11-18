@@ -13,7 +13,7 @@ namespace FSAPortfolio.WebAPI.Mapping.ActiveDirectory
         public ADUserMappingProfile()
         {
             CreateMap<MicrosoftGraphUserListResponse, UserSearchResponseModel>()
-                .ForMember(d => d.SearchResults, o => o.MapFrom(s => s.value))
+                .ForMember(d => d.SearchResults, o => o.MapFrom<UserSearchResponseModelResolver, List<MicrosoftGraphUserModel>>(s => s.value))
                 ;
 
             CreateMap<MicrosoftGraphUserModel, UserSearchModel>()
@@ -34,6 +34,20 @@ namespace FSAPortfolio.WebAPI.Mapping.ActiveDirectory
                 .ForMember(d => d.ActiveDirectoryPrincipalName, o => o.MapFrom(s => s.userPrincipalName))
                 .ForMember(d => d.ActiveDirectoryId, o => o.MapFrom(s => s.id))
                 ;
+        }
+
+        public class UserSearchResponseModelResolver : IMemberValueResolver<MicrosoftGraphUserListResponse, UserSearchResponseModel, List<MicrosoftGraphUserModel>, IEnumerable<UserSearchModel>>
+        {
+            public IEnumerable<UserSearchModel> Resolve(MicrosoftGraphUserListResponse source, UserSearchResponseModel destination, List<MicrosoftGraphUserModel> sourceMember, IEnumerable<UserSearchModel> destMember, ResolutionContext context)
+            {
+                var results = context.Mapper.Map<List<UserSearchModel>>(sourceMember);
+                var key = nameof(ActiveDirectoryUserSelectModel.NoneOption);
+                if(context.Items.ContainsKey(key) && (bool)context.Items[key])
+                {
+                    results.Insert(0, new UserSearchModel() { DisplayName = "None" });
+                }
+                return results;
+            }
         }
     }
 }

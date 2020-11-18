@@ -25,5 +25,8 @@ namespace FSAPortfolio.WebAPI.App
         internal const string PriorityGroupName = "Priority group";
         internal const string PriorityGroupFilter = "pgroup_filter";
 
+        internal const string LeadTeamName = "Lead team";
+        internal const string LeadTeamFilter = "leadteam_filter";
+
     }
 }

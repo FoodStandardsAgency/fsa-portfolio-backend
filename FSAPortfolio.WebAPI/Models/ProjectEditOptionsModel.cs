@@ -66,7 +66,7 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(ProjectPropertyConstants.oddlead_role)]
         public IEnumerable<DropDownItemModel> ODDLeadRole { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.g6team))]
+        [JsonProperty(FilterFieldConstants.LeadTeamFilter)]
         public IEnumerable<DropDownItemModel> G6Team { get; set; }
 
 
@@ -131,7 +131,7 @@ namespace FSAPortfolio.WebAPI.Models
 
     public class ActiveDirectoryUserSelectModel
     {
-        [JsonProperty("noneoption")]
+        [JsonProperty("nouseroption")]
         public bool NoneOption { get; set; }
     }
 
