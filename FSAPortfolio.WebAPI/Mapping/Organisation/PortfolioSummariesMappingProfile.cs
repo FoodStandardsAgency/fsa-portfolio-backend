@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries;
 using FSAPortfolio.WebAPI.Models;
 using System;
@@ -54,6 +55,13 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
                 .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByTeamResolver>())
+                ;
+
+            CreateMap<Person, ProjectSummaryModel>()
+                .ForMember(d => d.ViewKey, o => o.MapFrom(s => s.ViewKey))
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.DisplayName))
+                .ForMember(d => d.Order, o => o.MapFrom(s => 0))
+                .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByTeamLeadResolver>())
                 ;
 
 

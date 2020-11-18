@@ -12,6 +12,7 @@ namespace FSAPortfolio.WebAPI.Models
         public const string ByPriorityGroup = "priority";
         public const string ByRagStatus = "rag";
         public const string ByPhase = "phase";
+        public const string ByLead = "lead";
         public const string ByTeam = "team";
         public const string NewProjectsByTeam = "newbyteam";
 

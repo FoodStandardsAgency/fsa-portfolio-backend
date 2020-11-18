@@ -2,6 +2,7 @@
 using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
                     break;
                 case PortfolioSummaryModel.ByPhase:
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.Where(p => p.Id != source.Configuration.CompletedPhase.Id).OrderBy(c => c.Order));
+                    break;
+                case PortfolioSummaryModel.ByLead:
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Portfolio.Projects.Select(p => p.Lead));
                     break;
                 case PortfolioSummaryModel.ByTeam:
                 case PortfolioSummaryModel.NewProjectsByTeam:
@@ -136,6 +140,15 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
             }
 
             return result;
+        }
+    }
+
+    public class PhaseProjectsByTeamLeadResolver : IValueResolver<Person, ProjectSummaryModel, IEnumerable<PhaseProjectsModel>>
+    {
+        public IEnumerable<PhaseProjectsModel> Resolve(Person source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
+        {
+            var config = context.Items[nameof(PortfolioConfiguration)] as PortfolioConfiguration;
+            return SummaryLinqQuery.GetQuery(config, p => p.Lead_Id == source.Id, context);
         }
     }
 }
