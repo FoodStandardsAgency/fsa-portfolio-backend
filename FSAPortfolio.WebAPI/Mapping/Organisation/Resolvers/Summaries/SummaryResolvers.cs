@@ -49,7 +49,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.Where(p => p.Id != source.Configuration.CompletedPhase.Id).OrderBy(c => c.Order));
                     break;
                 case PortfolioSummaryModel.ByLead:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Portfolio.Projects.Select(p => p.Lead));
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Portfolio.Projects.Select(p => p.Lead).Distinct());
                     break;
                 case PortfolioSummaryModel.ByTeam:
                 case PortfolioSummaryModel.NewProjectsByTeam:
