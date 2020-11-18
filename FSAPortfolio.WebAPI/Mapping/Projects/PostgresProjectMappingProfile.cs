@@ -26,26 +26,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             project__ProjectUpdateItem();
 
         }
-        private void project__ProjectUpdateItem()
-        {
-            CreateMap<project, ProjectUpdateItem>()
-                .ForMember(p => p.Id, o => o.Ignore())
-                .ForMember(p => p.Project_Id, o => o.Ignore())
-                .ForMember(p => p.Project, o => o.Ignore())
-                .ForMember(p => p.Person, o => o.Ignore())
-                .ForMember(p => p.SyncId, o => o.MapFrom(s => s.id))
-                .ForMember(p => p.Timestamp, o => o.MapFrom(s => s.timestamp))
-                .ForMember(p => p.Text, o => o.MapFrom(s => s.update))
-                .ForMember(p => p.PercentageComplete, o => o.MapFrom(s => s.p_comp))
-                .ForMember(p => p.RAGStatus, o => o.MapFrom<string>(new ConfigRAGStatusResolver(true), s => s.rag))
-                .ForMember(p => p.Phase, o => o.MapFrom<string>(new ConfigPhaseStatusResolver(true), s => SyncMaps.phaseKeyMap[s.phase ?? "backlog"]))
-                .ForMember(p => p.OnHoldStatus, o => o.MapFrom<string>(new ConfigOnHoldStatusResolver(true), s => SyncMaps.onholdKeyMap[s.onhold ?? "n"]))
-                .ForMember(p => p.Budget, o => o.MapFrom<DecimalResolver, string>(s => s.budget))
-                .ForMember(p => p.Spent, o => o.MapFrom<DecimalResolver, string>(s => s.spent))
-                .ForMember(p => p.ExpectedCurrentPhaseEnd, o => o.MapFrom<PostgresProjectDateResolver, string>(s => s.expendp))
-                ;
-        }
-
         private void project__Project()
         {
             CreateMap<project, Project>()
@@ -72,9 +52,13 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => SyncMaps.budgetTypeKeyMap[s.budgettype ?? "none"]))
                 .ForMember(p => p.ChannelLink, o => o.MapFrom(s => new ProjectLink() { Link = s.link }))
                 .ForMember(p => p.Documents, o => o.MapFrom<PostgresDocumentResolver, string>(s => s.documents))
+                .ForMember(p => p.LeadRole, o => {
+                    o.PreCondition(s => SyncMaps.oddLeadRoleMap.ContainsKey(s.oddlead_role));
+                    o.MapFrom(s => SyncMaps.oddLeadRoleMap[s.oddlead_role]);
+                })
 
-                // TODO: These need migration mappings
-                .ForMember(p => p.Subcategories, o => o.Ignore())
+                .ForMember(p => p.Subcategories, o => o.Ignore()) // Anna Nikiel 18/11/2020: can ignore this in migration.
+
                 // Ignore these
                 .ForMember(p => p.KeyContact1, o => o.Ignore())
                 .ForMember(p => p.KeyContact2, o => o.Ignore())
@@ -101,6 +85,26 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.FirstUpdate_Id, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate_Id, o => o.Ignore())
             ;
+        }
+
+        private void project__ProjectUpdateItem()
+        {
+            CreateMap<project, ProjectUpdateItem>()
+                .ForMember(p => p.Id, o => o.Ignore())
+                .ForMember(p => p.Project_Id, o => o.Ignore())
+                .ForMember(p => p.Project, o => o.Ignore())
+                .ForMember(p => p.Person, o => o.Ignore())
+                .ForMember(p => p.SyncId, o => o.MapFrom(s => s.id))
+                .ForMember(p => p.Timestamp, o => o.MapFrom(s => s.timestamp))
+                .ForMember(p => p.Text, o => o.MapFrom(s => s.update))
+                .ForMember(p => p.PercentageComplete, o => o.MapFrom(s => s.p_comp))
+                .ForMember(p => p.RAGStatus, o => o.MapFrom<string>(new ConfigRAGStatusResolver(true), s => s.rag))
+                .ForMember(p => p.Phase, o => o.MapFrom<string>(new ConfigPhaseStatusResolver(true), s => SyncMaps.phaseKeyMap[s.phase ?? "backlog"]))
+                .ForMember(p => p.OnHoldStatus, o => o.MapFrom<string>(new ConfigOnHoldStatusResolver(true), s => SyncMaps.onholdKeyMap[s.onhold ?? "n"]))
+                .ForMember(p => p.Budget, o => o.MapFrom<DecimalResolver, string>(s => s.budget))
+                .ForMember(p => p.Spent, o => o.MapFrom<DecimalResolver, string>(s => s.spent))
+                .ForMember(p => p.ExpectedCurrentPhaseEnd, o => o.MapFrom<PostgresProjectDateResolver, string>(s => s.expendp))
+                ;
         }
 
         private void Project__latest_projects()

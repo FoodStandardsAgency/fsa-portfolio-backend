@@ -28,8 +28,6 @@ namespace FSAPortfolio.WebAPI.Models
         public ProjectDateEditModel expendp { get; set; }
         public ProjectDateEditModel actual_end_date { get; set; }
 
-
-
         [JsonIgnore]
         public IDictionary<string, ProjectPropertyModel> Properties { get; set; }
 

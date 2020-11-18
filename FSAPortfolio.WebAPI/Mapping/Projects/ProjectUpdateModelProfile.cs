@@ -65,6 +65,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.ProjectData, o => o.MapFrom<ProjectDataInboundResolver>())
                 .ForMember(p => p.Documents, o => o.MapFrom(s => s.documents))
                 .ForMember(p => p.Supplier, o => o.MapFrom(s => s.supplier))
+                .ForMember(p => p.LeadRole, o => o.MapFrom(s => s.oddlead_role))
 
                 .ForMember(p => p.BusinessCaseNumber, o => o.MapFrom(s => s.business_case_number))
                 .ForMember(p => p.FSNumber, o => o.MapFrom(s => s.fs_number))

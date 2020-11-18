@@ -64,12 +64,12 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.key_contact2, o => o.MapFrom(s => s.KeyContact2.DisplayName))
                 .ForMember(p => p.key_contact3, o => o.MapFrom(s => s.KeyContact3.DisplayName))
                 .ForMember(p => p.supplier, o => o.MapFrom(s => s.Supplier))
+                .ForMember(p => p.link, o => o.MapFrom(s => s.ChannelLink))
+                .ForMember(p => p.oddlead_role, o => o.MapFrom(s => s.LeadRole))
 
                 // TODO: add persistence and mappings for outstanding fields
                 // Outstanding
-                .ForMember(p => p.oddlead_role, o => o.Ignore())
                 .ForMember(p => p.milestones, o => o.Ignore())
-                .ForMember(p => p.link, o => o.Ignore())
 
                 // Latest update and update history
                 .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.Name))
@@ -104,6 +104,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 //.AfterMap<ProjectDataOutboundMapper<ProjectExportModel>>()
                 //.AfterMap<ProjectJsonPropertiesOutboundMapper>()
                 ;
+
+            CreateMap<ProjectLink, string>().ConvertUsing(s => $"{s.Name}, {s.Link}");
 
         }
 

@@ -27,6 +27,15 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "6", AccessGroupConstants.SuperuserViewKey }
         };
 
+        public static readonly Dictionary<string, string> oddLeadRoleMap = new Dictionary<string, string>()
+        {
+            { "oth", "Role" },
+            { "sup", "Support" },
+            { "imp", "Implementation" },
+            { "man", "Management" }
+        };
+
+
         public static readonly Dictionary<string, string> directorateKeyMap = new Dictionary<string, string>()
         {
             { "IR", "inc" },

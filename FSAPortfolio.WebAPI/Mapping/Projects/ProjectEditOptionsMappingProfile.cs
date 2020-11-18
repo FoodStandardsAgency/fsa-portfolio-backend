@@ -34,9 +34,9 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Theme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.theme))))
                 .ForMember(d => d.ProjectType, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_type))))
                 .ForMember(d => d.Programme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.programme))))
-                .ForMember(d => d.ODDLeadRole, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.oddlead_role, emptyOption: true)))
+                .ForMember(d => d.ODDLeadRole, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.oddlead_role, addNoneOption: true)))
 
-                .ForMember(d => d.ODDLead, o => o.MapFrom(new StubPersonResolver(ProjectPropertyConstants.ProjectLead, addNoneOption: false))) // TODO: do we need these options if using ajax?
+                .ForMember(d => d.ODDLead, o => o.MapFrom(s => new ActiveDirectoryUserSelectModel() { NoneOption = false }))
                 .ForMember(d => d.PriorityItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.priority_main))))
                 .ForMember(d => d.PriorityGroupItems, o => o.MapFrom(new PriorityGroupLabelDropDownResolver(nameof(ProjectModel.pgroup))))
                 .ForMember(d => d.FundedItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.funded))))
@@ -92,8 +92,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
     }
 
     /// <summary>
-    /// Maps labels filtering on flags passed into the mapping options: only labels with one of the flags set are returned.
+    /// Maps labels to models, with filtering on flags and included setting. Can also include custom labels.
     /// </summary>
+    /// <remarks>
+    /// Set the flags, included options and custom labels in the mapping context. Labels are filtered on flags, included setting and results are merged with custom labels.
+    /// </remarks>
     public class ConfigLabelFlagResolver : IMemberValueResolver<PortfolioConfiguration, ProjectLabelConfigModel, ICollection<PortfolioLabelConfig>, IEnumerable<ProjectLabelModel>>
     {
         public IEnumerable<ProjectLabelModel> Resolve(PortfolioConfiguration source, ProjectLabelConfigModel destination,
@@ -102,10 +105,13 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                                                       ResolutionContext context)
         {
             IEnumerable<PortfolioLabelConfig> labels = sourceMember;
+
+            // Get the settings from the context.
             var flagsKey = nameof(PortfolioFieldFlags);
             var includedOnlyKey = nameof(PortfolioLabelConfig.Included);
             var customLabelKey = nameof(PortfolioLabelConfig);
 
+            // Filter
             if (context.Items.ContainsKey(flagsKey))
             {
                 var flags = (PortfolioFieldFlags)context.Items[flagsKey];
@@ -118,12 +124,14 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 if(includedOnly) labels = labels.Where(s => s.Included);
             }
 
+            // Add custom labels
             if(context.Items.ContainsKey(customLabelKey))
             {
                 IEnumerable<PortfolioLabelConfig> customLabels = (IEnumerable<PortfolioLabelConfig>)context.Items[customLabelKey];
                 labels = labels.Union(customLabels);
             }
 
+            // Map to the models
             var models = context.Mapper.Map<ICollection<ProjectLabelModel>>(labels)
                                  .OrderBy(l => l.GroupOrder)
                                  .ThenBy(l => l.FieldOrder)
@@ -137,10 +145,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         private string fieldName;
         private bool emptyOption = false;
 
-        public LabelDropDownResolver(string fieldName, bool emptyOption = false)
+        public LabelDropDownResolver(string fieldName, bool addNoneOption = false)
         {
             this.fieldName = fieldName;
-            this.emptyOption = emptyOption;
+            this.emptyOption = addNoneOption;
         }
 
         public IEnumerable<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, IEnumerable<DropDownItemModel> destMember, ResolutionContext context)
@@ -176,7 +184,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             return source.PriorityGroups.Select(pg => new DropDownItemModel() { Display = pg.Name, Value = pg.ViewKey, Order = pg.Order });
         }
     }
-
 
     public class SelectPickerResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, SelectPickerModel>
     {
@@ -237,56 +244,4 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
-    public class StubRoleResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, SelectPickerModel>
-    {
-        private string fieldName;
-
-        public StubRoleResolver(string fieldName)
-        {
-            this.fieldName = fieldName;
-        }
-
-        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
-        {
-            SelectPickerModel model = new SelectPickerModel()
-            {
-                Header = "Select the role...",
-                Items = new SelectPickerItemModel[] {
-                    new SelectPickerItemModel() { Display = "None", Order = 0 },
-                    new SelectPickerItemModel() { Display = "Role0", Value = "r0id", SearchTokens="Role0", Order = 1 },
-                    new SelectPickerItemModel() { Display = "Role1", Value = "r1id", SearchTokens="Role1", Order = 2 },
-                    new SelectPickerItemModel() { Display = "Role2", Value = "r2id", SearchTokens="Role2", Order = 3 },
-                    new SelectPickerItemModel() { Display = "Role3", Value = "r3id", SearchTokens="Role3", Order = 4 },
-                }
-            };
-            return model;
-        }
-    }
-
-    public class StubTeamResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, SelectPickerModel>
-    {
-        private string fieldName;
-
-        public StubTeamResolver(string fieldName)
-        {
-            this.fieldName = fieldName;
-        }
-
-        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
-        {
-            // TODO: get the teams from ActiveDirectory
-            SelectPickerModel model = model = new SelectPickerModel()
-            {
-                Header = "Select the team...",
-                Items = new SelectPickerItemModel[] {
-                    new SelectPickerItemModel() { Display = "None", Order = 0 },
-                    new SelectPickerItemModel() { Display = "Team0 (t0@a.b.com)", Value = "t0id", SearchTokens="Team0, t0@a.b.com", Order = 1 },
-                    new SelectPickerItemModel() { Display = "Team1 (t1@a.b.com)", Value = "t1id", SearchTokens="Team1, t1@a.b.com", Order = 2 },
-                    new SelectPickerItemModel() { Display = "Team2 (t2@a.b.com)", Value = "t2id", SearchTokens="Team2, t2@a.b.com", Order = 3 },
-                    new SelectPickerItemModel() { Display = "Team3 (t3@a.b.com)", Value = "t3id", SearchTokens="Team3, t3@a.b.com", Order = 4 },
-                }
-            };
-            return model;
-        }
-    }
 }

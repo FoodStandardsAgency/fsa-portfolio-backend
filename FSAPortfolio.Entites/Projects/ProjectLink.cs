@@ -9,7 +9,6 @@ namespace FSAPortfolio.Entities.Projects
 {
     public class ProjectLink
     {
-
         public string Name { get; set; }
 
         public string Link { get; set; }

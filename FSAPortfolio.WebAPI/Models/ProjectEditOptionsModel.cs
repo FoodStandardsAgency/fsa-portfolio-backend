@@ -61,7 +61,7 @@ namespace FSAPortfolio.WebAPI.Models
 
         // People
         [JsonProperty(nameof(ProjectUpdateModel.oddlead))]
-        public SelectPickerModel ODDLead { get; set; }
+        public ActiveDirectoryUserSelectModel ODDLead { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.oddlead_role)]
         public IEnumerable<DropDownItemModel> ODDLeadRole { get; set; }
@@ -127,6 +127,12 @@ namespace FSAPortfolio.WebAPI.Models
     {
         public string FieldName { get; set; }
         public object Options { get; set; }
+    }
+
+    public class ActiveDirectoryUserSelectModel
+    {
+        [JsonProperty("noneoption")]
+        public bool NoneOption { get; set; }
     }
 
 }

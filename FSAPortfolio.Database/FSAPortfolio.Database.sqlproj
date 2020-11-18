@@ -102,5 +102,6 @@
     <Build Include="dbo\Tables\Directorates.sql" />
     <None Include="Deployment\01_Suppliers.sql" />
     <None Include="Deployment\02_LinkSize.sql" />
+    <None Include="Deployment\03_LeadRole.sql" />
   </ItemGroup>
 </Project>

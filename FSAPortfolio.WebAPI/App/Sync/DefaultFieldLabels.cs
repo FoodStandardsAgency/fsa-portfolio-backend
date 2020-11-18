@@ -117,7 +117,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_AboutTheProject, "Key documents", nameof(ProjectModel.documents), true, false, false, PortfolioFieldType.LinkedItemList),
 
                 Factory(FieldGroupName_ProjectTeam, "Project lead", ProjectPropertyConstants.ProjectLead, false, false, false, PortfolioFieldType.ADUserSearch, flags: FilterProject),
-                Factory(FieldGroupName_ProjectTeam, "Lead role", ProjectPropertyConstants.oddlead_role, false, false, false, PortfolioFieldType.OptionList),
+                Factory(FieldGroupName_ProjectTeam, "Lead role", ProjectPropertyConstants.oddlead_role, false, false, false, PortfolioFieldType.OptionList, options: "Role, Support, Implementation, Management"),
                 Factory(FieldGroupName_ProjectTeam, "Lead team", nameof(ProjectModel.g6team), false, false, false, PortfolioFieldType.Auto, flags: FilterProject | Read),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 1", nameof(ProjectModel.key_contact1), false, false, false, PortfolioFieldType.ADUserSearch),
                 Factory(FieldGroupName_ProjectTeam, "Key contact 2", nameof(ProjectModel.key_contact2), false, false, false, PortfolioFieldType.ADUserSearch),

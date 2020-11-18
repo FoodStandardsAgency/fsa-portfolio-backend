@@ -80,10 +80,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.key_contact2, o => o.MapFrom(s => s.KeyContact2))
                 .ForMember(p => p.key_contact3, o => o.MapFrom(s => s.KeyContact3))
                 .ForMember(p => p.supplier, o => o.MapFrom(s => s.Supplier))
+                .ForMember(p => p.oddlead_role, o => o.MapFrom(s => s.LeadRole))
 
                 // TODO: add persistence and mappings for outstanding fields
                 // Outstanding
-                .ForMember(p => p.oddlead_role, o => o.Ignore())
                 .ForMember(p => p.milestones, o => o.Ignore())
 
                 // Latest update and update history

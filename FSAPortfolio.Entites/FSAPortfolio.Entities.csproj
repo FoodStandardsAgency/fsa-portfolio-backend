@@ -66,6 +66,10 @@
     <Compile Include="Migrations\202011171821103_02_LinkSize.designer.cs">
       <DependentUpon>202011171821103_02_LinkSize.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202011181046426_03_LeadRole.cs" />
+    <Compile Include="Migrations\202011181046426_03_LeadRole.designer.cs">
+      <DependentUpon>202011181046426_03_LeadRole.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
@@ -113,6 +117,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202011171821103_02_LinkSize.resx">
       <DependentUpon>202011171821103_02_LinkSize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011181046426_03_LeadRole.resx">
+      <DependentUpon>202011181046426_03_LeadRole.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
