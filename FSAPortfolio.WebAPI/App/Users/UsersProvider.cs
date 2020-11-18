@@ -177,7 +177,7 @@ namespace FSAPortfolio.WebAPI.App.Users
                     }
 
                     // Look up the team from the user's department
-                    if(user != null)
+                    if(user != null && user.department != null)
                     {
                         // Get the viewkey from the map
                         string teamViewKey;

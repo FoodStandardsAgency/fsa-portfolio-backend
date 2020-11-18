@@ -64,6 +64,10 @@ namespace FSAPortfolio.WebAPI.Controllers
                         {
                             // Create a new update
                             projectUpdate = new ProjectUpdateItem() { Project = project };
+                            if(project.FirstUpdate_Id == null)
+                            {
+                                project.FirstUpdate = projectUpdate;
+                            }
                         }
 
                         // Map the data to the update and add if not a duplicate
