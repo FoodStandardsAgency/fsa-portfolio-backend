@@ -216,7 +216,11 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         internal async Task MapTeamMembersAsync(ProjectUpdateModel update, Project project)
         {
-            project.People.Clear();
+            if (project.People == null)
+                project.People = new List<Person>();
+            else
+                project.People.Clear();
+
             if (update?.team != null && update.team.Length > 0)
             {
                 foreach (var id in update.team)
