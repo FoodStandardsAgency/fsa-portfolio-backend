@@ -98,66 +98,14 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
-
-        // GET: api/Projects?portfolio={portfolio}&filter={filter}
-        [HttpGet]
-        public async Task<IEnumerable<latest_projects>> Get([FromUri]string portfolio, [FromUri] string filter)
-        {
-            try
-            {
-                IEnumerable<latest_projects> result = null;
-                using (var context = new PortfolioContext())
-                {
-                    var config = await context.Portfolios
-                        .Where(p => p.ViewKey == portfolio)
-                        .Select(p => p.Configuration)
-                        .Include(c => c.CompletedPhase)
-                        .SingleAsync();
-
-                    IQueryable<Project> query = ProjectWithIncludes(context, portfolio);
-                    switch (filter)
-                    {
-                        case "new":
-                            var newCutoff = DateTime.Now.AddDays(-PortfolioSettings.NewProjectLimitDays);
-                            query = from p in query
-                                    where p.LatestUpdate.Phase.Id != config.CompletedPhase.Id && p.FirstUpdate.Timestamp > newCutoff
-                                    orderby p.Priority descending, p.Name
-                                    select p;
-                            break;
-                        case "complete":
-                            query = from p in query
-                                    where p.LatestUpdate.Phase.Id == config.CompletedPhase.Id
-                                    orderby p.LatestUpdate.Timestamp descending, p.Name
-                                    select p;
-                            break;
-                        case "current":
-                        case "latest":
-                        default:
-                            query = from p in query
-                                    where p.LatestUpdate.Phase.Id != config.CompletedPhase.Id
-                                    orderby p.Priority descending, p.Name
-                                    select p;
-                            break;
-                    }
-                    var projects = await query.ToListAsync();
-                    result = PortfolioMapper.ProjectMapper.Map<IEnumerable<latest_projects>>(projects);
-                }
-                return result;
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
-        }
-
         /// <summary>
-        /// Gets a new project with any default settings and reserves an project_id.
+        /// Gets a new project with any default settings and reserves a project_id.
         /// Gets the label configuration for the view, with options set for any view components such as drop down lists.
         /// </summary>
         /// <param name="portfolio">The portfolio to create the new project for</param>
         /// <returns>A DTO with the label config, options and default project data.</returns>
         /// <remarks>Labels must have the Create flag set in order to be included in the config data.</remarks>
-        [HttpGet]
+        [HttpGet, Route("api/Projects/{portfolio}/newproject")]
         public async Task<GetProjectDTO<ProjectEditViewModel>> GetNewProject([FromUri] string portfolio)
         {
             try
@@ -185,7 +133,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet, Route("api/Projects/{projectId}")]
         public async Task<GetProjectDTO<ProjectViewModel>> Get([FromUri] string projectId,
                                                                [FromUri] bool includeOptions = false,
                                                                [FromUri] bool includeHistory = false,
@@ -195,7 +143,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             return await GetProject<ProjectViewModel>(projectId, includeOptions, includeHistory, includeLastUpdate, includeConfig);
         }
 
-        [HttpGet]
+        [HttpGet, Route("api/Projects/{projectId}/edit")]
         public async Task<GetProjectDTO<ProjectEditViewModel>> GetForEdit([FromUri] string projectId)
         {
             return await GetProject<ProjectEditViewModel>(projectId,
@@ -204,6 +152,26 @@ namespace FSAPortfolio.WebAPI.Controllers
                                                           includeLastUpdate: true,
                                                           includeConfig: true,
                                                           flags: PortfolioFieldFlags.Update);
+        }
+
+        [HttpDelete, Route("api/Projects/{projectId}")]
+        public async Task<IHttpActionResult> DeleteProject([FromUri] string projectId)
+        {
+            using(var context = new PortfolioContext())
+            {
+                var project = await (from p in context.Projects.IncludeProjectForDelete() 
+                                     where p.Reservation.ProjectId == projectId 
+                                     select p).SingleOrDefaultAsync();
+                if (project == null) return NotFound();
+                project.DeleteCollections(context);
+                await context.SaveChangesAsync();
+
+                project.Reservation.Portfolio.Projects.Remove(project);
+                context.ProjectReservations.Remove(project.Reservation);
+                context.Projects.Remove(project);
+                await context.SaveChangesAsync();
+                return Ok();
+            }
         }
 
         private static async Task<GetProjectDTO<T>> GetProject<T>(string projectId,

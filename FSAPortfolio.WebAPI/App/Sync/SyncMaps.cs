@@ -9,6 +9,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
 {
     public class SyncMaps
     {
+        public static readonly Dictionary<string, string> emailMap = new Dictionary<string, string>()
+        {
+            { "amy-kate.wych@food.gov.uk", "amy-kate.lynch@food.gov.uk" }
+        };
+
+
         public static readonly Dictionary<string, Tuple<string, int>> teamNameMap = new Dictionary<string, Tuple<string, int>>()
         {
             { "Data", new Tuple<string, int>("Data", 1) },

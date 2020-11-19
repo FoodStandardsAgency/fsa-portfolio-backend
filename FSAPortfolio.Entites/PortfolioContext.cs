@@ -41,6 +41,7 @@ namespace FSAPortfolio.Entities
         public virtual DbSet<ProjectCategory> ProjectCategories { get; set; }
         public virtual DbSet<ProjectSize> ProjectSizes { get; set; }
         public virtual DbSet<BudgetType> BudgetTypes { get; set; }
+        public virtual DbSet<Document> Documents { get; set; }
 
         public virtual DbSet<ProjectRAGStatus> ProjectRAGStatuses { get; set; }
         public virtual DbSet<ProjectOnHoldStatus> ProjectOnHoldStatuses { get; set; }

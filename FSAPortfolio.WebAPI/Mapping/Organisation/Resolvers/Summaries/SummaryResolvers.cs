@@ -49,7 +49,13 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.Where(p => p.Id != source.Configuration.CompletedPhase.Id).OrderBy(c => c.Order));
                     break;
                 case PortfolioSummaryModel.ByLead:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Portfolio.Projects.Select(p => p.Lead).Distinct());
+                    var allResults = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Portfolio.Projects
+                        .Where(p => p.Lead_Id != null)
+                        .Select(p => p.Lead)
+                        .Distinct()
+                        .OrderBy(p => p.Firstname)
+                        .ThenBy(p => p.Surname));
+                    result = allResults.Where(r => r.PhaseProjects.Any(pp => pp.Projects.Count() > 0)); // Only take leads with active projects
                     break;
                 case PortfolioSummaryModel.ByTeam:
                 case PortfolioSummaryModel.NewProjectsByTeam:

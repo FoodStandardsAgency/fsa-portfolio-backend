@@ -122,6 +122,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         log.Add($"Added person {destPerson.Firstname} {destPerson.Surname}");
                     }
 
+                    if (SyncMaps.emailMap.ContainsKey(destPerson.Email)) 
+                        destPerson.Email = SyncMaps.emailMap[destPerson.Email];
+
                     // Set the active directory user
                     MicrosoftGraphUserModel adUser = null;
                     if (destPerson.ActiveDirectoryId == null)

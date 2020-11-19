@@ -161,7 +161,6 @@
     <Compile Include="Controllers\PortfolioConfigurationController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
-    <Compile Include="Controllers\LegacyProjectsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DTO\GetProjectExportDTO.cs" />
     <Compile Include="DTO\GetProjectQueryDTO.cs" />
@@ -186,7 +185,7 @@
     <Compile Include="Mapping\Projects\ProjectEditOptionsMappingProfile.cs" />
     <Compile Include="Mapping\Projects\ProjectUpdateModelProfile.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectEditOptionsResolvers.cs" />
-    <Compile Include="Mapping\Projects\Resolvers\ProjectPersonInboundResolver.cs" />
+    <Compile Include="Mapping\Projects\Resolvers\PostgresPersonFromEmailResolver.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectPersonViewResolver.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectStatusOptionsResolvers.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectUpdateItemOptionsResolvers.cs" />

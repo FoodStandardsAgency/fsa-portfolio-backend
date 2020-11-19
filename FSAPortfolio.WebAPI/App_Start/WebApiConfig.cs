@@ -70,58 +70,6 @@ namespace FSAPortfolio.WebAPI
 
             #endregion
 
-
-            #region Projects
-            config.Routes.MapHttpRoute(
-                name: "NewProjectConfig",
-                routeTemplate: "api/Projects/{portfolio}/newproject",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetNewProject) }
-            );
-            config.Routes.MapHttpRoute(
-                name: "EditProjectView",
-                routeTemplate: "api/Projects/{projectId}/edit",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.GetForEdit) }
-            );
-            config.Routes.MapHttpRoute(
-                name: "Project",
-                routeTemplate: "api/Projects/{projectId}",
-                defaults: new { controller = ControllerName<ProjectsController>(), action = nameof(ProjectsController.Get) }
-            );
-            #endregion
-
-            #region Legacy
-            config.Routes.MapHttpRoute(
-                name: "Legacy_GetCurrentProjects",
-                routeTemplate: "api/Projects/Legacy/Current",
-                defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetCurrent) }
-            );
-            config.Routes.MapHttpRoute(
-                name: "Legacy_GetNewProjects",
-                routeTemplate: "api/Projects/Legacy/New",
-                defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetNew) }
-            );
-            config.Routes.MapHttpRoute(
-                name: "Legacy_GetCompletedProjects",
-                routeTemplate: "api/Projects/Legacy/Completed",
-                defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetCompleted) }
-            );
-            config.Routes.MapHttpRoute(
-                name: "Legacy_GetLatestProjects",
-                routeTemplate: "api/Projects/Legacy/Latest",
-                defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetLatest) }
-            );
-            config.Routes.MapHttpRoute(
-                name: "Legacy_GetODDLeads",
-                routeTemplate: "api/Projects/Legacy/ODDLeads",
-                defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetODDLeads) }
-            );
-            config.Routes.MapHttpRoute(
-                name: "Legacy_GetUnmatchedODDLeads",
-                routeTemplate: "api/Projects/Legacy/UnmatchedODDLeads",
-                defaults: new { controller = ControllerName<LegacyProjectsController>(), action = nameof(LegacyProjectsController.GetUnmatchedODDLeads) }
-            );
-            #endregion
-
             #region Sync
             config.Routes.MapHttpRoute(
                 name: "SyncAll",

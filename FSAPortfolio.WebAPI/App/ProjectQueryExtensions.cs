@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.Entities.Organisation;
+﻿using FSAPortfolio.Entities;
+using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using System;
 using System.Collections.Generic;
@@ -80,6 +81,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Directorate)
                 ;
         }
+
         public static IQueryable<Project> IncludeUpdates(this IQueryable<Project> query)
         {
             return query
@@ -88,6 +90,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Updates.Select(u => u.Phase))
                 ;
         }
+
         public static IQueryable<Project> IncludeQueryResult(this IQueryable<Project> query)
         {
             return query.Include(p => p.Reservation)
@@ -101,6 +104,32 @@ namespace FSAPortfolio.WebAPI.App
                 ;
         }
 
+        public static IQueryable<Project> IncludeProjectForDelete(this IQueryable<Project> query)
+        {
+            return query
+                .Include(p => p.Reservation.Portfolio.Projects)
+                .Include(p => p.ProjectData)
+                .Include(p => p.Subcategories)
+                .Include(p => p.RelatedProjects)
+                .Include(p => p.DependantProjects)
+                .Include(p => p.Documents)
+                .Include(p => p.People)
+                .Include(p => p.Updates)
+                ;
+        }
+
+        public static void DeleteCollections(this Project project, PortfolioContext context)
+        {
+            context.ProjectDataItems.RemoveRange(project.ProjectData);
+            project.Subcategories.Clear();
+            project.RelatedProjects.Clear();
+            project.DependantProjects.Clear();
+            context.Documents.RemoveRange(project.Documents);
+            project.Documents.Clear();
+            project.People.Clear();
+            context.ProjectUpdates.RemoveRange(project.Updates);
+            project.Updates.Clear();
+        }
 
         public static IQueryable<Project> IncludeLabelConfigs(this IQueryable<Project> query)
         {
@@ -109,6 +138,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Reservation.Portfolio.Configuration.LabelGroups)
                 ;
         }
+
         public static IQueryable<Project> FullConfigIncludes(this IQueryable<Project> query)
         {
             return query
