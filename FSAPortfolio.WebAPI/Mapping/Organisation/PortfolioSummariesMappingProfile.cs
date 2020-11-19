@@ -76,7 +76,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
             CreateMap<Project, ProjectIndexModel>()
                 .ForMember(d => d.ProjectId, o => o.MapFrom(s => s.Reservation.ProjectId))
                 .ForMember(d => d.Name, o => o.MapFrom(s => string.IsNullOrWhiteSpace(s.Name) ? s.Reservation.ProjectId : s.Name))
-                .ForMember(d => d.IsNew, o => o.MapFrom(s => s.IsNew))
+                .ForMember(d => d.IsNew, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
                 ;
 
         }
