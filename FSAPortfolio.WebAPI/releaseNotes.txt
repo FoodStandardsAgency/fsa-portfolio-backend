@@ -6,3 +6,4 @@
 - Fixed project date CSV export
 - Export priority group to CSV
 - Export lead and service lead
+- Order projects by ascending priority
