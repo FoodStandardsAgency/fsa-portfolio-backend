@@ -10,9 +10,13 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 {
     public class ProjectExportModelProfile : Profile
     {
+        public const string FullDateExportFormat = "dd/MM/yyyy";
+        public const string MonthDateExportFormat = "MM/yyyy";
+        public const string YearDateExportFormat = "yyyy";
         public ProjectExportModelProfile()
         {
             CreateMap<string, string>().ConvertUsing(s => s != null ? s.Replace(",", "") : null);
+            CreateMap<ProjectDate, string>().ConvertUsing<ProjectExportDateConverter>();
 
             // Outbound
             Project__ProjectExportModel();
@@ -121,5 +125,21 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             return result;
         }
     }
+
+    public class ProjectExportDateConverter : ITypeConverter<ProjectDate, string>
+    {
+        public string Convert(ProjectDate source, string destination, ResolutionContext context)
+        {
+            string result = string.Empty;
+            if (source.Date.HasValue)
+            {
+                if (source.Flags.HasFlag(ProjectDateFlags.Day)) result = source.Date.Value.ToString(ProjectExportModelProfile.FullDateExportFormat);
+                else if (source.Flags.HasFlag(ProjectDateFlags.Month)) result = source.Date.Value.ToString(ProjectExportModelProfile.MonthDateExportFormat);
+                else if (source.Flags.HasFlag(ProjectDateFlags.Year)) result = source.Date.Value.ToString(ProjectExportModelProfile.YearDateExportFormat);
+            }
+            return result;
+        }
+    }
+
 
 }
