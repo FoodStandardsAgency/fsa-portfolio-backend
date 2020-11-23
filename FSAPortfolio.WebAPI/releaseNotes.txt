@@ -4,3 +4,4 @@
 - Use display name from active directory
 - "Assurance gate completed" uses same date input as other fields.
 - Fixed project date CSV export
+- Export priority group to CSV

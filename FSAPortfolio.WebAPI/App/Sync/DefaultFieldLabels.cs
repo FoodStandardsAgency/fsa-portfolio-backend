@@ -157,6 +157,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_Updates, "Emerging issues, risks", nameof(ProjectModel.emerging_issues), false, false, false, PortfolioFieldType.LargeFreeTextArea, flags: ProjectData),
 
                 Factory(FieldGroupName_Prioritisation, "Priority score", nameof(ProjectModel.priority_main), false, false, false, PortfolioFieldType.PredefinedList, flags: FilterRequired, options: priorityOptions),
+                Factory(FieldGroupName_Prioritisation, "Priority group", ProjectPropertyConstants.pgroup, false, false, false, PortfolioFieldType.Auto),
                 Factory(FieldGroupName_Prioritisation, "Funded", nameof(ProjectModel.funded), false, false, false, PortfolioFieldType.PredefinedList, options: fundedOptions),
                 Factory(FieldGroupName_Prioritisation, "Confidence in delivery", nameof(ProjectModel.confidence), false, false, false, PortfolioFieldType.PredefinedList, options: fundedOptions),
                 Factory(FieldGroupName_Prioritisation, "Priorities impacted", nameof(ProjectModel.priorities), false, false, false, PortfolioFieldType.PredefinedList, options: fundedOptions),

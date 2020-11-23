@@ -29,5 +29,6 @@ namespace FSAPortfolio.WebAPI.App
         public const string g6team = "g6team";
 
         public const string fsaproc_assurance_gatecompleted = "fsaproc_assurance_gatecompleted";
+        public const string pgroup = "pgroup";
     }
 }
