@@ -80,10 +80,10 @@ namespace FSAPortfolio.Entities.Projects
         public static int MaxPriority = int.Parse(ConfigurationManager.AppSettings["PriorityGroup.High.Max"] ?? "20");
         public static int HighGroupCutoff = int.Parse(ConfigurationManager.AppSettings["PriorityGroup.High.Cutoff"] ?? "15");
         public static int MediumGroupCutoff = int.Parse(ConfigurationManager.AppSettings["PriorityGroup.High.Cutoff"] ?? "8");
-        public static string HighName = ConfigurationManager.AppSettings["PriorityGroup.High.Name"] ?? "High priority";
-        public static string MediumName = ConfigurationManager.AppSettings["PriorityGroup.Medium.Name"] ?? "Medium priority";
-        public static string LowName = ConfigurationManager.AppSettings["PriorityGroup.Low.Name"] ?? "Low Priority";
-        public static string NotSetName = ConfigurationManager.AppSettings["PriorityGroup.NotSet.Name"] ?? "No priority set";
+        public static string HighName = ConfigurationManager.AppSettings["PriorityGroup.High.Name"] ?? "High";
+        public static string MediumName = ConfigurationManager.AppSettings["PriorityGroup.Medium.Name"] ?? "Medium";
+        public static string LowName = ConfigurationManager.AppSettings["PriorityGroup.Low.Name"] ?? "Low";
+        public static string NotSetName = ConfigurationManager.AppSettings["PriorityGroup.NotSet.Name"] ?? "Not set";
 
         public static string LowViewKey = ConfigurationManager.AppSettings["PriorityGroup.Low.ViewKey"] ?? "low";
         public static string MediumViewKey = ConfigurationManager.AppSettings["PriorityGroup.Medium.ViewKey"] ?? "medium";
