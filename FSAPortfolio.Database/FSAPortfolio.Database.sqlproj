@@ -104,5 +104,6 @@
     <None Include="Deployment\02_LinkSize.sql" />
     <None Include="Deployment\03_LeadRole.sql" />
     <None Include="Deployment\04_AccessGroupViewKey.sql" />
+    <None Include="Deployment\05_DisplayName.sql" />
   </ItemGroup>
 </Project>

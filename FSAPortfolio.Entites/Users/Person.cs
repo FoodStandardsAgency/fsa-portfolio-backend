@@ -30,6 +30,10 @@ namespace FSAPortfolio.Entities.Users
         [StringLength(150)]
         public string ActiveDirectoryId { get; set; }
 
+        [StringLength(500)]
+        public string ActiveDirectoryDisplayName { get; set; }
+
+
         [StringLength(150)]
         public string Department { get; set; }
 
@@ -42,7 +46,11 @@ namespace FSAPortfolio.Entities.Users
             get
             {
                 string result = null;
-                if (!string.IsNullOrWhiteSpace(Firstname) && !string.IsNullOrWhiteSpace(Surname))
+                if(!string.IsNullOrWhiteSpace(ActiveDirectoryDisplayName))
+                {
+                    result = DisplayName;
+                }
+                else if (!string.IsNullOrWhiteSpace(Firstname) && !string.IsNullOrWhiteSpace(Surname))
                 {
                     result = $"{Firstname} {Surname}";
                 }
