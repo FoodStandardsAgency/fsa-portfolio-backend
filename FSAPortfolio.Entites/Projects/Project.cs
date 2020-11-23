@@ -81,6 +81,7 @@ namespace FSAPortfolio.Entities.Projects
         public ProjectDate ExpectedEndDate { get; set; }
         public ProjectDate HardEndDate { get; set; }
         public ProjectDate ActualEndDate { get; set; }
+        public ProjectDate AssuranceGateCompletedDate { get; set; }
 
         [StringLength(50)]
         public string BusinessCaseNumber { get; set; }

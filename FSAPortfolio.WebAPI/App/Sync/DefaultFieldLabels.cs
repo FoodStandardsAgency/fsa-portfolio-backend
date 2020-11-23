@@ -174,7 +174,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_Budget, $"{FieldGroupName_Budget} option 2", "budget_option2", false, false, false, PortfolioFieldType.OptionList, flags: NotModelled),
 
                 Factory(FieldGroupName_FSAProcesses, "Assurance gate number", nameof(ProjectModel.fsaproc_assurance_gatenumber), false, false, false, PortfolioFieldType.FreeText, flags: ProjectData),
-                Factory(FieldGroupName_FSAProcesses, "Assurance gate completed", nameof(ProjectModel.fsaproc_assurance_gatecompleted), false, false, false, PortfolioFieldType.Date, flags: ProjectData),
+                Factory(FieldGroupName_FSAProcesses, "Assurance gate completed", ProjectPropertyConstants.fsaproc_assurance_gatecompleted, false, false, false, PortfolioFieldType.ProjectDate, flags: ProjectData),
                 Factory(FieldGroupName_FSAProcesses, "Next gate", nameof(ProjectModel.fsaproc_assurance_nextgate), false, false, false, PortfolioFieldType.FreeText, flags: ProjectData),
                 Factory(FieldGroupName_FSAProcesses, $"{FieldGroupName_FSAProcesses} setting 1", "processes_setting1", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
                 Factory(FieldGroupName_FSAProcesses, $"{FieldGroupName_FSAProcesses} setting 2", "processes_setting2", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),

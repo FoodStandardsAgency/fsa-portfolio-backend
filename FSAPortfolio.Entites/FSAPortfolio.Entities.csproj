@@ -78,6 +78,10 @@
     <Compile Include="Migrations\202011231115370_05_DisplayName.designer.cs">
       <DependentUpon>202011231115370_05_DisplayName.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202011231152353_06_AssuranceGateCompleted.cs" />
+    <Compile Include="Migrations\202011231152353_06_AssuranceGateCompleted.designer.cs">
+      <DependentUpon>202011231152353_06_AssuranceGateCompleted.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
@@ -134,6 +138,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202011231115370_05_DisplayName.resx">
       <DependentUpon>202011231115370_05_DisplayName.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011231152353_06_AssuranceGateCompleted.resx">
+      <DependentUpon>202011231152353_06_AssuranceGateCompleted.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

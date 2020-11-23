@@ -117,7 +117,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.budget_field1, o => o.Ignore())
                 .ForMember(p => p.cost_centre, o => o.Ignore())
                 .ForMember(p => p.fsaproc_assurance_gatenumber, o => o.Ignore())
-                .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.Ignore())
                 .ForMember(p => p.fsaproc_assurance_nextgate, o => o.Ignore())
                 ;
 
@@ -140,6 +139,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
                 .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
                 .ForMember(p => p.actual_end_date, o => o.MapFrom(s => s.ActualEndDate))
+                .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.MapFrom(s => s.AssuranceGateCompletedDate))
                 .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
                 .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey == ViewKeyPrefix.ProjectSizeNotSetViewKey ? null : s.Size.Name))
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.Name))
@@ -160,6 +160,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.hardend, o => o.MapFrom(s => s.HardEndDate))
                 .ForMember(p => p.actstart, o => o.MapFrom(s => s.ActualStartDate))
                 .ForMember(p => p.actual_end_date, o => o.MapFrom(s => s.ActualEndDate))
+                .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.MapFrom(s => s.AssuranceGateCompletedDate))
                 .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
                 .AfterMap<ProjectDataOutboundMapper<ProjectEditViewModel>>()
                 .AfterMap<ProjectJsonPropertiesOutboundMapper>()

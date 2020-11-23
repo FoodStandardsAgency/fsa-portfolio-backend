@@ -45,6 +45,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.ExpectedEndDate, o => o.MapFrom(s => s.expend))
                 .ForMember(p => p.HardEndDate, o => o.MapFrom(s => s.hardend))
                 .ForMember(p => p.ActualEndDate, o => o.MapFrom(s => s.actual_end_date))
+                .ForMember(p => p.AssuranceGateCompletedDate, o => o.MapFrom(s => s.fsaproc_assurance_gatecompleted))
                 .ForMember(p => p.Description, o => o.MapFrom(s => s.short_desc))
                 .ForMember(p => p.Priority, o => o.MapFrom<NullableIntResolver, string>(s => s.priority_main))
                 .ForMember(p => p.Directorate, o => o.MapFrom<DirectorateResolver, string>(s => s.direct))

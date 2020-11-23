@@ -27,6 +27,7 @@ namespace FSAPortfolio.WebAPI.Models
         public ProjectDateEditModel actstart { get; set; }
         public ProjectDateEditModel expendp { get; set; }
         public ProjectDateEditModel actual_end_date { get; set; }
+        public ProjectDateEditModel fsaproc_assurance_gatecompleted { get; set; }
 
         [JsonIgnore]
         public IDictionary<string, ProjectPropertyModel> Properties { get; set; }
@@ -70,6 +71,7 @@ namespace FSAPortfolio.WebAPI.Models
         public ProjectDateEditModel actstart { get; set; }
         public ProjectDateEditModel expendp { get; set; }
         public ProjectDateEditModel actual_end_date { get; set; }
+        public ProjectDateEditModel fsaproc_assurance_gatecompleted { get; set; }
 
 
         [JsonIgnore]

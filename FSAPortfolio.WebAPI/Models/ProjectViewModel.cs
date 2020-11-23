@@ -41,6 +41,8 @@ namespace FSAPortfolio.WebAPI.Models
         public ProjectDateViewModel actstart { get; set; }
         public ProjectDateViewModel expendp { get; set; }
         public ProjectDateViewModel actual_end_date { get; set; }
+        public ProjectDateViewModel fsaproc_assurance_gatecompleted { get; set; }
+
 
 
     }

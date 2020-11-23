@@ -2,3 +2,4 @@
 ===========
 - Mapping added for phase viewkey (required in front end for colour styling)
 - Use display name from active directory
+- "Assurance gate completed" uses same date input as other fields.
