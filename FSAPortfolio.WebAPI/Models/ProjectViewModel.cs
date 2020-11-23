@@ -22,6 +22,9 @@ namespace FSAPortfolio.WebAPI.Models
         public string team { get; set; }
 
 
+        [JsonProperty("phaseviewkey")]
+        public string phaseviewkey { get; set; }
+
 
         [JsonProperty("updates")]
         public UpdateHistoryModel[] UpdateHistory { get; set; }
