@@ -83,7 +83,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
                     {
                         ViewKey = phaseGroup.Key.ViewKey,
                         Order = phaseGroup.Key.Order,
-                        Projects = context.Mapper.Map<IEnumerable<ProjectIndexModel>>(phaseGroup.Where(p => p != null).OrderBy(p => p.Priority))
+                        Projects = context.Mapper.Map<IEnumerable<ProjectIndexModel>>(phaseGroup.Where(p => p != null).OrderByDescending(p => p.Priority))
                     };
             return q.OrderBy(p => p.Order);
         }
