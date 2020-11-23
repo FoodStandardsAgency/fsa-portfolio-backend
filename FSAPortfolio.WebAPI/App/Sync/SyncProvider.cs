@@ -92,7 +92,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
-        internal async Task SyncPeople(string viewKey = "odd")
+        internal async Task SyncPeople(string viewKey = "odd", bool forceADSync = false)
         {
             log.Add("Syncing people...");
 
@@ -127,7 +127,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                     // Set the active directory user
                     MicrosoftGraphUserModel adUser = null;
-                    if (destPerson.ActiveDirectoryId == null)
+                    if (destPerson.ActiveDirectoryId == null || forceADSync)
                     {
                         if (destPerson.Email != null)
                         {
@@ -136,6 +136,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                             {
                                 destPerson.ActiveDirectoryPrincipalName = adUser.userPrincipalName;
                                 destPerson.ActiveDirectoryId = adUser.id;
+                                destPerson.ActiveDirectoryDisplayName = adUser.displayName;
                             }
                             else
                             {

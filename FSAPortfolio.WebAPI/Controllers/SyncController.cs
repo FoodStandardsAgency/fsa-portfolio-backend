@@ -50,7 +50,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             List<string> messages = new List<string>();
             var sync = new SyncProvider(messages);
-            await sync.SyncPeople();
+            await sync.SyncPeople(forceADSync: true);
             return messages;
         }
 

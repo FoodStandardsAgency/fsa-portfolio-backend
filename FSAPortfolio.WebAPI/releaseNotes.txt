@@ -1,5 +1,5 @@
-﻿Version 0.1
-===========
+﻿Version 0.1 - Released 23/11/2020 16:20
+=======================================
 - Mapping added for phase viewkey (required in front end for colour styling)
 - Use display name from active directory
 - "Assurance gate completed" uses same date input as other fields.
