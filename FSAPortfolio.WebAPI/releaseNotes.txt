@@ -5,3 +5,4 @@
 - "Assurance gate completed" uses same date input as other fields.
 - Fixed project date CSV export
 - Export priority group to CSV
+- Export lead and service lead

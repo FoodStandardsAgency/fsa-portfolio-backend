@@ -9,9 +9,9 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
 {
-    public class ProjectPersonViewResolver : IMemberValueResolver<Project, ProjectModel, Person, string>
+    public class ProjectPersonViewResolver : IMemberValueResolver<Project, object, Person, string>
     {
-        public string Resolve(Project source, ProjectModel destination, Person sourceMember, string destMember, ResolutionContext context)
+        public string Resolve(Project source, object destination, Person sourceMember, string destMember, ResolutionContext context)
         {
             string result = sourceMember?.DisplayName;
             return result;

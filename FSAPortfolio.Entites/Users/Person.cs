@@ -48,7 +48,7 @@ namespace FSAPortfolio.Entities.Users
                 string result = null;
                 if(!string.IsNullOrWhiteSpace(ActiveDirectoryDisplayName))
                 {
-                    result = DisplayName;
+                    result = ActiveDirectoryDisplayName;
                 }
                 else if (!string.IsNullOrWhiteSpace(Firstname) && !string.IsNullOrWhiteSpace(Surname))
                 {

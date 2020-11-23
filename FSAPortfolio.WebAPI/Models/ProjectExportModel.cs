@@ -41,7 +41,13 @@ namespace FSAPortfolio.WebAPI.Models
         public string pgroup { get; set; }
         public string link { get; set; }
         public string onhold { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.ProjectLead)]
+        public string oddlead { get; set; }
+
         public string oddlead_role { get; set; }
+        public string servicelead { get; set; }
+
         public string budgettype { get; set; }
         public string direct { get; set; }
         public float? p_comp { get; set; }
