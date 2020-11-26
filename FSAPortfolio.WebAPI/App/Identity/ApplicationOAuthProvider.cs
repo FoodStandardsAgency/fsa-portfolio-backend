@@ -92,5 +92,47 @@ namespace FSAPortfolio.WebAPI.App.Identity
             };
             return new AuthenticationProperties(data);
         }
+
+        //public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager, string authenticationType)
+        //{
+        //    // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
+        //    var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
+
+
+
+        //    // Add custom user claims here
+        //    // TODO: add portfolio access claims
+        //    string RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+        //    string UserIdClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier";
+        //    string UserNameClaimType = "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
+        //    string SecurityStampClaimType = "AspNet.Identity.SecurityStamp";
+
+        //    ClaimsIdentity id = new ClaimsIdentity(authenticationType, UserNameClaimType, RoleClaimType);
+        //    //id.AddClaim(new Claim(UserIdClaimType, ConvertIdToString(user.Id), "http://www.w3.org/2001/XMLSchema#string"));
+        //    id.AddClaim(new Claim(UserNameClaimType, user.UserName, "http://www.w3.org/2001/XMLSchema#string"));
+        //    id.AddClaim(new Claim("http://schemas.microsoft.com/accesscontrolservice/2010/07/claims/identityprovider", "ASP.NET Identity", "http://www.w3.org/2001/XMLSchema#string"));
+        //    if (manager.SupportsUserSecurityStamp)
+        //    {
+        //        ClaimsIdentity claimsIdentity = id;
+        //        string securityStampClaimType = SecurityStampClaimType;
+        //        claimsIdentity.AddClaim(new Claim(securityStampClaimType, await manager.GetSecurityStampAsync(user.Id).WithCurrentCulture()));
+        //    }
+        //    if (manager.SupportsUserRole)
+        //    {
+        //        foreach (string item in await manager.GetRolesAsync(user.Id).WithCurrentCulture())
+        //        {
+        //            id.AddClaim(new Claim(RoleClaimType, item, "http://www.w3.org/2001/XMLSchema#string"));
+        //        }
+        //    }
+        //    if (manager.SupportsUserClaim)
+        //    {
+        //        ClaimsIdentity claimsIdentity = id;
+        //        claimsIdentity.AddClaims(await manager.GetClaimsAsync(user.Id).WithCurrentCulture());
+        //    }
+
+
+        //    return userIdentity;
+        //}
+
     }
 }

@@ -15,6 +15,7 @@ using System.Web.Http;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
+    [Authorize]
     public class UsersController : ApiController
     {
 

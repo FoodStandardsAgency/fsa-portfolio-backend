@@ -51,10 +51,21 @@ namespace FSAPortfolio.WebAPI.App.Identity
 
         public async Task<ApplicationUser> FindByNameAsync(string userName)
         {
+            ApplicationUser result = null;
             var user = await context.Users
                 .Include(u => u.AccessGroup)
                 .FirstOrDefaultAsync(u => u.UserName == userName);
-            return new ApplicationUser() { };
+            if (user != null)
+            {
+                result = new ApplicationUser()
+                {
+                    UserName = user.UserName,
+                    Id = user.Id.ToString(),
+                    AccessGroupViewKey = user.AccessGroup.ViewKey,
+                    PasswordHash = user.PasswordHash
+                };
+            }
+            return result;
         }
 
         public Task UpdateAsync(ApplicationUser user)

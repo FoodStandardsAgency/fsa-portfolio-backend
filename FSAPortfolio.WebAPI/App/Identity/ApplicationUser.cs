@@ -8,13 +8,16 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.App.Identity
 {
-    public class ApplicationUser : IUser, IUser<string>
+    public class ApplicationUser : IUser
     {
+        public const string AccessGroupClaimType = "AccessGroup";
+        public const string ActiveDirectoryClaimType = "ActiveDirectory";
         public string Id { get; set; }
 
         public string UserName { get; set; }
-
+        public string ActiveDirectoryUserId { get; set; }
         public string AccessGroupViewKey { get; set; }
+        public string PasswordHash { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
@@ -22,8 +25,11 @@ namespace FSAPortfolio.WebAPI.App.Identity
             var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
 
             // Add custom user claims here
-            // TODO: add portfolio access claims
-
+            if(AccessGroupViewKey != null)
+                userIdentity.AddClaim(new Claim(AccessGroupClaimType, AccessGroupViewKey));
+            
+            if(ActiveDirectoryUserId != null)
+                userIdentity.AddClaim(new Claim(ActiveDirectoryClaimType, ActiveDirectoryUserId));
 
             return userIdentity;
         }

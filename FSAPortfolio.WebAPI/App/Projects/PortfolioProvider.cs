@@ -4,10 +4,14 @@ using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.Mapping;
 using FSAPortfolio.WebAPI.Mapping.Projects;
 using FSAPortfolio.WebAPI.Models;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 

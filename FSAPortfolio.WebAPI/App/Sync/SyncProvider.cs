@@ -410,10 +410,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
             if (randomiseProjectPortfolios)
             {
+#pragma warning disable CS0162 // Unreachable code detected
                 using (var source = new PortfolioContext())
                 {
                     portfolios = source.Portfolios.Select(p => p.ShortName).ToList().GetEnumerator();
                 }
+#pragma warning restore CS0162 // Unreachable code detected
             }
 
 

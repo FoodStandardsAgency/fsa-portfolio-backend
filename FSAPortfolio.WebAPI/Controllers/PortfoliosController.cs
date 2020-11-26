@@ -21,6 +21,7 @@ namespace FSAPortfolio.WebAPI.Controllers
 {
     public class PortfoliosController : ApiController
     {
+        [Authorize]
         [HttpGet]
         public async Task<IEnumerable<PortfolioModel>> Index()
         {
