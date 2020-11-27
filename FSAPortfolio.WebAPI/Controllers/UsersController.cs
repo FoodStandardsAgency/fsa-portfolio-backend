@@ -1,5 +1,6 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.PostgreSQL;
+using FSAPortfolio.WebAPI.App.Microsoft;
 using FSAPortfolio.WebAPI.App.Users;
 using FSAPortfolio.WebAPI.Mapping;
 using FSAPortfolio.WebAPI.Models;
@@ -23,7 +24,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         [AcceptVerbs("GET")]
         public async Task<UserSearchResponseModel> SearchUsers([FromUri] string portfolio, [FromUri] string term, [FromUri(Name = "addnone")] bool includeNone = false)
         {
-            var provider = new MSGraphUserStore();
+            var provider = new MicrosoftGraphUserStore();
             var result = await provider.GetUsersAsync(term);
             var response = PortfolioMapper.ActiveDirectoryMapper.Map<UserSearchResponseModel>(result, opt => opt.Items[nameof(ActiveDirectoryUserSelectModel.NoneOption)] = includeNone);
             return response;

@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IdentityModel.Tokens;
-using System.Linq;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.ActiveDirectory;
-using Owin;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.OAuth;
-using FSAPortfolio.Entities;
+﻿using FSAPortfolio.Entities;
 using FSAPortfolio.WebAPI.App.Identity;
+using Microsoft.Owin;
+using Microsoft.Owin.Security.OAuth;
+using Owin;
+using System;
 
 [assembly: OwinStartup(typeof(FSAPortfolio.WebAPI.Startup))]
 
 namespace FSAPortfolio.WebAPI
 {
-	public class Startup
+    public class Startup
 	{
         public static OAuthAuthorizationServerOptions OAuthOptions { get; private set; }
         public static OAuthBearerAuthenticationOptions OAuthBearerOptions { get; private set; }
@@ -30,7 +21,7 @@ namespace FSAPortfolio.WebAPI
             ConfigureAuth(app);
         }
 
-         public void ConfigureAuth(IAppBuilder app)
+        public void ConfigureAuth(IAppBuilder app)
         {
             // Configure the db context and user manager to use a single instance per request
             app.CreatePerOwinContext(PortfolioContext.Create);

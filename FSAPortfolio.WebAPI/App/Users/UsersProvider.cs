@@ -2,6 +2,7 @@
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
+using FSAPortfolio.WebAPI.App.Microsoft;
 using FSAPortfolio.WebAPI.Mapping;
 using FSAPortfolio.WebAPI.Models;
 using Microsoft.Identity.Client;
@@ -62,7 +63,7 @@ namespace FSAPortfolio.WebAPI.App.Users
 
 
         private Lazy<Dictionary<string, string>> lazyTeamViewKeyMap; // Maps team name to team viewkey
-        private Lazy<MSGraphUserStore> lazyMsGraph;
+        private Lazy<MicrosoftGraphUserStore> lazyMsGraph;
 
         public UsersProvider(PortfolioContext context = null)
         {
@@ -71,7 +72,7 @@ namespace FSAPortfolio.WebAPI.App.Users
                 ConfigurationManager.AppSettings.AllKeys.Where(k => k.StartsWith(TeamKeyPrefix))
                 .ToDictionary(k => ConfigurationManager.AppSettings[k], k => k.Substring(TeamKeyPrefix.Length)));
 
-            lazyMsGraph = new Lazy<MSGraphUserStore>(() => new MSGraphUserStore());
+            lazyMsGraph = new Lazy<MicrosoftGraphUserStore>(() => new MicrosoftGraphUserStore());
         }
 
         internal async Task MapPeopleAsync(ProjectUpdateModel update, Project project)

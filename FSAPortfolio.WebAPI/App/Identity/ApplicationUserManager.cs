@@ -1,4 +1,5 @@
 ﻿using FSAPortfolio.Entities;
+using FSAPortfolio.WebAPI.App.Microsoft;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -16,14 +18,33 @@ namespace FSAPortfolio.WebAPI.App.Identity
         public override bool SupportsUserRole => true;
         public override bool SupportsUserClaim => true;
         public override bool SupportsUserPassword => true;
-
-        public ApplicationUserManager(IUserStore<ApplicationUser> store) : base(store)
+        private const string _accessTokenRegexPattern = "AccessToken (?<accessToken>.*)";
+        private MicrosoftGraphUserStore graph;
+        private string accessToken;
+        public ApplicationUserManager(IUserStore<ApplicationUser> store, string accessToken) : base(store)
         {
+            if (accessToken != null)
+            {
+                this.accessToken = accessToken;
+                graph = new MicrosoftGraphUserStore();
+            }
         }
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new UserStore(context.Get<PortfolioContext>()));
+            string activeDirectoryAccessToken = null;
+
+            // If we have an access token in the header, use active directory to authenticate the user.
+            if (context.Request.Headers.ContainsKey("Authorization"))
+            {
+                var authheader = context.Request.Headers["Authorization"];
+                var match = Regex.Match(authheader, _accessTokenRegexPattern);
+                if (match.Success)
+                {
+                    activeDirectoryAccessToken = match.Groups["accessToken"].Value;
+                }
+            }
+            var manager = new ApplicationUserManager(new UserStore(context.Get<PortfolioContext>()), activeDirectoryAccessToken);
 
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
@@ -33,9 +54,24 @@ namespace FSAPortfolio.WebAPI.App.Identity
             return manager;
         }
 
-        public override Task<ApplicationUser> FindAsync(string userName, string password)
+        public override async Task<ApplicationUser> FindAsync(string userName, string password)
         {
-            return base.FindAsync(userName, password);
+            ApplicationUser user;
+            if (accessToken != null)
+            {
+                var aduser = await graph.GetUserForAccessToken(accessToken);
+                user = new ApplicationUser()
+                {
+                    Id = aduser.id,
+                    ActiveDirectoryUserId = aduser.id,
+                    UserName = aduser.userPrincipalName
+                };
+            }
+            else
+            {
+                user = await base.FindAsync(userName, password);
+            }
+            return user;
         }
 
 

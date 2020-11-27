@@ -5,6 +5,7 @@ using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.PostgreSQL;
 using FSAPortfolio.PostgreSQL.Projects;
+using FSAPortfolio.WebAPI.App.Microsoft;
 using FSAPortfolio.WebAPI.App.Users;
 using FSAPortfolio.WebAPI.Mapping;
 using FSAPortfolio.WebAPI.Mapping.Organisation;
@@ -131,7 +132,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     {
                         if (destPerson.Email != null)
                         {
-                            var graph = new MSGraphUserStore();
+                            var graph = new MicrosoftGraphUserStore();
                             adUser = await graph.GetUserForPrincipalNameAsync(destPerson.Email);
                             if (adUser != null)
                             {
