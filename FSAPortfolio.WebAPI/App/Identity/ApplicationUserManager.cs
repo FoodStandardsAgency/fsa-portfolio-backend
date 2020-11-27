@@ -1,4 +1,5 @@
 ﻿using FSAPortfolio.Entities;
+using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.App.Microsoft;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
@@ -75,11 +76,23 @@ namespace FSAPortfolio.WebAPI.App.Identity
         }
 
 
-        // E.g. ODD.Admin, ODD.Editor
+        /// <summary>
+        /// E.g. ODD.Admin, ODD.Editor 
+        /// </summary>
+        /// <param name="userId">Either the active directory id or the local user id. Check the access token to distinguish which id it is.</param>
+        /// <returns></returns>
         public override async Task<IList<string>> GetRolesAsync(string userId)
         {
-            // TODO: stub
-            return new List<string>() { "ODD.Admin" };
+            List<Role> roles;
+            if (accessToken != null)
+            {
+                roles = (await graph.GetUserRolesAsync(userId)).ToList();
+            }
+            else
+            {
+                roles = (await Store.FindByIdAsync(userId)).Roles;
+            }
+            return roles.Select(r => r.ViewKey).ToList();
         }
 
         // E.g. AD user, Supplier

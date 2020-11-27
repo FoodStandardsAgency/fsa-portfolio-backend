@@ -8,6 +8,8 @@ using System.Data.Entity;
 
 using System.Threading.Tasks;
 using System.Web;
+using FSAPortfolio.Entities.Users;
+using System.Linq.Expressions;
 
 namespace FSAPortfolio.WebAPI.App.Identity
 {
@@ -15,14 +17,6 @@ namespace FSAPortfolio.WebAPI.App.Identity
     public class UserStore : IUserStore<ApplicationUser>, IUserStore<ApplicationUser, string>
     {
         private PortfolioContext context;
-        private string TenantId = ConfigurationManager.AppSettings["Azure.TenantId"];
-        private string ClientId = ConfigurationManager.AppSettings["Azure.ClientId"];
-        private string ClientSecret = ConfigurationManager.AppSettings["Azure.ClientSecret"];
-        private const string AuthorityFormat = "https://login.microsoftonline.com/{0}/v2.0";
-        private const string userSelect = "$select=id,displayName,givenName,surname,mail,userPrincipalName,department";
-
-        private const string TeamKeyPrefix = "AzureAD.Team.Name.";
-
         public UserStore(PortfolioContext context)
         {
             this.context = context;
@@ -44,17 +38,23 @@ namespace FSAPortfolio.WebAPI.App.Identity
             //throw new NotImplementedException();
         }
 
-        public Task<ApplicationUser> FindByIdAsync(string userId)
+        public async Task<ApplicationUser> FindByIdAsync(string userId)
         {
-            throw new NotImplementedException();
+            int id = int.Parse(userId);
+            return await FindUser(u => u.Id == id);
         }
 
         public async Task<ApplicationUser> FindByNameAsync(string userName)
         {
+            return await FindUser(u => u.UserName == userName);
+        }
+
+        private async Task<ApplicationUser> FindUser(Expression<Func<User, bool>> predicate)
+        {
             ApplicationUser result = null;
             var user = await context.Users
                 .Include(u => u.AccessGroup)
-                .FirstOrDefaultAsync(u => u.UserName == userName);
+                .FirstOrDefaultAsync(predicate);
             if (user != null)
             {
                 result = new ApplicationUser()
@@ -64,6 +64,12 @@ namespace FSAPortfolio.WebAPI.App.Identity
                     AccessGroupViewKey = user.AccessGroup.ViewKey,
                     PasswordHash = user.PasswordHash
                 };
+                if (user.RoleList != null)
+                {
+                    result.Roles = user.RoleList.Split(';')
+                        .Select(r => new Role() { ViewKey = r.Trim() })
+                        .ToList();
+                }
             }
             return result;
         }

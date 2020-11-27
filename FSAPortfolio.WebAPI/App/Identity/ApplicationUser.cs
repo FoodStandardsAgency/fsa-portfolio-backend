@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using FSAPortfolio.Entities.Users;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace FSAPortfolio.WebAPI.App.Identity
         public string ActiveDirectoryUserId { get; set; }
         public string AccessGroupViewKey { get; set; }
         public string PasswordHash { get; set; }
+
+        public List<Role> Roles { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {

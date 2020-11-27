@@ -205,6 +205,7 @@
     <Compile Include="App\Identity\ApplicationOAuthProvider.cs" />
     <Compile Include="App\Identity\ApplicationUser.cs" />
     <Compile Include="App\Identity\UserStore.cs" />
+    <Compile Include="App\Microsoft\GroupMembershipToRoleMap.cs" />
     <Compile Include="App\PortfolioExtensions.cs" />
     <Compile Include="App\ConfigurationExtensions.cs" />
     <Compile Include="App\ProjectQueryExtensions.cs" />

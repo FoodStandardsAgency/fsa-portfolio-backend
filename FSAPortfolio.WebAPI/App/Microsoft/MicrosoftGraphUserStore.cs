@@ -1,8 +1,11 @@
-﻿using FSAPortfolio.WebAPI.Models;
+﻿using FSAPortfolio.Entities.Users;
+using FSAPortfolio.WebAPI.Models;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -66,6 +69,45 @@ namespace FSAPortfolio.WebAPI.App.Microsoft
             MicrosoftGraphUserListResponse users = JsonConvert.DeserializeObject<MicrosoftGraphUserListResponse>(json);
             return users;
         }
+
+        internal async Task<IEnumerable<Role>> GetUserRolesAsync(string userId)
+        {
+            // First get group memberships
+            var groups = await GetGroupMemberships(userId);
+            var groupIds = groups.value.Select(g => g.Id);
+            var roles = groupIds.Where(gid => GroupMembershipToRoleMap.GroupMap.ContainsKey(gid)).SelectMany(gid => GroupMembershipToRoleMap.GroupMap[gid]);
+            return roles;
+        }
+
+        private async Task<MicrosoftGraphGroupMemberListResponse> GetGroupMemberships(string userId)
+        {
+            MicrosoftGraphGroupMemberListResponse result = null;
+            var auth = await AuthenticateAsync();
+            var uri = new UriBuilder($"https://graph.microsoft.com/v1.0/users/{userId}/memberOf");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri.ToString());
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", auth.AccessToken);
+            HttpResponseMessage response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                result = JsonConvert.DeserializeObject<MicrosoftGraphGroupMemberListResponse>(json);
+            }
+            else
+            {
+                switch (response.StatusCode)
+                {
+                    case HttpStatusCode.NotFound:
+                        break;
+                    default:
+                        throw new HttpResponseException(response.StatusCode);
+                }
+            }
+
+            return result;
+        }
+
         internal async Task<MicrosoftGraphUserModel> GetUserForAccessToken(string accessToken)
         {
             MicrosoftGraphUserModel user;
