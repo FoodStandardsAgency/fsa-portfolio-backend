@@ -131,7 +131,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     {
                         if (destPerson.Email != null)
                         {
-                            adUser = await usersProvider.GetUserForPrincipalNameAsync(destPerson.Email);
+                            var graph = new MSGraphUserStore();
+                            adUser = await graph.GetUserForPrincipalNameAsync(destPerson.Email);
                             if (adUser != null)
                             {
                                 destPerson.ActiveDirectoryPrincipalName = adUser.userPrincipalName;

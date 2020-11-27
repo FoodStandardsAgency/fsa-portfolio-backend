@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using FSAPortfolio.WebAPI.App.Users;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -14,6 +16,7 @@ namespace FSAPortfolio.WebAPI.App.Identity
     public class ApplicationOAuthProvider : OAuthAuthorizationServerProvider
     {
         private readonly string _publicClientId;
+        private const string _accessTokenRegexPattern = "AccessToken (?<accessToken>.*)";
 
         public ApplicationOAuthProvider(string publicClientId)
         {
@@ -27,9 +30,28 @@ namespace FSAPortfolio.WebAPI.App.Identity
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context)
         {
+            ApplicationUser user = null;
             var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
-
-            ApplicationUser user = await userManager.FindAsync(context.UserName, context.Password);
+            if (context.Request.Headers.ContainsKey("Authorization"))
+            {
+                var authheader = context.Request.Headers["Authorization"];
+                var match = Regex.Match(authheader, _accessTokenRegexPattern);
+                if (match.Success)
+                {
+                    var graph = new MSGraphUserStore();
+                    var aduser = await graph.GetUserForAccessToken(match.Groups["accessToken"].Value);
+                    user = new ApplicationUser()
+                    {
+                        Id = aduser.id,
+                        ActiveDirectoryUserId = aduser.id,
+                        UserName = aduser.userPrincipalName
+                    };
+                }
+            }
+            else
+            {
+                user = await userManager.FindAsync(context.UserName, context.Password);
+            }
 
             if (user == null)
             {

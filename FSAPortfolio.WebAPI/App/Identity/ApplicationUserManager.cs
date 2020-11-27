@@ -33,6 +33,12 @@ namespace FSAPortfolio.WebAPI.App.Identity
             return manager;
         }
 
+        public override Task<ApplicationUser> FindAsync(string userName, string password)
+        {
+            return base.FindAsync(userName, password);
+        }
+
+
         // E.g. ODD.Admin, ODD.Editor
         public override async Task<IList<string>> GetRolesAsync(string userId)
         {
