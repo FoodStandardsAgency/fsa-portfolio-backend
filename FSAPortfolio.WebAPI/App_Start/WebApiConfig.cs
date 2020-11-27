@@ -23,6 +23,11 @@ namespace FSAPortfolio.WebAPI
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name: "GetIdentity",
+                routeTemplate: "api/Users/identity",
+                defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetIdentity) }
+            );
+            config.Routes.MapHttpRoute(
                 name: "SearchUsers",
                 routeTemplate: "api/Users/search",
                 defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.SearchUsers) }
@@ -48,9 +53,6 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetADUser) }
             );
 
-            #region Portfolio Configuration
-
-            #endregion
 
             #region Portfolio 
             config.Routes.MapHttpRoute(

@@ -19,9 +19,9 @@ using System.Web.Http;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
+    [Authorize]
     public class PortfoliosController : ApiController
     {
-        [Authorize]
         [HttpGet]
         public async Task<IEnumerable<PortfolioModel>> Index()
         {
