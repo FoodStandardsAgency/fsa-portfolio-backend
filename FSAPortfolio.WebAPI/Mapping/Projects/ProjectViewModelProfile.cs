@@ -65,7 +65,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.project_type, o => o.MapFrom(s => s.ProjectType))
                 .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives))
 
-                .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.Team))
+                .ForMember(p => p.g6team, o => {
+                    o.PreCondition(s => s.Lead != null && s.Lead.Team != null);
+                    o.MapFrom(s => s.Lead.Team.Name); 
+                })
                 .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
                 .ForMember(p => p.first_completed, o => o.MapFrom<FirstCompletedResolver>())
                 .ForMember(p => p.pgroup, o => o.MapFrom(s => s.PriorityGroup.Name))
@@ -169,6 +172,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             CreateMap<Person, ProjectPersonModel>()
                 .ForMember(p => p.DisplayName, o => o.MapFrom(s => s.DisplayName))
                 .ForMember(p => p.Value, o => o.MapFrom(s => s.ViewKey))
+                .ForMember(p => p.Email, o => o.MapFrom(s => s.Email))
                 ;
 
             CreateMap<Document, LinkModel>()

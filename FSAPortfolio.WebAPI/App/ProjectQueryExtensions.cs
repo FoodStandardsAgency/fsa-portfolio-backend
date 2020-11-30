@@ -73,7 +73,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.RelatedProjects.Select(rp => rp.Reservation))
                 .Include(p => p.DependantProjects.Select(rp => rp.Reservation))
                 .Include(p => p.Documents)
-                .Include(p => p.Lead)
+                .Include(p => p.Lead.Team)
                 .Include(p => p.ServiceLead)
                 .Include(p => p.KeyContact1)
                 .Include(p => p.KeyContact2)

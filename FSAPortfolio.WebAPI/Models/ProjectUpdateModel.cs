@@ -91,6 +91,9 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonProperty("value")]
         public string Value { get; set; }
+
+        [JsonProperty("email")]
+        public string Email { get; set; }
     }
 
     public class ProjectDateEditModel
