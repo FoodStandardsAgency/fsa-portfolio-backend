@@ -29,6 +29,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(r => r.Project.RelatedProjects)
                 .Include(r => r.Project.DependantProjects)
                 .Include(r => r.Project.Documents)
+                .Include(r => r.Project.Milestones)
                 .Include(r => r.Project.Lead)
                 .Include(r => r.Project.KeyContact1)
                 .Include(r => r.Project.KeyContact2)
@@ -73,6 +74,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.RelatedProjects.Select(rp => rp.Reservation))
                 .Include(p => p.DependantProjects.Select(rp => rp.Reservation))
                 .Include(p => p.Documents)
+                .Include(p => p.Milestones)
                 .Include(p => p.Lead.Team)
                 .Include(p => p.ServiceLead)
                 .Include(p => p.KeyContact1)
@@ -114,6 +116,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.RelatedProjects)
                 .Include(p => p.DependantProjects)
                 .Include(p => p.Documents)
+                .Include(p => p.Milestones)
                 .Include(p => p.People)
                 .Include(p => p.Updates)
                 ;
@@ -125,9 +128,14 @@ namespace FSAPortfolio.WebAPI.App
             project.Subcategories.Clear();
             project.RelatedProjects.Clear();
             project.DependantProjects.Clear();
+
             context.Documents.RemoveRange(project.Documents);
             project.Documents.Clear();
+            context.Milestones.RemoveRange(project.Milestones);
+            project.Milestones.Clear();
+
             project.People.Clear();
+
             context.ProjectUpdates.RemoveRange(project.Updates);
             project.Updates.Clear();
         }

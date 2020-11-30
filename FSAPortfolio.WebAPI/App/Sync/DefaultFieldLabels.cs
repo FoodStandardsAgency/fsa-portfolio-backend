@@ -54,6 +54,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 case PortfolioFieldType.ProjectUpdateText:
                 case PortfolioFieldType.ADUserSearch:
                 case PortfolioFieldType.ADUserMultiSearch:
+                case PortfolioFieldType.Milestones:
                     inputTypeLocked = true;
                     break;
                 case PortfolioFieldType.OptionList:
@@ -139,7 +140,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_ProjectPlan, "Actual end date", ProjectPropertyConstants.ActualEndDate, false, false, false, PortfolioFieldType.ProjectDate),
                 Factory(FieldGroupName_ProjectPlan, "Hard deadline", ProjectPropertyConstants.HardDeadline, false, false, false, PortfolioFieldType.ProjectDate),
                 Factory(FieldGroupName_ProjectPlan, "Percentage completed", nameof(ProjectModel.p_comp), false, false, false, PortfolioFieldType.Percentage),
-                Factory(FieldGroupName_ProjectPlan, "Milestones", nameof(ProjectModel.milestones), false, false, false, PortfolioFieldType.PredefinedField),
+                Factory(FieldGroupName_ProjectPlan, "Milestones", ProjectPropertyConstants.milestones, false, false, false, PortfolioFieldType.Milestones),
                 Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} setting 1", "project_plan_setting1", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
                 Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} setting 2", "project_plan_setting2", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
                 Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} option 1", "project_plan_option1", false, false, false, PortfolioFieldType.OptionList, flags: NotModelled),

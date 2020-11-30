@@ -87,8 +87,6 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(PropertyName = ProjectPropertyConstants.Supplier)]
         public string supplier { get; set; }
 
-        public string milestones { get; set; }
-
         public string how_get_green { get; set; }
         public string forward_look { get; set; }
         public string emerging_issues { get; set; }

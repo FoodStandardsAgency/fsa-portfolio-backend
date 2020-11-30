@@ -29,6 +29,8 @@ namespace FSAPortfolio.WebAPI.Models
         public ProjectDateEditModel actual_end_date { get; set; }
         public ProjectDateEditModel fsaproc_assurance_gatecompleted { get; set; }
 
+        public MilestoneEditModel[] milestones { get; set; }
+
         [JsonIgnore]
         public IDictionary<string, ProjectPropertyModel> Properties { get; set; }
 
@@ -73,6 +75,8 @@ namespace FSAPortfolio.WebAPI.Models
         public ProjectDateEditModel actual_end_date { get; set; }
         public ProjectDateEditModel fsaproc_assurance_gatecompleted { get; set; }
 
+        public MilestoneEditModel[] milestones { get; set; }
+
 
         [JsonIgnore]
         public IEnumerable<ProjectPropertyModel> Properties { get; set; }
@@ -95,6 +99,22 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("email")]
         public string Email { get; set; }
     }
+
+    public class MilestoneEditModel
+    {
+        [JsonProperty("id")]
+        public int Id { get; set; }
+
+        [JsonProperty("order")]
+        public int Order { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("deadline")]
+        public ProjectDateEditModel Deadline { get; set; }
+    }
+
 
     public class ProjectDateEditModel
     {

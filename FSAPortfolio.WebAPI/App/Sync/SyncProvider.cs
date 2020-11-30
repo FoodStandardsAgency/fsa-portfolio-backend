@@ -484,6 +484,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         .Include(p => p.RelatedProjects)
                         .Include(p => p.DependantProjects)
                         .Include(p => p.Documents)
+                        .Include(p => p.Milestones)
                         .Include(p => p.People)
                         .SingleOrDefault(p => p.Reservation.ProjectId == latestSourceUpdate.project_id);
 
@@ -503,7 +504,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                             },
                             Updates = new List<ProjectUpdateItem>(),
                             Portfolios = new List<Portfolio>(),
-                            Documents = new List<Document>()
+                            Documents = new List<Document>(),
+                            Milestones = new List<Milestone>()
                         };
                         dest.Projects.Add(destProject);
                     }

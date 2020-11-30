@@ -71,6 +71,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Theme, o => o.Ignore())
                 .ForMember(p => p.ProjectType, o => o.Ignore())
                 .ForMember(p => p.StrategicObjectives, o => o.Ignore())
+                .ForMember(p => p.Milestones, o => o.Ignore())
                 .ForMember(p => p.Programme, o => o.Ignore())
                 .ForMember(p => p.Supplier, o => o.Ignore())
 

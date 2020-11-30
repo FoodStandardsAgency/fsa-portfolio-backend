@@ -85,9 +85,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.supplier, o => o.MapFrom(s => s.Supplier))
                 .ForMember(p => p.oddlead_role, o => o.MapFrom(s => s.LeadRole))
 
-                // TODO: add persistence and mappings for outstanding fields
-                // Outstanding
-                .ForMember(p => p.milestones, o => o.Ignore())
 
                 // Latest update and update history
                 .ForMember(p => p.id, o => o.MapFrom(s => s.LatestUpdate.SyncId))
@@ -128,6 +125,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.UpdateHistory, o => o.MapFrom<UpdateHistoryResolver>())
                 .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => new RelatedProjectModel() { ProjectId = rp.Reservation.ProjectId, Name = rp.Name })))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects.Select(rp => new RelatedProjectModel() { ProjectId = rp.Reservation.ProjectId, Name = rp.Name })))
+                .ForMember(p => p.milestones, o => o.MapFrom(s => s.Milestones.OrderBy(d => d.Order)))
                 .ForMember(p => p.category, o => o.MapFrom(s => s.Category.Name))
                 .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.Name))
                 .ForMember(p => p.phaseviewkey, o => o.MapFrom(s => s.LatestUpdate.Phase.ViewKey))
@@ -154,6 +152,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.LastUpdate, o => o.MapFrom<LastUpdateResolver>())
                 .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => rp.Reservation.ProjectId)))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects.Select(rp => rp.Reservation.ProjectId)))
+                .ForMember(p => p.milestones, o => o.MapFrom(s => s.Milestones.OrderBy(d => d.Order)))
                 .ForMember(d => d.Properties, o => o.Ignore())
                 .ForMember(p => p.oddlead, o => o.MapFrom(s => s.Lead))
                 .ForMember(p => p.servicelead, o => o.MapFrom(s => s.ServiceLead))
@@ -178,6 +177,19 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             CreateMap<Document, LinkModel>()
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Link, o => o.MapFrom(s => s.Link))
+                ;
+
+            CreateMap<Milestone, MilestoneViewModel>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
+                .ForMember(d => d.Deadline, o => o.MapFrom(s => s.Deadline))
+                ;
+
+            CreateMap<Milestone, MilestoneEditModel>()
+                .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
+                .ForMember(d => d.Deadline, o => o.MapFrom(s => s.Deadline))
                 ;
         }
 

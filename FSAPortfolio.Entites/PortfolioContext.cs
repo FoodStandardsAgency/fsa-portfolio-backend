@@ -44,6 +44,7 @@ namespace FSAPortfolio.Entities
         public virtual DbSet<ProjectSize> ProjectSizes { get; set; }
         public virtual DbSet<BudgetType> BudgetTypes { get; set; }
         public virtual DbSet<Document> Documents { get; set; }
+        public virtual DbSet<Milestone> Milestones { get; set; }
 
         public virtual DbSet<ProjectRAGStatus> ProjectRAGStatuses { get; set; }
         public virtual DbSet<ProjectOnHoldStatus> ProjectOnHoldStatuses { get; set; }
@@ -144,6 +145,7 @@ namespace FSAPortfolio.Entities
                 mc.MapRightKey("Document_Id");
                 mc.ToTable("ProjectDocuments");
             });
+            modelBuilder.Entity<Project>().HasMany(p => p.Milestones).WithRequired(m => m.Project).HasForeignKey(m => m.Project_ProjectReservation_Id);
             modelBuilder.Entity<Project>().HasMany(p => p.AuditLogs).WithRequired(l => l.Project).HasForeignKey(u => u.Project_Id);
             modelBuilder.Entity<Project>().HasMany(p => p.ProjectData).WithRequired(l => l.Project).HasForeignKey(u => u.Project_Id);
             modelBuilder.Entity<Project>().HasMany(p => p.People).WithMany().Map(mc =>
@@ -168,6 +170,8 @@ namespace FSAPortfolio.Entities
             modelBuilder.ComplexType<ProjectLink>();
 
             modelBuilder.Entity<Document>().HasKey(p => p.Id);
+            modelBuilder.Entity<Milestone>().HasKey(p => p.Id);
+
 
             modelBuilder.Entity<ProjectDataItem>().HasKey(p => p.Id);
             modelBuilder.Entity<ProjectDataItem>().HasRequired(p => p.Label).WithMany().HasForeignKey(p => p.Label_Id);

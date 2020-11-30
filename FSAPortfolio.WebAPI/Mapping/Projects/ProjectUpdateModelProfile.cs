@@ -65,6 +65,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => s.budgettype))
                 .ForMember(p => p.ProjectData, o => o.MapFrom<ProjectDataInboundResolver>())
                 .ForMember(p => p.Documents, o => o.MapFrom(s => s.documents))
+                .ForMember(p => p.Milestones, o => o.MapFrom<MilestoneResolver, MilestoneEditModel[]>(s => s.milestones))
                 .ForMember(p => p.Supplier, o => o.MapFrom(s => s.supplier))
                 .ForMember(p => p.LeadRole, o => o.MapFrom(s => s.oddlead_role))
 
@@ -107,6 +108,14 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Id, o => o.Ignore())
                 .ForMember(p => p.Order, o => o.Ignore())
                 ;
+
+            CreateMap<MilestoneEditModel, Milestone>()
+                .ForMember(d => d.Id, o => o.Ignore())
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
+                .ForMember(d => d.Deadline, o => o.MapFrom(s => s.Deadline))
+                ;
+
 
         }
 
@@ -228,4 +237,28 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         }
     }
 
+    public class MilestoneResolver : IMemberValueResolver<ProjectUpdateModel, Project, MilestoneEditModel[], ICollection<Milestone>>
+    {
+        public ICollection<Milestone> Resolve(ProjectUpdateModel source, Project destination, MilestoneEditModel[] sourceMember, ICollection<Milestone> destMember, ResolutionContext context)
+        {
+            ICollection<Milestone> result = new List<Milestone>();
+            if(sourceMember != null && sourceMember.Length > 0)
+            {
+                var portfolioContext = context.Items[nameof(PortfolioContext)] as PortfolioContext;
+                foreach(var entity in destMember.ToList())
+                {
+                    if (!sourceMember.Any(s => s.Id == entity.Id))
+                        portfolioContext.Milestones.Remove(entity);
+                }
+
+                foreach (var milestone in sourceMember)
+                {
+                    Milestone entity = (milestone.Id > 0 ? destMember.FirstOrDefault(m => m.Id == milestone.Id) : null) ?? new Milestone();
+                    context.Mapper.Map(milestone, entity);
+                    result.Add(entity);
+                }
+            }
+            return result;
+        }
+    }
 }

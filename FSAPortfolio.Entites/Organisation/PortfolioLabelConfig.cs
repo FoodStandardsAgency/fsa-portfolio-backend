@@ -37,7 +37,8 @@ namespace FSAPortfolio.Entities.Organisation
         LinkedItemList = 54,
         ProjectUpdateText = 55,
         ADUserSearch = 56,
-        ADUserMultiSearch = 57
+        ADUserMultiSearch = 57,
+        Milestones = 58
     }
 
     /// <summary>
@@ -100,6 +101,7 @@ namespace FSAPortfolio.Entities.Organisation
             this[PortfolioFieldType.ProjectUpdateText] = "Project update text";
             this[PortfolioFieldType.ADUserSearch] = "Select single user from Active Directory";
             this[PortfolioFieldType.ADUserMultiSearch] = "Select multiple users from Active Directory";
+            this[PortfolioFieldType.Milestones] = "Enter key milestones";
         }
     }
 

@@ -43,7 +43,7 @@ namespace FSAPortfolio.WebAPI.Models
         public ProjectDateViewModel actual_end_date { get; set; }
         public ProjectDateViewModel fsaproc_assurance_gatecompleted { get; set; }
 
-
+        public MilestoneViewModel[] milestones { get; set; }
 
     }
 
@@ -56,6 +56,17 @@ namespace FSAPortfolio.WebAPI.Models
         public string Name { get; set; }
     }
 
+    public class MilestoneViewModel
+    {
+        [JsonProperty("order")]
+        public int Order { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("deadline")]
+        public ProjectDateViewModel Deadline { get; set; }
+    }
     public class ProjectDateViewModel
     {
         [JsonProperty("date")]

@@ -355,6 +355,21 @@
                 .Index(t => new { t.Configuration_Id, t.Name }, unique: true);
             
             CreateTable(
+                "dbo.Milestones",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Project_ProjectReservation_Id = c.Int(nullable: false),
+                        Name = c.String(maxLength: 250),
+                        Deadline_Date = c.DateTime(),
+                        Deadline_Flags = c.Int(nullable: false),
+                        Order = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Projects", t => t.Project_ProjectReservation_Id)
+                .Index(t => t.Project_ProjectReservation_Id);
+            
+            CreateTable(
                 "dbo.ProjectDataItems",
                 c => new
                     {
@@ -532,6 +547,7 @@
             DropForeignKey("dbo.ProjectDataItems", "Label_Id", "dbo.PortfolioLabelConfigs");
             DropForeignKey("dbo.ProjectTeamMembers", "Person_Id", "dbo.People");
             DropForeignKey("dbo.ProjectTeamMembers", "Project_Id", "dbo.Projects");
+            DropForeignKey("dbo.Milestones", "Project_ProjectReservation_Id", "dbo.Projects");
             DropForeignKey("dbo.Projects", "Lead_Id", "dbo.People");
             DropForeignKey("dbo.Projects", "LatestUpdate_Id", "dbo.ProjectUpdateItems");
             DropForeignKey("dbo.Projects", "KeyContact3_Id", "dbo.People");
@@ -584,6 +600,7 @@
             DropIndex("dbo.ProjectReservations", new[] { "Portfolio_Id", "Year", "Month", "Index" });
             DropIndex("dbo.ProjectDataItems", new[] { "Label_Id" });
             DropIndex("dbo.ProjectDataItems", new[] { "Project_Id" });
+            DropIndex("dbo.Milestones", new[] { "Project_ProjectReservation_Id" });
             DropIndex("dbo.ProjectRAGStatus", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.ProjectRAGStatus", new[] { "Configuration_Id", "ViewKey" });
             DropIndex("dbo.People", new[] { "Team_Id" });
@@ -640,6 +657,7 @@
             DropTable("dbo.ProjectSizes");
             DropTable("dbo.ProjectReservations");
             DropTable("dbo.ProjectDataItems");
+            DropTable("dbo.Milestones");
             DropTable("dbo.ProjectRAGStatus");
             DropTable("dbo.Teams");
             DropTable("dbo.People");
