@@ -21,7 +21,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             CreateMap<PortfolioConfiguration, ProjectEditOptionsModel>()
                 .ForMember(d => d.PhaseItems, o => o.MapFrom(config => config.Phases.OrderBy(p => p.Order)))
                 .ForMember(d => d.RAGStatusItems, o => o.MapFrom(
-                    new ProjectOptionDropDownResolver<ProjectRAGStatus>(nameof(ProjectModel.rag), addNoneOption: false), 
+                    new ProjectOptionDropDownResolver<ProjectRAGStatus>(nameof(ProjectModel.rag), addNoneOption: false), // NOTE! Don't use addNoneOption here - RAG is synched with a specific "Undecided" status
                     config => config.RAGStatuses.OrderBy(p => p.Order))
                 )
                 .ForMember(d => d.OnHoldStatusItems, o => o.MapFrom(config => config.OnHoldStatuses.OrderBy(p => p.Order)))

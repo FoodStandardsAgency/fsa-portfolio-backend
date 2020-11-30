@@ -109,7 +109,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
     {
         public IEnumerable<PhaseProjectsModel> Resolve(ProjectRAGStatus source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
         {
-            return SummaryLinqQuery.GetQuery(source.Configuration, p => p.LatestUpdate.RAGStatus.Id == source.Id, context);
+            return SummaryLinqQuery.GetQuery(source.Configuration, p => p.LatestUpdate.RAGStatus != null && p.LatestUpdate.RAGStatus.Id == source.Id, context);
         }
     }
 
