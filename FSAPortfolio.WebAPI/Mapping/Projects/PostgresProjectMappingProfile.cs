@@ -48,7 +48,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => SyncMaps.categoryKeyMap[s.category ?? "cap"]))
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => SyncMaps.sizeKeyMap[s.project_size ?? string.Empty]))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => SyncMaps.budgetTypeKeyMap[s.budgettype ?? "none"]))
-                .ForMember(p => p.ChannelLink, o => o.MapFrom(s => new ProjectLink() { Link = s.link }))
+                .ForMember(p => p.ChannelLink, o => o.MapFrom<PostgresLinkResolver, string>(s => s.link))
                 .ForMember(p => p.Documents, o => o.MapFrom<PostgresDocumentResolver, string>(s => s.documents))
                 .ForMember(p => p.LeadRole, o => {
                     o.PreCondition(s => SyncMaps.oddLeadRoleMap.ContainsKey(s.oddlead_role));
@@ -241,6 +241,31 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 }
             }
             return documents;
+        }
+    }
+
+    public class PostgresLinkResolver : IMemberValueResolver<project, Project, string, ProjectLink>
+    {
+        public ProjectLink Resolve(project source, Project destination, string sourceMember, ProjectLink destMember, ResolutionContext context)
+        {
+            ProjectLink link = new ProjectLink();
+            if(sourceMember != null)
+            {
+                var parts = sourceMember.Split(',');
+                switch(parts.Length)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        link.Link = parts[0];
+                        break;
+                    default:
+                        link.Name = parts[0];
+                        link.Link = parts[1];
+                        break;
+                }
+            }
+            return link;
         }
     }
 }
