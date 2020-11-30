@@ -20,7 +20,10 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
             CreateMap<PortfolioConfiguration, ProjectEditOptionsModel>()
                 .ForMember(d => d.PhaseItems, o => o.MapFrom(config => config.Phases.OrderBy(p => p.Order)))
-                .ForMember(d => d.RAGStatusItems, o => o.MapFrom(config => config.RAGStatuses.OrderBy(p => p.Order)))
+                .ForMember(d => d.RAGStatusItems, o => o.MapFrom(
+                    new ProjectOptionDropDownResolver<ProjectRAGStatus>(nameof(ProjectModel.rag), addNoneOption: false), 
+                    config => config.RAGStatuses.OrderBy(p => p.Order))
+                )
                 .ForMember(d => d.OnHoldStatusItems, o => o.MapFrom(config => config.OnHoldStatuses.OrderBy(p => p.Order)))
                 .ForMember(d => d.ProjectSizeItems, o => o.MapFrom(config => config.ProjectSizes.OrderBy(p => p.Order)))
                 .ForMember(d => d.BudgetTypeItems, o => o.MapFrom(config => config.BudgetTypes.OrderBy(p => p.Order)))
@@ -243,5 +246,30 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             return model;
         }
     }
+
+    public class ProjectOptionDropDownResolver<TOption> : IMemberValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, IEnumerable<TOption>, IEnumerable<DropDownItemModel>>
+        where TOption : IProjectOption, new()
+    {
+        private string fieldName;
+        private bool emptyOption = false;
+
+        public ProjectOptionDropDownResolver(string fieldName, bool addNoneOption = false)
+        {
+            this.fieldName = fieldName;
+            this.emptyOption = addNoneOption;
+        }
+
+        public IEnumerable<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, IEnumerable<TOption> sourceMember, IEnumerable<DropDownItemModel> destMember, ResolutionContext context)
+        {
+            List<DropDownItemModel> items = null;
+            if (sourceMember != null)
+            {
+                items = context.Mapper.Map<List<DropDownItemModel>>(sourceMember);
+                if (emptyOption) items.Insert(0, new DropDownItemModel() { Display = "None", Value = null });
+            }
+            return items;
+        }
+    }
+
 
 }
