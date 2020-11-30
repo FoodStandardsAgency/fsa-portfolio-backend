@@ -7,13 +7,13 @@ namespace FSAPortfolio.Entities.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class _02_LinkSize : IMigrationMetadata
+    public sealed partial class Create : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(_02_LinkSize));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Create));
         
         string IMigrationMetadata.Id
         {
-            get { return "202011171821103_02_LinkSize"; }
+            get { return "202011300846054_Create"; }
         }
         
         string IMigrationMetadata.Source

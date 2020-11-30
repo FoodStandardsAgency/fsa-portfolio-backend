@@ -100,11 +100,5 @@
     <Build Include="dbo\Tables\PortfolioTeams.sql" />
     <Build Include="dbo\Tables\Documents.sql" />
     <Build Include="dbo\Tables\Directorates.sql" />
-    <None Include="Deployment\01_Suppliers.sql" />
-    <None Include="Deployment\02_LinkSize.sql" />
-    <None Include="Deployment\03_LeadRole.sql" />
-    <None Include="Deployment\04_AccessGroupViewKey.sql" />
-    <None Include="Deployment\05_DisplayName.sql" />
-    <None Include="Deployment\06_AssuranceGateCompleted.sql" />
   </ItemGroup>
 </Project>

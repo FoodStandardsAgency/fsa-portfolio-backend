@@ -23,6 +23,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "IT", new Tuple<string, int>("FSA IT", 4) }
         };
 
+        public static readonly Dictionary<string, string[]> userRoleMap = new Dictionary<string, string[]>()
+        {
+            { "portfolio", new string[]{ "ODD.Admin" } },
+            { "odd", new string[]{ "ODD.Editor" } }
+        };
+
         public static readonly Dictionary<string, string> accessGroupKeyMap = new Dictionary<string, string>()
         {
             { "1", AccessGroupConstants.FSAViewKey },

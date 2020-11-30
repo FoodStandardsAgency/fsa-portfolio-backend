@@ -79,6 +79,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         log.Add($"Added user {destUser.UserName}");
                     }
                     destUser.AccessGroup = accessGroupLookup[SyncMaps.accessGroupKeyMap[sourceUser.access_group]];
+                    string[] roles;
+                    if (SyncMaps.userRoleMap.TryGetValue(sourceUser.username, out roles))
+                    {
+                        destUser.RoleList = string.Join(",", roles);
+                    }
                 }
 
                 dest.SaveChanges();
@@ -497,7 +502,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                                 ReservedAt = DateTime.Now
                             },
                             Updates = new List<ProjectUpdateItem>(),
-                            Portfolios = new List<Portfolio>()
+                            Portfolios = new List<Portfolio>(),
+                            Documents = new List<Document>()
                         };
                         dest.Projects.Add(destProject);
                     }

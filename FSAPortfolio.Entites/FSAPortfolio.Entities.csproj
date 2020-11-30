@@ -54,37 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Migrations\202011161648483_Create.cs" />
-    <Compile Include="Migrations\202011161648483_Create.designer.cs">
-      <DependentUpon>202011161648483_Create.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202011171213514_01_Suppliers.cs" />
-    <Compile Include="Migrations\202011171213514_01_Suppliers.designer.cs">
-      <DependentUpon>202011171213514_01_Suppliers.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202011171821103_02_LinkSize.cs" />
-    <Compile Include="Migrations\202011171821103_02_LinkSize.designer.cs">
-      <DependentUpon>202011171821103_02_LinkSize.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202011181046426_03_LeadRole.cs" />
-    <Compile Include="Migrations\202011181046426_03_LeadRole.designer.cs">
-      <DependentUpon>202011181046426_03_LeadRole.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202011181132051_04_AccessGroupViewKey.cs" />
-    <Compile Include="Migrations\202011181132051_04_AccessGroupViewKey.designer.cs">
-      <DependentUpon>202011181132051_04_AccessGroupViewKey.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202011231115370_05_DisplayName.cs" />
-    <Compile Include="Migrations\202011231115370_05_DisplayName.designer.cs">
-      <DependentUpon>202011231115370_05_DisplayName.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202011231152353_06_AssuranceGateCompleted.cs" />
-    <Compile Include="Migrations\202011231152353_06_AssuranceGateCompleted.designer.cs">
-      <DependentUpon>202011231152353_06_AssuranceGateCompleted.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202011271401503_07_Roles.cs" />
-    <Compile Include="Migrations\202011271401503_07_Roles.designer.cs">
-      <DependentUpon>202011271401503_07_Roles.cs</DependentUpon>
+    <Compile Include="Migrations\202011300846054_Create.cs" />
+    <Compile Include="Migrations\202011300846054_Create.designer.cs">
+      <DependentUpon>202011300846054_Create.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
@@ -126,29 +98,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202011161648483_Create.resx">
-      <DependentUpon>202011161648483_Create.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202011171213514_01_Suppliers.resx">
-      <DependentUpon>202011171213514_01_Suppliers.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202011171821103_02_LinkSize.resx">
-      <DependentUpon>202011171821103_02_LinkSize.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202011181046426_03_LeadRole.resx">
-      <DependentUpon>202011181046426_03_LeadRole.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202011181132051_04_AccessGroupViewKey.resx">
-      <DependentUpon>202011181132051_04_AccessGroupViewKey.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202011231115370_05_DisplayName.resx">
-      <DependentUpon>202011231115370_05_DisplayName.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202011231152353_06_AssuranceGateCompleted.resx">
-      <DependentUpon>202011231152353_06_AssuranceGateCompleted.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202011271401503_07_Roles.resx">
-      <DependentUpon>202011271401503_07_Roles.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202011300846054_Create.resx">
+      <DependentUpon>202011300846054_Create.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

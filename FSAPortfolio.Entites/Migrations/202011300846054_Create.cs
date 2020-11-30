@@ -12,9 +12,12 @@
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(maxLength: 50),
+                        ViewKey = c.String(maxLength: 50),
+                        Description = c.String(maxLength: 50),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .Index(t => t.ViewKey, unique: true)
+                .Index(t => t.Description, unique: true);
             
             CreateTable(
                 "dbo.BudgetTypes",
@@ -185,6 +188,7 @@
                         ChannelLink_Name = c.String(),
                         ChannelLink_Link = c.String(),
                         Lead_Id = c.Int(),
+                        LeadRole = c.String(),
                         ServiceLead_Id = c.Int(),
                         Supplier = c.String(maxLength: 150),
                         Priority = c.Int(),
@@ -198,6 +202,8 @@
                         HardEndDate_Flags = c.Int(nullable: false),
                         ActualEndDate_Date = c.DateTime(),
                         ActualEndDate_Flags = c.Int(nullable: false),
+                        AssuranceGateCompletedDate_Date = c.DateTime(),
+                        AssuranceGateCompletedDate_Flags = c.Int(nullable: false),
                         BusinessCaseNumber = c.String(maxLength: 50),
                         FSNumber = c.String(maxLength: 50),
                         RiskRating = c.String(maxLength: 50),
@@ -267,7 +273,7 @@
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Name = c.String(maxLength: 150),
-                        Link = c.String(maxLength: 250),
+                        Link = c.String(),
                         Order = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
@@ -314,6 +320,7 @@
                         Team_Id = c.Int(),
                         ActiveDirectoryPrincipalName = c.String(maxLength: 150),
                         ActiveDirectoryId = c.String(maxLength: 150),
+                        ActiveDirectoryDisplayName = c.String(maxLength: 500),
                         Department = c.String(maxLength: 150),
                         Timestamp = c.DateTime(nullable: false),
                     })
@@ -403,9 +410,11 @@
                         UserName = c.String(maxLength: 50),
                         PasswordHash = c.String(maxLength: 300),
                         AccessGroupId = c.Int(nullable: false),
+                        RoleList = c.String(),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.AccessGroups", t => t.AccessGroupId)
+                .Index(t => t.UserName, unique: true)
                 .Index(t => t.AccessGroupId);
             
             CreateTable(
@@ -568,6 +577,7 @@
             DropIndex("dbo.DependantProjects", new[] { "DependantProject_Id" });
             DropIndex("dbo.DependantProjects", new[] { "Project_Id" });
             DropIndex("dbo.Users", new[] { "AccessGroupId" });
+            DropIndex("dbo.Users", new[] { "UserName" });
             DropIndex("dbo.ProjectSizes", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.ProjectSizes", new[] { "Configuration_Id", "ViewKey" });
             DropIndex("dbo.ProjectReservations", new[] { "ProjectId" });
@@ -617,6 +627,8 @@
             DropIndex("dbo.PortfolioConfigurations", new[] { "Portfolio_Id" });
             DropIndex("dbo.BudgetTypes", new[] { "Configuration_Id", "Name" });
             DropIndex("dbo.BudgetTypes", new[] { "Configuration_Id", "ViewKey" });
+            DropIndex("dbo.AccessGroups", new[] { "Description" });
+            DropIndex("dbo.AccessGroups", new[] { "ViewKey" });
             DropTable("dbo.PortfolioTeams");
             DropTable("dbo.PortfolioProjects");
             DropTable("dbo.ProjectSubcategories");

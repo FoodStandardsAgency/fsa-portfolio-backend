@@ -32,6 +32,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.ExpectedEndDate, o => o.MapFrom<PostgresProjectDateResolver, string>(s => s.expend))
                 .ForMember(p => p.HardEndDate, o => o.MapFrom<PostgresProjectDateResolver, string>(s => s.hardend))
                 .ForMember(p => p.ActualEndDate, o => o.MapFrom<PostgresProjectDateResolver, string>(s => "00/00/00")) // Isn't one!?
+                .ForMember(p => p.AssuranceGateCompletedDate, o => o.MapFrom<PostgresProjectDateResolver, string>(s => "00/00/00")) // Isn't one!?
                 .ForMember(p => p.Description, o => o.MapFrom(s => s.short_desc))
                 .ForMember(p => p.Priority, o => o.MapFrom<NullableIntResolver, string>(s => s.priority_main))
                 .ForMember(p => p.Directorate, o => o.MapFrom<DirectorateResolver, string>(s => s.direct))
@@ -72,6 +73,12 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.StrategicObjectives, o => o.Ignore())
                 .ForMember(p => p.Programme, o => o.Ignore())
                 .ForMember(p => p.Supplier, o => o.Ignore())
+
+                .ForMember(p => p.BusinessCaseNumber, o => o.Ignore())
+                .ForMember(p => p.FSNumber, o => o.Ignore())
+                .ForMember(p => p.RiskRating, o => o.Ignore())
+                .ForMember(p => p.ProgrammeDescription, o => o.Ignore())
+
                 // Ignore the keys
                 .ForMember(p => p.ProjectReservation_Id, o => o.Ignore())
                 .ForMember(p => p.ProjectCategory_Id, o => o.Ignore())
