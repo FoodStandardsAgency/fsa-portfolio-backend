@@ -14,6 +14,7 @@ using FSAPortfolio.Entities.Organisation;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
+    [Authorize]
     public class PortfolioLabelController : ApiController
     {
 

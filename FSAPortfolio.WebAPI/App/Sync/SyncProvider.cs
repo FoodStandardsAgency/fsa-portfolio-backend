@@ -5,6 +5,7 @@ using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.PostgreSQL;
 using FSAPortfolio.PostgreSQL.Projects;
+using FSAPortfolio.WebAPI.App.Microsoft;
 using FSAPortfolio.WebAPI.App.Users;
 using FSAPortfolio.WebAPI.Mapping;
 using FSAPortfolio.WebAPI.Mapping.Organisation;
@@ -131,7 +132,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     {
                         if (destPerson.Email != null)
                         {
-                            adUser = await usersProvider.GetUserForPrincipalNameAsync(destPerson.Email);
+                            var graph = new MicrosoftGraphUserStore();
+                            adUser = await graph.GetUserForPrincipalNameAsync(destPerson.Email);
                             if (adUser != null)
                             {
                                 destPerson.ActiveDirectoryPrincipalName = adUser.userPrincipalName;
@@ -410,10 +412,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
             if (randomiseProjectPortfolios)
             {
+#pragma warning disable CS0162 // Unreachable code detected
                 using (var source = new PortfolioContext())
                 {
                     portfolios = source.Portfolios.Select(p => p.ShortName).ToList().GetEnumerator();
                 }
+#pragma warning restore CS0162 // Unreachable code detected
             }
 
 

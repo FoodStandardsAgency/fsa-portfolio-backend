@@ -21,5 +21,10 @@ namespace FSAPortfolio.Entities.Users
 
         public int AccessGroupId { get; set; }
         public virtual AccessGroup AccessGroup { get; set; }
+
+        /// <summary>
+        /// Comma separated list of roles (e.g. ODD.Editor, ODD.Admin, SERD.Admin etc).
+        /// </summary>
+        public string RoleList { get; set; }
     }
 }

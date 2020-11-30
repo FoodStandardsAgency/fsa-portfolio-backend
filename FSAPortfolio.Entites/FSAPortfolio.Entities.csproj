@@ -82,6 +82,10 @@
     <Compile Include="Migrations\202011231152353_06_AssuranceGateCompleted.designer.cs">
       <DependentUpon>202011231152353_06_AssuranceGateCompleted.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202011271401503_07_Roles.cs" />
+    <Compile Include="Migrations\202011271401503_07_Roles.designer.cs">
+      <DependentUpon>202011271401503_07_Roles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
@@ -108,6 +112,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Users\AccessGroup.cs" />
     <Compile Include="Users\Person.cs" />
+    <Compile Include="Users\Role.cs" />
     <Compile Include="Users\User.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +146,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202011231152353_06_AssuranceGateCompleted.resx">
       <DependentUpon>202011231152353_06_AssuranceGateCompleted.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202011271401503_07_Roles.resx">
+      <DependentUpon>202011271401503_07_Roles.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

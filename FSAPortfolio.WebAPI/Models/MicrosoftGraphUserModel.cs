@@ -37,4 +37,22 @@ namespace FSAPortfolio.WebAPI.Models
 
         public List<MicrosoftGraphUserModel> value { get; set; }
     }
+
+    public class MicrosoftGraphGroupMember
+    {
+
+        [JsonProperty(PropertyName = "@odata.type")]
+        public string MembershipType { get; set; }
+        
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+    }
+
+    public class MicrosoftGraphGroupMemberListResponse
+    {
+        [JsonProperty(PropertyName = "@odata.context")]
+        public string context { get; set; }
+
+        public List<MicrosoftGraphGroupMember> value { get; set; }
+    }
 }

@@ -1,5 +1,6 @@
 ﻿using FSAPortfolio.WebAPI.Controllers;
 using FSAPortfolio.WebAPI.Models;
+using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +14,19 @@ namespace FSAPortfolio.WebAPI
         {
             // Web API configuration and services
 
+            // Configure Web API to use only bearer token authentication.
+            config.SuppressDefaultHostAuthentication();
+            config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
+
+
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            config.Routes.MapHttpRoute(
+                name: "GetIdentity",
+                routeTemplate: "api/Users/identity",
+                defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetIdentity) }
+            );
             config.Routes.MapHttpRoute(
                 name: "SearchUsers",
                 routeTemplate: "api/Users/search",
@@ -42,9 +53,6 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetADUser) }
             );
 
-            #region Portfolio Configuration
-
-            #endregion
 
             #region Portfolio 
             config.Routes.MapHttpRoute(

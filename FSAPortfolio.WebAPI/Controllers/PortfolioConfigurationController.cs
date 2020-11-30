@@ -16,6 +16,7 @@ using FSAPortfolio.WebAPI.App.Config;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
+    [Authorize]
     public class PortfolioConfigurationController : ApiController
     {
 

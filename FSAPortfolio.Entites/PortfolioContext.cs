@@ -25,6 +25,8 @@ namespace FSAPortfolio.Entities
             Configuration.LazyLoadingEnabled = LazyLoad;
         }
 
+        public static PortfolioContext Create() => new PortfolioContext();
+
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Person> People { get; set; }
         public virtual DbSet<AccessGroup> AccessGroups { get; set; }
