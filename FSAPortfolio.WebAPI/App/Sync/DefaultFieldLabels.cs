@@ -28,7 +28,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
         private PortfolioLabelConfig Factory(string fieldGroup, string fieldTitle, string fieldName,
                                              bool included, bool includedLock, bool adminLock,
-                                             PortfolioFieldType inputType, PortfolioFieldFlags flags = Default, string options = null)
+                                             PortfolioFieldType inputType, PortfolioFieldFlags flags = DefaultCRUD, string options = null)
         {
             bool inputTypeLocked;
             switch(inputType)
@@ -66,7 +66,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     throw new ArgumentException("Not recognised", nameof(inputType));
             }
 
-            if ((flags & Default) == 0) flags = flags | Default;
+            if ((flags & DefaultCRUD) == 0) flags = flags | DefaultCRUD;
 
             var group = config.LabelGroups.FirstOrDefault(g => g.Name == fieldGroup);
             var label = config.Labels.FirstOrDefault(l => l.FieldName == fieldName) ?? new PortfolioLabelConfig();
@@ -158,7 +158,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_Updates, "Emerging issues, risks", nameof(ProjectModel.emerging_issues), false, false, false, PortfolioFieldType.LargeFreeTextArea, flags: ProjectData),
 
                 Factory(FieldGroupName_Prioritisation, "Priority score", nameof(ProjectModel.priority_main), false, false, false, PortfolioFieldType.PredefinedList, flags: FilterRequired, options: priorityOptions),
-                Factory(FieldGroupName_Prioritisation, "Priority group", ProjectPropertyConstants.pgroup, false, false, false, PortfolioFieldType.Auto),
+                Factory(FieldGroupName_Prioritisation, "Priority group", ProjectPropertyConstants.pgroup, false, false, false, PortfolioFieldType.Auto, flags: PortfolioFieldFlags.Read),
                 Factory(FieldGroupName_Prioritisation, "Funded", nameof(ProjectModel.funded), false, false, false, PortfolioFieldType.PredefinedList, options: fundedOptions),
                 Factory(FieldGroupName_Prioritisation, "Confidence in delivery", nameof(ProjectModel.confidence), false, false, false, PortfolioFieldType.PredefinedList, options: fundedOptions),
                 Factory(FieldGroupName_Prioritisation, "Priorities impacted", nameof(ProjectModel.priorities), false, false, false, PortfolioFieldType.PredefinedList, options: fundedOptions),

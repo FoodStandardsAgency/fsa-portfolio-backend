@@ -58,7 +58,7 @@ namespace FSAPortfolio.WebAPI.Models
         public bool FieldTypeLocked { get; set; }
 
         [JsonProperty("flags")]
-        public PortfolioFieldFlags Flags { get; set; } = PortfolioFieldFlags.Default;
+        public PortfolioFieldFlags Flags { get; set; } = PortfolioFieldFlags.DefaultCRUD;
 
     }
 
