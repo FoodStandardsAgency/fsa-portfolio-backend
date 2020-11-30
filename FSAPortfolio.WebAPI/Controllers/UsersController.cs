@@ -1,5 +1,6 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.PostgreSQL;
+using FSAPortfolio.WebAPI.App.Identity;
 using FSAPortfolio.WebAPI.App.Microsoft;
 using FSAPortfolio.WebAPI.App.Users;
 using FSAPortfolio.WebAPI.Mapping;
@@ -119,7 +120,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 result = new IdentityResponseModel()
                 {
                     Roles = identity.Claims.Where(c => c.Type == identity.RoleClaimType).Select(c => c.Value.ToLower()).ToArray(),
-                    AccessGroup = identity.Claims.SingleOrDefault(c => c.Type == "AccessGroup")?.Value?.ToLower()
+                    AccessGroup = identity.Claims.SingleOrDefault(c => c.Type == ApplicationUser.AccessGroupClaimType)?.Value?.ToLower()
                 };
             }
             return result;

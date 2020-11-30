@@ -54,6 +54,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Organisation
                 .ForMember(d => d.FieldTypeLocked, o => o.MapFrom(s => s.FieldTypeLocked))
                 .ForMember(d => d.InputValue, o => o.MapFrom<OutboundLabelInputValueResolver>())
                 .ForMember(d => d.MasterField, o => o.MapFrom(s => s.MasterLabel == null ? null : s.MasterLabel.FieldName))
+                .ForMember(d => d.FSAOnly, o => o.MapFrom(s => s.Flags.HasFlag(PortfolioFieldFlags.FSAOnly)))
                 .ReverseMap()
                 .ForMember(d => d.MasterLabel, o => o.Ignore())
                 .ForMember(d => d.FieldOptions, o => o.MapFrom(s => s.InputValue)) // Just map the raw value here and do the collections in controller/provider

@@ -68,6 +68,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
             if ((flags & DefaultCRUD) == 0) flags = flags | DefaultCRUD;
 
+            if (fieldGroup == FieldGroupName_Budget) flags |= FSAOnly;
+
             var group = config.LabelGroups.FirstOrDefault(g => g.Name == fieldGroup);
             var label = config.Labels.FirstOrDefault(l => l.FieldName == fieldName) ?? new PortfolioLabelConfig();
             label.Configuration_Id = config.Portfolio_Id;

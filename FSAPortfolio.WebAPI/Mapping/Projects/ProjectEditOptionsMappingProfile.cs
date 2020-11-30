@@ -75,6 +75,17 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         {
             CreateMap<PortfolioConfiguration, ProjectLabelConfigModel>()
                 .ForMember(d => d.Labels, o => o.MapFrom<ConfigLabelFlagResolver, ICollection<PortfolioLabelConfig>>(s => s.Labels))
+                .AfterMap((source, dest, context) => {
+                    // TODO: revisit this - can still see the values in the mark up!
+                    // If an FSAOnly mapping has been requested, put the input types for FSAOnly labels to None.
+                    if (context.Items.ContainsKey(nameof(PortfolioFieldFlags.FSAOnly)) && (bool)context.Items[nameof(PortfolioFieldFlags.FSAOnly)])
+                    {
+                        foreach (var label in dest.Labels)
+                        {
+                            if (label.FSAOnly) label.Included = false;
+                        }
+                    }
+                })
                 ;
 
             CreateMap<PortfolioLabelConfig, ProjectLabelModel>()
@@ -89,6 +100,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Label, o => o.MapFrom(s => s.Label == null ? s.FieldTitle : s.Label))
                 .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType.ToString().ToLower()))
                 .ForMember(d => d.InputValue, o => o.Ignore()) // This is set separately as the value can come from anywhere
+                .ForMember(d => d.FSAOnly, o => o.MapFrom(s => s.Flags.HasFlag(PortfolioFieldFlags.FSAOnly)))
                 ;
 
         }

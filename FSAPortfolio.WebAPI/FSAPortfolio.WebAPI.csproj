@@ -200,6 +200,7 @@
     <Compile Include="App\AuditProvider.cs" />
     <Compile Include="App\Config\ConfigurationProvider.cs" />
     <Compile Include="App\Config\PortfolioConfigurationException.cs" />
+    <Compile Include="App\ControllerExtensions.cs" />
     <Compile Include="App\FieldGroupConstants.cs" />
     <Compile Include="App\FilterFieldConstants.cs" />
     <Compile Include="App\Identity\ApplicationOAuthProvider.cs" />

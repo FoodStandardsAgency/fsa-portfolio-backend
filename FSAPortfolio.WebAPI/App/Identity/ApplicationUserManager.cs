@@ -95,7 +95,6 @@ namespace FSAPortfolio.WebAPI.App.Identity
             return roles == null ? new List<string>() : roles.Select(r => r.ViewKey).ToList();
         }
 
-        // E.g. AD user, Supplier
         public override async Task<IList<Claim>> GetClaimsAsync(string userId)
         {
             // TODO: stub

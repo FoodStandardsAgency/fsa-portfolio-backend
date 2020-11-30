@@ -52,6 +52,10 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("inputvalue")]
         public string InputValue { get; set; }
 
+        [JsonProperty("fsaonly")]
+        public bool FSAOnly { get; set; }
+
+
     }
 
 }

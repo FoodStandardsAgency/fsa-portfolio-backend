@@ -175,7 +175,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
-        private static async Task<GetProjectDTO<T>> GetProject<T>(string projectId,
+        private async Task<GetProjectDTO<T>> GetProject<T>(string projectId,
                                                                   bool includeOptions,
                                                                   bool includeHistory,
                                                                   bool includeLastUpdate,
@@ -208,7 +208,11 @@ namespace FSAPortfolio.WebAPI.Controllers
                         opt.Items[nameof(ProjectEditViewModel.LastUpdate)] = includeLastUpdate;
                     })
                 };
-                if (includeConfig) result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration, flags: flags);
+                if (includeConfig)
+                {
+                    var userIsFSA = this.UserHasFSAClaim();
+                    result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration, flags: flags, fsaOnly: !userIsFSA);
+                }
                 if (includeOptions)
                 {
                     var provider = new PortfolioProvider(context, portfolio);

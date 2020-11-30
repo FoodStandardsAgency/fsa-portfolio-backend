@@ -72,12 +72,14 @@ namespace FSAPortfolio.WebAPI.Mapping
             PortfolioConfiguration config,
             PortfolioFieldFlags flags = PortfolioFieldFlags.Read,
             bool includedOnly = false,
-            IEnumerable<PortfolioLabelConfig> customLabels = null)
+            IEnumerable<PortfolioLabelConfig> customLabels = null,
+            bool fsaOnly = false)
         {
             return ProjectMapper.Map<ProjectLabelConfigModel>(config, opts => { 
                 opts.Items[nameof(PortfolioFieldFlags)] = flags;
                 if (includedOnly) opts.Items[nameof(PortfolioLabelConfig.Included)] = includedOnly;
                 if (customLabels != null) opts.Items[nameof(PortfolioLabelConfig)] = customLabels;
+                if (fsaOnly) opts.Items[nameof(PortfolioFieldFlags.FSAOnly)] = fsaOnly;
             });
         }
 

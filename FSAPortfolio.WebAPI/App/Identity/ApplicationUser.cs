@@ -1,4 +1,5 @@
 ﻿using FSAPortfolio.Entities.Users;
+using FSAPortfolio.WebAPI.App.Users;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
@@ -30,9 +31,14 @@ namespace FSAPortfolio.WebAPI.App.Identity
             // Add custom user claims here
             if(AccessGroupViewKey != null)
                 userIdentity.AddClaim(new Claim(AccessGroupClaimType, AccessGroupViewKey));
-            
-            if(ActiveDirectoryUserId != null)
+
+            if (ActiveDirectoryUserId != null)
+            {
                 userIdentity.AddClaim(new Claim(ActiveDirectoryClaimType, ActiveDirectoryUserId));
+
+                // TODO: revisit this - here we assume the user is FSA because came from active directory! Maybe we should be checking them against a AD group?
+                userIdentity.AddClaim(new Claim(AccessGroupClaimType, AccessGroupConstants.FSAViewKey));
+            }
 
             return userIdentity;
         }

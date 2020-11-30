@@ -56,10 +56,11 @@ namespace FSAPortfolio.Entities.Organisation
         FilterProject = 1 << 6,
         FilterRequired = 1 << 7, // Marks the label as being required by the filter view, even if it is not a filter field - means the label is used in the filter for something else (e.g. priority in the results)
         NotModelled = 1 << 8, // Doesn't have a property on the model: exists solely in label config and project data
+        FSAOnly = 1 << 9, // Hide field from suppliers
         DefaultCRUD = Create | Read | Update | Delete,
         UpdateOnly = Read | Update,
         DefaultProjectData = DefaultCRUD | ProjectData,
-        DefaultFilterProject = DefaultCRUD | FilterProject
+        DefaultFilterProject = DefaultCRUD | FilterProject,
     }
 
     public class PortfolioFieldTypeDescriptions : Dictionary<PortfolioFieldType, string>
