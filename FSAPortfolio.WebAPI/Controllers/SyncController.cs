@@ -21,7 +21,7 @@ namespace FSAPortfolio.WebAPI.Controllers
     {
         // GET: api/Sync/SyncAll
         [AcceptVerbs("GET")]
-        public async Task<IEnumerable<string>> SyncAll([FromUri] bool syncPortfolios = false)
+        public async Task<IEnumerable<string>> SyncAll([FromUri] bool syncPortfolios = true)
         {
             List<string> messages = new List<string>();
             var sync = new SyncProvider(messages);

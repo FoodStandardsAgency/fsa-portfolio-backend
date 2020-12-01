@@ -7,6 +7,8 @@
 - Email added to person mapping
 - Make budget fields FSA only; mark as not included to suppliers 
 	IMPORTANT NOTE: the values of these fields will still appear in page markup as hidden fields!
+- Added milestones
+- Preserve label config on sync
 
 
 Version 0.1 - Released 23/11/2020 16:20

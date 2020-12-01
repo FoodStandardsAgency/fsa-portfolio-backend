@@ -228,13 +228,23 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     var defaults = new DefaultFieldLabels(config);
                     var defaultLabels = defaults.GetDefaultLabels();
 
-                    // Removed redundant labels
                     var currentLabels = config.Labels.ToArray();
                     foreach (var label in currentLabels)
                     {
-                        if(!defaultLabels.Any(l => l.FieldName == label.FieldName))
+                        var defaultLabel = defaultLabels.SingleOrDefault(l => l.FieldName == label.FieldName);
+
+                        // Removed redundant labels
+                        if (defaultLabel == null)
                         {
                             config.Labels.Remove(label);
+                        }
+                        else
+                        {
+                            // Preserve these existing values
+                            defaultLabel.AdminOnly = label.AdminOnly;
+                            defaultLabel.Included = label.Included;
+                            defaultLabel.Label = label.Label ?? defaultLabel.Label;
+                            defaultLabel.FieldOptions = label.FieldOptions ?? defaultLabel.FieldOptions;
                         }
                     }
 
