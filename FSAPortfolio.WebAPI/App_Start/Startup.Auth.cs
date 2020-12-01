@@ -33,7 +33,7 @@ namespace FSAPortfolio.WebAPI
             {
                 TokenEndpointPath = new PathString("/api/Token"),
                 Provider = new ApplicationOAuthProvider(PublicClientId),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(14),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
                 // TODO: In production mode set AllowInsecureHttp = false
                 AllowInsecureHttp = true
             };
