@@ -42,7 +42,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Criticality, o => o.MapFrom<PostgresIntResolver, string>(s => s.criticality))
                 .ForMember(p => p.People, o => o.MapFrom<PostgresTeamCollectionResolver, string>(s => s.team))
                 .ForMember(p => p.Lead, o => o.MapFrom<PostgresPersonFromEmailResolver, string>(s => s.oddlead_email))
-                .ForMember(p => p.ServiceLead, o => o.MapFrom<PostgresPersonFromEmailResolver, string>(s => s.servicelead_email))
+                .ForMember(p => p.KeyContact1, o => o.MapFrom<PostgresPersonFromEmailResolver, string>(s => s.servicelead_email))
                 .ForMember(p => p.RelatedProjects, o => o.MapFrom<PostgresProjectCollectionResolver, string>(s => s.rels))
                 .ForMember(p => p.DependantProjects, o => o.MapFrom<PostgresProjectCollectionResolver, string>(s => s.dependencies))
                 .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => SyncMaps.categoryKeyMap[s.category ?? "cap"]))
@@ -58,7 +58,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Subcategories, o => o.Ignore()) // Anna Nikiel 18/11/2020: can ignore this in migration.
 
                 // Ignore these
-                .ForMember(p => p.KeyContact1, o => o.Ignore())
+                .ForMember(p => p.ServiceLead, o => o.Ignore())
                 .ForMember(p => p.KeyContact2, o => o.Ignore())
                 .ForMember(p => p.KeyContact3, o => o.Ignore())
                 .ForMember(p => p.ProjectData, o => o.Ignore())

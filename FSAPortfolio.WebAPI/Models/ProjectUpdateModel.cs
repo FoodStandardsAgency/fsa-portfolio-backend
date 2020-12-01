@@ -18,7 +18,6 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonProperty(ProjectPropertyConstants.ProjectLead)]
         public ProjectPersonModel oddlead { get; set; }
-        public ProjectPersonModel servicelead { get; set; }
         public string[] team { get; set; }
 
         public ProjectDateEditModel start_date { get; set; }
@@ -56,8 +55,6 @@ namespace FSAPortfolio.WebAPI.Models
     {
         [JsonProperty(ProjectPropertyConstants.ProjectLead)]
         public ProjectPersonModel oddlead { get; set; }
-
-        public ProjectPersonModel servicelead { get; set; }
         public ProjectPersonModel[] team { get; set; }
 
         [JsonProperty("lastupdate")]

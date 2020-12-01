@@ -78,7 +78,6 @@ namespace FSAPortfolio.WebAPI.App.Users
         internal async Task MapPeopleAsync(ProjectUpdateModel update, Project project)
         {
             project.Lead = await EnsureForAsync(update.oddlead, project.Lead, project.Reservation.Portfolio);
-            project.ServiceLead = await EnsureForAsync(update.servicelead, project.ServiceLead, project.Reservation.Portfolio);
             project.KeyContact1 = await EnsureForAsync(update.key_contact1, project.KeyContact1);
             project.KeyContact2 = await EnsureForAsync(update.key_contact2, project.KeyContact2);
             project.KeyContact3 = await EnsureForAsync(update.key_contact3, project.KeyContact3);

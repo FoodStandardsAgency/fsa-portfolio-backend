@@ -46,7 +46,6 @@ namespace FSAPortfolio.WebAPI.Models
         public string oddlead { get; set; }
 
         public string oddlead_role { get; set; }
-        public string servicelead { get; set; }
 
         public string budgettype { get; set; }
         public string direct { get; set; }

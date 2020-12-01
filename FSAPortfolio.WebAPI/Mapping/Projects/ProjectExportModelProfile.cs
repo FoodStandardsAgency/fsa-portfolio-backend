@@ -72,7 +72,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.link, o => o.MapFrom(s => s.ChannelLink))
                 .ForMember(p => p.oddlead, o => o.MapFrom<ProjectPersonViewResolver, Person>(s => s.Lead))
                 .ForMember(p => p.oddlead_role, o => o.MapFrom(s => s.LeadRole))
-                .ForMember(p => p.servicelead, o => o.MapFrom<ProjectPersonViewResolver, Person>(s => s.ServiceLead))
 
                 // TODO: add persistence and mappings for outstanding fields
                 // Outstanding
