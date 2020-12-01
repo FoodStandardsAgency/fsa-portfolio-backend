@@ -76,7 +76,6 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Documents)
                 .Include(p => p.Milestones)
                 .Include(p => p.Lead.Team)
-                .Include(p => p.ServiceLead)
                 .Include(p => p.KeyContact1)
                 .Include(p => p.KeyContact2)
                 .Include(p => p.KeyContact3)

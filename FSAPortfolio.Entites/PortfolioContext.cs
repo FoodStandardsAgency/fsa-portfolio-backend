@@ -157,7 +157,6 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<Project>().HasOptional(p => p.LatestUpdate).WithMany().HasForeignKey(p => p.LatestUpdate_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.FirstUpdate).WithMany().HasForeignKey(p => p.FirstUpdate_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.Lead).WithMany().HasForeignKey(p => p.Lead_Id);
-            modelBuilder.Entity<Project>().HasOptional(p => p.ServiceLead).WithMany().HasForeignKey(p => p.ServiceLead_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.Category).WithMany().HasForeignKey(p => p.ProjectCategory_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.Size).WithMany().HasForeignKey(p => p.ProjectSize_Id);
             modelBuilder.Entity<Project>().HasOptional(p => p.BudgetType).WithMany().HasForeignKey(p => p.BudgetType_Id);

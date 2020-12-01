@@ -58,7 +58,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.Subcategories, o => o.Ignore()) // Anna Nikiel 18/11/2020: can ignore this in migration.
 
                 // Ignore these
-                .ForMember(p => p.ServiceLead, o => o.Ignore())
                 .ForMember(p => p.KeyContact2, o => o.Ignore())
                 .ForMember(p => p.KeyContact3, o => o.Ignore())
                 .ForMember(p => p.ProjectData, o => o.Ignore())
@@ -86,7 +85,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.ProjectSize_Id, o => o.Ignore())
                 .ForMember(p => p.BudgetType_Id, o => o.Ignore())
                 .ForMember(p => p.Lead_Id, o => o.Ignore())
-                .ForMember(p => p.ServiceLead_Id, o => o.Ignore())
                 .ForMember(p => p.FirstUpdate_Id, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate_Id, o => o.Ignore())
             ;

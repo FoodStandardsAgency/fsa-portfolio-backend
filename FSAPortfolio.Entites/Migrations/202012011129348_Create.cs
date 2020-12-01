@@ -189,7 +189,6 @@
                         ChannelLink_Link = c.String(),
                         Lead_Id = c.Int(),
                         LeadRole = c.String(),
-                        ServiceLead_Id = c.Int(),
                         Supplier = c.String(maxLength: 150),
                         Priority = c.Int(),
                         StartDate_Date = c.DateTime(),
@@ -226,14 +225,12 @@
                 .ForeignKey("dbo.ProjectUpdateItems", t => t.LatestUpdate_Id)
                 .ForeignKey("dbo.People", t => t.Lead_Id)
                 .ForeignKey("dbo.ProjectReservations", t => t.ProjectReservation_Id)
-                .ForeignKey("dbo.People", t => t.ServiceLead_Id)
                 .ForeignKey("dbo.ProjectSizes", t => t.ProjectSize_Id)
                 .Index(t => t.ProjectReservation_Id)
                 .Index(t => t.ProjectCategory_Id)
                 .Index(t => t.ProjectSize_Id)
                 .Index(t => t.BudgetType_Id)
                 .Index(t => t.Lead_Id)
-                .Index(t => t.ServiceLead_Id)
                 .Index(t => t.LatestUpdate_Id)
                 .Index(t => t.FirstUpdate_Id)
                 .Index(t => t.Directorate_Id)
@@ -538,7 +535,6 @@
             DropForeignKey("dbo.ProjectSubcategories", "Subcategory_Id", "dbo.ProjectCategories");
             DropForeignKey("dbo.ProjectSubcategories", "Project_Id", "dbo.Projects");
             DropForeignKey("dbo.Projects", "ProjectSize_Id", "dbo.ProjectSizes");
-            DropForeignKey("dbo.Projects", "ServiceLead_Id", "dbo.People");
             DropForeignKey("dbo.Projects", "ProjectReservation_Id", "dbo.ProjectReservations");
             DropForeignKey("dbo.ProjectReservations", "Portfolio_Id", "dbo.Portfolios");
             DropForeignKey("dbo.RelatedProjects", "RelatedProject_Id", "dbo.Projects");
@@ -618,7 +614,6 @@
             DropIndex("dbo.Projects", new[] { "Directorate_Id" });
             DropIndex("dbo.Projects", new[] { "FirstUpdate_Id" });
             DropIndex("dbo.Projects", new[] { "LatestUpdate_Id" });
-            DropIndex("dbo.Projects", new[] { "ServiceLead_Id" });
             DropIndex("dbo.Projects", new[] { "Lead_Id" });
             DropIndex("dbo.Projects", new[] { "BudgetType_Id" });
             DropIndex("dbo.Projects", new[] { "ProjectSize_Id" });

@@ -78,7 +78,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 // Have to be mapped manually as requires async request to AD
                 .ForMember(p => p.Lead, o => o.Ignore())
                 .ForMember(p => p.People, o => o.Ignore())
-                .ForMember(p => p.ServiceLead, o => o.Ignore())
                 .ForMember(p => p.KeyContact1, o => o.Ignore())
                 .ForMember(p => p.KeyContact2, o => o.Ignore())
                 .ForMember(p => p.KeyContact3, o => o.Ignore())
@@ -97,7 +96,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.ProjectSize_Id, o => o.Ignore())
                 .ForMember(p => p.BudgetType_Id, o => o.Ignore())
                 .ForMember(p => p.Lead_Id, o => o.Ignore())
-                .ForMember(p => p.ServiceLead_Id, o => o.Ignore())
                 .ForMember(p => p.FirstUpdate_Id, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate_Id, o => o.Ignore())
             ;
@@ -242,15 +240,17 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
         public ICollection<Milestone> Resolve(ProjectUpdateModel source, Project destination, MilestoneEditModel[] sourceMember, ICollection<Milestone> destMember, ResolutionContext context)
         {
             ICollection<Milestone> result = new List<Milestone>();
-            if(sourceMember != null && sourceMember.Length > 0)
+
+            // Remove 
+            foreach (var entity in destMember.ToList())
             {
                 var portfolioContext = context.Items[nameof(PortfolioContext)] as PortfolioContext;
-                foreach(var entity in destMember.ToList())
-                {
-                    if (!sourceMember.Any(s => s.Id == entity.Id))
-                        portfolioContext.Milestones.Remove(entity);
-                }
+                if (sourceMember == null || !sourceMember.Any(s => s.Id == entity.Id))
+                    portfolioContext.Milestones.Remove(entity);
+            }
 
+            if (sourceMember != null && sourceMember.Length > 0)
+            {
                 foreach (var milestone in sourceMember)
                 {
                     Milestone entity = (milestone.Id > 0 ? destMember.FirstOrDefault(m => m.Id == milestone.Id) : null) ?? new Milestone();

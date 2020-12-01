@@ -68,9 +68,6 @@ namespace FSAPortfolio.Entities.Projects
         public virtual Person KeyContact2 { get; set; }
         public virtual Person KeyContact3 { get; set; }
 
-        public virtual Person ServiceLead { get; set; }
-        public int? ServiceLead_Id { get; set; }
-
         public virtual ICollection<Person> People { get; set; }
 
         [StringLength(150)]
