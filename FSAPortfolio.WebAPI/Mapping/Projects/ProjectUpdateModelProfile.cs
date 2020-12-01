@@ -242,11 +242,14 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             ICollection<Milestone> result = new List<Milestone>();
 
             // Remove 
-            foreach (var entity in destMember.ToList())
+            if (destMember != null)
             {
-                var portfolioContext = context.Items[nameof(PortfolioContext)] as PortfolioContext;
-                if (sourceMember == null || !sourceMember.Any(s => s.Id == entity.Id))
-                    portfolioContext.Milestones.Remove(entity);
+                foreach (var entity in destMember.ToList())
+                {
+                    var portfolioContext = context.Items[nameof(PortfolioContext)] as PortfolioContext;
+                    if (sourceMember == null || !sourceMember.Any(s => s.Id == entity.Id))
+                        portfolioContext.Milestones.Remove(entity);
+                }
             }
 
             if (sourceMember != null && sourceMember.Length > 0)

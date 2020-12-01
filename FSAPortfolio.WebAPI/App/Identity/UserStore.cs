@@ -66,7 +66,7 @@ namespace FSAPortfolio.WebAPI.App.Identity
                 };
                 if (user.RoleList != null)
                 {
-                    result.Roles = user.RoleList.Split(';')
+                    result.Roles = user.RoleList.Split(';', ',')
                         .Select(r => new Role() { ViewKey = r.Trim() })
                         .ToList();
                 }

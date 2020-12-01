@@ -22,26 +22,6 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
             var teams = PortfolioMapper.ProjectMapper.Map<List<DropDownItemModel>>(config.Portfolio.Teams.OrderBy(d => d.Order));
             options.G6Team = teams;
-
-
-            options.RelatedProjects = new SelectPickerModel()
-            {
-                Header = "Select the related projects (enter a phase or RAG status to narrow list)...",
-                Items = projects.Select((p, i) => new SelectPickerItemModel()
-                {
-                    Value = p.Reservation.ProjectId,
-                    Display = $"{p.Reservation.ProjectId}: {p.Name}",
-                    SearchTokens = $"{p.Category?.Name},{p.LatestUpdate?.Phase?.Name}",
-                    Order = i
-                }).ToList()
-            };
-
-            options.DependantProjects = new SelectPickerModel()
-            {
-                Header = "Select the dependencies (enter a phase or RAG status to narrow list)...",
-                Items = options.RelatedProjects.Items
-            };
-
         }
     }
 }

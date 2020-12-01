@@ -22,6 +22,7 @@ namespace FSAPortfolio.WebAPI
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            #region Users
             config.Routes.MapHttpRoute(
                 name: "GetIdentity",
                 routeTemplate: "api/Users/identity",
@@ -52,7 +53,7 @@ namespace FSAPortfolio.WebAPI
                 routeTemplate: "api/Users/LegacyADUsers",
                 defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.GetADUser) }
             );
-
+            #endregion
 
             #region Portfolio 
             config.Routes.MapHttpRoute(

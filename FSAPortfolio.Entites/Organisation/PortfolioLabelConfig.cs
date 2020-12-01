@@ -38,7 +38,8 @@ namespace FSAPortfolio.Entities.Organisation
         ProjectUpdateText = 55,
         ADUserSearch = 56,
         ADUserMultiSearch = 57,
-        Milestones = 58
+        Milestones = 58,
+        AjaxMultiSearch = 59
     }
 
     /// <summary>
@@ -102,6 +103,8 @@ namespace FSAPortfolio.Entities.Organisation
             this[PortfolioFieldType.ADUserSearch] = "Select single user from Active Directory";
             this[PortfolioFieldType.ADUserMultiSearch] = "Select multiple users from Active Directory";
             this[PortfolioFieldType.Milestones] = "Enter key milestones";
+            this[PortfolioFieldType.AjaxMultiSearch] = "Select multiple data search items";
+
         }
     }
 

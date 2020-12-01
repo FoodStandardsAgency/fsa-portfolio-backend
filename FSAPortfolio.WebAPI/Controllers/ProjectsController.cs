@@ -99,6 +99,23 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
+        // Get: api/Projects
+        [AcceptVerbs("GET")]
+        [Authorize]
+        public async Task<IEnumerable<SelectItemModel>> SearchProjects([FromUri] string term, [FromUri(Name = "addnone")] bool includeNone = false)
+        {
+            using (var context = new PortfolioContext())
+            {
+                IEnumerable<SelectItemModel> result = null;
+                var filteredQuery = from p in context.Projects.Include(p => p.Reservation) 
+                                    where p.Reservation.ProjectId.Contains(term) || p.Name.Contains(term)
+                                    select p;
+                result = PortfolioMapper.ProjectMapper.Map<IEnumerable<SelectItemModel>>(await filteredQuery.OrderByDescending(p => p.Priority).Take(10).ToArrayAsync());
+                return result;
+            }
+        }
+
+
         /// <summary>
         /// Gets a new project with any default settings and reserves a project_id.
         /// Gets the label configuration for the view, with options set for any view components such as drop down lists.
@@ -224,10 +241,6 @@ namespace FSAPortfolio.WebAPI.Controllers
 
             return result;
         }
-
-
-
-
         private static IQueryable<Project> ProjectWithIncludes(PortfolioContext context, string portfolio)
         {
             return context.Projects.IncludeProject().Where(p => p.Portfolios.Any(po => po.ViewKey == portfolio));

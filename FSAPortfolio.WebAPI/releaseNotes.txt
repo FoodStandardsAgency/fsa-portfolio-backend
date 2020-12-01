@@ -9,6 +9,7 @@
 	IMPORTANT NOTE: the values of these fields will still appear in page markup as hidden fields!
 - Added milestones
 - Preserve label config on sync
+- Related projects searched via ajax
 
 
 Version 0.1 - Released 23/11/2020 16:20

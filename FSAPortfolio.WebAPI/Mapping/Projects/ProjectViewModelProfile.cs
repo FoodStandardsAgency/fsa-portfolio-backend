@@ -32,6 +32,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.Link, o => o.MapFrom(s => s.Link))
                 ;
 
+            CreateMap<Project, RelatedProjectModel>()
+                .ForMember(d => d.ProjectId, o => o.MapFrom(s => s.Reservation.ProjectId))
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                ;
+
             // Outbound
             Project__ProjectViewModel();
             ProjectUpdateItem__UpdateHistoryModel();
@@ -123,8 +128,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
             CreateMap<Project, ProjectViewModel>()
                 .ForMember(p => p.LastStatusUpdate, o => o.MapFrom<LastStatusUpdateResolver>())
                 .ForMember(p => p.UpdateHistory, o => o.MapFrom<UpdateHistoryResolver>())
-                .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => new RelatedProjectModel() { ProjectId = rp.Reservation.ProjectId, Name = rp.Name })))
-                .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects.Select(rp => new RelatedProjectModel() { ProjectId = rp.Reservation.ProjectId, Name = rp.Name })))
+                .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects))
+                .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects))
                 .ForMember(p => p.milestones, o => o.MapFrom(s => s.Milestones.OrderBy(d => d.Order)))
                 .ForMember(p => p.category, o => o.MapFrom(s => s.Category.Name))
                 .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.Name))
@@ -148,8 +153,8 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
 
             CreateMap<Project, ProjectEditViewModel>()
                 .ForMember(p => p.LastUpdate, o => o.MapFrom<LastUpdateResolver>())
-                .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects.Select(rp => rp.Reservation.ProjectId)))
-                .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects.Select(rp => rp.Reservation.ProjectId)))
+                .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects))
+                .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects))
                 .ForMember(p => p.milestones, o => o.MapFrom(s => s.Milestones.OrderBy(d => d.Order)))
                 .ForMember(d => d.Properties, o => o.Ignore())
                 .ForMember(p => p.oddlead, o => o.MapFrom(s => s.Lead))
@@ -163,6 +168,11 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
                 .AfterMap<ProjectDataOutboundMapper<ProjectEditViewModel>>()
                 .AfterMap<ProjectJsonPropertiesOutboundMapper>()
+                ;
+
+            CreateMap<Project, SelectItemModel>()
+                .ForMember(d => d.Text, o => o.MapFrom(s => $"{s.Reservation.ProjectId}: {s.Name.Trim()}"))
+                .ForMember(d => d.Value, o => o.MapFrom(s => s.Reservation.ProjectId))
                 ;
 
             CreateMap<Person, ProjectPersonModel>()

@@ -60,8 +60,8 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("lastupdate")]
         public UpdateHistoryModel LastUpdate { get; set; }
 
-        public string[] rels { get; set; }
-        public string[] dependencies { get; set; }
+        public SelectItemModel[] rels { get; set; }
+        public SelectItemModel[] dependencies { get; set; }
 
 
         public ProjectDateEditModel start_date { get; set; }
@@ -112,7 +112,6 @@ namespace FSAPortfolio.WebAPI.Models
         public ProjectDateEditModel Deadline { get; set; }
     }
 
-
     public class ProjectDateEditModel
     {
         [JsonProperty("day")]
@@ -125,4 +124,12 @@ namespace FSAPortfolio.WebAPI.Models
         public int? Year { get; set; }
     }
 
+    public class SelectItemModel
+    {
+        [JsonProperty("text")]
+        public string Text { get; set; }
+
+        [JsonProperty("value")]
+        public string Value { get; set; }
+    }
 }
