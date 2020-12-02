@@ -221,6 +221,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 context.SaveChanges();
 
             }
+
             using (var context = new PortfolioContext())
             {
                 foreach (var config in context.PortfolioConfigurations.IncludeFullConfiguration().ToList())

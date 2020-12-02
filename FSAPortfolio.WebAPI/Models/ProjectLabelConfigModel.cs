@@ -55,6 +55,9 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("fsaonly")]
         public bool FSAOnly { get; set; }
 
+        [JsonProperty("required")]
+        public bool Required { get; set; }
+
 
     }
 

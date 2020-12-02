@@ -99,6 +99,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType.ToString().ToLower()))
                 .ForMember(d => d.InputValue, o => o.Ignore()) // This is set separately as the value can come from anywhere
                 .ForMember(d => d.FSAOnly, o => o.MapFrom(s => s.Flags.HasFlag(PortfolioFieldFlags.FSAOnly)))
+                .ForMember(d => d.Required, o => o.MapFrom(s => s.Flags.HasFlag(PortfolioFieldFlags.Required)))
                 ;
 
         }
