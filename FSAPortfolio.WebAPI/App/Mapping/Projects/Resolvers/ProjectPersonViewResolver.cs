@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
+namespace FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers
 {
     public class ProjectPersonViewResolver : IMemberValueResolver<Project, object, Person, string>
     {

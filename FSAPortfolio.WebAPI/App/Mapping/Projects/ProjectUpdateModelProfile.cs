@@ -15,9 +15,9 @@ using System.Web;
 using System.Data.Entity;
 using System.Reflection;
 using Newtonsoft.Json;
-using FSAPortfolio.WebAPI.Mapping.Projects.Resolvers;
+using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
 
-namespace FSAPortfolio.WebAPI.Mapping.Projects
+namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 {
     public class ProjectUpdateModelProfile : Profile
     {

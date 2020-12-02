@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Mapping.Projects
+namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 {
     public class ProjectQueryModelProfile : Profile
     {

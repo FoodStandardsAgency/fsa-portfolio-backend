@@ -2,10 +2,10 @@
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Sync;
-using FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers;
+using FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers;
 using FSAPortfolio.WebAPI.Models;
 
-namespace FSAPortfolio.WebAPI.Mapping.Organisation
+namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
 {
     public class PortfolioConfigurationMappingProfile : Profile
     {

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
+namespace FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers
 {
     public abstract class BaseProjectOptionResolver<T> : IMemberValueResolver<object, Project, string, T>
         where T : class, IProjectOption, new()

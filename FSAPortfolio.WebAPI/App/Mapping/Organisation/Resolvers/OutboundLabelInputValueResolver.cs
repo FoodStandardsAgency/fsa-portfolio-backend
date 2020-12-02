@@ -5,7 +5,7 @@ using FSAPortfolio.WebAPI.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers
+namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers
 {
     public class OutboundLabelInputValueResolver : IValueResolver<PortfolioLabelConfig, PortfolioLabelModel, string>
     {

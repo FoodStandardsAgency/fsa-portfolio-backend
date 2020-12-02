@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Organisation;
-using FSAPortfolio.WebAPI.Mapping.ActiveDirectory;
-using FSAPortfolio.WebAPI.Mapping.Organisation;
-using FSAPortfolio.WebAPI.Mapping.Projects;
+using FSAPortfolio.WebAPI.App.Mapping.ActiveDirectory;
+using FSAPortfolio.WebAPI.App.Mapping.Organisation;
+using FSAPortfolio.WebAPI.App.Mapping.Projects;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Mapping
+namespace FSAPortfolio.WebAPI.App.Mapping
 {
     internal class PortfolioMapper
     {

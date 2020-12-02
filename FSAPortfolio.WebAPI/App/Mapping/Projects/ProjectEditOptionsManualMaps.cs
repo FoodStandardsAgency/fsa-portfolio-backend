@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Mapping.Projects
+namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 {
     public class ProjectEditOptionsManualMaps
     {

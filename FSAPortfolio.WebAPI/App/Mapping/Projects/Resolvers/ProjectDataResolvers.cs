@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Mapping.Projects.Resolvers
+namespace FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers
 {
     public class ProjectDataInboundResolver : IValueResolver<ProjectUpdateModel, Project, ICollection<ProjectDataItem>>
     {

@@ -10,9 +10,9 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using FSAPortfolio.WebAPI.App.Sync;
-using FSAPortfolio.WebAPI.Mapping.Projects.Resolvers;
+using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
 
-namespace FSAPortfolio.WebAPI.Mapping.Projects
+namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 {
     public class PostgresProjectMappingProfile : Profile
     {

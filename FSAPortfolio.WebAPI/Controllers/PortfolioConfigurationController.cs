@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Data.Entity;
-using FSAPortfolio.WebAPI.Mapping;
+using FSAPortfolio.WebAPI.App.Mapping;
 using Newtonsoft.Json.Linq;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.WebAPI.App;

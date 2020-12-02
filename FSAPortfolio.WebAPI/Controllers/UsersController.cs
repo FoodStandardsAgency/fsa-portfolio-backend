@@ -3,7 +3,7 @@ using FSAPortfolio.PostgreSQL;
 using FSAPortfolio.WebAPI.App.Identity;
 using FSAPortfolio.WebAPI.App.Microsoft;
 using FSAPortfolio.WebAPI.App.Users;
-using FSAPortfolio.WebAPI.Mapping;
+using FSAPortfolio.WebAPI.App.Mapping;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;

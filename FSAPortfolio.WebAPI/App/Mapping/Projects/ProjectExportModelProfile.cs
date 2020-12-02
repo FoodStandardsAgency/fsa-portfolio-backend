@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.Mapping.Projects.Resolvers;
+using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Linq;
 
-namespace FSAPortfolio.WebAPI.Mapping.Projects
+namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 {
     public class ProjectExportModelProfile : Profile
     {

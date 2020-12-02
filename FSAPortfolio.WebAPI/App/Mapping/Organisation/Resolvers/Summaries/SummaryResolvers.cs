@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Mapping.Organisation.Resolvers.Summaries
+namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
 {
     public class ProjectCountByPhaseResolver : IValueResolver<ProjectPhase, PhaseSummaryModel, int>
     {

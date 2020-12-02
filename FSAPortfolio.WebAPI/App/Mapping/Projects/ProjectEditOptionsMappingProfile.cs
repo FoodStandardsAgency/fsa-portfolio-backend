@@ -3,14 +3,14 @@ using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Sync;
-using FSAPortfolio.WebAPI.Mapping.Projects.Resolvers;
+using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Mapping.Projects
+namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 {
     public class ProjectEditOptionsMappingProfile : Profile
     {
