@@ -73,8 +73,7 @@ namespace FSAPortfolio.WebAPI.Mapping.Projects
                 .ForMember(p => p.oddlead, o => o.MapFrom<ProjectPersonViewResolver, Person>(s => s.Lead))
                 .ForMember(p => p.oddlead_role, o => o.MapFrom(s => s.LeadRole))
 
-                // TODO: add persistence and mappings for outstanding fields
-                // Outstanding
+                // TODO: Outstanding
                 .ForMember(p => p.milestones, o => o.Ignore())
 
                 // Latest update and update history

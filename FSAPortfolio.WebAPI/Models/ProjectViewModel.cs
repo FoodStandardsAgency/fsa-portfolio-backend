@@ -10,7 +10,6 @@ namespace FSAPortfolio.WebAPI.Models
 {
     public class ProjectViewModel : ProjectModel
     {
-        // TODO: move lead over to ProjectPersonModel; then move all instances back into ProjectModel
         public string oddlead_email { get; set; } 
 
         [JsonProperty(ProjectPropertyConstants.ProjectLead)]

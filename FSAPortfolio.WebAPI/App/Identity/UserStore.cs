@@ -13,7 +13,6 @@ using System.Linq.Expressions;
 
 namespace FSAPortfolio.WebAPI.App.Identity
 {
-    // TODO: this doesn't need to implement these interfaces - created by ApplicationUserManager
     public class UserStore : IUserStore<ApplicationUser>, IUserStore<ApplicationUser, string>
     {
         private PortfolioContext context;
@@ -34,8 +33,6 @@ namespace FSAPortfolio.WebAPI.App.Identity
 
         public void Dispose()
         {
-            // TODO: dispose
-            //throw new NotImplementedException();
         }
 
         public async Task<ApplicationUser> FindByIdAsync(string userId)
