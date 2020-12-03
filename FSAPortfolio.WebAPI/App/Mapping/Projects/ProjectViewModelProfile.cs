@@ -308,8 +308,8 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
     {
         public string Resolve(Project source, object destination, string sourceMember, string destMember, ResolutionContext context)
         {
-            string result;
-            if (!ProjectViewModelProfile.StragicObjectivesMap.TryGetValue(sourceMember, out result)) 
+            string result = null;
+            if (!ProjectViewModelProfile.StragicObjectivesMap.TryGetValue(sourceMember ?? "none", out result)) 
                 result = "Error";
             return result;
         }
