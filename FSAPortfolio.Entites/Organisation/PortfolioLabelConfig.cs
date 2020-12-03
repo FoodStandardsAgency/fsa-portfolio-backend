@@ -49,17 +49,19 @@ namespace FSAPortfolio.Entities.Organisation
     [Flags]
     public enum PortfolioFieldFlags
     {
+        None = 0,
         Create = 1,
         Read = 1 << 1,
         Update = 1 << 2,
         Delete = 1 << 3,
         ProjectData = 1 << 4,
         EditorCanView = 1 << 5,
-        FilterProject = 1 << 6,
+        FilterProject = 1 << 6, // Allow user to filter projects on the field
         FilterRequired = 1 << 7, // Marks the label as being required by the filter view, even if it is not a filter field - means the label is used in the filter for something else (e.g. priority in the results)
         NotModelled = 1 << 8, // Doesn't have a property on the model: exists solely in label config and project data
         FSAOnly = 1 << 9, // Hide field from suppliers
         Required = 1 << 10,
+        Filterable = 1 << 11, // Marks if a server side filter predicate is implemented for the field - required for the field to be used as a filter
         DefaultCRUD = Create | Read | Update | Delete,
         UpdateOnly = Read | Update,
         DefaultProjectData = DefaultCRUD | ProjectData,

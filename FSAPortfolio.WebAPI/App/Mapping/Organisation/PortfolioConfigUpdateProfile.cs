@@ -20,8 +20,17 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.Label, o => o.MapFrom(s => string.IsNullOrWhiteSpace(s.Label) ? null : s.Label))
                 .ForMember(d => d.FieldType, o => o.MapFrom(s => s.FieldType))
                 .ForMember(d => d.FieldOptions, o => o.MapFrom(s => s.FieldOptions))
+                .ForMember(d => d.Flags, o => o.MapFrom<FlagUpdateResolver, PortfolioFieldFlags>(s => s.Flags))
                 .ForAllOtherMembers(o => o.Ignore())
                 ;
+        }
+
+        public class FlagUpdateResolver : IMemberValueResolver<PortfolioLabelConfig, PortfolioLabelConfig, PortfolioFieldFlags, PortfolioFieldFlags>
+        {
+            public PortfolioFieldFlags Resolve(PortfolioLabelConfig source, PortfolioLabelConfig destination, PortfolioFieldFlags sourceMember, PortfolioFieldFlags destMember, ResolutionContext context)
+            {
+                return destMember.HasFlag(PortfolioFieldFlags.Filterable) ? (destMember & ~PortfolioFieldFlags.FilterProject) | (sourceMember & PortfolioFieldFlags.FilterProject) : destMember;
+            }
         }
     }
 }

@@ -11,6 +11,7 @@
 - Preserve label config on sync
 - Related projects searched via ajax
 - Required field flags for front end validation
+- Configure filter fields per portfolio
 
 
 Version 0.1 - Released 23/11/2020 16:20

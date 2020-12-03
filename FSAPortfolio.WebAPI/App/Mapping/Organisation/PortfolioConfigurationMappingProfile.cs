@@ -9,7 +9,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
 {
     public class PortfolioConfigurationMappingProfile : Profile
     {
-
         public PortfolioConfigurationMappingProfile()
         {
             CreateMap<PortfolioConfigAddLabelRequest, PortfolioLabelConfig>()
@@ -55,11 +54,22 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.InputValue, o => o.MapFrom<OutboundLabelInputValueResolver>())
                 .ForMember(d => d.MasterField, o => o.MapFrom(s => s.MasterLabel == null ? null : s.MasterLabel.FieldName))
                 .ForMember(d => d.FSAOnly, o => o.MapFrom(s => s.Flags.HasFlag(PortfolioFieldFlags.FSAOnly)))
+                .ForMember(d => d.Filterable, o => o.MapFrom(s => s.Flags.HasFlag(PortfolioFieldFlags.Filterable)))
+                .ForMember(d => d.FilterProject, o => o.MapFrom(s => s.Flags.HasFlag(PortfolioFieldFlags.FilterProject)))
                 .ReverseMap()
                 .ForMember(d => d.MasterLabel, o => o.Ignore())
                 .ForMember(d => d.FieldOptions, o => o.MapFrom(s => s.InputValue)) // Just map the raw value here and do the collections in controller/provider
+                .ForMember(d => d.Flags, o => o.MapFrom<FlagResolver>())
                 ;
         }
+    }
 
+    public class FlagResolver : IValueResolver<PortfolioLabelModel, PortfolioLabelConfig, PortfolioFieldFlags>
+    {
+        public PortfolioFieldFlags Resolve(PortfolioLabelModel source, PortfolioLabelConfig destination, PortfolioFieldFlags destMember, ResolutionContext context)
+        {
+            destMember = source.FilterProject ? PortfolioFieldFlags.FilterProject : PortfolioFieldFlags.None;
+            return destMember;
+        }
     }
 }
