@@ -241,11 +241,16 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         }
                         else
                         {
-                            // Preserve these existing values
+                            // Preserve these existing values (note that non-configurable values are set in the DefaultFieldLabels!)
+                            // TODO: move this into the DefaultFieldLabels
                             defaultLabel.AdminOnly = label.AdminOnly;
                             defaultLabel.Included = label.Included;
                             defaultLabel.Label = label.Label ?? defaultLabel.Label;
                             defaultLabel.FieldOptions = label.FieldOptions ?? defaultLabel.FieldOptions;
+                            if (defaultLabel.Flags.HasFlag(PortfolioFieldFlags.Filterable))
+                            {
+                                defaultLabel.Flags = (defaultLabel.Flags & ~PortfolioFieldFlags.FilterProject) | (label.Flags & PortfolioFieldFlags.FilterProject);
+                            }
                         }
                     }
 

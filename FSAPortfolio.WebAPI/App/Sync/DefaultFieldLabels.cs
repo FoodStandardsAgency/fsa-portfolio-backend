@@ -79,13 +79,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
             label.FieldOrder = fieldOrder++;
             label.FieldTitle = fieldTitle;
             label.FieldName = fieldName;
-            label.Included = included || IncludeAll;
             label.FieldType = inputType;
             label.IncludedLock = includedLock;
             label.AdminOnlyLock = adminLock;
             label.FieldTypeLocked = inputTypeLocked;
-            label.Flags = flags;
-            label.FieldOptions = options;
+
             return label;
         }
 
