@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
 using FSAPortfolio.WebAPI.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FSAPortfolio.WebAPI.App.Mapping.Projects
@@ -13,6 +13,13 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
     {
         internal const string TimeOutputFormat = "dd/MM/yyyy hh:mm";
         private const string DateOutputFormat = "dd/MM/yyyy";
+
+        internal static Dictionary<string, string> StragicObjectivesMap = new Dictionary<string, string>()
+        {
+            { "none", "None" },
+            { "fsa", "FSA wide"},
+            { "communications", "Communications" }
+        };
 
         public ProjectViewModelProfile()
         {
@@ -68,7 +75,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 
                 .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
                 .ForMember(p => p.project_type, o => o.MapFrom(s => s.ProjectType))
-                .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives))
 
                 .ForMember(p => p.g6team, o => {
                     o.PreCondition(s => s.Lead != null && s.Lead.Team != null);
@@ -132,6 +138,8 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects))
                 .ForMember(p => p.milestones, o => o.MapFrom(s => s.Milestones.OrderBy(d => d.Order)))
                 .ForMember(p => p.category, o => o.MapFrom(s => s.Category.Name))
+                .ForMember(p => p.subcat, o => o.MapFrom(s => s.Subcategories.Select(sc => sc.Name).ToArray()))
+                .ForMember(p => p.strategic_objectives, o => o.MapFrom<StrategicObjectiveResolver, string>(s => s.StrategicObjectives))
                 .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.Name))
                 .ForMember(p => p.phaseviewkey, o => o.MapFrom(s => s.LatestUpdate.Phase.ViewKey))
                 .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
@@ -293,6 +301,17 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
             else if (source.Flags.HasFlag(ProjectDateFlags.Month)) model.Flag = "month";
             else if (source.Flags.HasFlag(ProjectDateFlags.Year)) model.Flag = "year";
             return model;
+        }
+    }
+
+    public class StrategicObjectiveResolver : IMemberValueResolver<Project, object, string, string>
+    {
+        public string Resolve(Project source, object destination, string sourceMember, string destMember, ResolutionContext context)
+        {
+            string result;
+            if (!ProjectViewModelProfile.StragicObjectivesMap.TryGetValue(sourceMember, out result)) 
+                result = "Error";
+            return result;
         }
     }
 }

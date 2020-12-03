@@ -1,13 +1,18 @@
 ﻿using FSAPortfolio.WebAPI.App;
+using FSAPortfolio.WebAPI.App.Mapping.Projects;
 using FSAPortfolio.WebAPI.Models.JsonConverters;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FSAPortfolio.WebAPI.Models
 {
     [JsonConverter(typeof(ProjectEditOptionsModelConverter))]
     public class ProjectEditOptionsModel
     {
+        private static IEnumerable<DropDownItemModel> strategicObjectiveOptions = ProjectViewModelProfile.StragicObjectivesMap.Keys.Select((k, i) => 
+            new DropDownItemModel() { Display = ProjectViewModelProfile.StragicObjectivesMap[k], Value = k, Order = i }
+            );
 
         [JsonProperty(nameof(ProjectModel.phase))]
         public IEnumerable<DropDownItemModel> PhaseItems { get; set; }
@@ -34,12 +39,7 @@ namespace FSAPortfolio.WebAPI.Models
         public IEnumerable<DropDownItemModel> Directorates { get; set; }
 
         [JsonProperty(nameof(ProjectModel.strategic_objectives))]
-        public readonly IEnumerable<DropDownItemModel> StrategicObjectives = new DropDownItemModel[] {
-            new DropDownItemModel(){ Display = "None", Value = "none", Order = 0 },
-            new DropDownItemModel(){ Display = "FSA wide", Value = "fsa", Order = 1 },
-            new DropDownItemModel(){ Display = "Communications", Value = "communications", Order = 2 }
-        };
-
+        public IEnumerable<DropDownItemModel> StrategicObjectives => strategicObjectiveOptions; 
 
         [JsonProperty(nameof(ProjectModel.programme))]
         public IEnumerable<DropDownItemModel> Programme { get; set; }
