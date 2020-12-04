@@ -13,6 +13,10 @@ namespace FSAPortfolio.PostgreSQL.Projects
         string short_desc { get; set; }
         int id { get; set; }
         string update { get; set; }
+        string category { get; set; }
+        string team { get; set; }
+        string budgettype { get; set; }
+
         bool IsDuplicate(object project);
     }
 }

@@ -654,35 +654,33 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
             catch (AutoMapperMappingException ame)
             {
-                if (latestSourceUpdate is oddproject)
+                if (latestSourceUpdate is oddproject && new string[] { "Size", "Directorate" }.Contains(ame.MemberMap.DestinationName))
                 {
                     var oddProject = latestSourceUpdate as oddproject;
-                    if (ame.MemberMap.DestinationName == "Size")
+                    switch(ame.MemberMap.DestinationName)
                     {
-                        log.Add($"MAPPING ERROR: Source project size = {oddProject.project_size}");
-                    }
-                    else
-                    {
-                        switch (ame.MemberMap.DestinationName)
-                        {
-                            case "Category":
-                                log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source category = {oddProject.category}");
-                                break;
-                            case "Team":
-                                log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source team = {oddProject.team}");
-                                break;
-                            case "Directorate":
-                                log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source data = {oddProject.direct}");
-                                break;
-                            default:
-                                log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}");
-                                break;
-                        }
+                        case "Directorate":
+                            log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source data = {oddProject.direct}");
+                            break;
+                        case "Size":
+                            log.Add($"MAPPING ERROR: Source project size = {oddProject.project_size}");
+                            break;
                     }
                 }
                 else
                 {
-                    log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}");
+                    switch (ame.MemberMap.DestinationName)
+                    {
+                        case nameof(Project.BudgetType):
+                            log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source category = {latestSourceUpdate.budgettype}");
+                            break;
+                        case nameof(Project.Category):
+                            log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source category = {latestSourceUpdate.category}");
+                            break;
+                        default:
+                            log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}");
+                            break;
+                    }
                 }
             }
             return null;
