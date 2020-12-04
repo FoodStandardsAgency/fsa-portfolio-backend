@@ -38,6 +38,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<PostgresODDProjectMappingProfile>();
+                cfg.AddProfile<PostgresSERDProjectMappingProfile>();
                 cfg.AddProfile<ProjectViewModelProfile>();
                 cfg.AddProfile<ProjectUpdateModelProfile>();
                 cfg.AddProfile<ProjectQueryModelProfile>();
@@ -629,17 +630,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
         private Project MapProject<T>(PortfolioContext dest, IEnumerable<T> sourceProjectDetail, Project destProject, T latestSourceUpdate)
             where T : IPostgresProject
         {
-            log.Add($"{destProject.Reservation.ProjectId} mapping...");
-            if (mapper == null) log.Add($"Mapper is null!");
-            if (dest == null) log.Add($"dest is null!");
-            if (latestSourceUpdate == null) log.Add($"Update is null!");
             var oddSourceUpdate = latestSourceUpdate as oddproject;
-            if (oddSourceUpdate == null) log.Add($"ODD update is null!");
             try
             {
                 if (oddSourceUpdate != null)
                 {
-                    log.Add($"{destProject.Reservation.ProjectId} HERE!?");
                     if (SyncMaps.directorateKeyMap.ContainsKey(oddSourceUpdate.direct))
                     {
                         oddSourceUpdate.direct = SyncMaps.directorateKeyMap[oddSourceUpdate.direct];
@@ -650,7 +645,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
                 }
                 mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
-                log.Add($"{destProject.Reservation.ProjectId} mapped");
                 destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
                 return destProject;
             }
