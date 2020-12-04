@@ -635,6 +635,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             {
                 if (oddSourceUpdate != null)
                 {
+                    log.Add($"{destProject.Reservation.ProjectId} HERE!?");
                     if (SyncMaps.directorateKeyMap.ContainsKey(oddSourceUpdate.direct))
                     {
                         oddSourceUpdate.direct = SyncMaps.directorateKeyMap[oddSourceUpdate.direct];
@@ -644,6 +645,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         oddSourceUpdate.direct = oddSourceUpdate.direct?.ToLower();
                     }
                 }
+                if (mapper == null) log.Add($"Mapper is null!");
+                if (latestSourceUpdate == null) log.Add($"Update is null!");
                 mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
                 log.Add($"{destProject.Reservation.ProjectId} mapped");
                 destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
