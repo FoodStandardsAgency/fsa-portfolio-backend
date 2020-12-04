@@ -458,6 +458,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         }
                     }
                 }
+                catch(Exception e)
+                {
+                    break;
+                }
             }
         }
 
@@ -625,6 +629,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         private Project MapProject<T>(PortfolioContext dest, IEnumerable<T> sourceProjectDetail, Project destProject, T latestSourceUpdate)
             where T : IPostgresProject
         {
+            log.Add($"{destProject.Reservation.ProjectId} mapping...");
             var oddSourceUpdate = latestSourceUpdate as oddproject;
             try
             {
@@ -640,6 +645,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
                 }
                 mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
+                log.Add($"{destProject.Reservation.ProjectId} mapped");
                 destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
                 return destProject;
             }
