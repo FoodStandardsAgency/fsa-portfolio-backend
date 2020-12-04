@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FSAPortfolio.Entities.Projects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -43,5 +44,38 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "12", $"{ViewKeyPrefix.Category}11" },
             { "13", $"{ViewKeyPrefix.Category}12" }
         };
+
+        public static readonly Dictionary<Tuple<string, string>, string> categoryMap = new Dictionary<Tuple<string, string>, string>()
+        {
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}0"), CategoryConstants.CapabilityName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}1"), CategoryConstants.DataName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}2"), CategoryConstants.ServiceMgmtName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}3"), CategoryConstants.SupportName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}4"), CategoryConstants.ITName },
+            { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}5"), CategoryConstants.ResilienceName },
+
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}0"), "Food hypersensitivity"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}1"), "Chemical contaminants"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}2"), "Foodborne disease"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}3"), "Antimicrobial resistance"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}4"), "Nutrition and health"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}5"), "Consumer and business behaviour"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}6"), "Food crime"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}7"), "Novel food and processes"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}8"), "Data and digital"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}9"), "Best regulator"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}10"), "Emerging risks and opportunities"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}11"), "Not a current ARI"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}12"), "Unknown"},
+
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}0"), "Category / Swimlane 1"},
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}1"), "Category / Swimlane 2"},
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}2"), "Category / Swimlane 3"},
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}3"), "Category / Swimlane 4"},
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}4"), "Category / Swimlane 5"},
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}5"), "Category / Swimlane 6"}
+
+        };
+
     }
 }

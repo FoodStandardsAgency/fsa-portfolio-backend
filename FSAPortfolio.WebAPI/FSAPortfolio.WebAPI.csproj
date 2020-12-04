@@ -215,6 +215,7 @@
     <Compile Include="App\Projects\ProjectProvider.cs" />
     <Compile Include="App\Projects\ProjectPropertyConstants.cs" />
     <Compile Include="App\Projects\ProjectSearchFilters.cs" />
+    <Compile Include="App\Sync\BudgetTypeSyncMaps.cs" />
     <Compile Include="App\Sync\CategorySyncMaps.cs" />
     <Compile Include="App\Sync\DefaultFieldLabels.cs" />
     <Compile Include="App\Sync\PhaseSyncMaps.cs" />

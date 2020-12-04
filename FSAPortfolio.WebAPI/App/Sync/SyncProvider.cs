@@ -346,6 +346,21 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 category.Name = SyncMaps.categoryMap.ContainsKey(tk) ? SyncMaps.categoryMap[tk] : SyncMaps.categoryMap[new Tuple<string, string>("odd", k)];
                 category.Order = o;
             };
+            Func<int, BudgetType> budgetTypeFactory = (o) =>
+            {
+                string k = $"{ViewKeyPrefix.BudgetType}{o}";
+                var budgetType = portfolio.Configuration.BudgetTypes.SingleOrDefault(p => p.ViewKey == k);
+                if (budgetType == null)
+                {
+                    budgetType = new BudgetType() { ViewKey = k, Order = o };
+                    portfolio.Configuration.BudgetTypes.Add(budgetType);
+                }
+                var tk = new Tuple<string, string>(viewKey, k);
+                budgetType.Name = SyncMaps.budgetTypeMap.ContainsKey(tk) ? SyncMaps.budgetTypeMap[tk] : SyncMaps.budgetTypeMap[new Tuple<string, string>("odd", k)];
+                budgetType.Order = o;
+                return budgetType;
+            };
+
             Func<int, ProjectSize> sizeFactory = (o) =>
             {
                 string k = $"{ViewKeyPrefix.ProjectSize}{o}";
@@ -357,18 +372,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 }
                 projectSize.Name = SyncMaps.sizeMap[k];
                 return projectSize;
-            };
-            Func<int, BudgetType> budgetTypeFactory = (o) =>
-            {
-                string k = $"{ViewKeyPrefix.BudgetType}{o}";
-                var budgetType = portfolio.Configuration.BudgetTypes.SingleOrDefault(p => p.ViewKey == k);
-                if (budgetType == null)
-                {
-                    budgetType = new BudgetType() { ViewKey = k, Order = o };
-                    portfolio.Configuration.BudgetTypes.Add(budgetType);
-                }
-                budgetType.Name = SyncMaps.budgetTypeMap[k];
-                return budgetType;
             };
             Func<string, int, PortfolioLabelGroup> labelGroupFactory = (n, go) =>
             {
@@ -407,10 +410,13 @@ namespace FSAPortfolio.WebAPI.App.Sync
             sizeFactory(2);
             sizeFactory(3);
             sizeFactory(4);
-            budgetTypeFactory(0);
-            budgetTypeFactory(1);
-            budgetTypeFactory(2);
-            budgetTypeFactory(3);
+
+            // Need to lookup budgettypes based on portfolio view key
+            var budgetTypeLookup = SyncMaps.budgetTypeKeyMap[viewKey];
+            for (int i = 0; i < budgetTypeLookup.Keys.Count; i++)
+            {
+                budgetTypeFactory(i);
+            }
             labelGroupFactory(FieldGroupConstants.FieldGroupName_ProjectIDs, 0);
             labelGroupFactory(FieldGroupConstants.FieldGroupName_AboutTheProject, 1);
             labelGroupFactory(FieldGroupConstants.FieldGroupName_ProjectTeam, 2);
