@@ -29,7 +29,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "dec", $"{ViewKeyPrefix.Phase}1" },
             { "wai", $"{ViewKeyPrefix.Phase}2" },
             { "und", $"{ViewKeyPrefix.Phase}3" },
-            { "com", $"{ViewKeyPrefix.Phase}5" },
+            { "com", $"{ViewKeyPrefix.Phase}4" },
         };
 
         public static readonly Dictionary<Tuple<string, string>, string> phaseMap = new Dictionary<Tuple<string, string>, string>()
