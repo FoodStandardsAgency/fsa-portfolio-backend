@@ -54,8 +54,6 @@ namespace FSAPortfolio.PostgreSQL
                 default:
                     throw new NotImplementedException();
             }
-
-            configure_odd_project(modelBuilder);
         }
 
         private static void configure_odd_project(DbModelBuilder modelBuilder)
