@@ -656,6 +656,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
             catch (AutoMapperMappingException ame)
             {
+                log.Add($"Mapping error: {ame.Message}");
                 if (latestSourceUpdate is oddproject)
                 {
                     var oddProject = latestSourceUpdate as oddproject;
