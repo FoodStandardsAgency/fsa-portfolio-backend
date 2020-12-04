@@ -398,7 +398,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             onHoldFactory(3);
 
             var categoryLookup = SyncMaps.categoryKeyMap[viewKey];
-            for (int i = 0; i < categoryLookup.Count; i++)
+            for (int i = 0; i < categoryLookup.Keys.Count; i++)
             {
                 categoryFactory(i);
             }

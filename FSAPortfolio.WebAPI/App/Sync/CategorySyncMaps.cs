@@ -17,7 +17,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "serd", serd_categoryKeyMap }
         };
 
-        public static readonly Dictionary<string, string> odd_categoryKeyMap = new Dictionary<string, string>()
+        public static Dictionary<string, string> odd_categoryKeyMap => new Dictionary<string, string>()
         {
             { "cap", $"{ViewKeyPrefix.Category}0" },
             { "data", $"{ViewKeyPrefix.Category}1" },
@@ -27,7 +27,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "res", $"{ViewKeyPrefix.Category}5" },
         };
 
-        public static readonly Dictionary<string, string> serd_categoryKeyMap = new Dictionary<string, string>()
+        public static Dictionary<string, string> serd_categoryKeyMap => new Dictionary<string, string>()
         {
             { "02", $"{ViewKeyPrefix.Category}0" },
             { "04", $"{ViewKeyPrefix.Category}1" },
