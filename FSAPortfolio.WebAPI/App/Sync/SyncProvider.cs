@@ -52,7 +52,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         internal void SyncUsers()
         {
             log.Add("Syncing users...");
-            using (var source = new MigratePortfolioContext())
+            using (var source = new MigratePortfolioContext("odd"))
             using (var dest = new PortfolioContext())
             {
                 // Ensure we have all access groups
@@ -101,7 +101,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         {
             log.Add("Syncing people...");
 
-            using (var source = new MigratePortfolioContext())
+            using (var source = new MigratePortfolioContext("odd"))
             using (var dest = new PortfolioContext())
             {
                 var portfolio = await dest.Portfolios.Include(p => p.Teams).SingleAsync(p => p.ViewKey == "odd");

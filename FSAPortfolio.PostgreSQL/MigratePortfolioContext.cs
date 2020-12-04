@@ -11,10 +11,6 @@ namespace FSAPortfolio.PostgreSQL
     public partial class MigratePortfolioContext : DbContext
     {
         string portfolio = "odd";
-        public MigratePortfolioContext()
-            : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings["Migration.ConnectionString"] ?? "MigratePortfolioContext"])
-        {
-        }
         public MigratePortfolioContext(string portfolio)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[$"{portfolio.ToUpper()}.Migration.ConnectionString"] ?? "MigratePortfolioContext"])
         {
@@ -24,6 +20,7 @@ namespace FSAPortfolio.PostgreSQL
         public MigratePortfolioContext(ConnectionStringSettings cs)
             : base(cs.ConnectionString)
         {
+            Database.SetInitializer<MigratePortfolioContext>(null);
         }
 
         public virtual DbSet<odd_people> odd_people { get; set; }
