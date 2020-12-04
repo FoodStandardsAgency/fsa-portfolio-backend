@@ -14,9 +14,9 @@ using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
 
 namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 {
-    public class PostgresProjectMappingProfile : Profile
+    public class PostgresODDProjectMappingProfile : Profile
     {
-        public PostgresProjectMappingProfile()
+        public PostgresODDProjectMappingProfile()
         {
             // Inbound
             project__Project();
@@ -25,7 +25,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         }
         private void project__Project()
         {
-            CreateMap<project, Project>()
+            CreateMap<oddproject, Project>()
                 .ForMember(p => p.Name, o => o.MapFrom(s => s.project_name))
                 .ForMember(p => p.StartDate, o => o.MapFrom<PostgresProjectDateResolver, string>(s => s.start_date))
                 .ForMember(p => p.ActualStartDate, o => o.MapFrom<PostgresProjectDateResolver, string>(s => s.actstart))
@@ -45,7 +45,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.KeyContact1, o => o.MapFrom<PostgresPersonFromEmailResolver, string>(s => s.servicelead_email))
                 .ForMember(p => p.RelatedProjects, o => o.MapFrom<PostgresProjectCollectionResolver, string>(s => s.rels))
                 .ForMember(p => p.DependantProjects, o => o.MapFrom<PostgresProjectCollectionResolver, string>(s => s.dependencies))
-                .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => SyncMaps.categoryKeyMap[s.category ?? "cap"]))
+                .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => SyncMaps.categoryKeyMap["odd"][s.category ?? "cap"]))
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => SyncMaps.sizeKeyMap[s.project_size ?? string.Empty]))
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => SyncMaps.budgetTypeKeyMap[s.budgettype ?? "none"]))
                 .ForMember(p => p.ChannelLink, o => o.MapFrom<PostgresLinkResolver, string>(s => s.link))
@@ -92,7 +92,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 
         private void project__ProjectUpdateItem()
         {
-            CreateMap<project, ProjectUpdateItem>()
+            CreateMap<oddproject, ProjectUpdateItem>()
                 .ForMember(p => p.Id, o => o.Ignore())
                 .ForMember(p => p.Project_Id, o => o.Ignore())
                 .ForMember(p => p.Project, o => o.Ignore())
@@ -102,7 +102,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.Text, o => o.MapFrom(s => s.update))
                 .ForMember(p => p.PercentageComplete, o => o.MapFrom(s => s.p_comp))
                 .ForMember(p => p.RAGStatus, o => o.MapFrom<string>(new ConfigRAGStatusResolver(true), s => s.rag))
-                .ForMember(p => p.Phase, o => o.MapFrom<string>(new ConfigPhaseStatusResolver(true), s => SyncMaps.phaseKeyMap[s.phase ?? "backlog"]))
+                .ForMember(p => p.Phase, o => o.MapFrom<string>(new ConfigPhaseStatusResolver(true), s => SyncMaps.phaseKeyMap["odd"][s.phase ?? "backlog"]))
                 .ForMember(p => p.OnHoldStatus, o => o.MapFrom<string>(new ConfigOnHoldStatusResolver(true), s => SyncMaps.onholdKeyMap[s.onhold ?? "n"]))
                 .ForMember(p => p.Budget, o => o.MapFrom<DecimalResolver, string>(s => s.budget))
                 .ForMember(p => p.Spent, o => o.MapFrom<DecimalResolver, string>(s => s.spent))
@@ -218,9 +218,9 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         }
     }
 
-    public class PostgresDocumentResolver : IMemberValueResolver<project, Project, string, ICollection<Document>>
+    public class PostgresDocumentResolver : IMemberValueResolver<object, Project, string, ICollection<Document>>
     {
-        public ICollection<Document> Resolve(project source, Project destination, string sourceMember, ICollection<Document> destMember, ResolutionContext context)
+        public ICollection<Document> Resolve(object source, Project destination, string sourceMember, ICollection<Document> destMember, ResolutionContext context)
         {
             List<Document> documents = new List<Document>(destMember);
             if(!string.IsNullOrWhiteSpace(sourceMember))
@@ -243,9 +243,9 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         }
     }
 
-    public class PostgresLinkResolver : IMemberValueResolver<project, Project, string, ProjectLink>
+    public class PostgresLinkResolver : IMemberValueResolver<object, Project, string, ProjectLink>
     {
-        public ProjectLink Resolve(project source, Project destination, string sourceMember, ProjectLink destMember, ResolutionContext context)
+        public ProjectLink Resolve(object source, Project destination, string sourceMember, ProjectLink destMember, ResolutionContext context)
         {
             ProjectLink link = new ProjectLink();
             if(sourceMember != null)

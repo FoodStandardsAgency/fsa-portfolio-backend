@@ -29,8 +29,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
     internal class SyncProvider
     {
         private ICollection<string> log;
-        private const bool randomiseProjectPortfolios = false;
-
 
         IMapper mapper;
 
@@ -39,7 +37,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             this.log = log;
             var config = new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile<PostgresProjectMappingProfile>();
+                cfg.AddProfile<PostgresODDProjectMappingProfile>();
                 cfg.AddProfile<ProjectViewModelProfile>();
                 cfg.AddProfile<ProjectUpdateModelProfile>();
                 cfg.AddProfile<ProjectQueryModelProfile>();
@@ -423,38 +421,28 @@ namespace FSAPortfolio.WebAPI.App.Sync
             labelGroupFactory(FieldGroupConstants.FieldGroupName_FSAProcesses, 8);
         }
 
-        internal void SyncAllProjects()
+        internal void SyncAllProjects(string portfolio = "odd")
         {
             IEnumerable<string> projectIds;
             IEnumerator<string> portfolios = null;
-            using (var source = new MigratePortfolioContext())
+            using (var source = new MigratePortfolioContext(portfolio))
             {
-                projectIds = source.projects.Select(p => p.project_id).Distinct().ToArray();
-            }
-            if (randomiseProjectPortfolios)
-            {
-#pragma warning disable CS0162 // Unreachable code detected
-                using (var source = new PortfolioContext())
+                switch(portfolio)
                 {
-                    portfolios = source.Portfolios.Select(p => p.ShortName).ToList().GetEnumerator();
+                    case "odd":
+                        projectIds = source.projects.Select(p => p.project_id).Distinct().ToArray();
+                        break;
+                    case "serd":
+                        projectIds = source.serdprojects.Select(p => p.project_id).Distinct().ToArray();
+                        break;
+                    default:
+                        throw new NotImplementedException();
                 }
-#pragma warning restore CS0162 // Unreachable code detected
             }
 
 
             foreach (var id in projectIds)
             {
-                    string portfolio = "odd";
-
-                if (randomiseProjectPortfolios && portfolios != null)
-                {
-                    if (!portfolios.MoveNext())
-                    {
-                        portfolios.Reset();
-                        portfolios.MoveNext();
-                    }
-                    portfolio = portfolios.Current;
-                }
                 try
                 {
                     SyncProject(id, portfolio);
@@ -478,81 +466,101 @@ namespace FSAPortfolio.WebAPI.App.Sync
         {
             bool synched = false;
 
-            using (var source = new MigratePortfolioContext())
+            using (var source = new MigratePortfolioContext(portfolioViewKey))
             using (var dest = new PortfolioContext())
             {
-                var sourceProjectItems = source.projects.Where(p => p.project_id == projectId).ToList();
-
-                // Only proceed if have a project with a single name throughout its history
-                if (sourceProjectItems.Count() > 0)
+                switch(portfolioViewKey)
                 {
-                    var latestSourceUpdate = sourceProjectItems.OrderByDescending(p => p.timestamp).First();
+                    case "odd":
+                        synched = SyncODDProject(projectId, source, dest);
+                        break;
+                    case "serd":
+                        synched = SyncSERDProject(projectId, source, dest);
+                        break;
+                }
+            }
 
-                    // First sync the project
-                    var destProject = dest.Projects.FullConfigIncludes()
-                        .Include(p => p.Portfolios)
-                        .Include(p => p.Updates.Select(u => u.OnHoldStatus))
-                        .Include(p => p.Updates.Select(u => u.RAGStatus))
-                        .Include(p => p.Updates.Select(u => u.Phase))
-                        .Include(p => p.Category)
-                        .Include(p => p.Size)
-                        .Include(p => p.BudgetType)
-                        .Include(p => p.RelatedProjects)
-                        .Include(p => p.DependantProjects)
-                        .Include(p => p.Documents)
-                        .Include(p => p.Milestones)
-                        .Include(p => p.People)
-                        .SingleOrDefault(p => p.Reservation.ProjectId == latestSourceUpdate.project_id);
+            return synched;
+        }
 
-                    if (destProject == null)
+        private bool SyncSERDProject(string projectId, MigratePortfolioContext source, PortfolioContext dest)
+        {
+            log.Add($"{projectId} Ok.");
+            return true;
+        }
+
+        private bool SyncODDProject(string projectId, MigratePortfolioContext source, PortfolioContext dest)
+        {
+            string portfolioViewKey = "odd";
+            bool synched = false;
+            var sourceProjectItems = source.projects.Where(p => p.project_id == projectId).ToList();
+
+            // Only proceed if have a project with a single name throughout its history
+            if (sourceProjectItems.Count() > 0)
+            {
+                var latestSourceUpdate = sourceProjectItems.OrderByDescending(p => p.timestamp).First();
+
+                // First sync the project
+                var destProject = dest.Projects.FullConfigIncludes()
+                    .Include(p => p.Portfolios)
+                    .Include(p => p.Updates.Select(u => u.OnHoldStatus))
+                    .Include(p => p.Updates.Select(u => u.RAGStatus))
+                    .Include(p => p.Updates.Select(u => u.Phase))
+                    .Include(p => p.Category)
+                    .Include(p => p.Size)
+                    .Include(p => p.BudgetType)
+                    .Include(p => p.RelatedProjects)
+                    .Include(p => p.DependantProjects)
+                    .Include(p => p.Documents)
+                    .Include(p => p.Milestones)
+                    .Include(p => p.People)
+                    .SingleOrDefault(p => p.Reservation.ProjectId == latestSourceUpdate.project_id);
+
+                if (destProject == null)
+                {
+                    var pid = latestSourceUpdate.project_id.Trim();
+                    var yrStart = pid.Length - 7;
+                    destProject = new Project()
                     {
-                        var pid = latestSourceUpdate.project_id.Trim();
-                        var yrStart = pid.Length - 7;
-                        destProject = new Project()
+                        Reservation = new ProjectReservation()
                         {
-                            Reservation = new ProjectReservation()
-                            {
-                                ProjectId = pid,
-                                Year = int.Parse(pid.Substring(yrStart, 2)) + 2000,
-                                Month = int.Parse(pid.Substring(yrStart + 2, 2)),
-                                Index = int.Parse(pid.Substring(yrStart + 4)),
-                                ReservedAt = DateTime.Now
-                            },
-                            Updates = new List<ProjectUpdateItem>(),
-                            Portfolios = new List<Portfolio>(),
-                            Documents = new List<Document>(),
-                            Milestones = new List<Milestone>()
-                        };
-                        dest.Projects.Add(destProject);
-                    }
+                            ProjectId = pid,
+                            Year = int.Parse(pid.Substring(yrStart, 2)) + 2000,
+                            Month = int.Parse(pid.Substring(yrStart + 2, 2)),
+                            Index = int.Parse(pid.Substring(yrStart + 4)),
+                            ReservedAt = DateTime.Now
+                        },
+                        Updates = new List<ProjectUpdateItem>(),
+                        Portfolios = new List<Portfolio>(),
+                        Documents = new List<Document>(),
+                        Milestones = new List<Milestone>()
+                    };
+                    dest.Projects.Add(destProject);
+                }
 
-                    // Add to the given portfolio if not already in one
-                    if (!string.IsNullOrEmpty(portfolioViewKey))
-                    {
-                        var portfolio = dest.Portfolios.IncludeConfig().Single(p => p.ShortName == portfolioViewKey);
-                        destProject.Portfolios.Clear();
-                        destProject.Portfolios.Add(portfolio);
-                        destProject.Reservation.Portfolio = portfolio;
-                    }
+                // Add to the given portfolio if not already in one
+                var portfolio = dest.Portfolios.IncludeConfig().Single(p => p.ShortName == portfolioViewKey);
+                destProject.Portfolios.Clear();
+                destProject.Portfolios.Add(portfolio);
+                destProject.Reservation.Portfolio = portfolio;
 
 
-                    destProject = MapProject(dest, sourceProjectItems, destProject, latestSourceUpdate);
+                destProject = MapProject(dest, sourceProjectItems, destProject, latestSourceUpdate);
 
-                    if (destProject != null)
-                    {
-                        SyncUpdates(dest, sourceProjectItems, destProject);
-                        log.Add($"{projectId} Ok.");
-                        synched = true;
-                    }
-                    else
-                    {
-                        logFailure(projectId, "Destination project is null!");
-                    }
+                if (destProject != null)
+                {
+                    SyncUpdates(dest, sourceProjectItems, destProject);
+                    log.Add($"{projectId} Ok.");
+                    synched = true;
                 }
                 else
                 {
-                    logFailure(projectId, $"Details count = {sourceProjectItems.Count()}");
+                    logFailure(projectId, "Destination project is null!");
                 }
+            }
+            else
+            {
+                logFailure(projectId, $"Details count = {sourceProjectItems.Count()}");
             }
 
             return synched;
@@ -563,10 +571,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
             log.Add($"{projectId} FAIL! {message}"); ;
         }
 
-        private void SyncUpdates(PortfolioContext dest, IEnumerable<project> sourceProjectDetail, Project destProject)
+        private void SyncUpdates(PortfolioContext dest, IEnumerable<oddproject> sourceProjectDetail, Project destProject)
         {
             // Now sync the updates
-            project lastUpdate = null;
+            oddproject lastUpdate = null;
             foreach (var sourceUpdate in sourceProjectDetail.OrderBy(u => u.timestamp))
             {
                 var destUpdate = destProject.Updates.SingleOrDefault(u => u.SyncId == sourceUpdate.id);
@@ -607,7 +615,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             dest.SaveChanges();
         }
 
-        private Project MapProject(PortfolioContext dest, IEnumerable<project> sourceProjectDetail, Project destProject, project latestSourceUpdate)
+        private Project MapProject(PortfolioContext dest, IEnumerable<oddproject> sourceProjectDetail, Project destProject, oddproject latestSourceUpdate)
         {
             try
             {

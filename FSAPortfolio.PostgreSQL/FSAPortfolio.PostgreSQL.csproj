@@ -88,8 +88,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MigratePortfolioContext.cs" />
+    <Compile Include="Projects\IPostgresProject.cs" />
     <Compile Include="Projects\odd_people.cs" />
-    <Compile Include="Projects\project.cs" />
+    <Compile Include="Projects\serdproject.cs" />
+    <Compile Include="Projects\oddproject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Users\user.cs" />
   </ItemGroup>

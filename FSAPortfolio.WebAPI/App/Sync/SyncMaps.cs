@@ -7,7 +7,7 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.App.Sync
 {
-    public class SyncMaps
+    public partial class SyncMaps
     {
         public static readonly Dictionary<string, string> emailMap = new Dictionary<string, string>()
         {
@@ -48,6 +48,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
         };
 
 
+
+
         public static readonly Dictionary<string, string> directorateKeyMap = new Dictionary<string, string>()
         {
             { "IR", "inc" },
@@ -84,24 +86,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "b", $"{ViewKeyPrefix.Status}2" },
             { "c", $"{ViewKeyPrefix.Status}3" }
         };
-        public static readonly Dictionary<string, string> categoryKeyMap = new Dictionary<string, string>()
-        {
-            { "cap", $"{ViewKeyPrefix.Category}0" },
-            { "data", $"{ViewKeyPrefix.Category}1" },
-            { "sm", $"{ViewKeyPrefix.Category}2" },
-            { "ser", $"{ViewKeyPrefix.Category}3" },
-            { "it", $"{ViewKeyPrefix.Category}4" },
-            { "res", $"{ViewKeyPrefix.Category}5" },
-        };
-        public static readonly Dictionary<string, string> phaseKeyMap = new Dictionary<string, string>()
-        {
-            { "backlog", $"{ViewKeyPrefix.Phase}0" },
-            { "discovery", $"{ViewKeyPrefix.Phase}1" },
-            { "alpha", $"{ViewKeyPrefix.Phase}2" },
-            { "beta", $"{ViewKeyPrefix.Phase}3" },
-            { "live", $"{ViewKeyPrefix.Phase}4" },
-            { "completed", $"{ViewKeyPrefix.Phase}5" },
-        };
+
 
 
 
@@ -174,12 +159,18 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}4"), CategoryConstants.ITName },
             { new Tuple<string, string>("odd", $"{ViewKeyPrefix.Category}5"), CategoryConstants.ResilienceName },
 
-            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}0"), "Best regulator"},
-            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}1"), "Food hypersensitivity"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}0"), "Food hypersensitivity"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}1"), "Chemical contaminants"},
             { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}2"), "Foodborne disease"},
-            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}3"), "Chemical contaminants"},
-            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}4"), "Novel food and processes"},
-            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}5"), "Antimicrobial resistance"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}3"), "Antimicrobial resistance"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}4"), "Nutrition and health"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}5"), "Consumer and business behaviour"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}6"), "Food crime"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}7"), "Novel food and processes"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}8"), "Data and digital"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}9"), "Best regulator"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}11"), "Emerging risks and opportunities"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}11"), "Not a current ARI"},
 
             { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}0"), "Category / Swimlane 1"},
             { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}1"), "Category / Swimlane 2"},

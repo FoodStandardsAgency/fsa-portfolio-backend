@@ -31,7 +31,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping
             projectConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AllowNullCollections = true;
-                cfg.AddProfile<PostgresProjectMappingProfile>();
+                cfg.AddProfile<PostgresODDProjectMappingProfile>();
                 cfg.AddProfile<ProjectViewModelProfile>();
                 cfg.AddProfile<ProjectUpdateModelProfile>();
                 cfg.AddProfile<ProjectQueryModelProfile>();
