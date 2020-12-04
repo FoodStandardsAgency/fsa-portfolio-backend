@@ -654,7 +654,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
             catch (AutoMapperMappingException ame)
             {
-                log.Add($"Mapping error: {ame.StackTrace}");
                 if (latestSourceUpdate is oddproject)
                 {
                     var oddProject = latestSourceUpdate as oddproject;
@@ -666,6 +665,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     {
                         switch (ame.MemberMap.DestinationName)
                         {
+                            case "Category":
+                                log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source category = {oddProject.category}");
+                                break;
                             case "Team":
                                 log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source team = {oddProject.team}");
                                 break;
