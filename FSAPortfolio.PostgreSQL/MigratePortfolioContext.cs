@@ -8,9 +8,10 @@ namespace FSAPortfolio.PostgreSQL
     using FSAPortfolio.PostgreSQL.Users;
     using System.Configuration;
 
-    public partial class MigratePortfolioContext : DbContext
+    public partial class MigratePortfolioContext<T> : DbContext
+        where T : class, IPostgresProject, new()
     {
-        string portfolio = "odd";
+        string portfolio;
         public MigratePortfolioContext(string portfolio)
             : this(ConfigurationManager.ConnectionStrings[ConfigurationManager.AppSettings[$"{portfolio.ToUpper()}.Migration.ConnectionString"] ?? "MigratePortfolioContext"])
         {
@@ -20,12 +21,11 @@ namespace FSAPortfolio.PostgreSQL
         public MigratePortfolioContext(ConnectionStringSettings cs)
             : base(cs.ConnectionString)
         {
-            Database.SetInitializer<MigratePortfolioContext>(null);
+            Database.SetInitializer<MigratePortfolioContext<T>>(null);
         }
 
         public virtual DbSet<odd_people> odd_people { get; set; }
-        public virtual DbSet<oddproject> projects { get; set; }
-        public virtual DbSet<serdproject> serdprojects { get; set; }
+        public virtual DbSet<T> projects { get; set; }
         public virtual DbSet<user> users { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -40,6 +40,7 @@ namespace FSAPortfolio.PostgreSQL
 
         private void configure_project(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<T>().ToTable("projects");
             switch (portfolio)
             {
                 case "odd":
@@ -55,8 +56,6 @@ namespace FSAPortfolio.PostgreSQL
 
         private static void configure_odd_project(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<oddproject>().ToTable("projects");
-            modelBuilder.Entity<serdproject>().ToTable("serdprojects");
             modelBuilder.Entity<oddproject>()
                 .Property(e => e.project_id)
                 .IsUnicode(false);
@@ -205,8 +204,6 @@ namespace FSAPortfolio.PostgreSQL
 
         private static void configure_serd_project(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<serdproject>().ToTable("projects");
-            modelBuilder.Entity<oddproject>().ToTable("oddprojects");
             modelBuilder.Entity<serdproject>()
                 .Property(e => e.project_id)
                 .IsUnicode(false);

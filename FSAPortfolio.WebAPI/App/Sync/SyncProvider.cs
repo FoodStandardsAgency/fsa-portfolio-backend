@@ -52,7 +52,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         internal void SyncUsers()
         {
             log.Add("Syncing users...");
-            using (var source = new MigratePortfolioContext("odd"))
+            using (var source = new MigratePortfolioContext<oddproject>("odd"))
             using (var dest = new PortfolioContext())
             {
                 // Ensure we have all access groups
@@ -101,7 +101,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         {
             log.Add("Syncing people...");
 
-            using (var source = new MigratePortfolioContext("odd"))
+            using (var source = new MigratePortfolioContext<oddproject>("odd"))
             using (var dest = new PortfolioContext())
             {
                 var portfolio = await dest.Portfolios.Include(p => p.Teams).SingleAsync(p => p.ViewKey == "odd");
@@ -425,19 +425,22 @@ namespace FSAPortfolio.WebAPI.App.Sync
         internal void SyncAllProjects(string portfolio = "odd")
         {
             IEnumerable<string> projectIds;
-            using (var source = new MigratePortfolioContext(portfolio))
+            switch (portfolio)
             {
-                switch(portfolio)
-                {
-                    case "odd":
+                case "odd":
+                    using (var source = new MigratePortfolioContext<oddproject>(portfolio))
+                    {
                         projectIds = source.projects.Select(p => p.project_id).Distinct().ToArray();
-                        break;
-                    case "serd":
-                        projectIds = source.serdprojects.Select(p => p.project_id).Distinct().ToArray();
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                    }
+                    break;
+                case "serd":
+                    using (var source = new MigratePortfolioContext<serdproject>(portfolio))
+                    {
+                        projectIds = source.projects.Select(p => p.project_id).Distinct().ToArray();
+                    }
+                    break;
+                default:
+                    throw new NotImplementedException();
             }
 
 
@@ -470,16 +473,21 @@ namespace FSAPortfolio.WebAPI.App.Sync
         {
             bool synched = false;
 
-            using (var source = new MigratePortfolioContext(portfolioViewKey))
             using (var dest = new PortfolioContext())
             {
                 switch(portfolioViewKey)
                 {
                     case "odd":
-                        synched = SyncODDProject(projectId, source, dest);
+                        using (var source = new MigratePortfolioContext<oddproject>(portfolioViewKey))
+                        {
+                            synched = SyncODDProject(projectId, source, dest);
+                        }
                         break;
                     case "serd":
-                        synched = SyncSERDProject(projectId, source, dest);
+                        using (var source = new MigratePortfolioContext<serdproject>(portfolioViewKey))
+                        {
+                            synched = SyncSERDProject(projectId, source, dest);
+                        }
                         break;
                 }
             }
@@ -487,15 +495,15 @@ namespace FSAPortfolio.WebAPI.App.Sync
             return synched;
         }
 
-        private bool SyncSERDProject(string projectId, MigratePortfolioContext source, PortfolioContext dest)
+        private bool SyncSERDProject(string projectId, MigratePortfolioContext<serdproject> source, PortfolioContext dest)
         {
             string portfolioViewKey = "serd";
-            var sourceProjectItems = source.serdprojects.Where(p => p.project_id == projectId).ToList();
+            var sourceProjectItems = source.projects.Where(p => p.project_id == projectId).ToList();
             bool synched = SyncProject<serdproject>(projectId, dest, portfolioViewKey, sourceProjectItems);
             return synched;
         }
 
-        private bool SyncODDProject(string projectId, MigratePortfolioContext source, PortfolioContext dest)
+        private bool SyncODDProject(string projectId, MigratePortfolioContext<oddproject> source, PortfolioContext dest)
         {
             string portfolioViewKey = "odd";
             var sourceProjectItems = source.projects.Where(p => p.project_id == projectId).ToList();
