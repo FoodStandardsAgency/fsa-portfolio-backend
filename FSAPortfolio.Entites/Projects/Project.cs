@@ -47,7 +47,7 @@ namespace FSAPortfolio.Entities.Projects
         public int? BudgetType_Id { get; set; }
         public int Funded { get; set; }
         public int Confidence { get; set; }
-        public int Priorities { get; set; }
+        public int Priorities { get; set; } // TODO: is this used?
         public int Benefits { get; set; }
         public int Criticality { get; set; }
 

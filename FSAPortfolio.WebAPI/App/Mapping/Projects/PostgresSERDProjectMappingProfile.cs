@@ -47,7 +47,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => SyncMaps.serd_categoryKeyMap[s.category ?? "13"]))
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => SyncMaps.sizeKeyMap[string.Empty])) // TODO: isn't one!?
                 .ForMember(p => p.Size, o => o.Ignore())
-                .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => SyncMaps.serd_budgetTypeKeyMap[s.budgettype ?? "none"]))
+                .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => SyncMaps.serd_budgetTypeKeyMap[(s.budgettype ?? "none").Trim()]))
                 .ForMember(p => p.ChannelLink, o => o.MapFrom<PostgresLinkResolver, string>(s => s.link))
                 .ForMember(p => p.Documents, o => o.MapFrom<PostgresDocumentResolver, string>(s => s.documents))
                 .ForMember(p => p.LeadRole, o => o.Ignore())
@@ -55,6 +55,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 //    o.PreCondition(s => SyncMaps.oddLeadRoleMap.ContainsKey(s.oddlead_role));
                 //    o.MapFrom(s => SyncMaps.oddLeadRoleMap[s.oddlead_role]);
                 //})
+                .ForMember(p => p.ProjectType, o => o.Ignore()) // TODO: SERD
 
                 .ForMember(p => p.Subcategories, o => o.Ignore()) // Anna Nikiel 18/11/2020: can ignore this in migration.
 
@@ -70,11 +71,10 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.LatestUpdate, o => o.Ignore())
                 .ForMember(p => p.AuditLogs, o => o.Ignore())
                 .ForMember(p => p.Theme, o => o.Ignore())
-                .ForMember(p => p.ProjectType, o => o.Ignore())
                 .ForMember(p => p.StrategicObjectives, o => o.Ignore())
                 .ForMember(p => p.Milestones, o => o.Ignore())
                 .ForMember(p => p.Programme, o => o.Ignore())
-                .ForMember(p => p.Supplier, o => o.Ignore())
+                .ForMember(p => p.Priorities, o => o.Ignore())
 
                 .ForMember(p => p.BusinessCaseNumber, o => o.Ignore())
                 .ForMember(p => p.FSNumber, o => o.Ignore())
