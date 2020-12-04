@@ -484,17 +484,24 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
         private bool SyncSERDProject(string projectId, MigratePortfolioContext source, PortfolioContext dest)
         {
-            log.Add($"{projectId} Ok.");
-            return true;
+            string portfolioViewKey = "serd";
+            var sourceProjectItems = source.serdprojects.Where(p => p.project_id == projectId).ToList();
+            bool synched = SyncProject<serdproject>(projectId, dest, portfolioViewKey, sourceProjectItems);
+            return synched;
         }
 
         private bool SyncODDProject(string projectId, MigratePortfolioContext source, PortfolioContext dest)
         {
             string portfolioViewKey = "odd";
-            bool synched = false;
             var sourceProjectItems = source.projects.Where(p => p.project_id == projectId).ToList();
+            bool synched = SyncProject<oddproject>(projectId, dest, portfolioViewKey, sourceProjectItems);
+            return synched;
+        }
 
-            // Only proceed if have a project with a single name throughout its history
+        private bool SyncProject<T>(string projectId, PortfolioContext dest, string portfolioViewKey, List<T> sourceProjectItems)
+            where T : IPostgresProject, new()
+        {
+            bool synched = false;
             if (sourceProjectItems.Count() > 0)
             {
                 var latestSourceUpdate = sourceProjectItems.OrderByDescending(p => p.timestamp).First();
@@ -570,10 +577,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
             log.Add($"{projectId} FAIL! {message}"); ;
         }
 
-        private void SyncUpdates(PortfolioContext dest, IEnumerable<oddproject> sourceProjectDetail, Project destProject)
+        private void SyncUpdates<T>(PortfolioContext dest, IEnumerable<T> sourceProjectDetail, Project destProject)
+            where T : IPostgresProject
         {
             // Now sync the updates
-            oddproject lastUpdate = null;
+            T lastUpdate = default(T);
             foreach (var sourceUpdate in sourceProjectDetail.OrderBy(u => u.timestamp))
             {
                 var destUpdate = destProject.Updates.SingleOrDefault(u => u.SyncId == sourceUpdate.id);
@@ -614,17 +622,22 @@ namespace FSAPortfolio.WebAPI.App.Sync
             dest.SaveChanges();
         }
 
-        private Project MapProject(PortfolioContext dest, IEnumerable<oddproject> sourceProjectDetail, Project destProject, oddproject latestSourceUpdate)
+        private Project MapProject<T>(PortfolioContext dest, IEnumerable<T> sourceProjectDetail, Project destProject, T latestSourceUpdate)
+            where T : IPostgresProject
         {
+            var oddSourceUpdate = latestSourceUpdate as oddproject;
             try
             {
-                if (SyncMaps.directorateKeyMap.ContainsKey(latestSourceUpdate.direct))
+                if (oddSourceUpdate != null)
                 {
-                    latestSourceUpdate.direct = SyncMaps.directorateKeyMap[latestSourceUpdate.direct];
-                }
-                else
-                {
-                    latestSourceUpdate.direct = latestSourceUpdate.direct?.ToLower();
+                    if (SyncMaps.directorateKeyMap.ContainsKey(oddSourceUpdate.direct))
+                    {
+                        oddSourceUpdate.direct = SyncMaps.directorateKeyMap[oddSourceUpdate.direct];
+                    }
+                    else
+                    {
+                        oddSourceUpdate.direct = oddSourceUpdate.direct?.ToLower();
+                    }
                 }
                 mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
                 destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
@@ -632,24 +645,32 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
             catch (AutoMapperMappingException ame)
             {
-                if (ame.MemberMap.DestinationName == "Size")
+                if (latestSourceUpdate is oddproject)
                 {
-                    log.Add($"MAPPING ERROR: Source project size = {latestSourceUpdate.project_size}");
+                    var oddProject = latestSourceUpdate as oddproject;
+                    if (ame.MemberMap.DestinationName == "Size")
+                    {
+                        log.Add($"MAPPING ERROR: Source project size = {oddProject.project_size}");
+                    }
+                    else
+                    {
+                        switch (ame.MemberMap.DestinationName)
+                        {
+                            case "Team":
+                                log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source team = {oddProject.team}");
+                                break;
+                            case "Directorate":
+                                log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source data = {oddProject.direct}");
+                                break;
+                            default:
+                                log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}");
+                                break;
+                        }
+                    }
                 }
                 else
                 {
-                    switch(ame.MemberMap.DestinationName)
-                    {
-                        case "Team":
-                            log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source team = {latestSourceUpdate.team}");
-                            break;
-                        case "Directorate":
-                            log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source data = {latestSourceUpdate.direct}");
-                            break;
-                        default:
-                            log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}");
-                            break;
-                    }
+                    log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}");
                 }
             }
             return null;

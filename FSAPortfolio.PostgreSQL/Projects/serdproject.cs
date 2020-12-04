@@ -6,7 +6,7 @@ namespace FSAPortfolio.PostgreSQL.Projects
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class serdproject
+    public partial class serdproject : IPostgresProject
     {
         [Key]
         [Column(Order = 0)]
@@ -124,8 +124,9 @@ namespace FSAPortfolio.PostgreSQL.Projects
         [StringLength(3)]
         public string rd { get; set; }
 
-        public bool IsDuplicate(oddproject p)
+        public bool IsDuplicate(object project)
         {
+            var p = (serdproject)project;
             return update != null &&
                 rag == p.rag &&
                 onhold == p.onhold &&

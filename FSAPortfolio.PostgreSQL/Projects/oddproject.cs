@@ -6,7 +6,7 @@ namespace FSAPortfolio.PostgreSQL.Projects
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Data.Entity.Spatial;
 
-    public partial class oddproject : IPostgresProject<oddproject>
+    public partial class oddproject : IPostgresProject
     {
         [Key]
         [Column(Order = 0)]
@@ -128,8 +128,9 @@ namespace FSAPortfolio.PostgreSQL.Projects
 
         public float? p_comp { get; set; }
 
-        public bool IsDuplicate(oddproject p)
+        public bool IsDuplicate(object project)
         {
+            var p = (oddproject)project;
             return update != null &&
                 rag == p.rag &&
                 onhold == p.onhold &&

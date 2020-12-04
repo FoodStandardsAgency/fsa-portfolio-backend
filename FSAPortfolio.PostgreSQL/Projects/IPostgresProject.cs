@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace FSAPortfolio.PostgreSQL.Projects
 {
-    interface IPostgresProject<T> where T: class, new()
+    public interface IPostgresProject
     {
-        bool IsDuplicate(T p);
+        string project_id { get; set; }
+        DateTime timestamp { get; set; }
+        string short_desc { get; set; }
+        int id { get; set; }
+        string update { get; set; }
+        bool IsDuplicate(object project);
     }
 }

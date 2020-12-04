@@ -32,6 +32,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping
             {
                 cfg.AllowNullCollections = true;
                 cfg.AddProfile<PostgresODDProjectMappingProfile>();
+                cfg.AddProfile<PostgresSERDProjectMappingProfile>();
                 cfg.AddProfile<ProjectViewModelProfile>();
                 cfg.AddProfile<ProjectUpdateModelProfile>();
                 cfg.AddProfile<ProjectQueryModelProfile>();
