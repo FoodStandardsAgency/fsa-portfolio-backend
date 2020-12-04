@@ -566,7 +566,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 }
                 else
                 {
-                    logFailure(projectId, "Destination project is null!");
+                    logFailure(projectId);
                 }
             }
             else
@@ -580,6 +580,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
         private void logFailure(string projectId, string message)
         {
             log.Add($"{projectId} FAIL! {message}"); ;
+        }
+        private void logFailure(string projectId)
+        {
+            log.Add($"{projectId} FAIL!"); ;
         }
 
         private void SyncUpdates<T>(PortfolioContext dest, IEnumerable<T> sourceProjectDetail, Project destProject)
@@ -650,7 +654,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
             catch (AutoMapperMappingException ame)
             {
-                log.Add($"Mapping error: {ame.Message}");
+                log.Add($"Mapping error: {ame.StackTrace}");
                 if (latestSourceUpdate is oddproject)
                 {
                     var oddProject = latestSourceUpdate as oddproject;

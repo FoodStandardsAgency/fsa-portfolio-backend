@@ -36,7 +36,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "08", $"{ViewKeyPrefix.Category}8" },
             { "01", $"{ViewKeyPrefix.Category}9" },
             { "10", $"{ViewKeyPrefix.Category}10" },
-            { "12", $"{ViewKeyPrefix.Category}11" }
+            { "12", $"{ViewKeyPrefix.Category}11" },
+            { "13", $"{ViewKeyPrefix.Category}12" }
         };
     }
 }

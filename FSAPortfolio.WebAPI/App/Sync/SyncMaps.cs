@@ -169,8 +169,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}7"), "Novel food and processes"},
             { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}8"), "Data and digital"},
             { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}9"), "Best regulator"},
-            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}11"), "Emerging risks and opportunities"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}10"), "Emerging risks and opportunities"},
             { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}11"), "Not a current ARI"},
+            { new Tuple<string, string>("serd", $"{ViewKeyPrefix.Category}12"), "Unknown"},
 
             { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}0"), "Category / Swimlane 1"},
             { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}1"), "Category / Swimlane 2"},
