@@ -396,12 +396,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
             onHoldFactory(1);
             onHoldFactory(2);
             onHoldFactory(3);
-            categoryFactory(0);
-            categoryFactory(1);
-            categoryFactory(2);
-            categoryFactory(3);
-            categoryFactory(4);
-            categoryFactory(5);
+
+            var categoryLookup = SyncMaps.categoryKeyMap[viewKey];
+            for (int i = 0; i < categoryLookup.Count; i++)
+            {
+                categoryFactory(i);
+            }
             sizeFactory(0);
             sizeFactory(1);
             sizeFactory(2);
@@ -672,7 +672,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     switch (ame.MemberMap.DestinationName)
                     {
                         case nameof(Project.BudgetType):
-                            log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source category = {latestSourceUpdate.budgettype}");
+                            log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source budgettype = {latestSourceUpdate.budgettype}");
                             break;
                         case nameof(Project.Category):
                             log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source category = {latestSourceUpdate.category}");

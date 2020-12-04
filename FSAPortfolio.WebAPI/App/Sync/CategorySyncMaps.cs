@@ -10,6 +10,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
         public static readonly Dictionary<string, Dictionary<string, string>> categoryKeyMap = new Dictionary<string, Dictionary<string, string>>()
         {
             { "odd", odd_categoryKeyMap },
+            { "abc", odd_categoryKeyMap },
+            { "fhp", odd_categoryKeyMap },
+            { "otp", odd_categoryKeyMap },
+            { "test", odd_categoryKeyMap },
             { "serd", serd_categoryKeyMap }
         };
 
