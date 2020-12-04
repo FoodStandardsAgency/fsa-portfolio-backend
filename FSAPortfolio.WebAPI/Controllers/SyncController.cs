@@ -73,7 +73,7 @@ namespace FSAPortfolio.WebAPI.Controllers
 
         // GET: api/Sync/SyncAllProjects
         [AcceptVerbs("GET")]
-        public IEnumerable<string> SyncAllProjects([FromUri] string portfolio)
+        public IEnumerable<string> SyncAllProjects([FromUri] string portfolio = null)
         {
             List<string> messages = new List<string>();
             var sync = new SyncProvider(messages);
