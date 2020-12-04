@@ -61,6 +61,7 @@ namespace FSAPortfolio.PostgreSQL
         private static void configure_odd_project(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<oddproject>().ToTable("projects");
+            modelBuilder.Entity<serdproject>().ToTable("serdprojects");
             modelBuilder.Entity<oddproject>()
                 .Property(e => e.project_id)
                 .IsUnicode(false);
@@ -210,6 +211,7 @@ namespace FSAPortfolio.PostgreSQL
         private static void configure_serd_project(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<serdproject>().ToTable("projects");
+            modelBuilder.Entity<oddproject>().ToTable("oddprojects");
             modelBuilder.Entity<serdproject>()
                 .Property(e => e.project_id)
                 .IsUnicode(false);
