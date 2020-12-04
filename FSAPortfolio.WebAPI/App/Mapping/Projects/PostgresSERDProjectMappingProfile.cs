@@ -109,7 +109,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.Budget, o => o.MapFrom<DecimalResolver, string>(s => s.budget))
                 .ForMember(p => p.Spent, o => o.MapFrom<DecimalResolver, string>(s => s.spent))
                 .ForMember(p => p.ExpectedCurrentPhaseEnd, o => o.MapFrom<PostgresProjectDateResolver, string>(s => string.Empty)) // TODO: isn't one!?
-                .ForMember(p => p.ExpectedCurrentPhaseEnd, o => o.Ignore()) // TODO: gone
                 ;
         }
 
