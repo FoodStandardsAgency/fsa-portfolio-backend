@@ -424,7 +424,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
         internal void SyncAllProjects(string portfolio = "odd")
         {
             IEnumerable<string> projectIds;
-            IEnumerator<string> portfolios = null;
             using (var source = new MigratePortfolioContext(portfolio))
             {
                 switch(portfolio)
