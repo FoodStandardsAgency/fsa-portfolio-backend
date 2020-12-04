@@ -442,6 +442,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 case "serd":
                     using (var source = new MigratePortfolioContext<serdproject>(portfolio))
                     {
+                        log.Add("Syncing SERD projects");
                         projectIds = source.projects.Select(p => p.project_id).Distinct().ToArray();
                     }
                     break;
@@ -467,10 +468,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
                             log.Add(ve.ErrorMessage);
                         }
                     }
-                }
-                catch(Exception e)
-                {
-                    break;
                 }
             }
         }
