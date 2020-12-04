@@ -555,7 +555,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 destProject.Reservation.Portfolio = portfolio;
 
 
-                destProject = MapProject(dest, sourceProjectItems, destProject, latestSourceUpdate);
+                destProject = MapProject<T>(dest, sourceProjectItems, destProject, latestSourceUpdate);
 
                 if (destProject != null)
                 {
@@ -630,7 +630,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
             where T : IPostgresProject
         {
             log.Add($"{destProject.Reservation.ProjectId} mapping...");
+            if (mapper == null) log.Add($"Mapper is null!");
+            if (dest == null) log.Add($"dest is null!");
+            if (latestSourceUpdate == null) log.Add($"Update is null!");
             var oddSourceUpdate = latestSourceUpdate as oddproject;
+            if (oddSourceUpdate == null) log.Add($"ODD update is null!");
             try
             {
                 if (oddSourceUpdate != null)
@@ -645,8 +649,6 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         oddSourceUpdate.direct = oddSourceUpdate.direct?.ToLower();
                     }
                 }
-                if (mapper == null) log.Add($"Mapper is null!");
-                if (latestSourceUpdate == null) log.Add($"Update is null!");
                 mapper.Map(latestSourceUpdate, destProject, opt => opt.Items[nameof(PortfolioContext)] = dest);
                 log.Add($"{destProject.Reservation.ProjectId} mapped");
                 destProject.Description = sourceProjectDetail.Where(u => !string.IsNullOrEmpty(u.short_desc)).OrderBy(u => u.timestamp).LastOrDefault()?.short_desc; // Take the last description
