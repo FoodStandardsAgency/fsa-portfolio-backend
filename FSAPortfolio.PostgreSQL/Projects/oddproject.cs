@@ -128,9 +128,9 @@ namespace FSAPortfolio.PostgreSQL.Projects
 
         public float? p_comp { get; set; }
 
-        public bool IsDuplicate(object project)
+        public bool IsDuplicate(object nextUpdate)
         {
-            var p = (oddproject)project;
+            var p = (oddproject)nextUpdate;
             return update != null &&
                 rag == p.rag &&
                 onhold == p.onhold &&
@@ -139,7 +139,7 @@ namespace FSAPortfolio.PostgreSQL.Projects
                 budget == p.budget &&
                 spent == p.spent &&
                 expendp == p.expendp &&
-                (string.IsNullOrWhiteSpace(update) || update == p.update)
+                (string.IsNullOrWhiteSpace(p.update) || update == p.update)
                 ;
         }
 

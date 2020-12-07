@@ -133,7 +133,7 @@ namespace FSAPortfolio.PostgreSQL.Projects
                 phase == p.phase &&
                 budget == p.budget &&
                 spent == p.spent &&
-                (string.IsNullOrWhiteSpace(update) || update == p.update)
+                (string.IsNullOrWhiteSpace(p.update) || update == p.update)
                 ;
         }
 
