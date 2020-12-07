@@ -62,15 +62,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
         public async Task<ProjectEditOptionsModel> GetNewProjectOptionsAsync(PortfolioConfiguration config)
         {
             var options = PortfolioMapper.ProjectMapper.Map<ProjectEditOptionsModel>(config);
-
-            var projects = await context.Projects
-                .IncludeProject()
-                .Where(p => p.Reservation.Portfolio_Id == config.Portfolio_Id)
-                .OrderBy(p => p.Reservation.ProjectId)
-                .ToListAsync();
-
-            await ProjectEditOptionsManualMaps.MapAsync(context, config, projects, options);
-
+            await ProjectEditOptionsManualMaps.MapAsync(context, config, options);
             return options;
         }
 

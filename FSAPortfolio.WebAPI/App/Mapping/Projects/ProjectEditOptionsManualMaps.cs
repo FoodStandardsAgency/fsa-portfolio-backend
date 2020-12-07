@@ -13,7 +13,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 {
     public class ProjectEditOptionsManualMaps
     {
-        internal static async Task MapAsync(PortfolioContext context, PortfolioConfiguration config, IEnumerable<Project> projects, ProjectEditOptionsModel options)
+        internal static async Task MapAsync(PortfolioContext context, PortfolioConfiguration config, ProjectEditOptionsModel options)
         {
             var directorates = await context.Directorates.OrderBy(d => d.Order).ToListAsync();
             var directorateItems = PortfolioMapper.ProjectMapper.Map<List<DropDownItemModel>>(directorates);
