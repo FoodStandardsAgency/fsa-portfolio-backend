@@ -22,7 +22,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.UI.WebControls;
-
+using System.Text.RegularExpressions;
 
 namespace FSAPortfolio.WebAPI.App.Sync
 {
@@ -478,6 +478,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
         {
             bool synched = false;
 
+            if (string.IsNullOrEmpty(portfolioViewKey))
+            {
+                var m = Regex.Match(projectId, @"\d+");
+                portfolioViewKey = projectId.Substring(0, m.Index);
+            }
             using (var dest = new PortfolioContext())
             {
                 switch(portfolioViewKey)
