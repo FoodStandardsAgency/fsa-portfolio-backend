@@ -477,18 +477,20 @@ namespace FSAPortfolio.WebAPI.App.Sync
         internal bool SyncProject(string projectId, string portfolioViewKey = null)
         {
             bool synched = false;
-
+            logDebug(projectId, $"syncing...");
             if (string.IsNullOrEmpty(portfolioViewKey))
             {
                 var m = Regex.Match(projectId, @"\d+");
-                if (m.Success)
+                if (m.Success && m.Index > 0 && m.Index <= 4)
                 {
                     portfolioViewKey = projectId.Substring(0, m.Index).ToLower();
                     logDebug(projectId, $"Porfolio = {portfolioViewKey}...");
                 }
                 else
                 {
-                    logDebug(projectId, $"Porfolio viewkey not found in id {projectId}");
+                    logDebug(projectId, $"Porfolio viewkey not found in id {projectId}...");
+                    if(!m.Success) logDebug(projectId, "...viewkey not found");
+                    else logDebug(projectId, $"...match index = {m.Index}");
                 }
             }
 
