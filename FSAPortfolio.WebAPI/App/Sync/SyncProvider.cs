@@ -31,10 +31,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
         private ICollection<string> log;
 
         IMapper mapper;
+        internal bool debug;
 
-        internal SyncProvider(ICollection<string> log)
+        internal SyncProvider(ICollection<string> log, bool debug = false)
         {
             this.log = log;
+            this.debug = debug;
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<PostgresODDProjectMappingProfile>();
@@ -517,6 +519,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         private bool SyncProject<T>(string projectId, PortfolioContext dest, string portfolioViewKey, List<T> sourceProjectItems)
             where T : IPostgresProject, new()
         {
+            logDebug(projectId, $"source update count = {sourceProjectItems.Count}");
             bool synched = false;
             if (sourceProjectItems.Count() > 0)
             {
@@ -588,20 +591,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
             return synched;
         }
 
-        private void logFailure(string projectId, string message)
-        {
-            log.Add($"{projectId} FAIL! {message}"); ;
-        }
-        private void logFailure(string projectId)
-        {
-            log.Add($"{projectId} FAIL!"); ;
-        }
-
         private void SyncUpdates<T>(PortfolioContext dest, IEnumerable<T> sourceProjectDetail, Project destProject)
             where T : IPostgresProject
         {
             // Now sync the updates
-            T lastUpdate = default(T);
+            T lastUpdate = default;
             foreach (var sourceUpdate in sourceProjectDetail.OrderBy(u => u.timestamp))
             {
                 var destUpdate = destProject.Updates.SingleOrDefault(u => u.SyncId == sourceUpdate.id);
@@ -627,6 +621,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 }
                 else
                 {
+                    if(lastUpdate != null && lastUpdate.IsDuplicate(sourceUpdate))
+                        logDebug(destProject.Reservation.ProjectId, $"discarding duplicate (Update text = '{sourceUpdate.update?.Substring(0, 50) ?? "null"}'");
+
                     if (destUpdate != null) dest.ProjectUpdates.Remove(destUpdate);
                 }
                 lastUpdate = sourceUpdate;
@@ -696,5 +693,19 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
             return null;
         }
+
+        private void logFailure(string projectId, string message)
+        {
+            log.Add($"{projectId} FAIL! {message}"); ;
+        }
+        private void logFailure(string projectId)
+        {
+            log.Add($"{projectId} FAIL!"); ;
+        }
+        private void logDebug(string projectId, string message)
+        {
+            if (debug) log.Add($"{projectId}: {message}");
+        }
+
     }
 }

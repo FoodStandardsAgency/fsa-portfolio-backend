@@ -63,7 +63,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         public IEnumerable<string> SyncProject([FromBody] SyncRequestModel syncRequest)
         {
             List<string> messages = new List<string>();
-            var sync = new SyncProvider(messages);
+            var sync = new SyncProvider(messages, true);
             if (!sync.SyncProject(syncRequest.ProjectId))
             {
                 throw new HttpResponseException(HttpStatusCode.NotFound);
