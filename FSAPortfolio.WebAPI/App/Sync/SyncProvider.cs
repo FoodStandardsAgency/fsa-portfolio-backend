@@ -600,7 +600,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             where T : IPostgresProject
         {
             // Now sync the updates
-            T lastUpdate = default;
+            T lastUpdate = default(T);
             foreach (var sourceUpdate in sourceProjectDetail.OrderBy(u => u.timestamp))
             {
                 var destUpdate = destProject.Updates.SingleOrDefault(u => u.SyncId == sourceUpdate.id);
