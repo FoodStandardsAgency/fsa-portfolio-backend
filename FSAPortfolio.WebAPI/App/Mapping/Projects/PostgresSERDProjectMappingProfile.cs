@@ -21,7 +21,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
             // Inbound
             project__Project();
             project__ProjectUpdateItem();
-
         }
         private void project__Project()
         {
@@ -45,19 +44,15 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.RelatedProjects, o => o.MapFrom<PostgresProjectCollectionResolver, string>(s => s.rels))
                 .ForMember(p => p.DependantProjects, o => o.MapFrom<PostgresProjectCollectionResolver, string>(s => s.dependencies))
                 .ForMember(p => p.Category, o => o.MapFrom<ConfigCategoryResolver, string>(s => SyncMaps.serd_categoryKeyMap[s.category ?? "13"]))
+
+                .ForMember(p => p.Subcategories, o => o.MapFrom(new SubCategoryResolver(SyncMaps.serd_categoryKeyMap), s => s.subcat))
+
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => SyncMaps.sizeKeyMap[string.Empty])) // TODO: isn't one!?
-                .ForMember(p => p.Size, o => o.Ignore())
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => SyncMaps.serd_budgetTypeKeyMap[(s.budgettype ?? "none").Trim()]))
+                .ForMember(p => p.ProjectType, o => o.MapFrom(s => SyncMaps.serdProjectTypeMaps[s.project_type ?? "o"])) // TODO: SERD
                 .ForMember(p => p.ChannelLink, o => o.MapFrom<PostgresLinkResolver, string>(s => s.link))
                 .ForMember(p => p.Documents, o => o.MapFrom<PostgresDocumentResolver, string>(s => s.documents))
-                .ForMember(p => p.LeadRole, o => o.Ignore())
-                //.ForMember(p => p.LeadRole, o => {
-                //    o.PreCondition(s => SyncMaps.oddLeadRoleMap.ContainsKey(s.oddlead_role));
-                //    o.MapFrom(s => SyncMaps.oddLeadRoleMap[s.oddlead_role]);
-                //})
-                .ForMember(p => p.ProjectType, o => o.Ignore()) // TODO: SERD
-
-                .ForMember(p => p.Subcategories, o => o.Ignore()) // Anna Nikiel 18/11/2020: can ignore this in migration.
+                .ForMember(p => p.LeadRole, o => o.Ignore()) // Isn't one!?
 
                 // Ignore these
                 .ForMember(p => p.KeyContact1, o => o.Ignore())
@@ -112,5 +107,32 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 ;
         }
 
+    }
+
+    public class SubCategoryResolver : IMemberValueResolver<object, Project, string, ICollection<ProjectCategory>>
+    {
+        private Dictionary<string, string> categoryKeyMap;
+        private ConfigCategoryResolver resolver;
+
+        public SubCategoryResolver(Dictionary<string, string> categoryKeyMap)
+        {
+            this.categoryKeyMap = categoryKeyMap;
+            this.resolver = new ConfigCategoryResolver();
+        }
+
+        public ICollection<ProjectCategory> Resolve(object source, Project destination, string sourceMember, ICollection<ProjectCategory> destMember, ResolutionContext context)
+        {
+            var result = new List<ProjectCategory>();
+            if (!string.IsNullOrWhiteSpace(sourceMember))
+            {
+                var categoryKeys = sourceMember.Split(',').Select(s => categoryKeyMap[s.Trim()]);
+                foreach (var key in categoryKeys)
+                {
+                    var cat = resolver.Resolve(source, destination, key, null, context);
+                    if(cat != null) result.Add(cat);
+                }
+            }
+            return result;
+        }
     }
 }
