@@ -481,7 +481,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             if (string.IsNullOrEmpty(portfolioViewKey))
             {
                 var m = Regex.Match(projectId, @"\d+");
-                if (false && m.Success && m.Index > 0 && m.Index <= 4 && m.Index < projectId.Length)
+                if (m.Success && m.Index > 0 && m.Index <= 4 && m.Index < projectId.Length)
                 {
                     portfolioViewKey = projectId.Substring(0, m.Index).ToLower();
                     logDebug(projectId, $"Porfolio = {portfolioViewKey}...");
@@ -633,13 +633,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     if (lastUpdate != null && (lastUpdate.update?.Equals(sourceUpdate.update) ?? false))
                     {
                         destUpdate.Text = null;
+                        debugLogDiscardedUpdateText(sourceUpdate);
                     }
                 }
                 else
                 {
-                    if(lastUpdate != null && lastUpdate.IsDuplicate(sourceUpdate))
-                        logDebug(destProject.Reservation.ProjectId, $"discarding duplicate (Update text = '{sourceUpdate.update?.Substring(0, 50) ?? "null"}'");
-
+                    debugLogDiscardedUpdateText(sourceUpdate);
                     if (destUpdate != null) dest.ProjectUpdates.Remove(destUpdate);
                 }
                 lastUpdate = sourceUpdate;
@@ -721,6 +720,18 @@ namespace FSAPortfolio.WebAPI.App.Sync
         private void logDebug(string projectId, string message)
         {
             if (debug) log.Add($"{projectId}: {message}");
+        }
+
+        private void debugLogDiscardedUpdateText(IPostgresProject sourceUpdate)
+        {
+            if (sourceUpdate != null)
+            {
+                int length = Math.Min(sourceUpdate.update?.Length ?? 0, 50);
+                if (length > 0)
+                    logDebug(sourceUpdate.project_id, $"discarding duplicate (Update text = '{sourceUpdate.update.Substring(0, length)}')");
+                else
+                    logDebug(sourceUpdate.project_id, $"discarding duplicate (Update text empty)");
+            }
         }
 
     }
