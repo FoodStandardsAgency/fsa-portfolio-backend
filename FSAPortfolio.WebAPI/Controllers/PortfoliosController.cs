@@ -100,9 +100,16 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             using (var context = new PortfolioContext())
             {
-                var projectQuery = from p in context.Projects.IncludeProject() 
-                                   where p.Reservation.Portfolio.ViewKey == viewKey && p.LatestUpdate.Phase.Id != p.Reservation.Portfolio.Configuration.CompletedPhase.Id
+                var reservationIds = await (
+                    from p in context.Projects
+                    where p.Reservation.Portfolio.ViewKey == viewKey && p.LatestUpdate.Phase.Id != p.Reservation.Portfolio.Configuration.CompletedPhase.Id
+                    select p.ProjectReservation_Id
+                    ).ToListAsync();
+
+                var projectQuery = from p in context.Projects.IncludeProject()
+                                   where  reservationIds.Contains(p.ProjectReservation_Id)
                                    select p;
+
                 var provider = new PortfolioProvider(context, viewKey);
                 var config = await provider.GetConfigAsync();
                 var projects = await projectQuery.OrderByDescending(p => p.Priority).ToArrayAsync();
