@@ -4,9 +4,12 @@
     [UserName]      NVARCHAR (50)  NULL,
     [PasswordHash]  NVARCHAR (300) NULL,
     [AccessGroupId] INT            NOT NULL,
+    [RoleList]      NVARCHAR (MAX) NULL,
     CONSTRAINT [PK_dbo.Users] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_dbo.Users_dbo.AccessGroups_AccessGroupId] FOREIGN KEY ([AccessGroupId]) REFERENCES [dbo].[AccessGroups] ([Id])
 );
+
+
 
 
 

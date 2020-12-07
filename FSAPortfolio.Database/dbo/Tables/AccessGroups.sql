@@ -7,3 +7,15 @@
 
 
 
+
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ViewKey]
+    ON [dbo].[AccessGroups]([ViewKey] ASC);
+
+
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Description]
+    ON [dbo].[AccessGroups]([Description] ASC);
+
