@@ -10,82 +10,82 @@ namespace FSAPortfolio.WebAPI.Models
     [JsonConverter(typeof(ProjectEditOptionsModelConverter))]
     public class ProjectEditOptionsModel
     {
-        private static IEnumerable<DropDownItemModel> strategicObjectiveOptions = ProjectViewModelProfile.StragicObjectivesMap.Keys.Select((k, i) => 
+        private static List<DropDownItemModel> strategicObjectiveOptions = ProjectViewModelProfile.StragicObjectivesMap.Keys.Select((k, i) => 
             new DropDownItemModel() { Display = ProjectViewModelProfile.StragicObjectivesMap[k], Value = k, Order = i }
-            );
+            ).ToList();
 
         [JsonProperty(nameof(ProjectModel.phase))]
-        public IEnumerable<DropDownItemModel> PhaseItems { get; set; }
+        public List<DropDownItemModel> PhaseItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.rag))]
-        public IEnumerable<DropDownItemModel> RAGStatusItems { get; set; }
+        public List<DropDownItemModel> RAGStatusItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.onhold))]
-        public IEnumerable<DropDownItemModel> OnHoldStatusItems { get; set; }
+        public List<DropDownItemModel> OnHoldStatusItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.project_size))]
-        public IEnumerable<DropDownItemModel> ProjectSizeItems { get; set; }
+        public List<DropDownItemModel> ProjectSizeItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.budgettype))]
-        public IEnumerable<DropDownItemModel> BudgetTypeItems { get; set; }
+        public List<DropDownItemModel> BudgetTypeItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.category))]
-        public IEnumerable<DropDownItemModel> CategoryItems { get; set; }
+        public List<DropDownItemModel> CategoryItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.subcat))]
         public SelectPickerModel SubCategoryItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.direct))]
-        public IEnumerable<DropDownItemModel> Directorates { get; set; }
+        public List<DropDownItemModel> Directorates { get; set; }
 
         [JsonProperty(nameof(ProjectModel.strategic_objectives))]
-        public IEnumerable<DropDownItemModel> StrategicObjectives => strategicObjectiveOptions; 
+        public List<DropDownItemModel> StrategicObjectives => strategicObjectiveOptions; 
 
         [JsonProperty(nameof(ProjectModel.programme))]
-        public IEnumerable<DropDownItemModel> Programme { get; set; }
+        public List<DropDownItemModel> Programme { get; set; }
 
 
-        [JsonProperty(nameof(ProjectModel.risk_rating))]
-        public IEnumerable<DropDownItemModel> RiskRating { get; set; }
+        [JsonProperty(ProjectPropertyConstants.risk_rating)]
+        public List<DropDownItemModel> RiskRating { get; set; }
 
         [JsonProperty(nameof(ProjectModel.theme))]
-        public IEnumerable<DropDownItemModel> Theme { get; set; }
+        public List<DropDownItemModel> Theme { get; set; }
 
         [JsonProperty(nameof(ProjectModel.project_type))]
-        public IEnumerable<DropDownItemModel> ProjectType { get; set; }
+        public List<DropDownItemModel> ProjectType { get; set; }
 
         // People
         [JsonProperty(nameof(ProjectUpdateModel.oddlead))]
         public ActiveDirectoryUserSelectModel ODDLead { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.oddlead_role)]
-        public IEnumerable<DropDownItemModel> ODDLeadRole { get; set; }
+        public List<DropDownItemModel> ODDLeadRole { get; set; }
 
         [JsonProperty(FilterFieldConstants.LeadTeamFilter)]
-        public IEnumerable<DropDownItemModel> G6Team { get; set; }
+        public List<DropDownItemModel> G6Team { get; set; }
 
 
         [JsonProperty(nameof(ProjectModel.priority_main))]
-        public IEnumerable<DropDownItemModel> PriorityItems { get; set; }
+        public List<DropDownItemModel> PriorityItems { get; set; }
 
         [JsonProperty(FilterFieldConstants.PriorityGroupFilter)]
-        public IEnumerable<DropDownItemModel> PriorityGroupItems { get; set; }
+        public List<DropDownItemModel> PriorityGroupItems { get; set; }
 
 
         [JsonProperty(nameof(ProjectModel.funded))]
-        public IEnumerable<DropDownItemModel> FundedItems { get; set; }
+        public List<DropDownItemModel> FundedItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.confidence))]
-        public IEnumerable<DropDownItemModel> ConfidenceItems { get; set; }
+        public List<DropDownItemModel> ConfidenceItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.priorities))]
-        public IEnumerable<DropDownItemModel> PrioritiesItems { get; set; }
+        public List<DropDownItemModel> PrioritiesItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.benefits))]
-        public IEnumerable<DropDownItemModel> BenefitItems { get; set; }
+        public List<DropDownItemModel> BenefitItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.criticality))]
-        public IEnumerable<DropDownItemModel> CriticalityItems { get; set; }
+        public List<DropDownItemModel> CriticalityItems { get; set; }
 
         [JsonIgnore]
         public IEnumerable<ProjectDataOptionsModel> ProjectDataOptions { get; set; }

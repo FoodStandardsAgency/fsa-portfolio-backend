@@ -23,7 +23,7 @@ using FSAPortfolio.WebAPI.App.Users;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ProjectsController : ApiController
     {
         // POST: api/Projects
@@ -234,7 +234,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 {
                     var provider = new PortfolioProvider(context, portfolio);
                     var config = await provider.GetConfigAsync();
-                    result.Options = await provider.GetNewProjectOptionsAsync(config);
+                    result.Options = await provider.GetNewProjectOptionsAsync(config, result.Project as ProjectEditViewModel);
                 }
 
             }

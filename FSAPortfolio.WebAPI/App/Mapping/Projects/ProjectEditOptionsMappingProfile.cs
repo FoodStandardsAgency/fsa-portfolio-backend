@@ -154,7 +154,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         }
     }
 
-    public class LabelDropDownResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, IEnumerable<DropDownItemModel>>
+    public class LabelDropDownResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, List<DropDownItemModel>>
     {
         private string fieldName;
         private bool emptyOption = false;
@@ -165,26 +165,32 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
             this.emptyOption = addNoneOption;
         }
 
-        public IEnumerable<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, IEnumerable<DropDownItemModel> destMember, ResolutionContext context)
+        public List<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, List<DropDownItemModel> destMember, ResolutionContext context)
         {
             List<DropDownItemModel> items = null;
             var label = source.Labels.SingleOrDefault(l => l.FieldName == fieldName);
             if(!string.IsNullOrEmpty(label?.FieldOptions))
             {
-                items = label.FieldOptions.Split(',').Select((l, i ) => {
+                items = label.FieldOptions.Split(',').Select((l, i ) =>
+                {
                     var value = l.Trim();
                     var display = value;
-                    return new DropDownItemModel() { Display = display, Value = value, Order = i };
-                    })
+                    return NewDropDownItem(i + 1, value, display);
+                })
                     .ToList();
                 if (emptyOption)
-                    items.Insert(0, new DropDownItemModel() { Display = "None", Value = null });
+                    items.Insert(0, NewDropDownItem(1, null, "None"));
             }
             return items;
         }
+
+        public static DropDownItemModel NewDropDownItem(int order, string value, string display)
+        {
+            return new DropDownItemModel() { Display = display, Value = value, Order = order };
+        }
     }
 
-    public class PriorityGroupLabelDropDownResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, IEnumerable<DropDownItemModel>>
+    public class PriorityGroupLabelDropDownResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, List<DropDownItemModel>>
     {
         private string fieldName;
 
@@ -193,9 +199,9 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
             this.fieldName = fieldName;
         }
 
-        public IEnumerable<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, IEnumerable<DropDownItemModel> destMember, ResolutionContext context)
+        public List<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, List<DropDownItemModel> destMember, ResolutionContext context)
         {
-            return source.PriorityGroups.Select(pg => new DropDownItemModel() { Display = pg.Name, Value = pg.ViewKey, Order = pg.Order });
+            return source.PriorityGroups.Select(pg => new DropDownItemModel() { Display = pg.Name, Value = pg.ViewKey, Order = pg.Order }).ToList();
         }
     }
 
@@ -258,7 +264,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         }
     }
 
-    public class ProjectOptionDropDownResolver<TOption> : IMemberValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, IEnumerable<TOption>, IEnumerable<DropDownItemModel>>
+    public class ProjectOptionDropDownResolver<TOption> : IMemberValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, IEnumerable<TOption>, List<DropDownItemModel>>
         where TOption : IProjectOption, new()
     {
         private string fieldName;
@@ -270,7 +276,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
             this.emptyOption = addNoneOption;
         }
 
-        public IEnumerable<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, IEnumerable<TOption> sourceMember, IEnumerable<DropDownItemModel> destMember, ResolutionContext context)
+        public List<DropDownItemModel> Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, IEnumerable<TOption> sourceMember, List<DropDownItemModel> destMember, ResolutionContext context)
         {
             List<DropDownItemModel> items = null;
             if (sourceMember != null)

@@ -167,10 +167,13 @@ namespace FSAPortfolio.WebAPI.App.Config
                 where name == null
                 select existingOption;
 
+            existingQuery = existingQuery.Where(e => e != null);
+
             var unableToDeleteQuery =
                 // Join this to all uses of the option
                 from option in unmatchedOptionsQuery
-                join existingOption in existingQuery on option.Id equals existingOption.Id into usedOptions
+                join existingOption in existingQuery
+                on option.Id equals existingOption.Id into usedOptions
                 from usedOption in usedOptions
                 group usedOption by option into options
                 select new { category = options.Key, projectCount = options.Count() };

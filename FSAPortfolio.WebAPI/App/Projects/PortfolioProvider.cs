@@ -59,10 +59,10 @@ namespace FSAPortfolio.WebAPI.App.Projects
             return reservation;
         }
 
-        public async Task<ProjectEditOptionsModel> GetNewProjectOptionsAsync(PortfolioConfiguration config)
+        public async Task<ProjectEditOptionsModel> GetNewProjectOptionsAsync(PortfolioConfiguration config, ProjectEditViewModel projectModel = null)
         {
             var options = PortfolioMapper.ProjectMapper.Map<ProjectEditOptionsModel>(config);
-            await ProjectEditOptionsManualMaps.MapAsync(context, config, options);
+            await ProjectEditOptionsManualMaps.MapAsync(context, config, options, projectModel);
             return options;
         }
 
