@@ -563,6 +563,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     var yrStart = pid.Length - 7;
                     destProject = new Project()
                     {
+                        TeamSettings = new ProjectGenericSettings(),
+                        PlanSettings = new ProjectGenericSettings(),
+                        ProgressSettings = new ProjectGenericSettings(),
+                        BudgetSettings = new ProjectGenericBudgetSettings(),
+                        ProcessSettings = new ProjectGenericSettings(),
                         Reservation = new ProjectReservation()
                         {
                             ProjectId = pid,
