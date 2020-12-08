@@ -548,6 +548,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     .Include(p => p.Updates.Select(u => u.RAGStatus))
                     .Include(p => p.Updates.Select(u => u.Phase))
                     .Include(p => p.Category)
+                    .Include(p => p.Subcategories)
                     .Include(p => p.Size)
                     .Include(p => p.BudgetType)
                     .Include(p => p.RelatedProjects)
