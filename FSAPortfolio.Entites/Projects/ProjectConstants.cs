@@ -52,7 +52,7 @@ namespace FSAPortfolio.Entities.Projects
         public static string SupportName = ConfigurationManager.AppSettings["Category.Support.Name"] ?? "Digital services development and support";
         public static string ITName = ConfigurationManager.AppSettings["Category.IT.Name"] ?? "Evergreen IT";
         public static string ResilienceName = ConfigurationManager.AppSettings["Category.Resilience.Name"] ?? "Protecting data and business resilience";
-        public static string NotSetName = ConfigurationManager.AppSettings["Category.NotSet.Name"] ?? "Not set";
+        public static string NotSetName = ConfigurationManager.AppSettings["Category.NotSet.Name"] ?? "None";
     }
 
     public static class ProjectSizeConstants
@@ -62,7 +62,7 @@ namespace FSAPortfolio.Entities.Projects
         public static string MediumName = ConfigurationManager.AppSettings["Size.Medium.Name"] ?? "Medium";
         public static string LargeName = ConfigurationManager.AppSettings["Size.Large.Name"] ?? "Large";
         public static string ExtraLargeName = ConfigurationManager.AppSettings["Size.ExtraLarge.Name"] ?? "Extra Large";
-        public static string NotSetName = ConfigurationManager.AppSettings["Size.NotSet.Name"] ?? "Not set";
+        public static string NotSetName = ConfigurationManager.AppSettings["Size.NotSet.Name"] ?? "None";
     }
 
     public static class BudgetTypeConstants
@@ -71,7 +71,7 @@ namespace FSAPortfolio.Entities.Projects
         public static string AdminName = ConfigurationManager.AppSettings["BudgetType.Admin.Name"] ?? "Admin";
         public static string ProgrammeName = ConfigurationManager.AppSettings["BudgetType.Programme.Name"] ?? "Programme";
         public static string CapitalName = ConfigurationManager.AppSettings["BudgetType.Capital.Name"] ?? "Capital";
-        public static string NotSetName = ConfigurationManager.AppSettings["BudgetType.NotSet.Name"] ?? "Not set";
+        public static string NotSetName = ConfigurationManager.AppSettings["BudgetType.NotSet.Name"] ?? "None";
         public static string NotSetViewKey = ConfigurationManager.AppSettings["BudgetType.NotSet.ViewKey"] ?? "none";
     }
 
@@ -83,7 +83,7 @@ namespace FSAPortfolio.Entities.Projects
         public static string HighName = ConfigurationManager.AppSettings["PriorityGroup.High.Name"] ?? "High";
         public static string MediumName = ConfigurationManager.AppSettings["PriorityGroup.Medium.Name"] ?? "Medium";
         public static string LowName = ConfigurationManager.AppSettings["PriorityGroup.Low.Name"] ?? "Low";
-        public static string NotSetName = ConfigurationManager.AppSettings["PriorityGroup.NotSet.Name"] ?? "Not set";
+        public static string NotSetName = ConfigurationManager.AppSettings["PriorityGroup.NotSet.Name"] ?? "None";
 
         public static string LowViewKey = ConfigurationManager.AppSettings["PriorityGroup.Low.ViewKey"] ?? "low";
         public static string MediumViewKey = ConfigurationManager.AppSettings["PriorityGroup.Medium.ViewKey"] ?? "medium";
