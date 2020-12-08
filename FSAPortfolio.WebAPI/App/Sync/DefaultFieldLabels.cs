@@ -79,6 +79,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             label.FieldTitle = fieldTitle;
             label.FieldName = fieldName;
             label.FieldType = inputType;
+            label.Included = included || IncludeAll;
             label.IncludedLock = includedLock;
             label.AdminOnlyLock = adminLock;
             label.FieldTypeLocked = inputTypeLocked;
