@@ -9,6 +9,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
     {
         public static readonly Dictionary<string, string> serdProjectTypeMaps = new Dictionary<string, string>()
         {
+            { string.Empty, "Project type" },
             { "o", "Project type" },
             { "i", "Internal" },
             { "f", "Fellowship" },

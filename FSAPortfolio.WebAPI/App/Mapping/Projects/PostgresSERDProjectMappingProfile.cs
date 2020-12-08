@@ -49,7 +49,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => SyncMaps.sizeKeyMap[string.Empty])) // TODO: isn't one!?
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => SyncMaps.serd_budgetTypeKeyMap[(s.budgettype ?? "none").Trim()]))
-                .ForMember(p => p.ProjectType, o => o.MapFrom(s => SyncMaps.serdProjectTypeMaps[s.project_type ?? "o"])) // TODO: SERD
+                .ForMember(p => p.ProjectType, o => o.MapFrom(s => SyncMaps.serdProjectTypeMaps[s.project_type ?? string.Empty])) // TODO: SERD
                 .ForMember(p => p.ChannelLink, o => o.MapFrom<PostgresLinkResolver, string>(s => s.link))
                 .ForMember(p => p.Documents, o => o.MapFrom<PostgresDocumentResolver, string>(s => s.documents))
                 .ForMember(p => p.LeadRole, o => o.Ignore()) // Isn't one!?

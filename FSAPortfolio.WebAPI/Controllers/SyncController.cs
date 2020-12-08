@@ -64,9 +64,18 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             List<string> messages = new List<string>();
             var sync = new SyncProvider(messages, true);
-            if (!sync.SyncProject(syncRequest.ProjectId))
+
+            try
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                if (!sync.SyncProject(syncRequest.ProjectId))
+                {
+                    throw new HttpResponseException(HttpStatusCode.NotFound);
+                }
+            }
+            catch(Exception e)
+            {
+                messages.Add(e.Message);
+                messages.Add(e.StackTrace);
             }
             return messages;
         }
