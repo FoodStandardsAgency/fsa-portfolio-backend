@@ -79,17 +79,23 @@ namespace FSAPortfolio.WebAPI.App.Sync
             label.FieldTitle = fieldTitle;
             label.FieldName = fieldName;
             label.FieldType = inputType;
-            label.Included = included || IncludeAll;
             label.IncludedLock = includedLock;
             label.AdminOnlyLock = adminLock;
             label.FieldTypeLocked = inputTypeLocked;
 
-            // Clear flags to leave alone
-            var flagsToLeaveAsIs = FilterProject;
-            flags = (flags & ~FilterProject);
-            
-            // Set to the current values 
-            flags |= (label.Flags & FilterProject);
+            if (label.Id == 0)
+            {
+                label.Included = included || IncludeAll;
+            }
+            else
+            {
+
+                // Clear flags to leave alone
+                flags = (flags & ~FilterProject);
+
+                // Set to the current values 
+                flags |= (label.Flags & FilterProject);
+            }
 
             label.Flags = flags;
 

@@ -137,14 +137,15 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 
         public ICollection<ProjectCategory> Resolve(object source, Project destination, string sourceMember, ICollection<ProjectCategory> destMember, ResolutionContext context)
         {
-            var result = new List<ProjectCategory>();
+            var result = destMember?.ToList() ?? new List<ProjectCategory>();
             if (!string.IsNullOrWhiteSpace(sourceMember))
             {
                 var categoryKeys = sourceMember.Split(',').Select(s => categoryKeyMap[s.Trim()]);
                 foreach (var key in categoryKeys)
                 {
                     var cat = resolver.Resolve(source, destination, key, null, context);
-                    if(cat != null) result.Add(cat);
+                    if(cat != null && !result.Any(c => c.ViewKey == cat.ViewKey)) 
+                        result.Add(cat);
                 }
             }
             return result;
