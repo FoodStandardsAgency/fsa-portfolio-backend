@@ -13,6 +13,8 @@ using Newtonsoft.Json.Linq;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Config;
+using System.Data.Entity.Validation;
+using System.Text;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -67,6 +69,37 @@ namespace FSAPortfolio.WebAPI.Controllers
                     ReasonPhrase = pce.Message
                 };
                 throw new HttpResponseException(resp);
+            }
+            catch (DbEntityValidationException e)
+            {
+                var stringBuilder = new StringBuilder();
+                foreach(var eve in e.EntityValidationErrors)
+                {
+                    var label = eve.Entry.Entity as PortfolioLabelConfig;
+                    if(label != null)
+                    {
+                        stringBuilder.Append($"Problem with configuration for field {label.FieldTitle}: ");
+                        stringBuilder.Append(string.Join("; ", eve.ValidationErrors.Select(ve => ve.ErrorMessage)));
+                    }
+                    else
+                    {
+                        stringBuilder.Append($"Contact administrator: unrecognised issue with configuration update.");
+                    }
+                }
+                var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
+                {
+                    ReasonPhrase = stringBuilder.ToString()
+                };
+                throw new HttpResponseException(resp);
+            }
+            catch (Exception e)
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
+                {
+                    ReasonPhrase = e.Message
+                };
+                throw new HttpResponseException(resp);
+
             }
         }
 
