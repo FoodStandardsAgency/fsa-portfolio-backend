@@ -251,9 +251,14 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
     {
         public DateTime? Resolve(Project source, object destination, DateTime? destMember, ResolutionContext context)
         {
-            var completedPhase = source.Reservation.Portfolio.Configuration.CompletedPhase;
-            var firstCompletePhase = source.Updates.Where(u => u.Phase == completedPhase).OrderBy(u => u.Timestamp).FirstOrDefault();
-            return firstCompletePhase?.Timestamp;
+            DateTime? result = null;
+            if (source.Updates != null)
+            {
+                var completedPhase = source.Reservation.Portfolio.Configuration.CompletedPhase;
+                var firstCompletePhase = source.Updates.Where(u => u.Phase == completedPhase).OrderBy(u => u.Timestamp).FirstOrDefault();
+                result = firstCompletePhase?.Timestamp;
+            }
+            return result;
         }
 
     }
@@ -319,10 +324,13 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         public ProjectDateViewModel Convert(ProjectDate source, ProjectDateViewModel destination, ResolutionContext context)
         {
             ProjectDateViewModel model = new ProjectDateViewModel();
-            model.Date = context.Mapper.Map<DateTime?>(source.Date);
-            if (source.Flags.HasFlag(ProjectDateFlags.Day)) model.Flag = "day";
-            else if (source.Flags.HasFlag(ProjectDateFlags.Month)) model.Flag = "month";
-            else if (source.Flags.HasFlag(ProjectDateFlags.Year)) model.Flag = "year";
+            if (source != null)
+            {
+                model.Date = context.Mapper.Map<DateTime?>(source.Date);
+                if (source.Flags.HasFlag(ProjectDateFlags.Day)) model.Flag = "day";
+                else if (source.Flags.HasFlag(ProjectDateFlags.Month)) model.Flag = "month";
+                else if (source.Flags.HasFlag(ProjectDateFlags.Year)) model.Flag = "year";
+            }
             return model;
         }
     }

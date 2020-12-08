@@ -119,6 +119,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Milestones)
                 .Include(p => p.People)
                 .Include(p => p.Updates)
+                .Include(p => p.AuditLogs)
                 ;
         }
 
@@ -128,6 +129,9 @@ namespace FSAPortfolio.WebAPI.App
             project.Subcategories.Clear();
             project.RelatedProjects.Clear();
             project.DependantProjects.Clear();
+
+            context.ProjectAuditLogs.RemoveRange(project.AuditLogs);
+            project.AuditLogs.Clear();
 
             context.Documents.RemoveRange(project.Documents);
             project.Documents.Clear();
