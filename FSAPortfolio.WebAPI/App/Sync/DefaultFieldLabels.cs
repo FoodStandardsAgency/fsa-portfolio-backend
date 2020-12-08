@@ -68,8 +68,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     throw new ArgumentException("Not recognised", nameof(inputType));
             }
 
-            if ((flags & DefaultCRUD) == 0) flags = flags | DefaultCRUD;
-
+            if ((flags & DefaultCRUD) == 0) flags |= DefaultCRUD;
             if (fieldGroup == FieldGroupName_Budget) flags |= FSAOnly;
 
             var group = config.LabelGroups.FirstOrDefault(g => g.Name == fieldGroup);
@@ -83,6 +82,15 @@ namespace FSAPortfolio.WebAPI.App.Sync
             label.IncludedLock = includedLock;
             label.AdminOnlyLock = adminLock;
             label.FieldTypeLocked = inputTypeLocked;
+
+            // Clear flags to leave alone
+            var flagsToLeaveAsIs = FilterProject;
+            flags = (flags & ~FilterProject);
+            
+            // Set to the current values 
+            flags |= (label.Flags & FilterProject);
+
+            label.Flags = flags;
 
             return label;
         }
@@ -126,10 +134,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_ProjectTeam, "Key contact 3", nameof(ProjectModel.key_contact3), false, false, false, PortfolioFieldType.ADUserSearch),
                 Factory(FieldGroupName_ProjectTeam, "Supplier", ProjectPropertyConstants.Supplier, false, false, false, PortfolioFieldType.FreeText),
                 Factory(FieldGroupName_ProjectTeam, "Project team", nameof(ProjectEditViewModel.team), false, false, false, PortfolioFieldType.ADUserMultiSearch  ),
-                Factory(FieldGroupName_ProjectTeam, $"{FieldGroupName_ProjectTeam} setting 1", "project_team_setting1", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
-                Factory(FieldGroupName_ProjectTeam, $"{FieldGroupName_ProjectTeam} setting 2", "project_team_setting2", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
-                Factory(FieldGroupName_ProjectTeam, $"{FieldGroupName_ProjectTeam} option 1", "project_team_option1", false, false, false, PortfolioFieldType.OptionList, flags: NotModelled),
-                Factory(FieldGroupName_ProjectTeam, $"{FieldGroupName_ProjectTeam} option 2", "project_team_option2", false, false, false, PortfolioFieldType.OptionList, flags: NotModelled),
+                Factory(FieldGroupName_ProjectTeam, $"{FieldGroupName_ProjectTeam} setting 1", nameof(ProjectModel.project_team_setting1), false, false, false, PortfolioFieldType.FreeText),
+                Factory(FieldGroupName_ProjectTeam, $"{FieldGroupName_ProjectTeam} setting 2", nameof(ProjectModel.project_team_setting2), false, false, false, PortfolioFieldType.FreeText),
+                Factory(FieldGroupName_ProjectTeam, $"{FieldGroupName_ProjectTeam} option 1", nameof(ProjectModel.project_team_option1), false, false, false, PortfolioFieldType.OptionList),
+                Factory(FieldGroupName_ProjectTeam, $"{FieldGroupName_ProjectTeam} option 2", nameof(ProjectModel.project_team_option2), false, false, false, PortfolioFieldType.OptionList),
 
                 Factory(FieldGroupName_ProjectPlan, "Intended start date", ProjectPropertyConstants.IntendedStartDate, false, false, false, PortfolioFieldType.ProjectDate),
                 Factory(FieldGroupName_ProjectPlan, "Actual start date", ProjectPropertyConstants.ActualStartDate, false, false, false, PortfolioFieldType.ProjectDate),
@@ -139,24 +147,24 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_ProjectPlan, "Hard deadline", ProjectPropertyConstants.HardDeadline, false, false, false, PortfolioFieldType.ProjectDate),
                 Factory(FieldGroupName_ProjectPlan, "Percentage completed", nameof(ProjectModel.p_comp), false, false, false, PortfolioFieldType.Percentage),
                 Factory(FieldGroupName_ProjectPlan, "Milestones", ProjectPropertyConstants.milestones, false, false, false, PortfolioFieldType.Milestones),
-                Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} setting 1", "project_plan_setting1", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
-                Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} setting 2", "project_plan_setting2", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
-                Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} option 1", "project_plan_option1", false, false, false, PortfolioFieldType.OptionList, flags: NotModelled),
-                Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} option 2", "project_plan_option2", false, false, false, PortfolioFieldType.OptionList, flags: NotModelled),
+                Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} setting 1", nameof(ProjectModel.project_plan_setting1), false, false, false, PortfolioFieldType.FreeText),
+                Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} setting 2", nameof(ProjectModel.project_plan_setting2), false, false, false, PortfolioFieldType.FreeText),
+                Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} option 1", nameof(ProjectModel.project_plan_option1), false, false, false, PortfolioFieldType.OptionList),
+                Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} option 2", nameof(ProjectModel.project_plan_option2), false, false, false, PortfolioFieldType.OptionList),
 
                 Factory(FieldGroupName_ProgressIndicators, "Phase", nameof(ProjectModel.phase), true, true, false, PortfolioFieldType.PhaseChoice, flags: Filterable|FilterProject),
                 Factory(FieldGroupName_ProgressIndicators, "RAG", nameof(ProjectModel.rag), true, false, false, PortfolioFieldType.RAGChoice, flags: Filterable|FilterProject),
-                Factory(FieldGroupName_ProgressIndicators, "How to get to green", nameof(ProjectModel.how_get_green), false, false, false, PortfolioFieldType.SmallFreeTextArea, flags: ProjectData),
+                Factory(FieldGroupName_ProgressIndicators, "How to get to green", nameof(ProjectModel.how_get_green), false, false, false, PortfolioFieldType.SmallFreeTextArea),
                 Factory(FieldGroupName_ProgressIndicators, "Status", nameof(ProjectModel.onhold), false, false, false, PortfolioFieldType.OptionList, flags: Filterable|FilterProject),
-                Factory(FieldGroupName_ProgressIndicators, $"{FieldGroupName_ProgressIndicators} setting 1", "progress_setting1", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
-                Factory(FieldGroupName_ProgressIndicators, $"{FieldGroupName_ProgressIndicators} setting 2", "progress_setting2", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
-                Factory(FieldGroupName_ProgressIndicators, $"{FieldGroupName_ProgressIndicators} option 1", "progress_option1", false, false, false, PortfolioFieldType.OptionList, flags: NotModelled),
-                Factory(FieldGroupName_ProgressIndicators, $"{FieldGroupName_ProgressIndicators} option 2", "progress_option2", false, false, false, PortfolioFieldType.OptionList, flags: NotModelled),
+                Factory(FieldGroupName_ProgressIndicators, $"{FieldGroupName_ProgressIndicators} setting 1", nameof(ProjectModel.progress_setting1), false, false, false, PortfolioFieldType.FreeText),
+                Factory(FieldGroupName_ProgressIndicators, $"{FieldGroupName_ProgressIndicators} setting 2", nameof(ProjectModel.progress_setting2), false, false, false, PortfolioFieldType.FreeText),
+                Factory(FieldGroupName_ProgressIndicators, $"{FieldGroupName_ProgressIndicators} option 1", nameof(ProjectModel.progress_option1), false, false, false, PortfolioFieldType.OptionList),
+                Factory(FieldGroupName_ProgressIndicators, $"{FieldGroupName_ProgressIndicators} option 2", nameof(ProjectModel.progress_option2), false, false, false, PortfolioFieldType.OptionList),
 
                 //      FieldGroup      FieldTitle     FieldName                    Included IncludeLock AdmLock FieldType FieldTypeLocked
                 Factory(FieldGroupName_Updates, "Update", nameof(ProjectModel.update), true, false, false, PortfolioFieldType.ProjectUpdateText),
-                Factory(FieldGroupName_Updates, "Forward look", nameof(ProjectModel.forward_look), false, false, false, PortfolioFieldType.LargeFreeTextArea, flags: ProjectData),
-                Factory(FieldGroupName_Updates, "Emerging issues, risks", nameof(ProjectModel.emerging_issues), false, false, false, PortfolioFieldType.LargeFreeTextArea, flags: ProjectData),
+                Factory(FieldGroupName_Updates, "Forward look", nameof(ProjectModel.forward_look), false, false, false, PortfolioFieldType.LargeFreeTextArea),
+                Factory(FieldGroupName_Updates, "Emerging issues, risks", nameof(ProjectModel.emerging_issues), false, false, false, PortfolioFieldType.LargeFreeTextArea),
 
                 Factory(FieldGroupName_Prioritisation, "Priority score", nameof(ProjectModel.priority_main), false, false, false, PortfolioFieldType.PredefinedList, flags: FilterRequired, options: priorityOptions),
                 Factory(FieldGroupName_Prioritisation, "Priority group", ProjectPropertyConstants.pgroup, false, false, false, PortfolioFieldType.Auto, flags: PortfolioFieldFlags.Read),
@@ -169,20 +177,20 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_Budget, "Budget category", nameof(ProjectModel.budgettype), false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_Budget, "Budget amount", nameof(ProjectModel.budget), false, false, false, PortfolioFieldType.Budget),
                 Factory(FieldGroupName_Budget, "Amount spent", nameof(ProjectModel.spent), false, false, false, PortfolioFieldType.Budget),
-                Factory(FieldGroupName_Budget, "Forecast spend at completion", nameof(ProjectModel.forecast_spend), false, false, false, PortfolioFieldType.Budget, flags: ProjectData),
-                Factory(FieldGroupName_Budget, "Cost centre", nameof(ProjectModel.cost_centre), false, false, false, PortfolioFieldType.FreeText, flags: ProjectData),
-                Factory(FieldGroupName_Budget, $"{FieldGroupName_Budget} field 1", nameof(ProjectModel.budget_field1), false, false, false, PortfolioFieldType.Budget, flags: ProjectData),
-                Factory(FieldGroupName_Budget, $"{FieldGroupName_Budget} field 2", "budget_field2", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
-                Factory(FieldGroupName_Budget, $"{FieldGroupName_Budget} option 1", "budget_option1", false, false, false, PortfolioFieldType.OptionList, flags: NotModelled),
-                Factory(FieldGroupName_Budget, $"{FieldGroupName_Budget} option 2", "budget_option2", false, false, false, PortfolioFieldType.OptionList, flags: NotModelled),
+                Factory(FieldGroupName_Budget, "Forecast spend at completion", nameof(ProjectModel.forecast_spend), false, false, false, PortfolioFieldType.Budget),
+                Factory(FieldGroupName_Budget, "Cost centre", nameof(ProjectModel.cost_centre), false, false, false, PortfolioFieldType.FreeText),
+                Factory(FieldGroupName_Budget, $"{FieldGroupName_Budget} field 1", nameof(ProjectModel.budget_field1), false, false, false, PortfolioFieldType.Budget),
+                Factory(FieldGroupName_Budget, $"{FieldGroupName_Budget} field 2", nameof(ProjectModel.budget_field2), false, false, false, PortfolioFieldType.Budget),
+                Factory(FieldGroupName_Budget, $"{FieldGroupName_Budget} option 1", nameof(ProjectModel.budget_option1), false, false, false, PortfolioFieldType.OptionList),
+                Factory(FieldGroupName_Budget, $"{FieldGroupName_Budget} option 2", nameof(ProjectModel.budget_option2), false, false, false, PortfolioFieldType.OptionList),
 
-                Factory(FieldGroupName_FSAProcesses, "Assurance gate number", nameof(ProjectModel.fsaproc_assurance_gatenumber), false, false, false, PortfolioFieldType.FreeText, flags: ProjectData),
-                Factory(FieldGroupName_FSAProcesses, "Assurance gate completed", ProjectPropertyConstants.fsaproc_assurance_gatecompleted, false, false, false, PortfolioFieldType.ProjectDate, flags: ProjectData),
-                Factory(FieldGroupName_FSAProcesses, "Next gate", nameof(ProjectModel.fsaproc_assurance_nextgate), false, false, false, PortfolioFieldType.FreeText, flags: ProjectData),
-                Factory(FieldGroupName_FSAProcesses, $"{FieldGroupName_FSAProcesses} setting 1", "processes_setting1", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
-                Factory(FieldGroupName_FSAProcesses, $"{FieldGroupName_FSAProcesses} setting 2", "processes_setting2", false, false, false, PortfolioFieldType.FreeText, flags: NotModelled),
-                Factory(FieldGroupName_FSAProcesses, $"{FieldGroupName_FSAProcesses} option 1", "processes_option1", false, false, false, PortfolioFieldType.OptionList, flags: NotModelled),
-                Factory(FieldGroupName_FSAProcesses, $"{FieldGroupName_FSAProcesses} option 2", "processes_option2", false, false, false, PortfolioFieldType.OptionList, flags: NotModelled),
+                Factory(FieldGroupName_FSAProcesses, "Assurance gate number", nameof(ProjectModel.fsaproc_assurance_gatenumber), false, false, false, PortfolioFieldType.FreeText),
+                Factory(FieldGroupName_FSAProcesses, "Assurance gate completed", ProjectPropertyConstants.fsaproc_assurance_gatecompleted, false, false, false, PortfolioFieldType.ProjectDate),
+                Factory(FieldGroupName_FSAProcesses, "Next gate", nameof(ProjectModel.fsaproc_assurance_nextgate), false, false, false, PortfolioFieldType.FreeText),
+                Factory(FieldGroupName_FSAProcesses, $"{FieldGroupName_FSAProcesses} setting 1", nameof(ProjectModel.processes_setting1), false, false, false, PortfolioFieldType.FreeText),
+                Factory(FieldGroupName_FSAProcesses, $"{FieldGroupName_FSAProcesses} setting 2", nameof(ProjectModel.processes_setting2), false, false, false, PortfolioFieldType.FreeText),
+                Factory(FieldGroupName_FSAProcesses, $"{FieldGroupName_FSAProcesses} option 1", nameof(ProjectModel.processes_option1), false, false, false, PortfolioFieldType.OptionList),
+                Factory(FieldGroupName_FSAProcesses, $"{FieldGroupName_FSAProcesses} option 2", nameof(ProjectModel.processes_option2), false, false, false, PortfolioFieldType.OptionList),
             };
 
             SetMasterLabel(labels, nameof(ProjectModel.subcat), nameof(ProjectModel.category));

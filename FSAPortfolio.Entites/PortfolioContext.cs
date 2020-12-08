@@ -167,6 +167,8 @@ namespace FSAPortfolio.Entities
 
             modelBuilder.ComplexType<ProjectDate>();
             modelBuilder.ComplexType<ProjectLink>();
+            modelBuilder.ComplexType<ProjectGenericSettings>();
+            modelBuilder.ComplexType<ProjectGenericBudgetSettings>();
 
             modelBuilder.Entity<Document>().HasKey(p => p.Id);
             modelBuilder.Entity<Milestone>().HasKey(p => p.Id);

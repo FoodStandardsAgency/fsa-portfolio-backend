@@ -57,6 +57,12 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 
                 .ForMember(p => p.Subcategories, o => o.Ignore()) // Anna Nikiel 18/11/2020: can ignore this in migration.
 
+                .ForMember(p => p.TeamSettings, o => new ProjectGenericSettings())
+                .ForMember(p => p.PlanSettings, o => new ProjectGenericSettings())
+                .ForMember(p => p.ProgressSettings, o => new ProjectGenericSettings())
+                .ForMember(p => p.BudgetSettings, o => new ProjectGenericBudgetSettings())
+                .ForMember(p => p.ProcessSettings, o => new ProjectGenericSettings())
+
                 // Ignore these
                 .ForMember(p => p.KeyContact2, o => o.Ignore())
                 .ForMember(p => p.KeyContact3, o => o.Ignore())
@@ -78,6 +84,15 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.FSNumber, o => o.Ignore())
                 .ForMember(p => p.RiskRating, o => o.Ignore())
                 .ForMember(p => p.ProgrammeDescription, o => o.Ignore())
+
+                .ForMember(p => p.HowToGetToGreen, o => o.Ignore())
+                .ForMember(p => p.ForwardLook, o => o.Ignore())
+                .ForMember(p => p.EmergingIssues, o => o.Ignore())
+                .ForMember(p => p.ForecastSpend, o => o.Ignore())
+                .ForMember(p => p.CostCentre, o => o.Ignore())
+                .ForMember(p => p.AssuranceGateNumber, o => o.Ignore())
+                .ForMember(p => p.NextAssuranceGateNumber, o => o.Ignore())
+
 
                 // Ignore the keys
                 .ForMember(p => p.ProjectReservation_Id, o => o.Ignore())

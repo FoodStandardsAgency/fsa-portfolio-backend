@@ -58,6 +58,10 @@
     <Compile Include="Migrations\202012011129348_Create.designer.cs">
       <DependentUpon>202012011129348_Create.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202012081229595_01_GenericSettings.cs" />
+    <Compile Include="Migrations\202012081229595_01_GenericSettings.designer.cs">
+      <DependentUpon>202012081229595_01_GenericSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
@@ -76,6 +80,7 @@
     <Compile Include="Projects\ProjectCategory.cs" />
     <Compile Include="Projects\ProjectConstants.cs" />
     <Compile Include="Projects\ProjectDate.cs" />
+    <Compile Include="Projects\ProjectGenericSettings.cs" />
     <Compile Include="Projects\ProjectLink.cs" />
     <Compile Include="Projects\Milestone.cs" />
     <Compile Include="Projects\ProjectReservation.cs" />
@@ -93,14 +98,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FSAPortfolio.PostgreSQL\FSAPortfolio.PostgreSQL.csproj">
-      <Project>{81700DE3-5931-48BD-88D7-37F4E31D38B3}</Project>
-      <Name>FSAPortfolio.PostgreSQL</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Migrations\202012011129348_Create.resx">
       <DependentUpon>202012011129348_Create.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012081229595_01_GenericSettings.resx">
+      <DependentUpon>202012081229595_01_GenericSettings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

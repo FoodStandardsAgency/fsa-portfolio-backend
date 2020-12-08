@@ -87,6 +87,43 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.criticality))]
         public IEnumerable<DropDownItemModel> CriticalityItems { get; set; }
 
+
+        [JsonProperty(nameof(ProjectModel.project_team_option1))]
+        public IEnumerable<DropDownItemModel> project_team_option1 { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.project_team_option2))]
+        public IEnumerable<DropDownItemModel> project_team_option2 { get; set; }
+
+
+        [JsonProperty(nameof(ProjectModel.project_plan_option1))]
+        public IEnumerable<DropDownItemModel> project_plan_option1 { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.project_plan_option2))]
+        public IEnumerable<DropDownItemModel> project_plan_option2 { get; set; }
+
+
+        [JsonProperty(nameof(ProjectModel.progress_option1))]
+        public IEnumerable<DropDownItemModel> progress_option1 { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.progress_option2))]
+        public IEnumerable<DropDownItemModel> progress_option2 { get; set; }
+
+
+        [JsonProperty(nameof(ProjectModel.budget_option1))]
+        public IEnumerable<DropDownItemModel> budget_option1 { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.budget_option2))]
+        public IEnumerable<DropDownItemModel> budget_option2 { get; set; }
+
+
+        [JsonProperty(nameof(ProjectModel.processes_option1))]
+        public IEnumerable<DropDownItemModel> processes_option1 { get; set; }
+
+        [JsonProperty(nameof(ProjectModel.processes_option2))]
+        public IEnumerable<DropDownItemModel> processes_option2 { get; set; }
+
+
+
         [JsonIgnore]
         public IEnumerable<ProjectDataOptionsModel> ProjectDataOptions { get; set; }
     }

@@ -54,6 +54,12 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.Documents, o => o.MapFrom<PostgresDocumentResolver, string>(s => s.documents))
                 .ForMember(p => p.LeadRole, o => o.Ignore()) // Isn't one!?
 
+                .ForMember(p => p.TeamSettings, o => new ProjectGenericSettings())
+                .ForMember(p => p.PlanSettings, o => new ProjectGenericSettings())
+                .ForMember(p => p.ProgressSettings, o => new ProjectGenericSettings())
+                .ForMember(p => p.BudgetSettings, o => new ProjectGenericBudgetSettings())
+                .ForMember(p => p.ProcessSettings, o => new ProjectGenericSettings())
+
                 // Ignore these
                 .ForMember(p => p.KeyContact1, o => o.Ignore())
                 .ForMember(p => p.KeyContact2, o => o.Ignore())
@@ -75,6 +81,15 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.FSNumber, o => o.Ignore())
                 .ForMember(p => p.RiskRating, o => o.Ignore())
                 .ForMember(p => p.ProgrammeDescription, o => o.Ignore())
+
+                .ForMember(p => p.HowToGetToGreen, o => o.Ignore())
+                .ForMember(p => p.ForwardLook, o => o.Ignore())
+                .ForMember(p => p.EmergingIssues, o => o.Ignore())
+                .ForMember(p => p.ForecastSpend, o => o.Ignore())
+                .ForMember(p => p.CostCentre, o => o.Ignore())
+                .ForMember(p => p.AssuranceGateNumber, o => o.Ignore())
+                .ForMember(p => p.NextAssuranceGateNumber, o => o.Ignore())
+
 
                 // Ignore the keys
                 .ForMember(p => p.ProjectReservation_Id, o => o.Ignore())

@@ -88,20 +88,45 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.p_comp, o => o.MapFrom(s => s.LatestUpdate.PercentageComplete))
                 .ForMember(p => p.timestamp, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
 
+                .ForMember(p => p.project_team_setting1, o => o.MapFrom(s => s.TeamSettings.Setting1))
+                .ForMember(p => p.project_team_setting2, o => o.MapFrom(s => s.TeamSettings.Setting2))
+                .ForMember(p => p.project_team_option1, o => o.MapFrom(s => s.TeamSettings.Option1))
+                .ForMember(p => p.project_team_option2, o => o.MapFrom(s => s.TeamSettings.Option2))
+
+                .ForMember(p => p.project_plan_setting1, o => o.MapFrom(s => s.PlanSettings.Setting1))
+                .ForMember(p => p.project_plan_setting2, o => o.MapFrom(s => s.PlanSettings.Setting2))
+                .ForMember(p => p.project_plan_option1, o => o.MapFrom(s => s.PlanSettings.Option1))
+                .ForMember(p => p.project_plan_option2, o => o.MapFrom(s => s.PlanSettings.Option2))
+
+                .ForMember(p => p.progress_setting1, o => o.MapFrom(s => s.ProgressSettings.Setting1))
+                .ForMember(p => p.progress_setting2, o => o.MapFrom(s => s.ProgressSettings.Setting2))
+                .ForMember(p => p.progress_option1, o => o.MapFrom(s => s.ProgressSettings.Option1))
+                .ForMember(p => p.progress_option2, o => o.MapFrom(s => s.ProgressSettings.Option2))
+
+                .ForMember(p => p.budget_field1, o => o.MapFrom(s => s.BudgetSettings.Setting1))
+                .ForMember(p => p.budget_field2, o => o.MapFrom(s => s.BudgetSettings.Setting2))
+                .ForMember(p => p.budget_option1, o => o.MapFrom(s => s.BudgetSettings.Option1))
+                .ForMember(p => p.budget_option2, o => o.MapFrom(s => s.BudgetSettings.Option2))
+
+                .ForMember(p => p.processes_setting1, o => o.MapFrom(s => s.ProcessSettings.Setting1))
+                .ForMember(p => p.processes_setting2, o => o.MapFrom(s => s.ProcessSettings.Setting2))
+                .ForMember(p => p.processes_option1, o => o.MapFrom(s => s.ProcessSettings.Option1))
+                .ForMember(p => p.processes_option2, o => o.MapFrom(s => s.ProcessSettings.Option2))
+
+                .ForMember(p => p.how_get_green, o => o.MapFrom(s => s.HowToGetToGreen))
+                .ForMember(p => p.forward_look, o => o.MapFrom(s => s.ForwardLook))
+                .ForMember(p => p.emerging_issues, o => o.MapFrom(s => s.EmergingIssues))
+                .ForMember(p => p.forecast_spend, o => o.MapFrom(s => s.ForecastSpend))
+                .ForMember(p => p.cost_centre, o => o.MapFrom(s => s.CostCentre))
+                .ForMember(p => p.fsaproc_assurance_gatenumber, o => o.MapFrom(s => s.AssuranceGateNumber))
+                .ForMember(p => p.fsaproc_assurance_nextgate, o => o.MapFrom(s => s.NextAssuranceGateNumber))
+                .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.MapFrom(s => s.AssuranceGateCompletedDate))
+
                 // Below this line are project data items
                 .ForMember(p => p.business_case_number, o => o.Ignore())
                 .ForMember(p => p.fs_number, o => o.Ignore())
                 .ForMember(p => p.risk_rating, o => o.Ignore())
                 .ForMember(p => p.programme_description, o => o.Ignore())
-                .ForMember(p => p.how_get_green, o => o.Ignore())
-                .ForMember(p => p.forward_look, o => o.Ignore())
-                .ForMember(p => p.emerging_issues, o => o.Ignore())
-                .ForMember(p => p.forecast_spend, o => o.Ignore())
-                .ForMember(p => p.budget_field1, o => o.Ignore())
-                .ForMember(p => p.cost_centre, o => o.Ignore())
-                .ForMember(p => p.fsaproc_assurance_gatenumber, o => o.Ignore())
-                .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.Ignore())
-                .ForMember(p => p.fsaproc_assurance_nextgate, o => o.Ignore())
 
                 .ForMember(d => d.Properties, o => o.Ignore())
 

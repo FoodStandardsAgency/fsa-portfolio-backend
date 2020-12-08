@@ -75,6 +75,40 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.ProgrammeDescription, o => o.MapFrom(s => s.programme_description))
                 .ForMember(p => p.ChannelLink, o => o.MapFrom(s => s.link))
 
+                .ForPath(p => p.TeamSettings.Setting1, o => o.MapFrom(s => s.project_team_setting1))
+                .ForPath(p => p.TeamSettings.Setting2, o => o.MapFrom(s => s.project_team_setting2))
+                .ForPath(p => p.TeamSettings.Option1, o => o.MapFrom(s => s.project_team_option1))
+                .ForPath(p => p.TeamSettings.Option2, o => o.MapFrom(s => s.project_team_option2))
+
+                .ForPath(p => p.PlanSettings.Setting1, o => o.MapFrom(s => s.project_plan_setting1))
+                .ForPath(p => p.PlanSettings.Setting2, o => o.MapFrom(s => s.project_plan_setting2))
+                .ForPath(p => p.PlanSettings.Option1, o => o.MapFrom(s => s.project_plan_option1))
+                .ForPath(p => p.PlanSettings.Option2, o => o.MapFrom(s => s.project_plan_option2))
+
+                .ForPath(p => p.ProgressSettings.Setting1, o => o.MapFrom(s => s.progress_setting1))
+                .ForPath(p => p.ProgressSettings.Setting2, o => o.MapFrom(s => s.progress_setting2))
+                .ForPath(p => p.ProgressSettings.Option1, o => o.MapFrom(s => s.progress_option1))
+                .ForPath(p => p.ProgressSettings.Option2, o => o.MapFrom(s => s.progress_option2))
+
+                .ForPath(p => p.BudgetSettings.Setting1, o => o.MapFrom(s => s.budget_field1))
+                .ForPath(p => p.BudgetSettings.Setting2, o => o.MapFrom(s => s.budget_field2))
+                .ForPath(p => p.BudgetSettings.Option1, o => o.MapFrom(s => s.budget_option1))
+                .ForPath(p => p.BudgetSettings.Option2, o => o.MapFrom(s => s.budget_option2))
+
+                .ForPath(p => p.ProcessSettings.Setting1, o => o.MapFrom(s => s.processes_setting1))
+                .ForPath(p => p.ProcessSettings.Setting2, o => o.MapFrom(s => s.processes_setting2))
+                .ForPath(p => p.ProcessSettings.Option1, o => o.MapFrom(s => s.processes_option1))
+                .ForPath(p => p.ProcessSettings.Option2, o => o.MapFrom(s => s.processes_option2))
+
+                .ForMember(p => p.HowToGetToGreen, o => o.MapFrom(s => s.how_get_green))
+                .ForMember(p => p.ForwardLook, o => o.MapFrom(s => s.forward_look))
+                .ForMember(p => p.EmergingIssues, o => o.MapFrom(s => s.emerging_issues))
+                .ForMember(p => p.ForecastSpend, o => o.MapFrom(s => s.forecast_spend))
+                .ForMember(p => p.CostCentre, o => o.MapFrom(s => s.cost_centre))
+                .ForMember(p => p.AssuranceGateNumber, o => o.MapFrom(s => s.fsaproc_assurance_gatenumber))
+                .ForMember(p => p.NextAssuranceGateNumber, o => o.MapFrom(s => s.fsaproc_assurance_nextgate))
+
+
                 // Have to be mapped manually as requires async request to AD
                 .ForMember(p => p.Lead, o => o.Ignore())
                 .ForMember(p => p.People, o => o.Ignore())
