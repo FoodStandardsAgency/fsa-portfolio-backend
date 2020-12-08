@@ -23,7 +23,7 @@ using FSAPortfolio.WebAPI.App.Users;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ProjectsController : ApiController
     {
         // POST: api/Projects

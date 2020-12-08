@@ -23,6 +23,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(r => r.Project.LatestUpdate.RAGStatus)
                 .Include(r => r.Project.LatestUpdate.Phase)
                 .Include(r => r.Project.Category)
+                .Include(r => r.Project.Directorate)
                 .Include(r => r.Project.Subcategories)
                 .Include(r => r.Project.Size)
                 .Include(r => r.Project.BudgetType)
