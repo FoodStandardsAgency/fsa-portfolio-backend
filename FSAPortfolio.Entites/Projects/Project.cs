@@ -81,6 +81,21 @@ namespace FSAPortfolio.Entities.Projects
         public ProjectDate ActualEndDate { get; set; }
         public ProjectDate AssuranceGateCompletedDate { get; set; }
 
+        public ProjectGenericSettings TeamSettings { get; set; }
+        public ProjectGenericSettings PlanSettings { get; set; }
+        public ProjectGenericSettings ProgressSettings { get; set; }
+        public ProjectGenericBudgetSettings BudgetSettings { get; set; }
+        public ProjectGenericSettings ProcessSettings { get; set; }
+
+        public string HowToGetToGreen { get; set; }
+        public string ForwardLook { get; set; }
+        public string EmergingIssues { get; set; }
+        public int ForecastSpend { get; set; }
+        public string CostCentre { get; set; }
+        public string AssuranceGateNumber { get; set; }
+        public string NextAssuranceGateNumber { get; set; }
+
+
         [StringLength(50)]
         public string BusinessCaseNumber { get; set; }
         [StringLength(50)]

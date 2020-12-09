@@ -23,6 +23,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(r => r.Project.LatestUpdate.RAGStatus)
                 .Include(r => r.Project.LatestUpdate.Phase)
                 .Include(r => r.Project.Category)
+                .Include(r => r.Project.Directorate)
                 .Include(r => r.Project.Subcategories)
                 .Include(r => r.Project.Size)
                 .Include(r => r.Project.BudgetType)
@@ -118,6 +119,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Milestones)
                 .Include(p => p.People)
                 .Include(p => p.Updates)
+                .Include(p => p.AuditLogs)
                 ;
         }
 
@@ -127,6 +129,9 @@ namespace FSAPortfolio.WebAPI.App
             project.Subcategories.Clear();
             project.RelatedProjects.Clear();
             project.DependantProjects.Clear();
+
+            context.ProjectAuditLogs.RemoveRange(project.AuditLogs);
+            project.AuditLogs.Clear();
 
             context.Documents.RemoveRange(project.Documents);
             project.Documents.Clear();

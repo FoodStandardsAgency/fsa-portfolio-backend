@@ -49,10 +49,16 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 
                 .ForMember(p => p.Size, o => o.MapFrom<ConfigProjectSizeResolver, string>(s => SyncMaps.sizeKeyMap[string.Empty])) // TODO: isn't one!?
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => SyncMaps.serd_budgetTypeKeyMap[(s.budgettype ?? "none").Trim()]))
-                .ForMember(p => p.ProjectType, o => o.MapFrom(s => SyncMaps.serdProjectTypeMaps[s.project_type ?? "o"])) // TODO: SERD
+                .ForMember(p => p.ProjectType, o => o.MapFrom(s => SyncMaps.serdProjectTypeMaps[s.project_type ?? string.Empty])) // TODO: SERD
                 .ForMember(p => p.ChannelLink, o => o.MapFrom<PostgresLinkResolver, string>(s => s.link))
                 .ForMember(p => p.Documents, o => o.MapFrom<PostgresDocumentResolver, string>(s => s.documents))
                 .ForMember(p => p.LeadRole, o => o.Ignore()) // Isn't one!?
+
+                .ForMember(p => p.TeamSettings, o => new ProjectGenericSettings())
+                .ForMember(p => p.PlanSettings, o => new ProjectGenericSettings())
+                .ForMember(p => p.ProgressSettings, o => new ProjectGenericSettings())
+                .ForMember(p => p.BudgetSettings, o => new ProjectGenericBudgetSettings())
+                .ForMember(p => p.ProcessSettings, o => new ProjectGenericSettings())
 
                 // Ignore these
                 .ForMember(p => p.KeyContact1, o => o.Ignore())
@@ -75,6 +81,15 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.FSNumber, o => o.Ignore())
                 .ForMember(p => p.RiskRating, o => o.Ignore())
                 .ForMember(p => p.ProgrammeDescription, o => o.Ignore())
+
+                .ForMember(p => p.HowToGetToGreen, o => o.Ignore())
+                .ForMember(p => p.ForwardLook, o => o.Ignore())
+                .ForMember(p => p.EmergingIssues, o => o.Ignore())
+                .ForMember(p => p.ForecastSpend, o => o.Ignore())
+                .ForMember(p => p.CostCentre, o => o.Ignore())
+                .ForMember(p => p.AssuranceGateNumber, o => o.Ignore())
+                .ForMember(p => p.NextAssuranceGateNumber, o => o.Ignore())
+
 
                 // Ignore the keys
                 .ForMember(p => p.ProjectReservation_Id, o => o.Ignore())
@@ -122,14 +137,15 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 
         public ICollection<ProjectCategory> Resolve(object source, Project destination, string sourceMember, ICollection<ProjectCategory> destMember, ResolutionContext context)
         {
-            var result = new List<ProjectCategory>();
+            var result = destMember?.ToList() ?? new List<ProjectCategory>();
             if (!string.IsNullOrWhiteSpace(sourceMember))
             {
                 var categoryKeys = sourceMember.Split(',').Select(s => categoryKeyMap[s.Trim()]);
                 foreach (var key in categoryKeys)
                 {
                     var cat = resolver.Resolve(source, destination, key, null, context);
-                    if(cat != null) result.Add(cat);
+                    if(cat != null && !result.Any(c => c.ViewKey == cat.ViewKey)) 
+                        result.Add(cat);
                 }
             }
             return result;

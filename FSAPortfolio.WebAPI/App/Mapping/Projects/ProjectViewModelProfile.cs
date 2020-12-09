@@ -96,6 +96,31 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.supplier, o => o.MapFrom(s => s.Supplier))
                 .ForMember(p => p.oddlead_role, o => o.MapFrom(s => s.LeadRole))
 
+                .ForMember(p => p.project_team_setting1, o => o.MapFrom(s => s.TeamSettings.Setting1))
+                .ForMember(p => p.project_team_setting2, o => o.MapFrom(s => s.TeamSettings.Setting2))
+                .ForMember(p => p.project_team_option1, o => o.MapFrom(s => s.TeamSettings.Option1))
+                .ForMember(p => p.project_team_option2, o => o.MapFrom(s => s.TeamSettings.Option2))
+
+                .ForMember(p => p.project_plan_setting1, o => o.MapFrom(s => s.PlanSettings.Setting1))
+                .ForMember(p => p.project_plan_setting2, o => o.MapFrom(s => s.PlanSettings.Setting2))
+                .ForMember(p => p.project_plan_option1, o => o.MapFrom(s => s.PlanSettings.Option1))
+                .ForMember(p => p.project_plan_option2, o => o.MapFrom(s => s.PlanSettings.Option2))
+
+                .ForMember(p => p.progress_setting1, o => o.MapFrom(s => s.ProgressSettings.Setting1))
+                .ForMember(p => p.progress_setting2, o => o.MapFrom(s => s.ProgressSettings.Setting2))
+                .ForMember(p => p.progress_option1, o => o.MapFrom(s => s.ProgressSettings.Option1))
+                .ForMember(p => p.progress_option2, o => o.MapFrom(s => s.ProgressSettings.Option2))
+
+                .ForMember(p => p.budget_field1, o => o.MapFrom(s => s.BudgetSettings.Setting1))
+                .ForMember(p => p.budget_field2, o => o.MapFrom(s => s.BudgetSettings.Setting2))
+                .ForMember(p => p.budget_option1, o => o.MapFrom(s => s.BudgetSettings.Option1))
+                .ForMember(p => p.budget_option2, o => o.MapFrom(s => s.BudgetSettings.Option2))
+
+                .ForMember(p => p.processes_setting1, o => o.MapFrom(s => s.ProcessSettings.Setting1))
+                .ForMember(p => p.processes_setting2, o => o.MapFrom(s => s.ProcessSettings.Setting2))
+                .ForMember(p => p.processes_option1, o => o.MapFrom(s => s.ProcessSettings.Option1))
+                .ForMember(p => p.processes_option2, o => o.MapFrom(s => s.ProcessSettings.Option2))
+
 
                 // Latest update and update history
                 .ForMember(p => p.id, o => o.MapFrom(s => s.LatestUpdate.SyncId))
@@ -111,7 +136,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.timestamp, o => o.MapFrom(s => s.LatestUpdate.Timestamp))
                 .ForMember(p => p.supplier, o => o.MapFrom(s => s.Supplier))
 
-                // Below this line are project data items
                 .ForMember(p => p.business_case_number, o => o.MapFrom(s => s.BusinessCaseNumber))
                 .ForMember(p => p.fs_number, o => o.MapFrom(s => s.FSNumber))
                 .ForMember(p => p.risk_rating, o => o.MapFrom(s => s.RiskRating))
@@ -121,14 +145,13 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                     o.PreCondition(s => s.ChannelLink.Link != null);
                     o.MapFrom(s => s.ChannelLink);
                 })
-                .ForMember(p => p.how_get_green, o => o.Ignore())
-                .ForMember(p => p.forward_look, o => o.Ignore())
-                .ForMember(p => p.emerging_issues, o => o.Ignore())
-                .ForMember(p => p.forecast_spend, o => o.Ignore())
-                .ForMember(p => p.budget_field1, o => o.Ignore())
-                .ForMember(p => p.cost_centre, o => o.Ignore())
-                .ForMember(p => p.fsaproc_assurance_gatenumber, o => o.Ignore())
-                .ForMember(p => p.fsaproc_assurance_nextgate, o => o.Ignore())
+                .ForMember(p => p.how_get_green, o => o.MapFrom(s => s.HowToGetToGreen))
+                .ForMember(p => p.forward_look, o => o.MapFrom(s => s.ForwardLook))
+                .ForMember(p => p.emerging_issues, o => o.MapFrom(s => s.EmergingIssues))
+                .ForMember(p => p.forecast_spend, o => o.MapFrom(s => s.ForecastSpend))
+                .ForMember(p => p.cost_centre, o => o.MapFrom(s => s.CostCentre))
+                .ForMember(p => p.fsaproc_assurance_gatenumber, o => o.MapFrom(s => s.AssuranceGateNumber))
+                .ForMember(p => p.fsaproc_assurance_nextgate, o => o.MapFrom(s => s.NextAssuranceGateNumber))
                 ;
 
             CreateMap<Project, ProjectViewModel>()
@@ -153,10 +176,10 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.actual_end_date, o => o.MapFrom(s => s.ActualEndDate))
                 .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.MapFrom(s => s.AssuranceGateCompletedDate))
                 .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
-                .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.ViewKey == ViewKeyPrefix.ProjectSizeNotSetViewKey ? null : s.Size.Name))
+                .ForMember(p => p.project_size, o => o.MapFrom(s => s.Size.Name))
                 .ForMember(p => p.budgettype, o => o.MapFrom(s => s.BudgetType.Name))
                 .ForMember(p => p.direct, o => o.MapFrom(s => s.Directorate.Name))
-                .AfterMap<ProjectDataOutboundMapper<ProjectViewModel>>()
+                //.AfterMap<ProjectDataOutboundMapper<ProjectViewModel>>() // TODO: REMOVE
                 ;
 
             CreateMap<Project, ProjectEditViewModel>()
@@ -174,8 +197,8 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.actual_end_date, o => o.MapFrom(s => s.ActualEndDate))
                 .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.MapFrom(s => s.AssuranceGateCompletedDate))
                 .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
-                .AfterMap<ProjectDataOutboundMapper<ProjectEditViewModel>>()
-                .AfterMap<ProjectJsonPropertiesOutboundMapper>()
+                .AfterMap<ProjectDataOutboundMapper<ProjectEditViewModel>>() // TODO: REMOVE
+                .AfterMap<ProjectJsonPropertiesOutboundMapper>() // TODO: REMOVE
                 ;
 
             CreateMap<Project, SelectItemModel>()
@@ -228,9 +251,14 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
     {
         public DateTime? Resolve(Project source, object destination, DateTime? destMember, ResolutionContext context)
         {
-            var completedPhase = source.Reservation.Portfolio.Configuration.CompletedPhase;
-            var firstCompletePhase = source.Updates.Where(u => u.Phase == completedPhase).OrderBy(u => u.Timestamp).FirstOrDefault();
-            return firstCompletePhase?.Timestamp;
+            DateTime? result = null;
+            if (source.Updates != null)
+            {
+                var completedPhase = source.Reservation.Portfolio.Configuration.CompletedPhase;
+                var firstCompletePhase = source.Updates.Where(u => u.Phase == completedPhase).OrderBy(u => u.Timestamp).FirstOrDefault();
+                result = firstCompletePhase?.Timestamp;
+            }
+            return result;
         }
 
     }
@@ -296,10 +324,13 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         public ProjectDateViewModel Convert(ProjectDate source, ProjectDateViewModel destination, ResolutionContext context)
         {
             ProjectDateViewModel model = new ProjectDateViewModel();
-            model.Date = context.Mapper.Map<DateTime?>(source.Date);
-            if (source.Flags.HasFlag(ProjectDateFlags.Day)) model.Flag = "day";
-            else if (source.Flags.HasFlag(ProjectDateFlags.Month)) model.Flag = "month";
-            else if (source.Flags.HasFlag(ProjectDateFlags.Year)) model.Flag = "year";
+            if (source != null)
+            {
+                model.Date = context.Mapper.Map<DateTime?>(source.Date);
+                if (source.Flags.HasFlag(ProjectDateFlags.Day)) model.Flag = "day";
+                else if (source.Flags.HasFlag(ProjectDateFlags.Month)) model.Flag = "month";
+                else if (source.Flags.HasFlag(ProjectDateFlags.Year)) model.Flag = "year";
+            }
             return model;
         }
     }

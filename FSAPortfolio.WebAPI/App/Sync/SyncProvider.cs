@@ -548,6 +548,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     .Include(p => p.Updates.Select(u => u.RAGStatus))
                     .Include(p => p.Updates.Select(u => u.Phase))
                     .Include(p => p.Category)
+                    .Include(p => p.Subcategories)
                     .Include(p => p.Size)
                     .Include(p => p.BudgetType)
                     .Include(p => p.RelatedProjects)
@@ -563,6 +564,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     var yrStart = pid.Length - 7;
                     destProject = new Project()
                     {
+                        TeamSettings = new ProjectGenericSettings(),
+                        PlanSettings = new ProjectGenericSettings(),
+                        ProgressSettings = new ProjectGenericSettings(),
+                        BudgetSettings = new ProjectGenericBudgetSettings(),
+                        ProcessSettings = new ProjectGenericSettings(),
                         Reservation = new ProjectReservation()
                         {
                             ProjectId = pid,

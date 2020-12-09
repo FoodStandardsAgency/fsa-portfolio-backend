@@ -45,6 +45,23 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(d => d.PrioritiesItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.priorities))))
                 .ForMember(d => d.BenefitItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.benefits))))
                 .ForMember(d => d.CriticalityItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.criticality))))
+
+                .ForMember(d => d.project_team_option1, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_team_option1))))
+                .ForMember(d => d.project_team_option2, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_team_option2))))
+
+                .ForMember(d => d.project_plan_option1, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_plan_option1))))
+                .ForMember(d => d.project_plan_option2, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_plan_option2))))
+
+                .ForMember(d => d.progress_option1, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.progress_option1))))
+                .ForMember(d => d.progress_option2, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.progress_option2))))
+
+                .ForMember(d => d.budget_option1, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.budget_option1))))
+                .ForMember(d => d.budget_option2, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.budget_option2))))
+
+                .ForMember(d => d.processes_option1, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.processes_option1))))
+                .ForMember(d => d.processes_option2, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.processes_option2))))
+
+
                 .ForMember(d => d.ProjectDataOptions, o => o.Ignore())
                 .AfterMap<ProjectDataOptionsOutboundMapper>()
                 ;
