@@ -149,7 +149,7 @@ namespace FSAPortfolio.WebAPI.App.Config
             var optionNames = labelConfig.FieldOptions
                 .Split(',')
                 .Where(n => !string.IsNullOrWhiteSpace(n))
-                .Select(n => n.Trim())
+                .Select((n, i) => new { index = i, value = n.Trim() })
                 .ToArray();
 
             if (maxOptionCount.HasValue && optionNames.Length > maxOptionCount.Value)
@@ -157,12 +157,11 @@ namespace FSAPortfolio.WebAPI.App.Config
                 throw new PortfolioConfigurationException($"Can't update {collectionDescription}: you entered {optionNames.Length} {collectionDescription}; the {optionDescription} limit is {maxOptionCount.Value}.");
             }
 
-
             // If the option has no matching name, check the options has no existing assignments and then delete it
             var unmatchedOptionsQuery =
                 // Get options that don't have a match in the new list
                 from existingOption in optionCollection
-                join name in optionNames on existingOption.Name equals name into names
+                join name in optionNames on existingOption.Name equals name.value into names
                 from name in names.DefaultIfEmpty()
                 where name == null
                 select existingOption;
@@ -202,7 +201,7 @@ namespace FSAPortfolio.WebAPI.App.Config
             // If name has no matching option, add a option
             var matchedNamesQuery =
                 from name in optionNames
-                join option in optionCollection on name equals option.Name into options
+                join option in optionCollection on name.value equals option.Name into options
                 from option in options.DefaultIfEmpty()
                 orderby option.Order
                 select new { name, option };
@@ -221,7 +220,7 @@ namespace FSAPortfolio.WebAPI.App.Config
                         option = new T();
                         optionCollection.Add(option);
                     }
-                    option.Name = match.name;
+                    option.Name = match.name.value;
                     option.Order = i;
                     option.ViewKey = $"{viewKeyPrefix}{i}";
                     optionCollection.Add(option);
@@ -238,18 +237,21 @@ namespace FSAPortfolio.WebAPI.App.Config
                     T option = match.option;
                     if (match.option == null)
                     {
-                        option = new T() { Name = match.name };
+                        option = new T() { Name = match.name.value };
                     }
 
                     // Assign next viewkey
-                    do
+                    if (option.ViewKey == null)
                     {
-                        option.ViewKey = $"{viewKeyPrefix}{viewKeyIndex++}";
+                        do
+                        {
+                            option.ViewKey = $"{viewKeyPrefix}{viewKeyIndex++}";
+                        }
+                        while (matchedNames.Any(m => m.option != null && m.option != option && m.option.ViewKey == option.ViewKey));
                     }
-                    while (matchedNames.Any(m => m.option != option && m.option.ViewKey == option.ViewKey));
 
                     // Assign order and add to collection
-                    option.Order = i;
+                    option.Order = match.name.index;
                     optionCollection.Add(option);
 
                 }
