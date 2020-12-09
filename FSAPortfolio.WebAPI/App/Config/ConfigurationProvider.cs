@@ -203,7 +203,7 @@ namespace FSAPortfolio.WebAPI.App.Config
                 from name in optionNames
                 join option in optionCollection on name.value equals option.Name into options
                 from option in options.DefaultIfEmpty()
-                orderby option.Order
+                orderby name.index
                 select new { name, option };
             var matchedNames = matchedNamesQuery.ToList();
             int viewKeyIndex = 0;
