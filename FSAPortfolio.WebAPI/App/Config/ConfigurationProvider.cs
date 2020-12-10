@@ -211,14 +211,15 @@ namespace FSAPortfolio.WebAPI.App.Config
             if (fieldName == nameof(ProjectModel.phase))
             {
                 // Write over the existing elements - add any new ones
+                var existingOptions = optionCollection.ToList();
+                optionCollection.Clear();
                 for (int i = 0; i < matchedNames.Count(); i++)
                 {
                     var match = matchedNames.ElementAt(i);
-                    T option = optionCollection.ElementAtOrDefault(i);
-                    if (match.option == null)
+                    T option = existingOptions.ElementAtOrDefault(i);
+                    if (option == null)
                     {
                         option = new T();
-                        optionCollection.Add(option);
                     }
                     option.Name = match.name.value;
                     option.Order = i;
@@ -227,6 +228,7 @@ namespace FSAPortfolio.WebAPI.App.Config
                 }
                 var lastOption = optionCollection.LastOrDefault();
                 if(lastOption != null && maxOptionCount.HasValue) lastOption.ViewKey = $"{viewKeyPrefix}{maxOptionCount.Value - 1}";
+                config.CompletedPhase = lastOption as ProjectPhase;
             }
             else
             {

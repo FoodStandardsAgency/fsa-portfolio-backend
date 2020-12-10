@@ -12,6 +12,7 @@
 - Related projects searched via ajax
 - Required field flags for front end validation
 - Configure filter fields per portfolio
+- Various other bug fixes and improvements
 
 
 Version 0.1 - Released 23/11/2020 16:20
