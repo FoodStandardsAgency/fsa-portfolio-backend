@@ -122,9 +122,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_AboutTheProject, "Theme", nameof(ProjectModel.theme), true, false, false, PortfolioFieldType.OptionList, flags: Filterable|FilterProject, options: "Theme1, Theme2, Theme3"),
                 Factory(FieldGroupName_AboutTheProject, "Project type", nameof(ProjectModel.project_type), false, false, false, PortfolioFieldType.OptionList, flags: Filterable|FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Project size", ProjectPropertyConstants.project_size, false, false, false, PortfolioFieldType.OptionList),
-                Factory(FieldGroupName_AboutTheProject, "Category", nameof(ProjectModel.category), true, false, false, PortfolioFieldType.OptionList, flags: Filterable|FilterProject),
+                Factory(FieldGroupName_AboutTheProject, "Category", ProjectPropertyConstants.category, true, false, false, PortfolioFieldType.OptionList, flags: Filterable|FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Secondary category", nameof(ProjectModel.subcat), true, false, false, PortfolioFieldType.PredefinedMultiList), // Uses the same values as category
-                Factory(FieldGroupName_AboutTheProject, "Directorate", nameof(ProjectModel.direct), true, false, false, PortfolioFieldType.PredefinedList, flags: Filterable|FilterProject),
+                Factory(FieldGroupName_AboutTheProject, "Directorate", ProjectPropertyConstants.direct, true, false, false, PortfolioFieldType.PredefinedList, flags: Filterable|FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Strategic objectives", nameof(ProjectModel.strategic_objectives), false, false, false, PortfolioFieldType.PredefinedList, flags: Filterable|FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Programme", nameof(ProjectModel.programme), false, false, false, PortfolioFieldType.OptionList, flags: EditorCanView|Filterable|FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Programme description", ProjectPropertyConstants.programme_description, false, false, false, PortfolioFieldType.MediumFreeTextArea, flags: EditorCanView),
@@ -159,7 +159,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} option 1", nameof(ProjectModel.project_plan_option1), false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_ProjectPlan, $"{FieldGroupName_ProjectPlan} option 2", nameof(ProjectModel.project_plan_option2), false, false, false, PortfolioFieldType.OptionList),
 
-                Factory(FieldGroupName_ProgressIndicators, "Phase", nameof(ProjectModel.phase), true, true, false, PortfolioFieldType.PhaseChoice, flags: Filterable|FilterProject),
+                Factory(FieldGroupName_ProgressIndicators, "Phase", ProjectPropertyConstants.phase, true, true, false, PortfolioFieldType.PhaseChoice, flags: Filterable|FilterProject),
                 Factory(FieldGroupName_ProgressIndicators, "RAG", nameof(ProjectModel.rag), true, false, false, PortfolioFieldType.RAGChoice, flags: Filterable|FilterProject),
                 Factory(FieldGroupName_ProgressIndicators, "How to get to green", nameof(ProjectModel.how_get_green), false, false, false, PortfolioFieldType.SmallFreeTextArea),
                 Factory(FieldGroupName_ProgressIndicators, "Status", nameof(ProjectModel.onhold), false, false, false, PortfolioFieldType.OptionList, flags: Filterable|FilterProject),
@@ -200,7 +200,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_FSAProcesses, $"{FieldGroupName_FSAProcesses} option 2", nameof(ProjectModel.processes_option2), false, false, false, PortfolioFieldType.OptionList),
             };
 
-            SetMasterLabel(labels, nameof(ProjectModel.subcat), nameof(ProjectModel.category));
+            SetMasterLabel(labels, nameof(ProjectModel.subcat), ProjectPropertyConstants.category);
             SetMasterLabel(labels, nameof(ProjectModel.programme_description), nameof(ProjectModel.programme));
             SetMasterLabel(labels, ProjectPropertyConstants.oddlead_role, ProjectPropertyConstants.ProjectLead);
             SetMasterLabel(labels, ProjectPropertyConstants.g6team, ProjectPropertyConstants.ProjectLead);

@@ -14,7 +14,7 @@ namespace FSAPortfolio.WebAPI.Models
             new DropDownItemModel() { Display = ProjectViewModelProfile.StragicObjectivesMap[k], Value = k, Order = i }
             );
 
-        [JsonProperty(nameof(ProjectModel.phase))]
+        [JsonProperty(ProjectPropertyConstants.phase)]
         public IEnumerable<DropDownItemModel> PhaseItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.rag))]
@@ -29,13 +29,13 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.budgettype))]
         public IEnumerable<DropDownItemModel> BudgetTypeItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.category))]
+        [JsonProperty(ProjectPropertyConstants.category)]
         public IEnumerable<DropDownItemModel> CategoryItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.subcat))]
         public SelectPickerModel SubCategoryItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.direct))]
+        [JsonProperty(ProjectPropertyConstants.direct)]
         public IEnumerable<DropDownItemModel> Directorates { get; set; }
 
         [JsonProperty(nameof(ProjectModel.strategic_objectives))]

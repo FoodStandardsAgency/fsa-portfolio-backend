@@ -27,7 +27,7 @@ namespace FSAPortfolio.WebAPI.App.Config
 
             UpdateProjectOptions(
                 config,
-                nameof(ProjectModel.category),
+                ProjectPropertyConstants.category,
                 context.Projects.Select(p => p.Category).Union(context.Projects.SelectMany(p => p.Subcategories)),
                 config.Categories,
                 context.ProjectCategories,
@@ -39,7 +39,7 @@ namespace FSAPortfolio.WebAPI.App.Config
 
             UpdateProjectOptions(
                 config,
-                nameof(ProjectModel.phase),
+                ProjectPropertyConstants.phase,
                 context.ProjectUpdates.Select(p => p.Phase),
                 config.Phases,
                 context.ProjectPhases,
@@ -181,7 +181,8 @@ namespace FSAPortfolio.WebAPI.App.Config
             if (unableToDelete.Count > 0)
             {
                 // Can't do this update while the categories are assigned to projects
-                Func<string, int, string> categoryError = (n, c) => {
+                Func<string, int, string> categoryError = (n, c) =>
+                {
                     return c == 1 ?
                     $"[{n}] is used as a {optionDescription} ({c} occurrence)" :
                     $"[{n}] is used as a {optionDescription} ({c} occurrences)";
@@ -190,11 +191,18 @@ namespace FSAPortfolio.WebAPI.App.Config
             }
             else
             {
-                var unmatchedOptions = unmatchedOptionsQuery.ToList();
-                foreach (var option in unmatchedOptions)
+                if (fieldName == ProjectPropertyConstants.phase)
                 {
-                    optionCollection.Remove(option);
-                    dbSet.Remove(option);
+                    // We reuse phases - so don't remove here
+                }
+                else
+                {
+                    var unmatchedOptions = unmatchedOptionsQuery.ToList();
+                    foreach (var option in unmatchedOptions)
+                    {
+                        optionCollection.Remove(option);
+                        dbSet.Remove(option);
+                    }
                 }
             }
 
@@ -208,27 +216,49 @@ namespace FSAPortfolio.WebAPI.App.Config
             var matchedNames = matchedNamesQuery.ToList();
             int viewKeyIndex = 0;
 
-            if (fieldName == nameof(ProjectModel.phase))
+            if (fieldName == ProjectPropertyConstants.phase)
             {
+                int phaseIndex = 0;
+                int lastPhaseIndex = maxOptionCount.Value - 1;
+                int lastMatchedPhaseIndex = matchedNames.Count() - 1;
+                List<T> phasesToRemove = new List<T>();
+
                 // Write over the existing elements - add any new ones
-                var existingOptions = optionCollection.ToList();
-                optionCollection.Clear();
-                for (int i = 0; i < matchedNames.Count(); i++)
+                while (phaseIndex < matchedNames.Count())
                 {
-                    var match = matchedNames.ElementAt(i);
-                    T option = existingOptions.ElementAtOrDefault(i);
+                    var match = matchedNames.ElementAt(phaseIndex);
+                    var phaseViewKey = $"{viewKeyPrefix}{phaseIndex}";
+                    bool lastPhase = (phaseIndex == lastMatchedPhaseIndex);
+                    if (lastPhase)
+                    {
+                        // Removed unrequired phases
+                        while(phaseIndex < lastPhaseIndex)
+                        {
+                            var phase = optionCollection.SingleOrDefault(p => p.ViewKey == phaseViewKey);
+                            if(phase != null) phasesToRemove.Add(phase);
+                            phaseViewKey = $"{viewKeyPrefix}{++phaseIndex}";
+                        }
+                    }
+
+                    T option = optionCollection.SingleOrDefault(p => p.ViewKey == phaseViewKey);
                     if (option == null)
                     {
-                        option = new T();
+                        option = new T() { ViewKey = phaseViewKey, Order = phaseIndex };
+                        optionCollection.Add(option);
                     }
                     option.Name = match.name.value;
-                    option.Order = i;
-                    option.ViewKey = $"{viewKeyPrefix}{i}";
-                    optionCollection.Add(option);
+
+                    if (lastPhase) config.CompletedPhase = option as ProjectPhase;
+
+                    phaseIndex++;
                 }
-                var lastOption = optionCollection.LastOrDefault();
-                if(lastOption != null && maxOptionCount.HasValue) lastOption.ViewKey = $"{viewKeyPrefix}{maxOptionCount.Value - 1}";
-                config.CompletedPhase = lastOption as ProjectPhase;
+
+                foreach(var phase in phasesToRemove)
+                {
+                    optionCollection.Remove(phase);
+                    dbSet.Remove(phase);
+                }
+
             }
             else
             {

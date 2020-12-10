@@ -11,16 +11,16 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers
     {
         public string Resolve(PortfolioLabelConfig source, PortfolioLabelModel destination, string destMember, ResolutionContext context)
         {
-            string result = null;
+            string result;
             switch(source.FieldName)
             {
-                case nameof(ProjectModel.category):
+                case ProjectPropertyConstants.category:
                     result = GetValue(source.Configuration.Categories);
                     break;
                 case nameof(ProjectModel.onhold):
                     result = GetValue(source.Configuration.OnHoldStatuses);
                     break;
-                case nameof(ProjectModel.phase):
+                case ProjectPropertyConstants.phase:
                     result = GetValue(source.Configuration.Phases);
                     break;
                 case nameof(ProjectModel.rag):

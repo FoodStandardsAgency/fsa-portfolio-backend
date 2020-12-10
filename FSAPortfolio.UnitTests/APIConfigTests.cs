@@ -11,7 +11,7 @@ namespace FSAPortfolio.UnitTests
     [TestClass]
     public class APIConfigTests
     {
-        private const string ProjectSize_TestValue = "Size1";
+        private const string ProjectSize_TestValue = "EXTRA SIZE";
 
         [TestMethod]
         public async Task UpdateWithNoChange()
@@ -29,12 +29,14 @@ namespace FSAPortfolio.UnitTests
         }
 
         [TestMethod]
-        public async Task UpdateProjectSize()
+        public async Task UpdateProjectOptions()
         {
             await TestLabel(ProjectPropertyConstants.project_size, ProjectSize_TestValue);
+            await TestLabel(ProjectPropertyConstants.category, "EXTRA CATEGORY");
+            await TestLabel(ProjectPropertyConstants.phase, "Backlog, Phase1, Phase2", addToCurrent: false);
         }
 
-        private async Task TestLabel(string fieldName, string extraTestValues)
+        private async Task TestLabel(string fieldName, string testValue, bool addToCurrent = true)
         {
             var config = await BackendAPIClient.GetPortfolioConfigurationAsync("odd");
             var original_Config_Expected = JsonConvert.SerializeObject(config);
@@ -43,7 +45,7 @@ namespace FSAPortfolio.UnitTests
             var original_LabelValue_Expected = label.InputValue;
 
             // Add the additional values to the current label value (as the existing ones may be in use)...
-            var updated_LabelValue_Expected = $"{original_LabelValue_Expected}, {extraTestValues}";
+            var updated_LabelValue_Expected = addToCurrent ? $"{original_LabelValue_Expected}, {testValue}" : testValue;
             label.InputValue = updated_LabelValue_Expected;
             var updated_Config_Expected = JsonConvert.SerializeObject(config);
 
@@ -83,24 +85,6 @@ namespace FSAPortfolio.UnitTests
             {
                 var actualLabel = actualConfig.Labels.Single(l => l.FieldName == expectedLabel.FieldName && !string.IsNullOrWhiteSpace(expectedLabel.FieldName));
                 CompareProperties(expectedLabel, actualLabel);
-                //Assert.AreEqual(expectedLabel.AdminOnly, actualLabel.AdminOnly);
-                //Assert.AreEqual(expectedLabel.AdminOnlyLock, actualLabel.AdminOnlyLock);
-                //Assert.AreEqual(expectedLabel.FieldGroup, actualLabel.FieldGroup);
-                //Assert.AreEqual(expectedLabel.FieldName, actualLabel.FieldName);
-                //Assert.AreEqual(expectedLabel.FieldOrder, actualLabel.FieldOrder);
-                //Assert.AreEqual(expectedLabel.FieldTitle, actualLabel.FieldTitle);
-                //Assert.AreEqual(expectedLabel.FieldType, actualLabel.FieldType);
-                //Assert.AreEqual(expectedLabel.FieldTypeDescription, actualLabel.FieldTypeDescription);
-                //Assert.AreEqual(expectedLabel.FieldTypeLocked, actualLabel.FieldTypeLocked);
-                //Assert.AreEqual(expectedLabel.Filterable, actualLabel.Filterable);
-                //Assert.AreEqual(expectedLabel.FilterProject, actualLabel.FilterProject);
-                //Assert.AreEqual(expectedLabel.FSAOnly, actualLabel.FSAOnly);
-                //Assert.AreEqual(expectedLabel.GroupOrder, actualLabel.GroupOrder);
-                //Assert.AreEqual(expectedLabel.Included, actualLabel.Included);
-                //Assert.AreEqual(expectedLabel.IncludedLock, actualLabel.IncludedLock);
-                //Assert.AreEqual(expectedLabel.InputValue, actualLabel.InputValue);
-                //Assert.AreEqual(expectedLabel.Label, actualLabel.Label);
-                //Assert.AreEqual(expectedLabel.MasterField, actualLabel.MasterField);
             }
             Assert.AreEqual(expectedJson, actualJson);
         }
