@@ -33,7 +33,7 @@ namespace FSAPortfolio.UnitTests
         {
             await TestLabel(ProjectPropertyConstants.project_size, ProjectSize_TestValue);
             await TestLabel(ProjectPropertyConstants.category, "EXTRA CATEGORY");
-            await TestLabel(ProjectPropertyConstants.phase, "Backlog, Phase1, Phase2", addToCurrent: false);
+            await TestLabel(ProjectPropertyConstants.phase, "Backlog, Phase1, Phase2, Phase3, Phase4", addToCurrent: false);
         }
 
         private async Task TestLabel(string fieldName, string testValue, bool addToCurrent = true)

@@ -177,23 +177,19 @@ namespace FSAPortfolio.WebAPI.App.Config
                 group usedOption by option into options
                 select new { category = options.Key, projectCount = options.Count() };
 
-            var unableToDelete = unableToDeleteQuery.ToList();
-            if (unableToDelete.Count > 0)
+            if (fieldName != ProjectPropertyConstants.phase)
             {
-                // Can't do this update while the categories are assigned to projects
-                Func<string, int, string> categoryError = (n, c) =>
+                var unableToDelete = unableToDeleteQuery.ToList();
+                if (unableToDelete.Count > 0)
                 {
-                    return c == 1 ?
-                    $"[{n}] is used as a {optionDescription} ({c} occurrence)" :
-                    $"[{n}] is used as a {optionDescription} ({c} occurrences)";
-                };
-                throw new PortfolioConfigurationException($"Can't update {collectionDescription}: {string.Join("; ", unableToDelete.Select(c => categoryError(c.category.Name, c.projectCount)))}");
-            }
-            else
-            {
-                if (fieldName == ProjectPropertyConstants.phase)
-                {
-                    // We reuse phases - so don't remove here
+                    // Can't do this update while the categories are assigned to projects
+                    Func<string, int, string> categoryError = (n, c) =>
+                    {
+                        return c == 1 ?
+                        $"[{n}] is used as a {optionDescription} ({c} occurrence)" :
+                        $"[{n}] is used as a {optionDescription} ({c} occurrences)";
+                    };
+                    throw new PortfolioConfigurationException($"Can't update {collectionDescription}: {string.Join("; ", unableToDelete.Select(c => categoryError(c.category.Name, c.projectCount)))}");
                 }
                 else
                 {
