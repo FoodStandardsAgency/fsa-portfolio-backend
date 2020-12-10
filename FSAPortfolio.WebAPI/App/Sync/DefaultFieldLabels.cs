@@ -121,7 +121,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_AboutTheProject, "Risk rating", ProjectPropertyConstants.risk_rating, false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_AboutTheProject, "Theme", nameof(ProjectModel.theme), true, false, false, PortfolioFieldType.OptionList, flags: Filterable|FilterProject, options: "Theme1, Theme2, Theme3"),
                 Factory(FieldGroupName_AboutTheProject, "Project type", nameof(ProjectModel.project_type), false, false, false, PortfolioFieldType.OptionList, flags: Filterable|FilterProject),
-                Factory(FieldGroupName_AboutTheProject, "Project size", nameof(ProjectModel.project_size), false, false, false, PortfolioFieldType.OptionList),
+                Factory(FieldGroupName_AboutTheProject, "Project size", ProjectPropertyConstants.project_size, false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_AboutTheProject, "Category", nameof(ProjectModel.category), true, false, false, PortfolioFieldType.OptionList, flags: Filterable|FilterProject),
                 Factory(FieldGroupName_AboutTheProject, "Secondary category", nameof(ProjectModel.subcat), true, false, false, PortfolioFieldType.PredefinedMultiList), // Uses the same values as category
                 Factory(FieldGroupName_AboutTheProject, "Directorate", nameof(ProjectModel.direct), true, false, false, PortfolioFieldType.PredefinedList, flags: Filterable|FilterProject),

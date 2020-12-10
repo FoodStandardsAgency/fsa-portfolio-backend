@@ -23,7 +23,7 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.onhold))]
         public IEnumerable<DropDownItemModel> OnHoldStatusItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.project_size))]
+        [JsonProperty(ProjectPropertyConstants.project_size)]
         public IEnumerable<DropDownItemModel> ProjectSizeItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.budgettype))]

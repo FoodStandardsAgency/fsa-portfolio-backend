@@ -63,7 +63,7 @@ namespace FSAPortfolio.WebAPI.App.Config
 
             UpdateProjectOptions(
                 config,
-                nameof(ProjectModel.project_size),
+                ProjectPropertyConstants.project_size,
                 context.Projects.Select(p => p.Size),
                 config.ProjectSizes,
                 context.ProjectSizes,
