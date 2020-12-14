@@ -17,7 +17,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers
                 case ProjectPropertyConstants.category:
                     result = GetValue(source.Configuration.Categories);
                     break;
-                case nameof(ProjectModel.onhold):
+                case ProjectPropertyConstants.onhold:
                     result = GetValue(source.Configuration.OnHoldStatuses);
                     break;
                 case ProjectPropertyConstants.phase:
@@ -29,7 +29,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers
                 case ProjectPropertyConstants.project_size:
                     result = GetValue(source.Configuration.ProjectSizes);
                     break;
-                case nameof(ProjectModel.budgettype):
+                case ProjectPropertyConstants.budgettype:
                     result = GetValue(source.Configuration.BudgetTypes);
                     break;
                 default:

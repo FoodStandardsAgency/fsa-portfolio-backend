@@ -31,13 +31,19 @@ namespace FSAPortfolio.UnitTests
         [TestMethod]
         public async Task UpdateProjectOptions()
         {
-            await TestLabel(ProjectPropertyConstants.project_size, ProjectSize_TestValue);
-            await TestLabel(ProjectPropertyConstants.category, "EXTRA CATEGORY");
-            await TestLabel(ProjectPropertyConstants.phase, "Backlog, Phase1, Phase2, Phase3, Phase4", addToCurrent: false);
+            await TestCollectionLabel(ProjectPropertyConstants.project_size, ProjectSize_TestValue);
+            await TestCollectionLabel(ProjectPropertyConstants.category, "EXTRA CATEGORY");
+            await TestCollectionLabel(ProjectPropertyConstants.budgettype, "EXTRA BUDGET TYPE");
+            await TestCollectionLabel(ProjectPropertyConstants.onhold, "EXTRA STATUS");
+            await TestCollectionLabel(ProjectPropertyConstants.risk_rating, "EXTRA RISK");
+            await TestCollectionLabel(ProjectPropertyConstants.phase, "Backlog, Phase1, Phase2, Phase3, Phase4", addToCurrent: false);
+
+            // TODO: add rest of collections
         }
 
-        private async Task TestLabel(string fieldName, string testValue, bool addToCurrent = true)
+        private async Task TestCollectionLabel(string fieldName, string testValue, bool addToCurrent = true)
         {
+            // Get the original config
             var config = await BackendAPIClient.GetPortfolioConfigurationAsync("odd");
             var original_Config_Expected = JsonConvert.SerializeObject(config);
 

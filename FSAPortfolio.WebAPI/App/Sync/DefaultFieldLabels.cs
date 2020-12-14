@@ -162,7 +162,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_ProgressIndicators, "Phase", ProjectPropertyConstants.phase, true, true, false, PortfolioFieldType.PhaseChoice, flags: Filterable|FilterProject),
                 Factory(FieldGroupName_ProgressIndicators, "RAG", nameof(ProjectModel.rag), true, false, false, PortfolioFieldType.RAGChoice, flags: Filterable|FilterProject),
                 Factory(FieldGroupName_ProgressIndicators, "How to get to green", nameof(ProjectModel.how_get_green), false, false, false, PortfolioFieldType.SmallFreeTextArea),
-                Factory(FieldGroupName_ProgressIndicators, "Status", nameof(ProjectModel.onhold), false, false, false, PortfolioFieldType.OptionList, flags: Filterable|FilterProject),
+                Factory(FieldGroupName_ProgressIndicators, "Status", ProjectPropertyConstants.onhold, false, false, false, PortfolioFieldType.OptionList, flags: Filterable|FilterProject),
                 Factory(FieldGroupName_ProgressIndicators, $"{FieldGroupName_ProgressIndicators} setting 1", nameof(ProjectModel.progress_setting1), false, false, false, PortfolioFieldType.FreeText),
                 Factory(FieldGroupName_ProgressIndicators, $"{FieldGroupName_ProgressIndicators} setting 2", nameof(ProjectModel.progress_setting2), false, false, false, PortfolioFieldType.FreeText),
                 Factory(FieldGroupName_ProgressIndicators, $"{FieldGroupName_ProgressIndicators} option 1", nameof(ProjectModel.progress_option1), false, false, false, PortfolioFieldType.OptionList),
@@ -181,7 +181,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 Factory(FieldGroupName_Prioritisation, "Benefits", nameof(ProjectModel.benefits), false, false, false, PortfolioFieldType.PredefinedList, options: fundedOptions),
                 Factory(FieldGroupName_Prioritisation, "Criticality", nameof(ProjectModel.criticality), false, false, false, PortfolioFieldType.PredefinedList, options: fundedOptions),
 
-                Factory(FieldGroupName_Budget, "Budget category", nameof(ProjectModel.budgettype), false, false, false, PortfolioFieldType.OptionList),
+                Factory(FieldGroupName_Budget, "Budget category", ProjectPropertyConstants.budgettype, false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_Budget, "Budget amount", nameof(ProjectModel.budget), false, false, false, PortfolioFieldType.Budget),
                 Factory(FieldGroupName_Budget, "Amount spent", nameof(ProjectModel.spent), false, false, false, PortfolioFieldType.Budget),
                 Factory(FieldGroupName_Budget, "Forecast spend at completion", nameof(ProjectModel.forecast_spend), false, false, false, PortfolioFieldType.Budget),

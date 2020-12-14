@@ -30,7 +30,7 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.rag))]
         public string[] RAGStatuses { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.onhold))]
+        [JsonProperty(ProjectPropertyConstants.onhold)]
         public string[] OnHoldStatuses { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.category)]

@@ -51,7 +51,7 @@ namespace FSAPortfolio.WebAPI.App.Config
 
             UpdateProjectOptions(
                 config,
-                nameof(ProjectModel.onhold),
+                ProjectPropertyConstants.onhold,
                 context.ProjectUpdates.Select(p => p.OnHoldStatus),
                 config.OnHoldStatuses,
                 context.ProjectOnHoldStatuses,
@@ -75,7 +75,7 @@ namespace FSAPortfolio.WebAPI.App.Config
 
             UpdateProjectOptions(
                 config,
-                nameof(ProjectModel.budgettype),
+                ProjectPropertyConstants.budgettype,
                 context.Projects.Select(p => p.BudgetType),
                 config.BudgetTypes,
                 context.BudgetTypes,

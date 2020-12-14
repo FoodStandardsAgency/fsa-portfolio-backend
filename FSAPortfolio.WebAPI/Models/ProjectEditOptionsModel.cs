@@ -20,13 +20,13 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.rag))]
         public IEnumerable<DropDownItemModel> RAGStatusItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.onhold))]
+        [JsonProperty(ProjectPropertyConstants.onhold)]
         public IEnumerable<DropDownItemModel> OnHoldStatusItems { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.project_size)]
         public IEnumerable<DropDownItemModel> ProjectSizeItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.budgettype))]
+        [JsonProperty(ProjectPropertyConstants.budgettype)]
         public IEnumerable<DropDownItemModel> BudgetTypeItems { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.category)]
