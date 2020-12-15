@@ -41,12 +41,19 @@ namespace FSAPortfolio.UnitTests
 
         internal static async Task<PortfolioConfigModel> GetPortfolioConfigurationAsync(string portfolio)
         {
-            return await GetAsync< PortfolioConfigModel>($"api/PortfolioConfiguration/{portfolio}");
+            return await GetAsync<PortfolioConfigModel>($"api/PortfolioConfiguration/{portfolio}");
         }
+
         internal static async Task UpdatePortfolioConfigurationAsync(PortfolioConfigUpdateRequest update)
         {
             await PatchAsync($"api/PortfolioConfiguration/{update.ViewKey}", update);
         }
+
+        internal static async Task<ProjectEditViewModel> GetProjectAsync(string projectId)
+        {
+            return await GetAsync<ProjectEditViewModel>($"api/Projects/{projectId}/edit");
+        }
+
 
         private static async Task<T> GetAsync<T>(string uri)
         {
@@ -78,5 +85,6 @@ namespace FSAPortfolio.UnitTests
             HttpResponseMessage response = await client.SendAsync(request);
             return response;
         }
+
     }
 }

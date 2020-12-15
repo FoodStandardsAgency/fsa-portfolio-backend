@@ -143,6 +143,8 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 
             CreateMap<MilestoneEditModel, Milestone>()
                 .ForMember(d => d.Id, o => o.Ignore())
+                .ForMember(d => d.Project, o => o.Ignore())
+                .ForMember(d => d.Project_ProjectReservation_Id, o => o.Ignore())
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
                 .ForMember(d => d.Deadline, o => o.MapFrom(s => s.Deadline))

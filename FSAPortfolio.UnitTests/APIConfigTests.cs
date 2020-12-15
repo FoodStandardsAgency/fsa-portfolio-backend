@@ -31,19 +31,19 @@ namespace FSAPortfolio.UnitTests
         [TestMethod]
         public async Task UpdateProjectOptions()
         {
-            await TestCollectionLabel(ProjectPropertyConstants.project_size, ProjectSize_TestValue);
-            await TestCollectionLabel(ProjectPropertyConstants.category, "EXTRA CATEGORY");
-            await TestCollectionLabel(ProjectPropertyConstants.budgettype, "EXTRA BUDGET TYPE");
-            await TestCollectionLabel(ProjectPropertyConstants.onhold, "EXTRA STATUS");
-            await TestCollectionLabel(ProjectPropertyConstants.risk_rating, "EXTRA RISK");
-            await TestCollectionLabel(ProjectPropertyConstants.phase, "Backlog, Phase1, Phase2, Phase3, Phase4", addToCurrent: false);
+            await TestCollectionLabel(ProjectPropertyConstants.project_size, ProjectSize_TestValue, "ODD2009001");
+            await TestCollectionLabel(ProjectPropertyConstants.category, "EXTRA CATEGORY", "ODD2009001");
+            await TestCollectionLabel(ProjectPropertyConstants.budgettype, "EXTRA BUDGET TYPE", "ODD2009001");
+            await TestCollectionLabel(ProjectPropertyConstants.onhold, "EXTRA STATUS", "ODD2009001");
+            await TestCollectionLabel(ProjectPropertyConstants.risk_rating, "EXTRA RISK", "ODD2009001");
+            await TestCollectionLabel(ProjectPropertyConstants.phase, "Backlog, Phase1, Phase2, Phase3, Phase4", "ODD2009001", addToCurrent: false);
 
             // TODO: add rest of collections
         }
 
-        private async Task TestCollectionLabel(string fieldName, string testValue, bool addToCurrent = true)
+        private async Task TestCollectionLabel(string fieldName, string testValue, string projectId, bool addToCurrent = true)
         {
-            // Get the original config
+            // 1. GET CONFIG the original 
             var config = await BackendAPIClient.GetPortfolioConfigurationAsync("odd");
             var original_Config_Expected = JsonConvert.SerializeObject(config);
 
@@ -55,7 +55,7 @@ namespace FSAPortfolio.UnitTests
             label.InputValue = updated_LabelValue_Expected;
             var updated_Config_Expected = JsonConvert.SerializeObject(config);
 
-            // Update the label and check values
+            // 2. UPDATE CONFIG with new label and check values
             var update = new PortfolioConfigUpdateRequest() { ViewKey = "odd", Labels = config.Labels };
             await BackendAPIClient.UpdatePortfolioConfigurationAsync(update);
 
@@ -64,7 +64,13 @@ namespace FSAPortfolio.UnitTests
             label = config.Labels.Single(l => l.FieldName == fieldName);
             var updated_LabelValue_Actual = label.InputValue;
 
-            // Now set it back
+            // . GET PROJECT
+            var projectEditView = await BackendAPIClient.GetProjectAsync(projectId);
+
+            // . UPDATE PROJECT to use new label
+            //project.category 
+
+            // . UPDATE CONFIG to set it back to original
             label.InputValue = original_LabelValue_Expected;
             update = new PortfolioConfigUpdateRequest() { ViewKey = "odd", Labels = config.Labels };
             await BackendAPIClient.UpdatePortfolioConfigurationAsync(update);

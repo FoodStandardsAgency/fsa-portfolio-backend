@@ -93,6 +93,11 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.AssuranceGateNumber, o => o.Ignore())
                 .ForMember(p => p.NextAssuranceGateNumber, o => o.Ignore())
 
+                .ForMember(p => p.TeamSettings, o => o.Ignore())
+                .ForMember(p => p.PlanSettings, o => o.Ignore())
+                .ForMember(p => p.ProgressSettings, o => o.Ignore())
+                .ForMember(p => p.BudgetSettings, o => o.Ignore())
+                .ForMember(p => p.ProcessSettings, o => o.Ignore())
 
                 // Ignore the keys
                 .ForMember(p => p.ProjectReservation_Id, o => o.Ignore())

@@ -13,6 +13,7 @@
 - Required field flags for front end validation
 - Configure filter fields per portfolio
 - Various other bug fixes and improvements
+- Handle historic options for select lists and drop downs.
 
 
 Version 0.1 - Released 23/11/2020 16:20
