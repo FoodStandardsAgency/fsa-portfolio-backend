@@ -202,14 +202,16 @@ namespace FSAPortfolio.WebAPI.App.Config
             string collectionDescription,
             string optionDescription,
             string viewKeyPrefix,
-            int? maxOptionCount = null
-            ) where T : class, IProjectOption, new()
+            int? maxOptionCount = null,
+            bool hideHistoric = true) 
+            where T : class, IProjectOption, new()
         {
             var labelConfig = config.Labels.Single(l => l.FieldName == fieldName);
+
             var optionNames = labelConfig.FieldOptions
                 .Split(',')
                 .Where(n => !string.IsNullOrWhiteSpace(n))
-                .Select((n, i) => new { index = i, value = n.Trim() })
+                .Select((n, i) => (index: i, value: n.Trim()))
                 .ToArray();
 
             if (maxOptionCount.HasValue && optionNames.Length > maxOptionCount.Value)
@@ -217,13 +219,21 @@ namespace FSAPortfolio.WebAPI.App.Config
                 throw new PortfolioConfigurationException($"Can't update {collectionDescription}: you entered {optionNames.Length} {collectionDescription}; the {optionDescription} limit is {maxOptionCount.Value}.");
             }
 
+            var matchedNamesQuery =
+                from name in optionNames
+                join option in optionCollection on name.value equals option.Name into options
+                from option in options.DefaultIfEmpty()
+                orderby name.index
+                select (name, option);
+            var matchedNames = matchedNamesQuery.ToList();
+
             // If the option has no matching name, check the options has no existing assignments and then delete it
             var unmatchedOptionsQuery =
                 // Get options that don't have a match in the new list
                 from existingOption in optionCollection
                 join name in optionNames on existingOption.Name equals name.value into names
                 from name in names.DefaultIfEmpty()
-                where name == null
+                where name == default
                 select existingOption;
 
             existingQuery = existingQuery.Where(e => e != null);
@@ -235,24 +245,39 @@ namespace FSAPortfolio.WebAPI.App.Config
                 on option.Id equals existingOption.Id into usedOptions
                 from usedOption in usedOptions
                 group usedOption by option into options
-                select new { category = options.Key, projectCount = options.Count() };
+                select new { option = options.Key, projectCount = options.Count() };
 
             var unableToDelete = unableToDeleteQuery.ToList();
             if (unableToDelete.Count > 0)
             {
-                // Can't do this update while the categories are assigned to projects
-                Func<string, int, string> categoryError = (n, c) =>
+                if (hideHistoric)
                 {
-                    return c == 1 ?
-                    $"[{n}] is used as a {optionDescription} ({c} occurrence)" :
-                    $"[{n}] is used as a {optionDescription} ({c} occurrences)";
-                };
-                throw new PortfolioConfigurationException($"Can't update {collectionDescription}: {string.Join("; ", unableToDelete.Select(c => categoryError(c.category.Name, c.projectCount)))}");
+                    // Use Order = -1 to hide options
+                    foreach(var noDeleteOption in unableToDelete)
+                    {
+                        noDeleteOption.option.Order = ProjectOptionConstants.HideOrderValue;
+
+                        // Because we are hiding this option, need to add it back into the matched names so it gets added to the collection further down
+                        matchedNames.Add(((noDeleteOption.option.Order, noDeleteOption.option.Name), noDeleteOption.option));
+                    }
+                }
+                else
+                {
+                    // Can't do this update while the options are assigned to projects
+                    Func<string, int, string> categoryError = (n, c) =>
+                    {
+                        return c == 1 ?
+                        $"[{n}] is used as a {optionDescription} ({c} occurrence)" :
+                        $"[{n}] is used as a {optionDescription} ({c} occurrences)";
+                    };
+                    throw new PortfolioConfigurationException($"Can't update {collectionDescription}: {string.Join("; ", unableToDelete.Select(c => categoryError(c.option.Name, c.projectCount)))}");
+                }
             }
-            else
+
+            var unmatchedOptions = unmatchedOptionsQuery.ToList();
+            foreach (var option in unmatchedOptions)
             {
-                var unmatchedOptions = unmatchedOptionsQuery.ToList();
-                foreach (var option in unmatchedOptions)
+                if (!unableToDelete.Any(o => o.option.ViewKey == option.ViewKey))
                 {
                     optionCollection.Remove(option);
                     dbSet.Remove(option);
@@ -260,13 +285,6 @@ namespace FSAPortfolio.WebAPI.App.Config
             }
 
             // If name has no matching option, add a option
-            var matchedNamesQuery =
-                from name in optionNames
-                join option in optionCollection on name.value equals option.Name into options
-                from option in options.DefaultIfEmpty()
-                orderby name.index
-                select new { name, option };
-            var matchedNames = matchedNamesQuery.ToList();
             int viewKeyIndex = 0;
 
             optionCollection.Clear();

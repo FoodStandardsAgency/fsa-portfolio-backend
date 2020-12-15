@@ -21,7 +21,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
             CreateMap<PortfolioConfiguration, ProjectEditOptionsModel>()
                 .ForMember(d => d.PhaseItems, o => o.MapFrom(config => config.Phases.OrderBy(p => p.Order)))
                 .ForMember(d => d.RAGStatusItems, o => o.MapFrom(
-                    new ProjectOptionDropDownResolver<ProjectRAGStatus>(nameof(ProjectModel.rag), addNoneOption: false), // NOTE! Don't use addNoneOption here - RAG is synched with a specific "Undecided" status
+                    new ProjectOptionDropDownResolver<ProjectRAGStatus>(),
                     config => config.RAGStatuses.OrderBy(p => p.Order))
                 )
                 .ForMember(d => d.OnHoldStatusItems, o => o.MapFrom(config => config.OnHoldStatuses.OrderBy(p => p.Order)))
@@ -82,7 +82,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ConvertUsing(s => new SelectPickerModel()
                 {
                     Header = "Select the subcategories...",
-                    Items = s.Select(c => new SelectPickerItemModel() { Display = c.Name, Value = c.ViewKey, Order = c.Order }).ToArray()
+                    Items = s.Select(c => new SelectPickerItemModel() { Display = c.Name, Value = c.ViewKey, Order = c.Order }).ToList()
                 });
         }
 
@@ -239,45 +239,20 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
             var label = source.Labels.SingleOrDefault(l => l.FieldName == fieldName);
             if (label?.FieldOptions != null)
             {
-                var items = label.FieldOptions.Split(',').Select((l, i) => new SelectPickerItemModel() { Display = l, Value = l, Order = i });
+                var items = label.FieldOptions.Split(',').Select((l, i) => NewSelectPickerItemModel(l, l, i));
 
                 model = new SelectPickerModel()
                 {
                     Header = header,
-                    Items = items
+                    Items = items.ToList()
                 };
             }
             return model;
         }
-    }
 
-    public class StubPersonResolver : IValueResolver<PortfolioConfiguration, ProjectEditOptionsModel, SelectPickerModel>
-    {
-        private string fieldName;
-        private bool addNoneOption;
-
-        public StubPersonResolver(string fieldName, bool addNoneOption = true)
+        public static SelectPickerItemModel NewSelectPickerItemModel(string display, string value, int order)
         {
-            this.fieldName = fieldName;
-            this.addNoneOption = addNoneOption;
-        }
-
-        public SelectPickerModel Resolve(PortfolioConfiguration source, ProjectEditOptionsModel destination, SelectPickerModel destMember, ResolutionContext context)
-        {
-            SelectPickerModel model = addNoneOption ? new SelectPickerModel()
-            {
-                Header = "Select the person...",
-                Items = new SelectPickerItemModel[] {
-                    new SelectPickerItemModel() { Display = "None", Order = 0 }
-                }
-            } :
-            new SelectPickerModel()
-            {
-                Header = "Select the person...",
-                Items = new SelectPickerItemModel[] {
-                }
-            };
-            return model;
+            return new SelectPickerItemModel() { Display = display, Value = value, Order = order };
         }
     }
 
@@ -287,7 +262,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         private string fieldName;
         private bool emptyOption = false;
 
-        public ProjectOptionDropDownResolver(string fieldName, bool addNoneOption = false)
+        public ProjectOptionDropDownResolver(string fieldName = null, bool addNoneOption = false)
         {
             this.fieldName = fieldName;
             this.emptyOption = addNoneOption;
@@ -304,6 +279,4 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
             return items;
         }
     }
-
-
 }

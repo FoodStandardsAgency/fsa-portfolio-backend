@@ -41,7 +41,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers
 
         private string GetValue<T>(ICollection<T> collection) where T : IProjectOption
         {
-            return string.Join(", ", collection.OrderBy(o => o.Order).Select(o => o.Name));
+            return string.Join(", ", collection.Where(i => i.Order != ProjectOptionConstants.HideOrderValue).OrderBy(o => o.Order).Select(o => o.Name));
         }
 
     }

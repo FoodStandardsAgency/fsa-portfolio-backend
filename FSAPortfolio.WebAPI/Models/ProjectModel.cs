@@ -26,7 +26,11 @@ namespace FSAPortfolio.WebAPI.Models
 
         public string short_desc { get; set; }
         public string phase { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.category)]
         public string category { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.subcat)]
         public string[] subcat { get; set; }
         public string rag { get; set; }
         public string update { get; set; }
@@ -42,11 +46,16 @@ namespace FSAPortfolio.WebAPI.Models
         public DateTime? timestamp { get; set; }
         public string pgroup { get; set; }
 
+        [JsonProperty(ProjectPropertyConstants.onhold)]
         public string onhold { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.project_size)]
         public string project_size { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.oddlead_role)]
         public string oddlead_role { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.budgettype)]
         public string budgettype { get; set; }
         public string direct { get; set; }
         public float? p_comp { get; set; }

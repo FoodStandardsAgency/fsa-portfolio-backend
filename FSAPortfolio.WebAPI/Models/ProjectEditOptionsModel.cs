@@ -32,7 +32,7 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(ProjectPropertyConstants.category)]
         public List<DropDownItemModel> CategoryItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.subcat))]
+        [JsonProperty(ProjectPropertyConstants.subcat)]
         public SelectPickerModel SubCategoryItems { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.direct)]
@@ -146,7 +146,7 @@ namespace FSAPortfolio.WebAPI.Models
         public string Header { get; set; }
 
         [JsonProperty("items")]
-        public IEnumerable<SelectPickerItemModel> Items { get; set; }
+        public List<SelectPickerItemModel> Items { get; set; }
     }
 
     public class SelectPickerItemModel : DropDownItemModel

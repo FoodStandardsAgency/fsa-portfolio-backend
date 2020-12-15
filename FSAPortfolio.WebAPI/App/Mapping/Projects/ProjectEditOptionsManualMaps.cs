@@ -36,7 +36,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 
                 // Get the OptionList labels...
                 var optionListLabels = config.Labels
-                    .Where(l => l.FieldType == PortfolioFieldType.OptionList || l.FieldType == PortfolioFieldType.MultiOptionList)
+                    .Where(l => l.FieldType == PortfolioFieldType.OptionList || l.FieldType == PortfolioFieldType.MultiOptionList || l.FieldType == PortfolioFieldType.PredefinedMultiList)
                     .ToList();
 
                 // Get the edit option properties that have a json property name in the OptionList labels...
@@ -57,28 +57,53 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 var query = from l in optionListLabels
                             join eop in editOptionProperties on l.FieldName equals eop.json.PropertyName
                             join pep in projectEditProperites on l.FieldName equals pep.json.PropertyName
-                            select new Stuff() { label = l, editOptionProperty = eop.property, projectEditProperty = pep.property }
+                            select new _projectProperty() { label = l, editOptionProperty = eop.property, projectEditProperty = pep.property }
                             ;
 
                 foreach (var property in query)
                 {
                     // Get value from ProjectEditViewModel
-                    string projectValue = property.projectEditProperty.GetValue(project) as string;
-                    if (!string.IsNullOrWhiteSpace(projectValue))
+                    // Work from array of strings so can accommodate subcat
+                    if (property.projectEditProperty.PropertyType == typeof(string))
                     {
+                        var projectValue = property.projectEditProperty.GetValue(project) as string;
                         List<DropDownItemModel> propertyOptions = property.editOptionProperty.GetValue(options) as List<DropDownItemModel>;
-                        if (propertyOptions != null && !propertyOptions.Any(o => o.Value == projectValue))
+                        if (propertyOptions != null)
                         {
-                            propertyOptions.Insert(0, LabelDropDownResolver.NewDropDownItem(0, projectValue, projectValue));
+                            // Might need to add the value to the list 
+                            // Note: this could be skipped for IProjectOption collections, but there's no way to tell if this is the case.
+                            if (projectValue != null)
+                            {
+                                if (propertyOptions != null && !propertyOptions.Any(o => o.Value == projectValue))
+                                {
+                                    propertyOptions.Insert(0, LabelDropDownResolver.NewDropDownItem(0, projectValue, projectValue));
+                                }
+                            }
+
+                            // Now clear out unused hidden options (this does apply to IProjectOption collections!)
+                            propertyOptions.RemoveAll(o => o.Order == ProjectOptionConstants.HideOrderValue && projectValue != o.Value);
                         }
                     }
+                    else if (property.projectEditProperty.PropertyType == typeof(string[]))
+                    {
+                        var values = property.projectEditProperty.GetValue(project) as string[];
+                        SelectPickerModel propertyOptions = property.editOptionProperty.GetValue(options) as SelectPickerModel;
+                        if (propertyOptions != null)
+                        {
+                            // Note that we don't have to add properties here as this occurs with subcat only: which is an IProjectOption collection.
+
+                            // Now clear out unused hidden options
+                            propertyOptions.Items.RemoveAll(o => o.Order == ProjectOptionConstants.HideOrderValue && (values == null || !values.Contains(o.Value)));
+                        }
+                    }
+
                 }
 
             }
         }
     }
 
-    class Stuff
+    class _projectProperty
     {
         internal PropertyInfo editOptionProperty;
         internal PropertyInfo projectEditProperty;

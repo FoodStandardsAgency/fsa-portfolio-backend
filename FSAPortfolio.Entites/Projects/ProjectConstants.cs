@@ -6,6 +6,11 @@ using System.Web;
 
 namespace FSAPortfolio.Entities.Projects
 {
+    public static class ProjectOptionConstants
+    {
+        public const int HideOrderValue = -1;
+    }
+
     public static class PhaseConstants
     {
         public const int MaxCount = 6;
