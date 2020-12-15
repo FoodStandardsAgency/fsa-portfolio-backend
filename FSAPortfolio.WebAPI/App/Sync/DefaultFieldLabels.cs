@@ -83,6 +83,11 @@ namespace FSAPortfolio.WebAPI.App.Sync
             label.AdminOnlyLock = adminLock;
             label.FieldTypeLocked = inputTypeLocked;
 
+            if(label.FieldOptions == null)
+            {
+                label.FieldOptions = options;
+            }
+
             if (label.Id == 0)
             {
                 label.Included = included || IncludeAll;

@@ -45,7 +45,7 @@ namespace FSAPortfolio.Entities.Projects
     }
     public static class CategoryConstants
     {
-        public const int MaxCount = 10;
+        public const int MaxCount = 30;
         public static string CapabilityName = ConfigurationManager.AppSettings["Category.Capability.Name"] ?? "Developing our digital capability";
         public static string DataName = ConfigurationManager.AppSettings["Category.Data.Name"] ?? "Data driven FSA";
         public static string ServiceMgmtName = ConfigurationManager.AppSettings["Category.Service.Name"] ?? "IT Service management";

@@ -42,6 +42,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers
         protected override ProjectCategory GetOption(Project destination, string viewKey, ResolutionContext context)
             => destination.Reservation.Portfolio.Configuration.Categories.SingleOrDefault(c => c.ViewKey == viewKey);
     }
+
     public class DirectorateResolver : BaseProjectOptionResolver<Directorate>
     {
         public DirectorateResolver() : base(nameof(ProjectUpdateModel.direct), allowNullOption: true) { }
