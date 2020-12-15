@@ -65,6 +65,7 @@
   <ItemGroup>
     <None Include="Deployment\00_Create.sql" />
     <None Include="Deployment\Compare_DEVDB_to_Project.scmp" />
+    <None Include="Deployment\ResetPriorityOptions.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Users.sql" />
