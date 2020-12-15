@@ -19,15 +19,7 @@ namespace FSAPortfolio.UnitTests
     [TestClass]
     public class APITests
     {
-        static HttpClient client = new HttpClient();
-
-        static APITests()
-        {
-            client.BaseAddress = new Uri("http://localhost/FSAPortfolio.WebAPI/");
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("APIKey", ConfigurationManager.AppSettings["APIKey"]);
-        }
+        private static HttpClient client => BackendAPIClient.client;
 
         [TestMethod]
         public void ProjectEndpoints()

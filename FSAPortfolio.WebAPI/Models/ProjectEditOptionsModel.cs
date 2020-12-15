@@ -14,28 +14,28 @@ namespace FSAPortfolio.WebAPI.Models
             new DropDownItemModel() { Display = ProjectViewModelProfile.StragicObjectivesMap[k], Value = k, Order = i }
             ).ToList();
 
-        [JsonProperty(nameof(ProjectModel.phase))]
+        [JsonProperty(ProjectPropertyConstants.phase)]
         public List<DropDownItemModel> PhaseItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.rag))]
         public List<DropDownItemModel> RAGStatusItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.onhold))]
+        [JsonProperty(ProjectPropertyConstants.onhold)]
         public List<DropDownItemModel> OnHoldStatusItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.project_size))]
+        [JsonProperty(ProjectPropertyConstants.project_size)]
         public List<DropDownItemModel> ProjectSizeItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.budgettype))]
+        [JsonProperty(ProjectPropertyConstants.budgettype)]
         public List<DropDownItemModel> BudgetTypeItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.category))]
+        [JsonProperty(ProjectPropertyConstants.category)]
         public List<DropDownItemModel> CategoryItems { get; set; }
 
         [JsonProperty(nameof(ProjectModel.subcat))]
         public SelectPickerModel SubCategoryItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.direct))]
+        [JsonProperty(ProjectPropertyConstants.direct)]
         public List<DropDownItemModel> Directorates { get; set; }
 
         [JsonProperty(nameof(ProjectModel.strategic_objectives))]

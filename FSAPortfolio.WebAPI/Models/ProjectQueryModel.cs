@@ -18,7 +18,7 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(FilterFieldConstants.TeamMemberNameFilter)]
         public string TeamMemberName { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.phase))]
+        [JsonProperty(ProjectPropertyConstants.phase)]
         public string[] Phases { get; set; }
 
         [JsonProperty(nameof(ProjectModel.theme))]
@@ -30,13 +30,13 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(nameof(ProjectModel.rag))]
         public string[] RAGStatuses { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.onhold))]
+        [JsonProperty(ProjectPropertyConstants.onhold)]
         public string[] OnHoldStatuses { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.category))]
+        [JsonProperty(ProjectPropertyConstants.category)]
         public string[] Categories { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.direct))]
+        [JsonProperty(ProjectPropertyConstants.direct)]
         public string[] Directorates { get; set; }
 
         [JsonProperty(nameof(ProjectModel.strategic_objectives))]

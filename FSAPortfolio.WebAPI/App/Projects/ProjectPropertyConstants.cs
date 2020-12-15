@@ -27,6 +27,13 @@ namespace FSAPortfolio.WebAPI.App
         public const string fs_number = "fs_number";
         public const string risk_rating = "risk_rating";
         public const string programme_description = "programme_description";
+        public const string project_size = "project_size";
+        public const string category = "category";
+        public const string direct = "direct";
+        public const string phase = "phase";
+        public const string budgettype = "budgettype";
+        public const string onhold = "onhold";
+
         public const string link = "link";
 
         public const string oddlead_role = "oddlead_role";

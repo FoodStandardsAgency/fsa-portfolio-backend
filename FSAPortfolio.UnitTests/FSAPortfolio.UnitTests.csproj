@@ -59,9 +59,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APITests.cs" />
+    <Compile Include="BackendAPIClient.cs" />
     <Compile Include="MappingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestExtensions.cs" />
+    <Compile Include="APIConfigTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
