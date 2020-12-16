@@ -33,7 +33,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 validPortfolios = new List<Portfolio>();
                 foreach(var portfolio in portfolios)
                 {
-                    if(portfolio.RequiredRoles.Any(r => User.IsInRole(r)))
+                    if(this.HasPermission(portfolio))
                     {
                         validPortfolios.Add(portfolio);
                     }
@@ -57,12 +57,20 @@ namespace FSAPortfolio.WebAPI.Controllers
 
                 if (portfolio == null) throw new HttpResponseException(HttpStatusCode.NotFound);
 
-                result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(
-                    portfolio, 
-                    opt => {
+                if (this.HasPermission(portfolio))
+                {
+                    result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(
+                    portfolio,
+                    opt =>
+                    {
                         opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
                         opt.Items[nameof(PortfolioSummaryModel)] = summaryType;
                     });
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.Forbidden);
+                }
             }
             return result;
         }

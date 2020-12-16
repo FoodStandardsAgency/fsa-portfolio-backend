@@ -13,7 +13,10 @@
 - Required field flags for front end validation
 - Configure filter fields per portfolio
 - Various other bug fixes and improvements
-- Handle historic options for select lists and drop downs.
+- Handle historic options for select lists and dropdowns
+- Suppliers can only view portfolio they were added under
+- Portfolios hidden if user doesn't have role to access
+- Strengthened access control
 
 
 Version 0.1 - Released 23/11/2020 16:20

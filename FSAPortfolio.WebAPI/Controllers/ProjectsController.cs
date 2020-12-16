@@ -106,6 +106,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             using (var context = new PortfolioContext())
             {
+                // TODO: how to assert permissions here? Projects could be in different portfolios!
                 IEnumerable<SelectItemModel> result = null;
                 var filteredQuery = from p in context.Projects.Include(p => p.Reservation) 
                                     where p.Reservation.ProjectId.Contains(term) || p.Name.Contains(term)
@@ -132,6 +133,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 {
                     var provider = new PortfolioProvider(context, portfolio);
                     var config = await provider.GetConfigAsync();
+                    this.AssertPermission(config.Portfolio);
                     var reservation = await provider.GetProjectReservationAsync(config);
                     await context.SaveChangesAsync();
 
@@ -181,6 +183,8 @@ namespace FSAPortfolio.WebAPI.Controllers
                                      where p.Reservation.ProjectId == projectId 
                                      select p).SingleOrDefaultAsync();
                 if (project == null) return NotFound();
+                this.AssertPermission(project.Reservation.Portfolio);
+
                 project.DeleteCollections(context);
                 await context.SaveChangesAsync();
 
@@ -213,6 +217,7 @@ namespace FSAPortfolio.WebAPI.Controllers
 
                 var project = await query.SingleOrDefaultAsync();
                 if (project == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+                this.AssertPermission(project.Reservation.Portfolio);
 
                 portfolio = project.Reservation.Portfolio.ViewKey;
 
@@ -241,10 +246,5 @@ namespace FSAPortfolio.WebAPI.Controllers
 
             return result;
         }
-        private static IQueryable<Project> ProjectWithIncludes(PortfolioContext context, string portfolio)
-        {
-            return context.Projects.IncludeProject().Where(p => p.Portfolios.Any(po => po.ViewKey == portfolio));
-        }
-
     }
 }

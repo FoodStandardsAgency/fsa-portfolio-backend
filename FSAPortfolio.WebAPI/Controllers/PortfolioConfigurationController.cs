@@ -39,8 +39,10 @@ namespace FSAPortfolio.WebAPI.Controllers
                         .Where(p => p.Portfolio.ViewKey == viewKey)
                         .SingleAsync();
 
+                    this.AssertPermission(config.Portfolio, "Admin");
+
                     // Update the labels
-                    foreach(var labelUpdate in labelUpdates)
+                    foreach (var labelUpdate in labelUpdates)
                     {
                         var label = config.Labels.Single(l => l.FieldName == labelUpdate.FieldName);
                         PortfolioMapper.UpdateMapper.Map(labelUpdate, label);
@@ -113,6 +115,9 @@ namespace FSAPortfolio.WebAPI.Controllers
                 {
                     var pfolio = await context.Portfolios.IncludeConfig()
                         .SingleAsync(p => p.ViewKey == portfolio);
+
+                    this.AssertPermission(pfolio, "Admin");
+
                     var model = PortfolioMapper.ConfigMapper.Map<PortfolioConfigModel>(pfolio.Configuration);
                     model.Labels = model.Labels.OrderBy(l => l.FieldGroup).ThenBy(l => l.FieldOrder).ToList();
 
