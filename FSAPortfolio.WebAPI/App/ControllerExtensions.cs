@@ -25,18 +25,22 @@ namespace FSAPortfolio.WebAPI.Controllers
         };
 
         public static bool HasPermission(this ApiController controller, Portfolio portfolio) => portfolio.RequiredRoles.Any(r => controller.User.IsInRole(r));
-        public static bool HasPermission(this ApiController controller, Portfolio portfolio, string role)
+        public static bool HasPermission(this ApiController controller, Portfolio portfolio, params string[] roles)
         {
-            var roleViewKey = $"{portfolio.IDPrefix}.{role}";
-            return portfolio.RequiredRoles.Contains(roleViewKey) && controller.User.IsInRole(roleViewKey);
+            var roleViewKeys = roles.Select(r => $"{portfolio.IDPrefix}.{r}").ToArray();
+            return roleViewKeys.Any(k => controller.User.IsInRole(k) && portfolio.RequiredRoles.Contains(k));
         }
         public static void AssertPermission(this ApiController controller, Portfolio portfolio)
         {
             if (!HasPermission(controller, portfolio)) throw new HttpResponseException(HttpStatusCode.Forbidden);
         }
-        public static void AssertPermission(this ApiController controller, Portfolio portfolio, string role)
+        public static void AssertPermission(this ApiController controller, Portfolio portfolio, params string[] roles)
         {
-            if (!HasPermission(controller, portfolio, role)) throw new HttpResponseException(HttpStatusCode.Forbidden);
+            if (!HasPermission(controller, portfolio, roles)) throw new HttpResponseException(HttpStatusCode.Forbidden);
+        }
+        public static void AssertAdmin(this ApiController controller, Portfolio portfolio)
+        {
+            if (!HasPermission(controller, portfolio, "Admin", "Superuser")) throw new HttpResponseException(HttpStatusCode.Forbidden);
         }
 
         public static bool UserHasFSAClaim(this ApiController controller) => UserHasClaim(controller, fsaClaims);
