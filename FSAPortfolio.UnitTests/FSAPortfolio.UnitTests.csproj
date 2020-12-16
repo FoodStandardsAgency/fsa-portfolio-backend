@@ -58,12 +58,18 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIProjectTests.cs" />
     <Compile Include="APITests.cs" />
     <Compile Include="BackendAPIClient.cs" />
+    <Compile Include="CompareUtil.cs" />
+    <Compile Include="ConfigurationTests\ProjectTestData.cs" />
+    <Compile Include="ConfigurationTests\ConfigTestData.cs" />
     <Compile Include="MappingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestExtensions.cs" />
-    <Compile Include="APIConfigTests.cs" />
+    <Compile Include="ConfigurationTests\APIConfigTests.cs" />
+    <Compile Include="TestMappings\TestMapper.cs" />
+    <Compile Include="TestMappings\ProjectProfile.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -71,12 +77,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="TestData\projectFormData_update.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <Content Include="TestData\projectFormData_init.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FSAPortfolio.Entites\FSAPortfolio.Entities.csproj">

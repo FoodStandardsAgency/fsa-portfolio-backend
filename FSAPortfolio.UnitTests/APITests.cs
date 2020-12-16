@@ -21,22 +21,6 @@ namespace FSAPortfolio.UnitTests
     {
         private static HttpClient client => BackendAPIClient.client;
 
-        [TestMethod]
-        public void ProjectEndpoints()
-        {
-            string testProjectId = ConfigurationManager.AppSettings["TestProjectId"];
-            TestGetOk("api/Projects/odd/newproject");
-            TestGetOk($"api/Projects/{testProjectId}");
-        }
-
-        [TestMethod]
-        public void UpdateProject()
-        {
-            UpdateAndVerify("TestData/projectFormData_init.json");
-            UpdateAndVerify("TestData/projectFormData_update.json");
-            UpdateAndVerify("TestData/projectFormData_init.json"); // Note that because update is on same day, it updates the previous update!
-        }
-
         private static void UpdateAndVerify(string formBody)
         {
             var projectJson = File.ReadAllText(formBody);

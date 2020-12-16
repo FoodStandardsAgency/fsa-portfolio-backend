@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.WebAPI.Models;
+﻿using FSAPortfolio.WebAPI.DTO;
+using FSAPortfolio.WebAPI.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,11 @@ namespace FSAPortfolio.UnitTests
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", access_token);
         }
 
+        internal static async Task UpdateProjectAsync(ProjectUpdateModel update)
+        {
+            await PostAsync($"api/Projects", update);
+        }
+
         internal static async Task<PortfolioConfigModel> GetPortfolioConfigurationAsync(string portfolio)
         {
             return await GetAsync<PortfolioConfigModel>($"api/PortfolioConfiguration/{portfolio}");
@@ -49,9 +55,9 @@ namespace FSAPortfolio.UnitTests
             await PatchAsync($"api/PortfolioConfiguration/{update.ViewKey}", update);
         }
 
-        internal static async Task<ProjectEditViewModel> GetProjectAsync(string projectId)
+        internal static async Task<GetProjectDTO<ProjectEditViewModel>> GetProjectAsync(string projectId)
         {
-            return await GetAsync<ProjectEditViewModel>($"api/Projects/{projectId}/edit");
+            return await GetAsync<GetProjectDTO<ProjectEditViewModel>>($"api/Projects/{projectId}/edit");
         }
 
 
@@ -62,6 +68,13 @@ namespace FSAPortfolio.UnitTests
             var json = await result.Content.ReadAsStringAsync();
             T model = JsonConvert.DeserializeObject<T>(json);
             return model;
+        }
+        private static async Task PostAsync<T>(string uri, T update)
+        {
+            var json = JsonConvert.SerializeObject(update);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var result = await client.PostAsync(uri, content);
+            if (!result.IsSuccessStatusCode) throw new Exception(result.ReasonPhrase);
         }
         private static async Task PatchAsync<T>(string uri, T update)
         {
