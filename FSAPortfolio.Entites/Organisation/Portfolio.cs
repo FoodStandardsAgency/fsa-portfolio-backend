@@ -32,5 +32,28 @@ namespace FSAPortfolio.Entities.Organisation
         public virtual ICollection<Project> Projects { get; set; }
         public virtual ICollection<Team> Teams { get; set; }
 
+        public string RequiredRoleData { get; set; }
+
+        public string[] RequiredRoles
+        {
+            get
+            {
+                switch(RequiredRoleData)
+                {
+                    case "Superuser":
+                        return new string[] { $"{IDPrefix}.Superuser" };
+                    case "Admin":
+                        return new string[] { $"{IDPrefix}.Superuser", $"{IDPrefix}.Admin" };
+                    case "Editor":
+                        return new string[] { $"{IDPrefix}.Superuser", $"{IDPrefix}.Admin", $"{IDPrefix}.Editor" };
+                    case "FSA":
+                        return new string[] { $"{IDPrefix}.Superuser", $"{IDPrefix}.Admin", $"{IDPrefix}.Editor", $"{IDPrefix}.FSA" };
+                    case "Read":
+                    default:
+                        return new string[] { $"{IDPrefix}.Superuser", $"{IDPrefix}.Admin", $"{IDPrefix}.Editor", $"{IDPrefix}.FSA", $"{IDPrefix}.Read" };
+                }
+            }
+        }
+
     }
 }

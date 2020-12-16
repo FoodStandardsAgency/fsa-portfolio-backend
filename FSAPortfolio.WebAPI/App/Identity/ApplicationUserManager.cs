@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -19,21 +20,29 @@ namespace FSAPortfolio.WebAPI.App.Identity
         public override bool SupportsUserRole => true;
         public override bool SupportsUserClaim => true;
         public override bool SupportsUserPassword => true;
+
         private const string _accessTokenRegexPattern = "AccessToken (?<accessToken>.*)";
+
+        private PortfolioContext portfolioContext;
+        private PortfolioRoleManager roleManager;
         private MicrosoftGraphUserStore graph;
         private string accessToken;
-        public ApplicationUserManager(IUserStore<ApplicationUser> store, string accessToken) : base(store)
+        public ApplicationUserManager(PortfolioContext portfolioContext, IUserStore<ApplicationUser> store, PortfolioRoleManager roleManager, string accessToken) : base(store)
         {
+            this.portfolioContext = portfolioContext;
+            this.roleManager = roleManager;
             if (accessToken != null)
             {
                 this.accessToken = accessToken;
-                graph = new MicrosoftGraphUserStore();
+                graph = new MicrosoftGraphUserStore(roleManager);
             }
         }
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             string activeDirectoryAccessToken = null;
+            var portfolioContext = context.Get<PortfolioContext>();
+            var roleManager = new PortfolioRoleManager(portfolioContext);
 
             // If we have an access token in the header, use active directory to authenticate the user.
             if (context.Request.Headers.ContainsKey("Authorization"))
@@ -45,7 +54,7 @@ namespace FSAPortfolio.WebAPI.App.Identity
                     activeDirectoryAccessToken = match.Groups["accessToken"].Value;
                 }
             }
-            var manager = new ApplicationUserManager(new UserStore(context.Get<PortfolioContext>()), activeDirectoryAccessToken);
+            var manager = new ApplicationUserManager(portfolioContext, new UserStore(portfolioContext, roleManager), roleManager, activeDirectoryAccessToken);
 
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)

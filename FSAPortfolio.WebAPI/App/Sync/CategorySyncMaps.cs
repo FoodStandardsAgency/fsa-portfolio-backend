@@ -15,7 +15,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "fhp", odd_categoryKeyMap },
             { "otp", odd_categoryKeyMap },
             { "test", odd_categoryKeyMap },
-            { "serd", serd_categoryKeyMap }
+            { "serd", serd_categoryKeyMap },
+            { "dev", odd_categoryKeyMap }
         };
 
         public static Dictionary<string, string> odd_categoryKeyMap => new Dictionary<string, string>()
@@ -73,7 +74,16 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}2"), "Category / Swimlane 3"},
             { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}3"), "Category / Swimlane 4"},
             { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}4"), "Category / Swimlane 5"},
-            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}5"), "Category / Swimlane 6"}
+            { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}5"), "Category / Swimlane 6"},
+
+            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}0"), "Backend Feature"},
+            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}1"), "Backend Bug"},
+            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}2"), "Frontend Feature"},
+            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}3"), "Frontend Bug"},
+            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}4"), "Database"},
+            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}5"), "HTML"},
+            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}6"), "Accessibility"}
+
 
         };
 

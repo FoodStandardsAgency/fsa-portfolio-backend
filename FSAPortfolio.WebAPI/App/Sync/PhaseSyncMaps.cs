@@ -73,7 +73,15 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { new Tuple<string, string>("test", $"{ViewKeyPrefix.Phase}2"), PhaseConstants.AlphaName },
             { new Tuple<string, string>("test", $"{ViewKeyPrefix.Phase}3"), PhaseConstants.BetaName },
             { new Tuple<string, string>("test", $"{ViewKeyPrefix.Phase}4"), PhaseConstants.LiveName },
-            { new Tuple<string, string>("test", $"{ViewKeyPrefix.Phase}5"), PhaseConstants.CompletedName }
+            { new Tuple<string, string>("test", $"{ViewKeyPrefix.Phase}5"), PhaseConstants.CompletedName },
+
+            { new Tuple<string, string>("dev", $"{ViewKeyPrefix.Phase}0"), PhaseConstants.BacklogName },
+            { new Tuple<string, string>("dev", $"{ViewKeyPrefix.Phase}1"), PhaseConstants.DiscoveryName },
+            { new Tuple<string, string>("dev", $"{ViewKeyPrefix.Phase}2"), "Implementation" },
+            { new Tuple<string, string>("dev", $"{ViewKeyPrefix.Phase}3"), "Testing" },
+            { new Tuple<string, string>("dev", $"{ViewKeyPrefix.Phase}4"), PhaseConstants.LiveName },
+            { new Tuple<string, string>("dev", $"{ViewKeyPrefix.Phase}5"), PhaseConstants.CompletedName }
+
 
         };
 

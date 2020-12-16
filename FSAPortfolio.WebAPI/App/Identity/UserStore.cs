@@ -10,15 +10,18 @@ using System.Threading.Tasks;
 using System.Web;
 using FSAPortfolio.Entities.Users;
 using System.Linq.Expressions;
+using FSAPortfolio.WebAPI.App.Users;
 
 namespace FSAPortfolio.WebAPI.App.Identity
 {
     public class UserStore : IUserStore<ApplicationUser>, IUserStore<ApplicationUser, string>
     {
         private PortfolioContext context;
-        public UserStore(PortfolioContext context)
+        private PortfolioRoleManager roleManager;
+        public UserStore(PortfolioContext context, PortfolioRoleManager roleManager)
         {
             this.context = context;
+            this.roleManager = roleManager;
         }
 
         public Task CreateAsync(ApplicationUser user)
@@ -61,9 +64,17 @@ namespace FSAPortfolio.WebAPI.App.Identity
                     AccessGroupViewKey = user.AccessGroup.ViewKey,
                     PasswordHash = user.PasswordHash
                 };
+
+                // The roles added for the user in the store
+                var userRoleList = user.RoleList == null ? new string[0] : user.RoleList.Split(';', ',');
+
+                // Merge and take the intersection with required portfolio roles...
+                var isSupplier = result.AccessGroupViewKey == AccessGroupConstants.SupplierViewKey;
+                var roleList = await roleManager.GetFilteredRoleListAsync(userRoleList, isSupplier);
+
                 if (user.RoleList != null)
                 {
-                    result.Roles = user.RoleList.Split(';', ',')
+                    result.Roles = roleList
                         .Select(r => new Role() { ViewKey = r.Trim() })
                         .ToList();
                 }

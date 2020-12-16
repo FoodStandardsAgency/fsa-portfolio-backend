@@ -29,18 +29,21 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         private const string TeamKeyPrefix = "AzureAD.Team.Name.";
 
-        internal async Task<AddSupplierResponseModel> AddSupplierAsync(string userName, string passwordHash)
+        internal async Task<AddSupplierResponseModel> AddSupplierAsync(string portfolioViewKey, string userName, string passwordHash)
         {
             var response = new AddSupplierResponseModel();
             try
             {
                 var accessGroup = await context.AccessGroups.SingleAsync(a => a.ViewKey == AccessGroupConstants.SupplierViewKey);
+                var portfolio = await context.Portfolios.SingleAsync(p => p.ViewKey == portfolioViewKey);
+                var roleList = $"{portfolio.IDPrefix}.Read";
                 context.Users.Add(new User()
                 {
                     Timestamp = DateTime.Now,
                     UserName = userName,
                     PasswordHash = passwordHash,
-                    AccessGroup = accessGroup
+                    AccessGroup = accessGroup,
+                    RoleList = roleList
                 });
                 await context.SaveChangesAsync();
                 response.result = "Ok";

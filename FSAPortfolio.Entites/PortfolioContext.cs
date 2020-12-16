@@ -90,6 +90,7 @@ namespace FSAPortfolio.Entities
                 mc.ToTable("PortfolioTeams");
             }); ;
             modelBuilder.Entity<Portfolio>().HasRequired(p => p.Configuration).WithRequiredPrincipal(c => c.Portfolio);
+            modelBuilder.Entity<Portfolio>().Ignore(p => p.RequiredRoles);
 
             modelBuilder.Entity<PortfolioConfiguration>().HasKey(p => p.Portfolio_Id);
             modelBuilder.Entity<PortfolioConfiguration>().HasMany(p => p.AuditLogs).WithRequired(l => l.PortfolioConfiguration).HasForeignKey(u => u.PortfolioConfiguration_Id);

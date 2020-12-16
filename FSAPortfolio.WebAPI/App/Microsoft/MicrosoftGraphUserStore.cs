@@ -1,4 +1,5 @@
 ﻿using FSAPortfolio.Entities.Users;
+using FSAPortfolio.WebAPI.App.Identity;
 using FSAPortfolio.WebAPI.Models;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
@@ -23,6 +24,12 @@ namespace FSAPortfolio.WebAPI.App.Microsoft
         private const string userSelect = "$select=id,displayName,givenName,surname,mail,userPrincipalName,department";
 
         private AuthenticationResult _auth;
+        private PortfolioRoleManager roleManager;
+
+        public MicrosoftGraphUserStore(PortfolioRoleManager roleManager = null)
+        {
+            this.roleManager = roleManager;
+        }
 
         internal async Task<MicrosoftGraphUserModel> GetUserForPrincipalNameAsync(string term)
         {
@@ -76,7 +83,8 @@ namespace FSAPortfolio.WebAPI.App.Microsoft
             var groups = await GetGroupMemberships(userId);
             var groupIds = groups.value.Select(g => g.Id);
             var roles = groupIds.Where(gid => GroupMembershipToRoleMap.GroupMap.ContainsKey(gid)).SelectMany(gid => GroupMembershipToRoleMap.GroupMap[gid]);
-            return roles;
+            var filteredRoles = await roleManager.GetFilteredRoleListAsync(roles, false);
+            return filteredRoles.Select(r => new Role() { ViewKey = r });
         }
 
         private async Task<MicrosoftGraphGroupMemberListResponse> GetGroupMemberships(string userId)

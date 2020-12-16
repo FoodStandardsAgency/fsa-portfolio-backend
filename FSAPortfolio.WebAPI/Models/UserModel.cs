@@ -25,6 +25,9 @@ namespace FSAPortfolio.WebAPI.Models
 
     public class AddSupplierModel
     {
+        [JsonProperty("portfolio")]
+        public string Portfolio { get; set; }
+
         [JsonProperty("userName")]
         public string UserName { get; set; }
 

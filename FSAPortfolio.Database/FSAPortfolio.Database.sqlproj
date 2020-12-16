@@ -103,5 +103,6 @@
     <Build Include="dbo\Tables\Directorates.sql" />
     <Build Include="dbo\Tables\Milestones.sql" />
     <None Include="Deployment\01_GenericSettings.sql" />
+    <None Include="Deployment\02_PortfolioRequiredRoles.sql" />
   </ItemGroup>
 </Project>

@@ -23,6 +23,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.UI.WebControls;
 using System.Text.RegularExpressions;
+using FSAPortfolio.WebAPI.App.Identity;
 
 namespace FSAPortfolio.WebAPI.App.Sync
 {
@@ -108,6 +109,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             {
                 var portfolio = await dest.Portfolios.Include(p => p.Teams).SingleAsync(p => p.ViewKey == "odd");
                 var usersProvider = new UsersProvider(dest);
+                var roleManager = new PortfolioRoleManager(dest);
 
                 // Sync the people
                 foreach (var sourcePerson in source.odd_people.AsEnumerable().Where(p => !string.IsNullOrWhiteSpace(p.email)))
@@ -138,7 +140,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     {
                         if (destPerson.Email != null)
                         {
-                            var graph = new MicrosoftGraphUserStore();
+                            var graph = new MicrosoftGraphUserStore(roleManager);
                             adUser = await graph.GetUserForPrincipalNameAsync(destPerson.Email);
                             if (adUser != null)
                             {
@@ -207,6 +209,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         {
             using (var context = new PortfolioContext())
             {
+                AddPortfolio(context, "Portfolio Development", "DEV", "dev", "Superuser");
                 AddPortfolio(context, "Open Data and Digital", "ODD", "odd");
                 AddPortfolio(context, "Science, Evidence and Reseach Directorate", "SERD", "serd");
                 AddPortfolio(context, "ABC", "ABC", "abc");
@@ -263,7 +266,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
-        private void AddPortfolio(PortfolioContext context, string name, string shortName, string viewKey)
+        private void AddPortfolio(PortfolioContext context, string name, string shortName, string viewKey, string requiredRoles = null)
         {
             var portfolio = context.Portfolios
                 .Include(p => p.Configuration.Phases)
@@ -290,7 +293,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         BudgetTypes = new List<BudgetType>(),
                         LabelGroups = new List<PortfolioLabelGroup>(),
                         Labels = new List<PortfolioLabelConfig>()
-                    }
+                    },
+                    RequiredRoleData = requiredRoles
                 };
                 context.Portfolios.Add(portfolio);
             }

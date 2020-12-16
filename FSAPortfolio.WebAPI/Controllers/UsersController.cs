@@ -58,7 +58,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             using (var context = new PortfolioContext())
             {
                 var provider = new UsersProvider(context);
-                return await provider.AddSupplierAsync(model.UserName, model.PasswordHash);
+                return await provider.AddSupplierAsync(model.Portfolio, model.UserName, model.PasswordHash);
             }
         }
 

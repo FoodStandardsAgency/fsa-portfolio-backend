@@ -15,7 +15,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { "fhp", odd_budgetTypeKeyMap },
             { "otp", odd_budgetTypeKeyMap },
             { "test", odd_budgetTypeKeyMap },
-            { "serd", serd_budgetTypeKeyMap }
+            { "serd", serd_budgetTypeKeyMap },
+            { "dev", odd_budgetTypeKeyMap }
         };
 
         public static Dictionary<string, string> odd_budgetTypeKeyMap => new Dictionary<string, string>()
