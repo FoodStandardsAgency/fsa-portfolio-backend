@@ -125,7 +125,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                     ).ToListAsync();
 
                 var projectQuery = from p in context.Projects.IncludeProject()
-                                   where  reservationIds.Contains(p.ProjectReservation_Id)
+                                   where reservationIds.Contains(p.ProjectReservation_Id)
                                    select p;
 
                 var provider = new PortfolioProvider(context, viewKey);

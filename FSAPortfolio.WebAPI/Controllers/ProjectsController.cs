@@ -208,10 +208,15 @@ namespace FSAPortfolio.WebAPI.Controllers
             GetProjectDTO<T> result;
             using (var context = new PortfolioContext())
             {
+                var reservation = await context.ProjectReservations
+                    .SingleOrDefaultAsync(r => r.ProjectId == projectId);
+
+                if(reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+
                 var query = (from p in context.Projects
                              .IncludeProject()
                              .IncludeLabelConfigs() // Need label configs so can map project data fields
-                             where p.Reservation.ProjectId == projectId
+                             where p.ProjectReservation_Id == reservation.Id
                              select p);
                 if (includeHistory || includeLastUpdate) query = query.IncludeUpdates();
 
