@@ -218,7 +218,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 //AddPortfolio(context, "Test", "Test", "test");
                 context.SaveChanges();
 
-                foreach (var portfolio in context.Portfolios)
+                foreach (var portfolio in context.Portfolios.Where(p => p.ViewKey == "dev"))
                 {
                     portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == $"{ViewKeyPrefix.Phase}5");
                 }
