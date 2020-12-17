@@ -64,6 +64,16 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(FilterFieldConstants.LeadTeamFilter)]
         public List<DropDownItemModel> G6Team { get; set; }
 
+        [JsonProperty(nameof(ProjectUpdateModel.key_contact1))]
+        public ActiveDirectoryUserSelectModel KeyContact1 { get; set; }
+
+        [JsonProperty(nameof(ProjectUpdateModel.key_contact2))]
+        public ActiveDirectoryUserSelectModel KeyContact2 { get; set; }
+
+        [JsonProperty(nameof(ProjectUpdateModel.key_contact3))]
+        public ActiveDirectoryUserSelectModel KeyContact3 { get; set; }
+
+
 
         [JsonProperty(nameof(ProjectModel.priority_main))]
         public List<DropDownItemModel> PriorityItems { get; set; }

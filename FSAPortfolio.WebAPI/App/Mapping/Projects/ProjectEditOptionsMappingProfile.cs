@@ -46,6 +46,11 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(d => d.BenefitItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.benefits))))
                 .ForMember(d => d.CriticalityItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.criticality))))
 
+                .ForMember(d => d.KeyContact1, o => o.MapFrom(s => new ActiveDirectoryUserSelectModel() { NoneOption = true }))
+                .ForMember(d => d.KeyContact2, o => o.MapFrom(s => new ActiveDirectoryUserSelectModel() { NoneOption = true }))
+                .ForMember(d => d.KeyContact3, o => o.MapFrom(s => new ActiveDirectoryUserSelectModel() { NoneOption = true }))
+
+
                 .ForMember(d => d.project_team_option1, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_team_option1))))
                 .ForMember(d => d.project_team_option2, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_team_option2))))
 
