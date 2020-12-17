@@ -17,6 +17,7 @@
 - Suppliers can only view portfolio they were added under
 - Portfolios hidden if user doesn't have role to access
 - Strengthened access control
+- Allow clearing key contacts
 
 
 Version 0.1 - Released 23/11/2020 16:20
