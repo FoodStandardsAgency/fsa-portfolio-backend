@@ -58,6 +58,18 @@ namespace FSAPortfolio.WebAPI.Controllers
             return messages;
         }
 
+        // GET: api/Sync/SyncPortfolios
+        [AcceptVerbs("GET")]
+        public IEnumerable<string> SyncPortfolios()
+        {
+            List<string> messages = new List<string>();
+            var sync = new SyncProvider(messages);
+            sync.SyncPortfolios();
+            return messages;
+        }
+
+
+
         // PUT: api/Sync/SyncProject
         [AcceptVerbs("PUT")]
         public IEnumerable<string> SyncProject([FromBody] SyncRequestModel syncRequest)

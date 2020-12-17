@@ -96,6 +96,11 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { controller = ControllerName<SyncController>(), action = nameof(SyncController.SyncUsers) }
             );
             config.Routes.MapHttpRoute(
+                name: "SyncPortfolios",
+                routeTemplate: "api/Sync/SyncPortfolios",
+                defaults: new { controller = ControllerName<SyncController>(), action = nameof(SyncController.SyncPortfolios) }
+            );
+            config.Routes.MapHttpRoute(
                 name: "SyncProject",
                 routeTemplate: "api/Sync/SyncProject",
                 defaults: new { controller = ControllerName<SyncController>(), action = nameof(SyncController.SyncProject) }

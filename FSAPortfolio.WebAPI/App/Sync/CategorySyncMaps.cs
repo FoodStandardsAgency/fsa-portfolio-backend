@@ -76,13 +76,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
             { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}4"), "Category / Swimlane 5"},
             { new Tuple<string, string>("abc",$"{ViewKeyPrefix.Category}5"), "Category / Swimlane 6"},
 
-            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}0"), "Backend Feature"},
-            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}1"), "Backend Bug"},
-            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}2"), "Frontend Feature"},
-            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}3"), "Frontend Bug"},
-            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}4"), "Database"},
-            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}5"), "HTML"},
-            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}6"), "Accessibility"}
+            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}0"), "Backend"},
+            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}1"), "Frontend"},
+            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}2"), "Database"},
+            { new Tuple<string, string>("dev",$"{ViewKeyPrefix.Category}3"), "Migration"}
 
 
         };
