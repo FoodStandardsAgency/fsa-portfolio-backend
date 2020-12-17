@@ -243,11 +243,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="App\Mapping\ActiveDirectory\ADUserMappingProfile.cs" />
-    <Compile Include="App\Mapping\Organisation\PortfolioSummariesMappingProfile.cs" />
+    <Compile Include="App\Mapping\Summaries\PortfolioSummariesMappingProfile.cs" />
     <Compile Include="App\Mapping\Organisation\Resolvers\OutboundLabelInputValueResolver.cs" />
     <Compile Include="App\Mapping\Organisation\PortfolioMappingProfile.cs" />
     <Compile Include="App\Mapping\Organisation\PortfolioConfigUpdateProfile.cs" />
-    <Compile Include="App\Mapping\Organisation\Resolvers\Summaries\SummaryResolvers.cs" />
+    <Compile Include="App\Mapping\Summaries\SummaryResolvers.cs" />
     <Compile Include="App\Mapping\PortfolioMapper.cs" />
     <Compile Include="App\Mapping\Organisation\PortfolioConfigurationMappingProfile.cs" />
     <Compile Include="App\Mapping\Projects\PostgresODDProjectMappingProfile.cs" />
