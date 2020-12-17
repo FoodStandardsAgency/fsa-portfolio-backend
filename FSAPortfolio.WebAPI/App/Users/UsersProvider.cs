@@ -20,6 +20,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Text.RegularExpressions;
 
 namespace FSAPortfolio.WebAPI.App.Users
 {
@@ -124,22 +125,34 @@ namespace FSAPortfolio.WebAPI.App.Users
                     // Look up the team from the user's department
                     if (user != null && user.department != null)
                     {
-                        // Get the viewkey from the map
+                        // Get the viewkey from the map (or create one from the department)
                         string teamViewKey;
-                        if (lazyTeamViewKeyMap.Value.TryGetValue(user.department, out teamViewKey))
+                        if (!lazyTeamViewKeyMap.Value.TryGetValue(user.department, out teamViewKey))
                         {
-                            // Find the team
-                            var team = await context.Teams.SingleOrDefaultAsync(t => t.ViewKey == teamViewKey);
-                            if (team != null)
+                            // Strip none alpha characters from dept to get a viewkey, and lowercase it
+                            Regex rgx = new Regex("[^a-zA-Z0-9]");
+                            teamViewKey = rgx.Replace(user.department, "").ToLower();
+                        }
+
+                        // Find the team (or create one)
+                        var team = await context.Teams.SingleOrDefaultAsync(t => t.ViewKey == teamViewKey);
+                        if (team == null)
+                        {
+                            int order = await context.Teams.MaxAsync(t => t.Order);
+                            team = new Team()
                             {
-                                person.Team_Id = team.Id;
-                                if (portfolio.Teams != null)
-                                {
-                                    if (!portfolio.Teams.Contains(team))
-                                    {
-                                        portfolio.Teams.Add(team);
-                                    }
-                                }
+                                ViewKey = teamViewKey,
+                                Name = user.department,
+                                Order = order
+                            };
+                        }
+
+                        person.Team = team;
+                        if (portfolio.Teams != null)
+                        {
+                            if (!portfolio.Teams.Contains(team))
+                            {
+                                portfolio.Teams.Add(team);
                             }
                         }
                     }
