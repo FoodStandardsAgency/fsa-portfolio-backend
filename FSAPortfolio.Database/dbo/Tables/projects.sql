@@ -42,6 +42,33 @@
     [KeyContact1_Id]                   INT             NULL,
     [KeyContact2_Id]                   INT             NULL,
     [KeyContact3_Id]                   INT             NULL,
+    [TeamSettings_Setting1]            NVARCHAR (MAX)  NULL,
+    [TeamSettings_Setting2]            NVARCHAR (MAX)  NULL,
+    [TeamSettings_Option1]             NVARCHAR (MAX)  NULL,
+    [TeamSettings_Option2]             NVARCHAR (MAX)  NULL,
+    [PlanSettings_Setting1]            NVARCHAR (MAX)  NULL,
+    [PlanSettings_Setting2]            NVARCHAR (MAX)  NULL,
+    [PlanSettings_Option1]             NVARCHAR (MAX)  NULL,
+    [PlanSettings_Option2]             NVARCHAR (MAX)  NULL,
+    [ProgressSettings_Setting1]        NVARCHAR (MAX)  NULL,
+    [ProgressSettings_Setting2]        NVARCHAR (MAX)  NULL,
+    [ProgressSettings_Option1]         NVARCHAR (MAX)  NULL,
+    [ProgressSettings_Option2]         NVARCHAR (MAX)  NULL,
+    [BudgetSettings_Setting1]          DECIMAL (18, 2) DEFAULT ((0)) NOT NULL,
+    [BudgetSettings_Setting2]          DECIMAL (18, 2) DEFAULT ((0)) NOT NULL,
+    [BudgetSettings_Option1]           NVARCHAR (MAX)  NULL,
+    [BudgetSettings_Option2]           NVARCHAR (MAX)  NULL,
+    [ProcessSettings_Setting1]         NVARCHAR (MAX)  NULL,
+    [ProcessSettings_Setting2]         NVARCHAR (MAX)  NULL,
+    [ProcessSettings_Option1]          NVARCHAR (MAX)  NULL,
+    [ProcessSettings_Option2]          NVARCHAR (MAX)  NULL,
+    [HowToGetToGreen]                  NVARCHAR (MAX)  NULL,
+    [ForwardLook]                      NVARCHAR (MAX)  NULL,
+    [EmergingIssues]                   NVARCHAR (MAX)  NULL,
+    [ForecastSpend]                    INT             DEFAULT ((0)) NOT NULL,
+    [CostCentre]                       NVARCHAR (MAX)  NULL,
+    [AssuranceGateNumber]              NVARCHAR (MAX)  NULL,
+    [NextAssuranceGateNumber]          NVARCHAR (MAX)  NULL,
     CONSTRAINT [PK_dbo.Projects] PRIMARY KEY CLUSTERED ([ProjectReservation_Id] ASC),
     CONSTRAINT [FK_dbo.Projects_dbo.BudgetTypes_BudgetType_Id] FOREIGN KEY ([BudgetType_Id]) REFERENCES [dbo].[BudgetTypes] ([Id]),
     CONSTRAINT [FK_dbo.Projects_dbo.Directorates_Directorate_Id] FOREIGN KEY ([Directorate_Id]) REFERENCES [dbo].[Directorates] ([Id]),
@@ -55,6 +82,8 @@
     CONSTRAINT [FK_dbo.Projects_dbo.ProjectUpdateItems_FirstUpdate_Id] FOREIGN KEY ([FirstUpdate_Id]) REFERENCES [dbo].[ProjectUpdateItems] ([Id]),
     CONSTRAINT [FK_dbo.Projects_dbo.ProjectUpdateItems_LatestUpdate_Id] FOREIGN KEY ([LatestUpdate_Id]) REFERENCES [dbo].[ProjectUpdateItems] ([Id])
 );
+
+
 
 
 

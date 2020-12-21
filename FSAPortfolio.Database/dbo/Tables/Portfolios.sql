@@ -1,12 +1,15 @@
 ﻿CREATE TABLE [dbo].[Portfolios] (
-    [Id]          INT             IDENTITY (1, 1) NOT NULL,
-    [ViewKey]     NVARCHAR (10)   NULL,
-    [ShortName]   NVARCHAR (20)   NULL,
-    [Name]        NVARCHAR (250)  NULL,
-    [Description] NVARCHAR (1000) NULL,
-    [IDPrefix]    NVARCHAR (10)   NULL,
+    [Id]               INT             IDENTITY (1, 1) NOT NULL,
+    [ViewKey]          NVARCHAR (10)   NULL,
+    [ShortName]        NVARCHAR (20)   NULL,
+    [Name]             NVARCHAR (250)  NULL,
+    [Description]      NVARCHAR (1000) NULL,
+    [IDPrefix]         NVARCHAR (10)   NULL,
+    [RequiredRoleData] NVARCHAR (MAX)  NULL,
     CONSTRAINT [PK_dbo.Portfolios] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 GO
