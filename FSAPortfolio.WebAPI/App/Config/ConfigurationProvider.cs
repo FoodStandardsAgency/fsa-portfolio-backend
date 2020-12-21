@@ -211,7 +211,7 @@ namespace FSAPortfolio.WebAPI.App.Config
             var optionNames = labelConfig.FieldOptions
                 .Split(',')
                 .Where(n => !string.IsNullOrWhiteSpace(n))
-                .Select((n, i) => (index: i, value: n.Trim()))
+                .Select((n, i) => (index: i, value: n.Trim(), lowervalue: n.Trim().ToLower() ))
                 .ToArray();
 
             if (maxOptionCount.HasValue && optionNames.Length > maxOptionCount.Value)
@@ -221,7 +221,7 @@ namespace FSAPortfolio.WebAPI.App.Config
 
             var matchedNamesQuery =
                 from name in optionNames
-                join option in optionCollection on name.value equals option.Name into options
+                join option in optionCollection on name.lowervalue equals option.Name.ToLower() into options
                 from option in options.DefaultIfEmpty()
                 orderby name.index
                 select (name, option);
@@ -231,7 +231,7 @@ namespace FSAPortfolio.WebAPI.App.Config
             var unmatchedOptionsQuery =
                 // Get options that don't have a match in the new list
                 from existingOption in optionCollection
-                join name in optionNames on existingOption.Name equals name.value into names
+                join name in optionNames on existingOption.Name.ToLower() equals name.lowervalue into names
                 from name in names.DefaultIfEmpty()
                 where name == default
                 select existingOption;
@@ -258,7 +258,7 @@ namespace FSAPortfolio.WebAPI.App.Config
                         noDeleteOption.option.Order = ProjectOptionConstants.HideOrderValue;
 
                         // Because we are hiding this option, need to add it back into the matched names so it gets added to the collection further down
-                        matchedNames.Add(((noDeleteOption.option.Order, noDeleteOption.option.Name), noDeleteOption.option));
+                        matchedNames.Add(((noDeleteOption.option.Order, noDeleteOption.option.Name, noDeleteOption.option.Name.ToLower()), noDeleteOption.option));
                     }
                 }
                 else
@@ -291,11 +291,8 @@ namespace FSAPortfolio.WebAPI.App.Config
             for (int i = 0; i < matchedNames.Count(); i++)
             {
                 var match = matchedNames.ElementAt(i);
-                T option = match.option;
-                if (match.option == null)
-                {
-                    option = new T() { Name = match.name.value };
-                }
+                T option = match.option ?? new T();
+                option.Name = match.name.value;
 
                 // Assign next viewkey
                 if (option.ViewKey == null)

@@ -12,7 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FSAPortfolio.UnitTests
+namespace FSAPortfolio.UnitTests.APIClients
 {
     public static class BackendAPIClient
     {
@@ -40,28 +40,7 @@ namespace FSAPortfolio.UnitTests
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", access_token);
         }
 
-        internal static async Task UpdateProjectAsync(ProjectUpdateModel update)
-        {
-            await PostAsync($"api/Projects", update);
-        }
-
-        internal static async Task<PortfolioConfigModel> GetPortfolioConfigurationAsync(string portfolio)
-        {
-            return await GetAsync<PortfolioConfigModel>($"api/PortfolioConfiguration/{portfolio}");
-        }
-
-        internal static async Task UpdatePortfolioConfigurationAsync(PortfolioConfigUpdateRequest update)
-        {
-            await PatchAsync($"api/PortfolioConfiguration/{update.ViewKey}", update);
-        }
-
-        internal static async Task<GetProjectDTO<ProjectEditViewModel>> GetProjectAsync(string projectId)
-        {
-            return await GetAsync<GetProjectDTO<ProjectEditViewModel>>($"api/Projects/{projectId}/edit");
-        }
-
-
-        private static async Task<T> GetAsync<T>(string uri)
+        internal static async Task<T> GetAsync<T>(string uri)
         {
             var result = await client.GetAsync(uri);
             if (!result.IsSuccessStatusCode) throw new Exception(result.ReasonPhrase);
@@ -69,14 +48,22 @@ namespace FSAPortfolio.UnitTests
             T model = JsonConvert.DeserializeObject<T>(json);
             return model;
         }
-        private static async Task PostAsync<T>(string uri, T update)
+        internal static async Task<T> GetAsync<T>(string uri, Dictionary<string, string> queryValues)
+        {
+            using (var queryBuilder = new FormUrlEncodedContent(queryValues))
+            {
+                var queryString = queryBuilder.ReadAsStringAsync().Result;
+                return await GetAsync<T>($"{uri}?{queryString}");
+            }
+        }
+        internal static async Task PostAsync<T>(string uri, T update)
         {
             var json = JsonConvert.SerializeObject(update);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             var result = await client.PostAsync(uri, content);
             if (!result.IsSuccessStatusCode) throw new Exception(result.ReasonPhrase);
         }
-        private static async Task PatchAsync<T>(string uri, T update)
+        internal static async Task PatchAsync<T>(string uri, T update)
         {
             var json = JsonConvert.SerializeObject(update);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -99,5 +86,9 @@ namespace FSAPortfolio.UnitTests
             return response;
         }
 
+        internal static async Task DeleteAsync(string uri)
+        {
+            await client.DeleteAsync(uri);
+        }
     }
 }

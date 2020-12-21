@@ -5,5 +5,6 @@
 	pcat.ViewKey,
 	pcat.Name
   FROM [dbo].[Portfolios] po
-  LEFT JOIN [dbo].[PortfolioConfigurations] pc ON po.Id = pc.Portfolio_Id
+  INNER JOIN [dbo].[PortfolioConfigurations] pc ON po.Id = pc.Portfolio_Id
   LEFT JOIN [dbo].[ProjectCategories] pcat ON pcat.Configuration_Id = pc.Portfolio_Id
+  

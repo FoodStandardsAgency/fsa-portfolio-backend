@@ -21,6 +21,7 @@ namespace FSAPortfolio.WebAPI.Controllers
     [Authorize]
     public class PortfolioConfigurationController : ApiController
     {
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         [HttpPatch]
         public async Task Patch([FromUri(Name = "id")] string viewKey, [FromBody] PortfolioConfigUpdateRequest update)
@@ -96,6 +97,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
             catch (Exception e)
             {
+                Logger.Error(e);
                 var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
                 {
                     ReasonPhrase = e.Message

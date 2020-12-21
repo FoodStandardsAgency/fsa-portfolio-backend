@@ -13,6 +13,7 @@ using FSAPortfolio.WebAPI.App.Mapping;
 using FSAPortfolio.WebAPI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using FSAPortfolio.UnitTests.APIClients;
 
 namespace FSAPortfolio.UnitTests
 {

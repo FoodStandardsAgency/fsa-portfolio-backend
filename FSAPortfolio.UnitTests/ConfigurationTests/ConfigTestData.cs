@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.UnitTests.TestMappings;
+﻿using FSAPortfolio.UnitTests.APIClients;
+using FSAPortfolio.UnitTests.TestMappings;
 using FSAPortfolio.WebAPI.Models;
 using Newtonsoft.Json;
 using System;
@@ -22,7 +23,7 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
         public async Task LoadAsync()
         {
             // 1. GET CONFIG the original 
-            Config = await BackendAPIClient.GetPortfolioConfigurationAsync(portfolio);
+            Config = await PortfolioConfigClient.GetPortfolioConfigurationAsync(portfolio);
         }
 
         public PortfolioLabelModel GetLabel(string fieldName) => Config.Labels.Single(l => l.FieldName == fieldName);
@@ -37,7 +38,7 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
         internal async Task UpdateAsync()
         {
             var request = new PortfolioConfigUpdateRequest() { ViewKey = portfolio, Labels = Config.Labels };
-            await BackendAPIClient.UpdatePortfolioConfigurationAsync(request);
+            await PortfolioConfigClient.UpdatePortfolioConfigurationAsync(request);
         }
 
         internal static async Task<ConfigTestData> LoadAsync(string portfolio)

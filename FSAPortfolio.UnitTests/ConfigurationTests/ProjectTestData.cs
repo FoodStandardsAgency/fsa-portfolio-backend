@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.UnitTests.TestMappings;
+﻿using FSAPortfolio.UnitTests.APIClients;
+using FSAPortfolio.UnitTests.TestMappings;
 using FSAPortfolio.WebAPI.DTO;
 using FSAPortfolio.WebAPI.Models;
 using Newtonsoft.Json;
@@ -22,7 +23,7 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
         }
         public async Task LoadAsync()
         {
-            DTO = await BackendAPIClient.GetProjectAsync(projectId);
+            DTO = await ProjectClient.GetProjectAsync(projectId);
             ProjectUpdate = TestMapper.ProjectMapper.Map<ProjectUpdateModel>(ProjectEditView);
         }
         public ProjectTestData Clone()
@@ -35,7 +36,7 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
 
         internal async Task UpdateAsync()
         {
-            await BackendAPIClient.UpdateProjectAsync(ProjectUpdate);
+            await ProjectClient.UpdateProjectAsync(ProjectUpdate);
         }
 
 
