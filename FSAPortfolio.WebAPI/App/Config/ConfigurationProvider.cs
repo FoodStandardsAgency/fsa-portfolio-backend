@@ -6,7 +6,9 @@ using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -24,6 +26,7 @@ namespace FSAPortfolio.WebAPI.App.Config
         internal async Task UpdateCollections(PortfolioConfiguration config)
         {
             await UpdateRAGStatusOptions(config);
+
             UpdatePhaseOptions(config);
 
             UpdateProjectOptions(
@@ -74,10 +77,27 @@ namespace FSAPortfolio.WebAPI.App.Config
                 BudgetTypeConstants.MaxCount
                 );
 
-
-            await context.SaveChangesAsync();
-
-
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateException e)
+            {
+                var builder = new StringBuilder();
+                foreach(var entry in e.Entries)
+                {
+                    if(entry.Entity is ProjectPhase && entry.State == EntityState.Deleted)
+                    {
+                        var phase = entry.Entity as ProjectPhase;
+                        builder.Append($"Phase [{phase.Name}] can't be removed because it has projects assigned to it. This is likely occurring because you are trying to reduce the number of phases but there are projects assigned to the phase to be removed.");
+                    }
+                    else
+                    {
+                        builder.Append($"Please send this message to system support: Error updating project collections Entity type = {entry.Entity.GetType().Name}, Entity State = {entry.State}");
+                    }
+                }
+                throw new PortfolioConfigurationException(builder.ToString(), e);
+            }
         }
 
         private async Task UpdateRAGStatusOptions(PortfolioConfiguration config)
@@ -129,7 +149,7 @@ namespace FSAPortfolio.WebAPI.App.Config
             var optionNames = labelConfig.FieldOptions
                 .Split(',')
                 .Where(n => !string.IsNullOrWhiteSpace(n))
-                .Select((n, i) => new { index = i, value = n.Trim() })
+                .Select((n, i) => new { index = i, value = n.Trim(), lowervalue = n.Trim().ToLower() })
                 .ToArray();
 
             if (optionNames.Length > PhaseConstants.MaxCount)
@@ -144,7 +164,7 @@ namespace FSAPortfolio.WebAPI.App.Config
             // If name has no matching option, add a option
             var matchedNamesQuery =
                 from name in optionNames
-                join option in optionCollection on name.value equals option.Name into options
+                join option in optionCollection on name.lowervalue equals option.Name.ToLower() into options
                 from option in options.DefaultIfEmpty()
                 orderby name.index
                 select new { name, option };

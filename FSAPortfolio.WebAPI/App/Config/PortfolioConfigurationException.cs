@@ -10,5 +10,8 @@ namespace FSAPortfolio.WebAPI.App.Config
         public PortfolioConfigurationException(string message) : base(message)
         {
         }
+        public PortfolioConfigurationException(string message, Exception e) : base(message, e)
+        {
+        }
     }
 }

@@ -30,6 +30,15 @@ namespace FSAPortfolio.UnitTests.APIClients
             await config.UpdateAsync();
             return original_categories;
         }
+        internal static async Task<string> UpdatePhasesAsync(string portfolio, string phases)
+        {
+            var config = await ConfigTestData.LoadAsync(portfolio);
+            var phasesLabel = config.GetLabel(ProjectPropertyConstants.phase);
+            var original_phases = phasesLabel.InputValue;
+            phasesLabel.InputValue = phases;
+            await config.UpdateAsync();
+            return original_phases;
+        }
 
         internal static async Task<GetProjectQueryDTO> GetFilterOptionsAsync(string portfolio)
         {

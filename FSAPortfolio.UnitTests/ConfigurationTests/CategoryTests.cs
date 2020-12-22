@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace FSAPortfolio.UnitTests.ConfigurationTests
 {
+    [TestClass]
     public class CategoryTests
     {
         private const string CategoryBackup = "Backend Feature, Backend Bug, Frontend Feature, Frontend Bug, Database, HTML";

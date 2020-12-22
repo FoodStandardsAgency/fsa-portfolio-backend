@@ -63,6 +63,7 @@
     <Compile Include="APITests.cs" />
     <Compile Include="APIClients\BackendAPIClient.cs" />
     <Compile Include="CompareUtil.cs" />
+    <Compile Include="ConfigurationTests\PhaseTests.cs" />
     <Compile Include="ConfigurationTests\CategoryTests.cs" />
     <Compile Include="ConfigurationTests\ConfigurationTestUtils.cs" />
     <Compile Include="ConfigurationTests\ProjectTestData.cs" />
