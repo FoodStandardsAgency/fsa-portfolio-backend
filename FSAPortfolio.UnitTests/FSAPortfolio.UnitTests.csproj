@@ -63,13 +63,15 @@
     <Compile Include="APITests.cs" />
     <Compile Include="APIClients\BackendAPIClient.cs" />
     <Compile Include="CompareUtil.cs" />
+    <Compile Include="ConfigurationTests\CategoryTests.cs" />
+    <Compile Include="ConfigurationTests\ConfigurationTestUtils.cs" />
     <Compile Include="ConfigurationTests\ProjectTestData.cs" />
     <Compile Include="ConfigurationTests\ConfigTestData.cs" />
     <Compile Include="MappingTests.cs" />
     <Compile Include="APIClients\ProjectClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestExtensions.cs" />
-    <Compile Include="ConfigurationTests\APIConfigTests.cs" />
+    <Compile Include="ConfigurationTests\PortfolioConfigurationTests.cs" />
     <Compile Include="TestMappings\TestMapper.cs" />
     <Compile Include="TestMappings\ProjectProfile.cs" />
   </ItemGroup>
