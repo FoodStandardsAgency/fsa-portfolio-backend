@@ -1,5 +1,9 @@
-﻿Version 0.1.1
-=============
+﻿Version 0.1.2 - Pending Release
+===============================
+- DEV2012004 Sync two part surnames
+
+Version 0.1.1 - Released 17/12/2020
+===================================
 - Assurance gate completed fixed
 - Priority group set to read only (so won't display in forms)
 - Channel link migration fixed
