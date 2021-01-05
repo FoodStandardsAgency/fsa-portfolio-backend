@@ -217,10 +217,21 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 foreach (var personsName in peoplesNames)
                 {
                     var names = personsName.Split(' ').Where(n => !string.IsNullOrEmpty(n)).ToArray();
-                    if(names.Length == 2)
+                    string firstName = null, surname = null;
+                    switch(names.Length)
                     {
-                        var firstName = names[0];
-                        var surname = names[1];
+                        case 2:
+                            firstName = names[0];
+                            surname = names[1];
+                            break;
+                        case 3:
+                            firstName = names[0];
+                            surname = $"{names[1]} {names[2]}";
+                            break;
+                    }
+
+                    if (firstName != null && surname != null)
+                    {
                         if (!result.Any(p => nameCheck(firstName, surname, p)))
                         {
                             var person =
