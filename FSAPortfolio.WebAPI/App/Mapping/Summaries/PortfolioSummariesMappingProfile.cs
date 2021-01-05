@@ -59,7 +59,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
 
             CreateMap<Person, ProjectSummaryModel>()
                 .ForMember(d => d.ViewKey, o => o.MapFrom(s => s.ViewKey))
-                .ForMember(d => d.Name, o => o.MapFrom(s => s.DisplayName))
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.DisplayName ?? ProjectTeamConstants.NotSetName))
                 .ForMember(d => d.Order, o => o.MapFrom(s => 0))
                 .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByTeamLeadResolver>())
                 ;

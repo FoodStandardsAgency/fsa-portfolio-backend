@@ -97,4 +97,9 @@ namespace FSAPortfolio.Entities.Projects
 
     }
 
+    public static class ProjectTeamConstants
+    {
+        public const string NotSetName = "None set";
+    }
+
 }

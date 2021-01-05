@@ -49,17 +49,21 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.Where(p => p.Id != source.Configuration.CompletedPhase.Id).OrderBy(c => c.Order));
                     break;
                 case PortfolioSummaryModel.ByLead:
-                    var allResults = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Portfolio.Projects
+                    var people = source.Configuration.Portfolio.Projects
                         .Where(p => p.Lead_Id != null)
                         .Select(p => p.Lead)
                         .Distinct()
                         .OrderBy(p => p.Firstname)
-                        .ThenBy(p => p.Surname));
+                        .ThenBy(p => p.Surname)
+                        .ToList();
+                    people.Insert(0, new Person() { Id = 0, ActiveDirectoryDisplayName = ProjectTeamConstants.NotSetName });
+
+                    var allResults = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(people);
                     result = allResults.Where(r => r.PhaseProjects.Any(pp => pp.Projects.Count() > 0)); // Only take leads with active projects
                     break;
                 case PortfolioSummaryModel.ByTeam:
                 case PortfolioSummaryModel.NewProjectsByTeam:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Teams.OrderBy(t => t.Order).Union(new Team[] { new Team() { Name = "None set", Id = 0 } }));
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Teams.OrderBy(t => t.Order).Union(new Team[] { new Team() { Name = ProjectTeamConstants.NotSetName, Id = 0 } }));
                     break;
                 default:
                     throw new ArgumentException($"Unrecognised summary type: {summaryType}");
@@ -154,7 +158,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
         public IEnumerable<PhaseProjectsModel> Resolve(Person source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
         {
             var config = context.Items[nameof(PortfolioConfiguration)] as PortfolioConfiguration;
-            return SummaryLinqQuery.GetQuery(config, p => p.Lead_Id == source.Id, context);
+            return SummaryLinqQuery.GetQuery(config, p => source.Id == 0 ? !p.Lead_Id.HasValue : p.Lead_Id == source.Id, context);
         }
     }
 }
