@@ -167,6 +167,5 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Reservation.Portfolio.Configuration.BudgetTypes)
                 ;
         }
-
     }
 }

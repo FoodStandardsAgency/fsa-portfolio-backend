@@ -40,14 +40,14 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
             var categoryOptions = options.Options.CategoryItems;
 
             List<ProjectUpdateModel> updates = new List<ProjectUpdateModel>();
-            Action<ProjectUpdateModel, string> ensureCategory = async (p, c) => {
+            Action<ProjectUpdateModel, string> ensureCategory = (p, c) => {
                 if (p.category != c)
                 {
                     p.category = c;
                     updates.Add(p);
                 }
             };
-            Action<ProjectUpdateModel, string> ensureSubCategory = async (p, c) =>
+            Action<ProjectUpdateModel, string> ensureSubCategory = (p, c) =>
             {
                 var _cat = categoryOptions.Single(_c => _c.Display == c);
                 if (p.subcat == null || !p.subcat.Contains(_cat.Value))

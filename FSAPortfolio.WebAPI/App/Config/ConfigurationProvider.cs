@@ -172,6 +172,7 @@ namespace FSAPortfolio.WebAPI.App.Config
 
             int phaseIndex = 0;
             int lastPhaseIndex = PhaseConstants.MaxCount - 1;
+            int lastButOneMatchedPhaseIndex = matchedNames.Count() - 2;
             int lastMatchedPhaseIndex = matchedNames.Count() - 1;
             List<ProjectPhase> phasesToRemove = new List<ProjectPhase>();
 
@@ -181,6 +182,7 @@ namespace FSAPortfolio.WebAPI.App.Config
                 var match = matchedNames.ElementAt(phaseIndex);
                 var phaseViewKey = $"{viewKeyPrefix}{phaseIndex}";
                 bool lastPhase = (phaseIndex == lastMatchedPhaseIndex);
+                bool lastButOnePhase = (phaseIndex == lastButOneMatchedPhaseIndex);
                 if (lastPhase)
                 {
                     // Removed unrequired phases
@@ -201,6 +203,7 @@ namespace FSAPortfolio.WebAPI.App.Config
                 option.Name = match.name.value;
 
                 if (lastPhase) config.CompletedPhase = option;
+                if (lastButOnePhase) config.ArchivePhase = option;
 
                 phaseIndex++;
             }

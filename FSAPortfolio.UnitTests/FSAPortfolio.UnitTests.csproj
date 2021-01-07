@@ -58,6 +58,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIClients\PortfolioClient.cs" />
     <Compile Include="APIClients\PortfolioConfigClient.cs" />
     <Compile Include="APIProjectTests.cs" />
     <Compile Include="APITests.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="ConfigurationTests\ConfigTestData.cs" />
     <Compile Include="MappingTests.cs" />
     <Compile Include="APIClients\ProjectClient.cs" />
+    <Compile Include="PortfolioTests\ArchiveTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SummaryTests\ProjectSummaryTests.cs" />
     <Compile Include="TestExtensions.cs" />

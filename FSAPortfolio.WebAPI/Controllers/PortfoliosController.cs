@@ -140,6 +140,30 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ArchiveResponse> ArchiveProjectsAsync([FromUri(Name = "portfolio")] string viewKey)
+        {
+            // Validate request
+            if (string.IsNullOrWhiteSpace(viewKey)) throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            ArchiveResponse response = new ArchiveResponse();
+
+            try
+            {
+                using (var context = new PortfolioContext())
+                {
+                    var provider = new PortfolioProvider(context, viewKey);
+                    response.ArchivedProjectIds = await provider.ArchiveProjectsAsync();
+                }
+
+                return response;
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+        }
+
 
     }
 }

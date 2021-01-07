@@ -104,5 +104,10 @@
     <Build Include="dbo\Tables\Milestones.sql" />
     <None Include="Deployment\01_GenericSettings.sql" />
     <None Include="Deployment\02_PortfolioRequiredRoles.sql" />
+    <None Include="Deployment\DeleteUnusedReservations.sql" />
+    <Build Include="dbo\Views\vwPortfolioCategories.sql" />
+    <Build Include="dbo\Views\vwPortfolioPhases.sql" />
+    <Build Include="dbo\Views\vwProjectCategories.sql" />
+    <None Include="Deployment\03_Archive.sql" />
   </ItemGroup>
 </Project>

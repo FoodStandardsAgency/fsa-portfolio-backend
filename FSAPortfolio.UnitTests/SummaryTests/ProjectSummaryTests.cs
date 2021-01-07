@@ -17,7 +17,7 @@ namespace FSAPortfolio.UnitTests.SummaryTests
     {
 
         [TestMethod]
-        public async Task NoLeadSummaryTest()
+        public void NoLeadSummaryTest()
         {
             // Configure test data
             var l1 = new Person() { Id = 1, ActiveDirectoryDisplayName = "Person1" };

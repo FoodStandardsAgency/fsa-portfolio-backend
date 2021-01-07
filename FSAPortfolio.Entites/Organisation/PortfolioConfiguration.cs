@@ -12,6 +12,8 @@ namespace FSAPortfolio.Entities.Organisation
 
         public virtual Portfolio Portfolio { get; set; }
         public virtual ICollection<ProjectPhase> Phases { get; set; }
+        public int ArchiveAgeDays { get; set; } = PortfolioSettings.DefaultProjectArchiveAgeDays;
+        public virtual ProjectPhase ArchivePhase { get; set; }
         public virtual ProjectPhase CompletedPhase { get; set; }
         public virtual ICollection<ProjectRAGStatus> RAGStatuses { get; set; }
         public virtual ICollection<ProjectOnHoldStatus> OnHoldStatuses { get; set; }

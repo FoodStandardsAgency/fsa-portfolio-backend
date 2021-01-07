@@ -269,6 +269,7 @@
     <Compile Include="App\Mapping\Projects\Resolvers\ProjectPersonViewResolver.cs" />
     <Compile Include="App\Mapping\Projects\Resolvers\ProjectStatusOptionsResolvers.cs" />
     <Compile Include="App\Mapping\Projects\Resolvers\ProjectUpdateItemOptionsResolvers.cs" />
+    <Compile Include="Models\Archive.cs" />
     <Compile Include="Models\IdentityResponseModel.cs" />
     <Compile Include="Models\IJsonProperties.cs" />
     <Compile Include="Models\JsonConverters\NonReentrantJsonConverter.cs" />

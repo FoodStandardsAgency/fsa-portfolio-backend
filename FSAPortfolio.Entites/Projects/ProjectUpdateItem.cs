@@ -19,8 +19,11 @@ namespace FSAPortfolio.Entities.Projects
 
         public string Text { get; set; }
         public virtual ProjectRAGStatus RAGStatus { get; set; }
+        public int? RAGStatus_Id { get; set; }
         public virtual ProjectOnHoldStatus OnHoldStatus { get; set; }
+        public int? OnHoldStatus_Id { get; set; }
         public virtual ProjectPhase Phase { get; set; }
+        public int? Phase_Id { get; set; }
 
         public float? PercentageComplete { get; set; }
         public decimal Budget { get; set; }

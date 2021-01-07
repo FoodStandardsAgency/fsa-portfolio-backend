@@ -66,7 +66,7 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
             if(ignorePhases != null) phaseOptions.RemoveAll(p => ignorePhases.Contains(p.Display));
 
             List<ProjectUpdateModel> updates = new List<ProjectUpdateModel>();
-            Action<ProjectUpdateModel, string> ensurePhase = async (p, ph) =>
+            Action<ProjectUpdateModel, string> ensurePhase = (p, ph) =>
             {
                 if (p.phase != ph)
                 {

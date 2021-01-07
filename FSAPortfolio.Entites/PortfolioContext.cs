@@ -106,6 +106,7 @@ namespace FSAPortfolio.Entities
             modelBuilder.Entity<PortfolioConfiguration>().HasMany(p => p.Labels).WithRequired(p => p.Configuration).HasForeignKey(p => p.Configuration_Id);
             modelBuilder.Entity<PortfolioConfiguration>().HasMany(p => p.LabelGroups).WithRequired(p => p.Configuration).HasForeignKey(p => p.Configuration_Id);
             modelBuilder.Entity<PortfolioConfiguration>().HasOptional(p => p.CompletedPhase);
+            modelBuilder.Entity<PortfolioConfiguration>().HasOptional(p => p.ArchivePhase);
 
             modelBuilder.Entity<PortfolioLabelConfig>().HasKey(l => l.Id);
             modelBuilder.Entity<PortfolioLabelConfig>().HasIndex(l => new { l.Configuration_Id, l.FieldName }).IsUnique();
@@ -208,9 +209,9 @@ namespace FSAPortfolio.Entities
 
 
             modelBuilder.Entity<ProjectUpdateItem>().HasKey(u => u.Id);
-            modelBuilder.Entity<ProjectUpdateItem>().HasOptional(u => u.RAGStatus).WithMany();
-            modelBuilder.Entity<ProjectUpdateItem>().HasOptional(u => u.OnHoldStatus).WithMany();
-            modelBuilder.Entity<ProjectUpdateItem>().HasOptional(u => u.Phase).WithMany();
+            modelBuilder.Entity<ProjectUpdateItem>().HasOptional(u => u.RAGStatus).WithMany().HasForeignKey(u => u.RAGStatus_Id);
+            modelBuilder.Entity<ProjectUpdateItem>().HasOptional(u => u.OnHoldStatus).WithMany().HasForeignKey(u => u.OnHoldStatus_Id);
+            modelBuilder.Entity<ProjectUpdateItem>().HasOptional(u => u.Phase).WithMany().HasForeignKey(u => u.Phase_Id);
 
 
 

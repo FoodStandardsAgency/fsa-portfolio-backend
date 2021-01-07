@@ -131,5 +131,52 @@ namespace FSAPortfolio.WebAPI.App.Projects
 
         }
 
+        internal async Task<string[]> ArchiveProjectsAsync()
+        {
+
+            // Get the config and set the date cutoff
+            var portfolioConfig = await context.PortfolioConfigurations
+                .Include(c => c.CompletedPhase)
+                .Include(c => c.ArchivePhase)
+                .SingleAsync(p => p.Portfolio.ViewKey == portfolioViewKey);
+
+            var cutoff = DateTime.Today.AddDays(-portfolioConfig.ArchiveAgeDays);
+
+            // Get all archivable projects last updated before the cutoff
+            var projects = await (from p in context.Projects.Include(p => p.Reservation)
+                                  where p.LatestUpdate.Phase.Id == p.Reservation.Portfolio.Configuration.ArchivePhase.Id && p.LatestUpdate.Timestamp < cutoff
+                                  select p)
+                                  .ToListAsync();
+            var latestUpdateIds = projects.Select(p => p.LatestUpdate_Id).ToArray();
+            string[] archivedIds = projects.Select(p => p.Reservation.ProjectId).ToArray();
+
+            // Use untracked entities to save explicit cloning
+            var untracked_updates = await (from u in context.ProjectUpdates
+                                      .AsNoTracking() // Entities are not tracked
+                                      where latestUpdateIds.Contains(u.Id)
+                                      select u)
+                                      .ToListAsync();
+
+            foreach (var update in untracked_updates)
+            {
+                // Get the project for the update
+                var project = projects.Single(p => p.ProjectReservation_Id == update.Project_Id);
+
+                // Set the phase to completed and add it again (entity is untracked so a new one is added: saves cloning it)
+                update.Id = 0;
+                update.Phase_Id = portfolioConfig.CompletedPhase.Id;
+                update.Project = null;
+                context.ProjectUpdates.Add(update);
+
+                // Set the new update as the latest
+                project.LatestUpdate = update;
+            }
+
+            await context.SaveChangesAsync();
+
+
+            return archivedIds;
+        }
+
     }
 }

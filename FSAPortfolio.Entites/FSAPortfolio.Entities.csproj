@@ -66,6 +66,10 @@
     <Compile Include="Migrations\202012161324577_02_PortfolioRequiredRoles.designer.cs">
       <DependentUpon>202012161324577_02_PortfolioRequiredRoles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101061329228_03_Archive.cs" />
+    <Compile Include="Migrations\202101061329228_03_Archive.designer.cs">
+      <DependentUpon>202101061329228_03_Archive.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
     <Compile Include="Organisation\PortfolioConfiguration.cs" />
@@ -110,6 +114,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202012161324577_02_PortfolioRequiredRoles.resx">
       <DependentUpon>202012161324577_02_PortfolioRequiredRoles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101061329228_03_Archive.resx">
+      <DependentUpon>202101061329228_03_Archive.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

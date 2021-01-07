@@ -70,6 +70,16 @@ namespace FSAPortfolio.UnitTests.APIClients
             var result = await client.PatchAsync(uri, content);
             if (!result.IsSuccessStatusCode) throw new Exception(result.ReasonPhrase);
         }
+        internal static async Task<TResponse> PatchAsync<TRequest, TResponse>(string uri, TRequest request)
+        {
+            var json = JsonConvert.SerializeObject(request);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var result = await client.PatchAsync(uri, content);
+            if (!result.IsSuccessStatusCode) throw new Exception(result.ReasonPhrase);
+            json = await result.Content.ReadAsStringAsync();
+            TResponse response = JsonConvert.DeserializeObject<TResponse>(json);
+            return response;
+        }
 
         public static async Task<HttpResponseMessage> PatchAsync(this HttpClient client, string requestUri, HttpContent content)
         {

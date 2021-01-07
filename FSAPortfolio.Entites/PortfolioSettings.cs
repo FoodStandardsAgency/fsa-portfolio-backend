@@ -9,6 +9,7 @@ namespace FSAPortfolio.Entities
     public static class PortfolioSettings
     {
         public static int NewProjectLimitDays = GetIntSetting("Projects.NewLimitDays", 14);
+        public static int DefaultProjectArchiveAgeDays = GetIntSetting("Projects.DefaultArchiveAgeDays", 90);
 
         private static int GetIntSetting(string key, int? defaultValue)
         {
