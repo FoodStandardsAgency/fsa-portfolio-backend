@@ -341,3 +341,4 @@ healthchecksdb
 /FSAPortfolio.WebAPI/connectionStrings.config
 /FSAPortfolio.WebAPI/appSettings.config
 /FSAPortfolio.UnitTests/appSettings.config
+/FSAPortfolio.UnitTests/connectionStrings.config

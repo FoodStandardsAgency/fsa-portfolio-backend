@@ -157,6 +157,9 @@ namespace FSAPortfolio.WebAPI.App.Projects
                                       select u)
                                       .ToListAsync();
 
+            var auditLogTimestamp = DateTime.Now;
+            var auditLogText = $"Project archived after {portfolioConfig.ArchiveAgeDays} days in the [{portfolioConfig.ArchivePhase.Name}] phase.";
+
             foreach (var update in untracked_updates)
             {
                 // Get the project for the update
@@ -167,6 +170,15 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 update.Phase_Id = portfolioConfig.CompletedPhase.Id;
                 update.Project = null;
                 context.ProjectUpdates.Add(update);
+
+                // Add an audit log
+                var audit = new ProjectAuditLog()
+                {
+                    Timestamp = auditLogTimestamp,
+                    Text = auditLogText,
+                    Project_Id = project.ProjectReservation_Id
+                };
+                context.ProjectAuditLogs.Add(audit);
 
                 // Set the new update as the latest
                 project.LatestUpdate = update;

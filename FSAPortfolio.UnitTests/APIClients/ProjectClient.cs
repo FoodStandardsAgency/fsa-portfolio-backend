@@ -57,14 +57,14 @@ namespace FSAPortfolio.UnitTests.APIClients
         }
 
 
-        internal static async Task<List<ProjectUpdateModel>> GetTestProjectsAsync()
+        internal static async Task<List<ProjectUpdateModel>> GetTestProjectsAsync(string prefix = TestProjectPrefix)
         {
             var projects = new List<ProjectUpdateModel>();
             int decade = 0;
             IEnumerable<SelectItemModel> searchResults;
             do
             {
-                searchResults = await GetProjectByNameOrIdAsync($"{TestProjectPrefix}{decade++}");
+                searchResults = await GetProjectByNameOrIdAsync($"{prefix}{decade++}");
                 foreach (var result in searchResults)
                 {
                     var project = await ProjectTestData.LoadAsync(result.Value);
@@ -76,7 +76,7 @@ namespace FSAPortfolio.UnitTests.APIClients
             return projects;
         }
 
-        public static async Task EnsureTestProjects()
+        public static async Task EnsureTestProjects(int count = TestProjectCount, string prefix = TestProjectPrefix)
         {
             Func<string, Task> ensureProject = async name =>
             {
@@ -87,17 +87,18 @@ namespace FSAPortfolio.UnitTests.APIClients
                 }
             };
 
-            for (int i = 1; i <= TestProjectCount; i++)
+            for (int i = 1; i <= count; i++)
             {
-                await ensureProject($"{TestProjectPrefix}{i:D2}");
+                await ensureProject($"{prefix}{i:D2}");
             }
         }
-        public static async Task DeleteTestProjectsAsync()
+
+        public static async Task DeleteTestProjectsAsync(string prefix = TestProjectPrefix)
         {
             IEnumerable<SelectItemModel> searchResults;
             do
             {
-                searchResults = await GetProjectByNameOrIdAsync($"{TestProjectPrefix}");
+                searchResults = await GetProjectByNameOrIdAsync($"{prefix}");
                 foreach (var result in searchResults)
                 {
                     await DeleteProjectAsync(result.Value);
