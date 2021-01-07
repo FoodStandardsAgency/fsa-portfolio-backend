@@ -1,6 +1,8 @@
 ﻿Version 0.1.2 - Pending Release
 ===============================
 - DEV2012004 Sync two part surnames
+- DEV2012010 Archiving CRON job
+- Phase configuration issue fixed linked to removing a configured phase
 
 Version 0.1.1 - Released 17/12/2020
 ===================================

@@ -9,6 +9,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -79,7 +80,25 @@ namespace FSAPortfolio.WebAPI.App.Config
 
             try
             {
-                await context.SaveChangesAsync();
+                // Allow phases to be reordered with same names: 
+                using (var transaction = context.Database.BeginTransaction())
+                {
+                    // - give the phase names a temporary prefix and save
+                    foreach (var phase in config.Phases)
+                    {
+                        phase.Name = $"__{phase.Name}";
+                    }
+                    await context.SaveChangesAsync();
+
+                    // - remove the prefix
+                    foreach (var phase in config.Phases)
+                    {
+                        phase.Name = Regex.Match(phase.Name, "^__(.*)").Groups[1].Value;
+                    }
+                    await context.SaveChangesAsync();
+
+                    transaction.Commit();
+                }
             }
             catch (DbUpdateException e)
             {
@@ -154,7 +173,11 @@ namespace FSAPortfolio.WebAPI.App.Config
 
             if (optionNames.Length > PhaseConstants.MaxCount)
             {
-                throw new PortfolioConfigurationException($"Can't update phases: you entered {optionNames.Length} phases; the phase limit is {PhaseConstants.MaxCount}.");
+                throw new PortfolioConfigurationException($"Can't update phases: you entered {optionNames.Length} phases; the maximum number of phases is {PhaseConstants.MaxCount}.");
+            }
+            else if (optionNames.Length < 2)
+            {
+                throw new PortfolioConfigurationException($"Can't update phases: you entered {optionNames.Length} phases; the minimum number of phases is 2.");
             }
 
             var optionCollection = config.Phases;
@@ -171,22 +194,21 @@ namespace FSAPortfolio.WebAPI.App.Config
             var matchedNames = matchedNamesQuery.ToList();
 
             int phaseIndex = 0;
-            int lastPhaseIndex = PhaseConstants.MaxCount - 1;
-            int lastButOneMatchedPhaseIndex = matchedNames.Count() - 2;
-            int lastMatchedPhaseIndex = matchedNames.Count() - 1;
+            int matchIndex = 0;
+            int lastButOnePhaseIndex = PhaseConstants.MaxCount - 2;
+            int lastButOneMatchIndex = matchedNames.Count() - 2;
+            int lastMatchIndex = matchedNames.Count() - 1;
             List<ProjectPhase> phasesToRemove = new List<ProjectPhase>();
 
             // Write over the existing elements - add any new ones
-            while (phaseIndex < matchedNames.Count())
+            while (phaseIndex < PhaseConstants.MaxCount)
             {
-                var match = matchedNames.ElementAt(phaseIndex);
+                var match = matchedNames.ElementAt(matchIndex);
                 var phaseViewKey = $"{viewKeyPrefix}{phaseIndex}";
-                bool lastPhase = (phaseIndex == lastMatchedPhaseIndex);
-                bool lastButOnePhase = (phaseIndex == lastButOneMatchedPhaseIndex);
-                if (lastPhase)
+                if (matchIndex == lastButOneMatchIndex)
                 {
                     // Removed unrequired phases
-                    while (phaseIndex < lastPhaseIndex)
+                    while (phaseIndex < lastButOnePhaseIndex)
                     {
                         var phase = optionCollection.SingleOrDefault(p => p.ViewKey == phaseViewKey);
                         if (phase != null) phasesToRemove.Add(phase);
@@ -202,10 +224,12 @@ namespace FSAPortfolio.WebAPI.App.Config
                 }
                 option.Name = match.name.value;
 
-                if (lastPhase) config.CompletedPhase = option;
-                if (lastButOnePhase) config.ArchivePhase = option;
+                // Set the archive and completed phases
+                if (matchIndex == lastButOneMatchIndex) config.ArchivePhase = option;
+                if (matchIndex == lastMatchIndex) config.CompletedPhase = option;
 
                 phaseIndex++;
+                matchIndex++;
             }
 
             foreach (var phase in phasesToRemove)

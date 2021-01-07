@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FSAPortfolio.UnitTests.ConfigurationTests
@@ -16,8 +17,9 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
     {
         private const string PhaseBackup = "Backlog, Discovery, Implementation, Testing, Live, Completed";
         private const string TestStartPhases = "Backlog, Discovery, Implementation, Testing, Live, Completed";
-        private const string TestChangedPhases = "backlog, discovery, New1, New2, New3, New4";
-        private const string TestChanged_ReducedNumberPhases = "backlog, discovery, New1, New2, New3";
+        private const string TestChangedPhases = "backlog, discovery, New1, New2, New3, Completed";
+        private const string TestChanged_ReducedNumberPhases = "backlog, discovery, New1, New2, Completed";
+        private const string TestChanged_ReducedNumberPhases_Fail = "backlog, discovery, Implementation, Live, Completed";
 
         [ClassCleanup]
         public static async Task CleanupTest()
@@ -35,19 +37,21 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
         [TestMethod]
         public async Task ReconfigurePhases_ReduceNumber_Test()
         {
-            await TestPhaseChange(TestStartPhases, TestChanged_ReducedNumberPhases, new string[] { "Live" });
+            await TestPhaseChange(TestStartPhases, TestChanged_ReducedNumberPhases, new string[] { "Testing" });
         }
+
+
 
         [TestMethod]
         public async Task ReconfigurePhases_ReduceNumber_FailureMode_Test()
         {
             try
             {
-                await TestPhaseChange(TestStartPhases, TestChanged_ReducedNumberPhases);
+                await TestPhaseChange(TestStartPhases, TestChanged_ReducedNumberPhases_Fail);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Assert.AreEqual("Phase [Live] can't be removed because it has projects assigned to it. This is likely occurring because you are trying to reduce the number of phases but there are projects assigned to the phase to be removed.", e.Message);
+                Assert.AreEqual("Phase [Testing] can't be removed because it has projects assigned to it. This is likely occurring because you are trying to reduce the number of phases but there are projects assigned to the phase to be removed.", e.Message);
             }
         }
 

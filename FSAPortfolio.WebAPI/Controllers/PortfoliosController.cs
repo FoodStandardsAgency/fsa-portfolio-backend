@@ -140,7 +140,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet, OverrideAuthorization]
         public async Task<ArchiveResponse> ArchiveProjectsAsync([FromUri(Name = "portfolio")] string viewKey)
         {
             // Validate request
