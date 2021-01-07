@@ -113,6 +113,10 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
             CreateMap<serdproject, ProjectUpdateItem>()
                 .ForMember(p => p.Id, o => o.Ignore())
                 .ForMember(p => p.Project_Id, o => o.Ignore())
+                .ForMember(p => p.RAGStatus_Id, o => o.Ignore())
+                .ForMember(p => p.OnHoldStatus_Id, o => o.Ignore())
+                .ForMember(p => p.Phase_Id, o => o.Ignore())
+
                 .ForMember(p => p.Project, o => o.Ignore())
                 .ForMember(p => p.Person, o => o.Ignore())
                 .ForMember(p => p.SyncId, o => o.MapFrom(s => s.id))

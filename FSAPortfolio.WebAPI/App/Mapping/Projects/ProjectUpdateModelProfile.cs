@@ -132,6 +132,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.Lead_Id, o => o.Ignore())
                 .ForMember(p => p.FirstUpdate_Id, o => o.Ignore())
                 .ForMember(p => p.LatestUpdate_Id, o => o.Ignore())
+
             ;
 
             CreateMap<LinkModel, Document>()
@@ -158,6 +159,10 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
             CreateMap<ProjectUpdateModel, ProjectUpdateItem>()
                 .ForMember(p => p.Id, o => o.Ignore())
                 .ForMember(p => p.Project_Id, o => o.Ignore())
+                .ForMember(p => p.RAGStatus_Id, o => o.Ignore())
+                .ForMember(p => p.OnHoldStatus_Id, o => o.Ignore())
+                .ForMember(p => p.Phase_Id, o => o.Ignore())
+
                 .ForMember(p => p.Project, o => o.Ignore())
                 .ForMember(p => p.Person, o => o.Ignore())
                 .ForMember(p => p.SyncId, o => o.MapFrom(s => s.id))

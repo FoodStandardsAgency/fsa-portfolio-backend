@@ -148,20 +148,13 @@ namespace FSAPortfolio.WebAPI.Controllers
 
             ArchiveResponse response = new ArchiveResponse();
 
-            try
+            using (var context = new PortfolioContext())
             {
-                using (var context = new PortfolioContext())
-                {
-                    var provider = new PortfolioProvider(context, viewKey);
-                    response.ArchivedProjectIds = await provider.ArchiveProjectsAsync();
-                }
+                var provider = new PortfolioProvider(context, viewKey);
+                response.ArchivedProjectIds = await provider.ArchiveProjectsAsync();
+            }
 
-                return response;
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
+            return response;
         }
 
 
