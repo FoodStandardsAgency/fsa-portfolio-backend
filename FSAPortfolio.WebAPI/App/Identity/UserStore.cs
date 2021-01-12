@@ -66,7 +66,7 @@ namespace FSAPortfolio.WebAPI.App.Identity
                 };
 
                 // The roles added for the user in the store
-                var userRoleList = user.RoleList == null ? new string[0] : user.RoleList.Split(';', ',');
+                var userRoleList = user.RoleList == null ? new string[0] : user.RoleList.Split(';', ',').Select(r => r.Trim()).ToArray();
 
                 // Merge and take the intersection with required portfolio roles...
                 var isSupplier = result.AccessGroupViewKey == AccessGroupConstants.SupplierViewKey;
