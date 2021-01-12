@@ -24,7 +24,7 @@ using System.Text.RegularExpressions;
 
 namespace FSAPortfolio.WebAPI.App.Users
 {
-    public class UsersProvider
+    public class PersonProvider
     {
         private PortfolioContext context;
 
@@ -69,7 +69,7 @@ namespace FSAPortfolio.WebAPI.App.Users
         private Lazy<Dictionary<string, string>> lazyTeamViewKeyMap; // Maps team name to team viewkey
         private Lazy<MicrosoftGraphUserStore> lazyMsGraph;
 
-        public UsersProvider(PortfolioContext context = null)
+        public PersonProvider(PortfolioContext context = null)
         {
             this.context = context;
             lazyTeamViewKeyMap = new Lazy<Dictionary<string, string>>(() => 

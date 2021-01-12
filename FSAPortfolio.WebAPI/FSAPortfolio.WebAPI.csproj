@@ -233,9 +233,11 @@
     <Compile Include="App\Users\AccessGroupConstants.cs" />
     <Compile Include="App\Identity\ApplicationUserManager.cs" />
     <Compile Include="App\Microsoft\MicrosoftGraphUserStore.cs" />
-    <Compile Include="App\Users\UsersProvider.cs" />
+    <Compile Include="App\Users\PersonProvider.cs" />
+    <Compile Include="App\Users\UserProvider.cs" />
     <Compile Include="App\ViewKeyPrefix.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccessGroupsController.cs" />
     <Compile Include="Controllers\PortfoliosController.cs" />
     <Compile Include="Controllers\PortfolioLabelController.cs" />
     <Compile Include="Controllers\PortfolioConfigurationController.cs" />
@@ -309,6 +311,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FSAPortfolio.Entites\FSAPortfolio.Entities.csproj">

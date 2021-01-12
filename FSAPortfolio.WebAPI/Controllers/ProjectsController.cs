@@ -36,7 +36,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 {
                     // Load and map the project
                     var provider = new ProjectProvider(context, update.project_id);
-                    var userProvider = new UsersProvider(context);
+                    var userProvider = new PersonProvider(context);
                     var reservation = await provider.GetProjectReservationAsync();
                     if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
                     else

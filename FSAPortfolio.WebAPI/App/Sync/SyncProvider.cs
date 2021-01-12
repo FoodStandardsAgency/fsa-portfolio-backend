@@ -108,7 +108,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             using (var dest = new PortfolioContext())
             {
                 var portfolio = await dest.Portfolios.Include(p => p.Teams).SingleAsync(p => p.ViewKey == "odd");
-                var usersProvider = new UsersProvider(dest);
+                var usersProvider = new PersonProvider(dest);
                 var roleManager = new PortfolioRoleManager(dest);
 
                 // Sync the people
