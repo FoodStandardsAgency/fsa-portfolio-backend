@@ -93,6 +93,11 @@ namespace FSAPortfolio.WebAPI
                 routeTemplate: "api/Portfolios/{portfolio}/archive",
                 defaults: new { controller = ControllerName<PortfoliosController>(), action = nameof(PortfoliosController.ArchiveProjectsAsync) }
             );
+            config.Routes.MapHttpRoute(
+                name: "CreatePortfolio",
+                routeTemplate: "api/Portfolios/new",
+                defaults: new { controller = ControllerName<PortfoliosController>(), action = nameof(PortfoliosController.CreateAsync) }
+            );
 
             #endregion
 

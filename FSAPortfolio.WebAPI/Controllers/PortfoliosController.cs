@@ -157,6 +157,21 @@ namespace FSAPortfolio.WebAPI.Controllers
             return response;
         }
 
+        [HttpPost]
+        public async Task CreateAsync([FromBody] NewPortfolioModel model)
+        {
+            using (var context = new PortfolioContext())
+            {
+                var portfolio = PortfolioMapper.ConfigMapper.Map<Portfolio>(model);
+                portfolio.Configuration = new PortfolioConfiguration()
+                {
+                    ArchiveAgeDays = PortfolioSettings.DefaultProjectArchiveAgeDays
+                };
+                portfolio.IDPrefix = portfolio.ViewKey.ToUpper();
+                context.Portfolios.Add(portfolio);
+                await context.SaveChangesAsync();
+            }
+        }
 
     }
 }

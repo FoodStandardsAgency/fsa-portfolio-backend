@@ -21,4 +21,21 @@ namespace FSAPortfolio.WebAPI.Models
         public string Description { get; set; }
 
     }
+
+    public class NewPortfolioModel
+    {
+        [JsonProperty("viewkey")]
+        public string ViewKey { get; set; }
+
+        [JsonProperty("abbr")]
+        public string ShortName { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+    }
+
 }
