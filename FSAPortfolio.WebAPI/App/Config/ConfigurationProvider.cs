@@ -128,7 +128,7 @@ namespace FSAPortfolio.WebAPI.App.Config
                 ProjectRAGStatus redAmber, amberGreen;
                 switch (options)
                 {
-                    case 5:
+                    case 6:
                         // Add Red/Amber and Amber/Green and set the order
                         var redAmberMap = SyncMaps.ragMap[RagConstants.RedAmberViewKey];
                         var amberGreenMap = SyncMaps.ragMap[RagConstants.AmberGreenViewKey];
@@ -137,7 +137,7 @@ namespace FSAPortfolio.WebAPI.App.Config
                         config.RAGStatuses.Add(redAmber);
                         config.RAGStatuses.Add(amberGreen);
                         break;
-                    case 3:
+                    case 4:
                         // Remove Red/Amber and Amber/Green, map any projects with those RAGs
                         var red = config.RAGStatuses.Single(rag => rag.ViewKey == RagConstants.RedViewKey);
                         var amber = config.RAGStatuses.Single(rag => rag.ViewKey == RagConstants.AmberViewKey);
