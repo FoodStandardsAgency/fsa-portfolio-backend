@@ -172,7 +172,7 @@ namespace FSAPortfolio.WebAPI.App.Users
             {
                 foreach (var id in update.team)
                 {
-                    var person = await EnsurePersonForPrincipalName(id);
+                    var person = await EnsurePersonForPrincipalName(id, project.Reservation.Portfolio);
                     if (person != null)
                     {
                         project.People.Add(person);
