@@ -82,9 +82,9 @@ namespace FSAPortfolio.WebAPI.App.Users
         internal async Task MapPeopleAsync(ProjectUpdateModel update, Project project)
         {
             project.Lead = await EnsureForAsync(update.oddlead, project.Lead, project.Reservation.Portfolio);
-            project.KeyContact1 = await EnsureForAsync(update.key_contact1, project.KeyContact1);
-            project.KeyContact2 = await EnsureForAsync(update.key_contact2, project.KeyContact2);
-            project.KeyContact3 = await EnsureForAsync(update.key_contact3, project.KeyContact3);
+            project.KeyContact1 = await EnsureForAsync(update.key_contact1, project.KeyContact1, project.Reservation.Portfolio);
+            project.KeyContact2 = await EnsureForAsync(update.key_contact2, project.KeyContact2, project.Reservation.Portfolio);
+            project.KeyContact3 = await EnsureForAsync(update.key_contact3, project.KeyContact3, project.Reservation.Portfolio);
             await MapTeamMembersAsync(update, project);
         }
 
@@ -183,7 +183,7 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         }
 
-        private async Task<Person> EnsureForAsync(ProjectPersonModel model, Person currentValue, Portfolio portfolio = null)
+        private async Task<Person> EnsureForAsync(ProjectPersonModel model, Person currentValue, Portfolio portfolio)
         {
             Person result = null;
             if (model?.Value != null)
