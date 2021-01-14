@@ -1,5 +1,9 @@
-﻿Version 0.1.2 - Pending Release
+﻿Version 0.1.3 - Release Pending
 ===============================
+
+Version 0.1.2 - Released 14/01/2020
+===================================
+- DEV2101001 Issue updating project with new team member
 - DEV2012004 Sync two part surnames
 - DEV2012010 Archiving CRON job
 - Phase configuration issue fixed linked to removing a configured phase
