@@ -131,7 +131,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         [AcceptVerbs("POST")]
         public async Task CreateUser([FromBody] AddUserModel model)
         {
-            using(var context = new PortfolioContext())
+            using (var context = new PortfolioContext())
             {
                 var sha256 = SHA256.Create();
                 var hash = BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(model.Password))).Replace("-", "");
@@ -139,6 +139,5 @@ namespace FSAPortfolio.WebAPI.Controllers
                 await users.CreateUser(model.UserName, hash, model.AccessGroup);
             }
         }
-
     }
 }

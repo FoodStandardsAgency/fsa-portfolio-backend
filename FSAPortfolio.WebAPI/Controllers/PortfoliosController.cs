@@ -16,6 +16,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using FSAPortfolio.WebAPI.App.Sync;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -162,16 +163,34 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             using (var context = new PortfolioContext())
             {
-                var portfolio = PortfolioMapper.ConfigMapper.Map<Portfolio>(model);
-                portfolio.Configuration = new PortfolioConfiguration()
-                {
-                    ArchiveAgeDays = PortfolioSettings.DefaultProjectArchiveAgeDays
-                };
+                var log = new List<string>();
+                var syncProvider = new SyncProvider(log);
+                var portfolio = syncProvider.AddPortfolio(context, model.Name, model.ShortName, model.ViewKey);
+                var labels = new DefaultFieldLabels(portfolio.Configuration);
+                portfolio.Configuration.Labels = labels.GetDefaultLabels();
                 portfolio.IDPrefix = portfolio.ViewKey.ToUpper();
                 context.Portfolios.Add(portfolio);
                 await context.SaveChangesAsync();
+
+                portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == $"{ViewKeyPrefix.Phase}5");
+                portfolio.Configuration.ArchivePhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == $"{ViewKeyPrefix.Phase}4");
+                await context.SaveChangesAsync();
             }
         }
+
+        [AcceptVerbs("POST"), Authorize(Roles = "superuser")]
+        public async Task AddPermissionAsync([FromUri(Name = "portfolio")] string viewKey, [FromBody] PortfolioPermissionModel model)
+        {
+            using (var context = new PortfolioContext())
+            {
+                var portfolio = await context.Portfolios.SingleAsync(p => p.ViewKey == viewKey);
+                var user = await context.Users.SingleAsync(u => u.UserName == model.UserName);
+                var role = $"{portfolio.IDPrefix}.{model.Permission}";
+                user.RoleList = (string.IsNullOrWhiteSpace(user.RoleList) ? role : $"{user.RoleList};{role}");
+                await context.SaveChangesAsync();
+            }
+        }
+
 
     }
 }

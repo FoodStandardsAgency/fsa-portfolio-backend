@@ -72,12 +72,11 @@ namespace FSAPortfolio.WebAPI.App.Identity
                 var isSupplier = result.AccessGroupViewKey == AccessGroupConstants.SupplierViewKey;
                 var roleList = await roleManager.GetFilteredRoleListAsync(userRoleList, isSupplier);
 
-                if (user.RoleList != null)
-                {
-                    result.Roles = roleList
-                        .Select(r => new Role() { ViewKey = r.Trim() })
-                        .ToList();
-                }
+                result.Roles = roleList
+                    .Select(r => new Role() { ViewKey = r.Trim() })
+                    .ToList();
+
+                result.Roles.Add(new Role() { ViewKey = user.AccessGroup.ViewKey });
             }
             return result;
         }

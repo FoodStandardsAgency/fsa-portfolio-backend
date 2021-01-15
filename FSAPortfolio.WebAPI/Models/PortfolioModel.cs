@@ -38,4 +38,14 @@ namespace FSAPortfolio.WebAPI.Models
 
     }
 
+    public class PortfolioPermissionModel
+    {
+        [JsonProperty("userName")]
+        public string UserName { get; set; }
+
+        [JsonProperty("permission")]
+        public string Permission { get; set; }
+
+    }
+
 }

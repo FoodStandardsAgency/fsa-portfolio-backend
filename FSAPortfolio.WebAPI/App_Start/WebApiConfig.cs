@@ -95,8 +95,13 @@ namespace FSAPortfolio.WebAPI
             );
             config.Routes.MapHttpRoute(
                 name: "CreatePortfolio",
-                routeTemplate: "api/Portfolios/new",
+                routeTemplate: "api/NewPortfolio",
                 defaults: new { controller = ControllerName<PortfoliosController>(), action = nameof(PortfoliosController.CreateAsync) }
+            );
+            config.Routes.MapHttpRoute(
+                name: "AddPortfolioPermission",
+                routeTemplate: "api/Portfolios/{portfolio}/permission",
+                defaults: new { controller = ControllerName<PortfoliosController>(), action = nameof(PortfoliosController.AddPermissionAsync) }
             );
 
             #endregion
