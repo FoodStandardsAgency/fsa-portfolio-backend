@@ -138,7 +138,7 @@ namespace FSAPortfolio.WebAPI.App.Users
                         var team = await context.Teams.SingleOrDefaultAsync(t => t.ViewKey == teamViewKey);
                         if (team == null)
                         {
-                            int order = await context.Teams.MaxAsync(t => t.Order);
+                            int order = await context.Teams.Select(t => t.Order).DefaultIfEmpty(0).MaxAsync();
                             team = new Team()
                             {
                                 ViewKey = teamViewKey,
