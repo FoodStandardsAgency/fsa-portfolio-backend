@@ -1,7 +1,5 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
-using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Projects;
 using FSAPortfolio.WebAPI.DTO;
@@ -17,6 +15,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using FSAPortfolio.WebAPI.App.Sync;
+using System.IO;
+using CsvHelper;
+using System.Globalization;
+using System.Reflection;
+using Newtonsoft.Json;
+using FSAPortfolio.WebAPI.App.Users;
+using AutoMapper;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -141,6 +146,59 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<HttpResponseMessage> ImportAsync([FromUri(Name = "portfolio")] string viewKey)
+        {
+            if (!Request.Content.IsMimeMultipartContent())
+            {
+                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
+            }
+
+            try
+            {
+                // Get the files
+                var provider = new MultipartFormDataStreamProvider(Path.GetTempPath());
+                var files = await Request.Content.ReadAsMultipartAsync(provider);
+
+                using (var context = new PortfolioContext())
+                {
+                    // Get the config and options
+                    var portfolioProvider = new PortfolioProvider(context, viewKey);
+                    var config = await portfolioProvider.GetConfigAsync();
+                    this.AssertPermission(config.Portfolio);
+                    var options = await portfolioProvider.GetNewProjectOptionsAsync(config);
+
+                    // Import the projects
+                    var importer = new PropertyImporter();
+                    var projects = await importer.ImportProjectsAsync(files, config, options);
+
+                    // Update/create the projects
+                    var userProvider = new PersonProvider(context);
+                    var projectprovider = new ProjectProvider(context);
+                    foreach (var project in projects)
+                    {
+                        if (string.IsNullOrWhiteSpace(project.project_id))
+                        {
+                            // Create a reservation
+                            var reservation = await portfolioProvider.GetProjectReservationAsync(config);
+                            project.project_id = reservation.ProjectId;
+                            await projectprovider.UpdateProject(project, userProvider, reservation);
+                        }
+                        else
+                        {
+                            await projectprovider.UpdateProject(project, userProvider);
+                        }
+                    }
+                }
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
+        }
+
+
         [HttpGet, OverrideAuthorization]
         public async Task<ArchiveResponse> ArchiveProjectsAsync([FromUri(Name = "portfolio")] string viewKey)
         {
@@ -190,7 +248,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 await context.SaveChangesAsync();
             }
         }
-
-
     }
+
+
 }

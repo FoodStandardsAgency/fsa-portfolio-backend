@@ -47,6 +47,9 @@
     <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.10.0.0\lib\net461\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="CsvHelper, Version=20.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.20.0.0\lib\net47\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -66,7 +69,10 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.3\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.0.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.0\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Identity.Client, Version=4.22.0.0, Culture=neutral, PublicKeyToken=0a613f4dd989e8ae, processorArchitecture=MSIL">
@@ -124,7 +130,7 @@
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -132,7 +138,7 @@
     </Reference>
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.WebRequest" />
@@ -213,7 +219,9 @@
     <Compile Include="App\Identity\ApplicationUser.cs" />
     <Compile Include="App\Identity\PortfolioRoleManager.cs" />
     <Compile Include="App\Identity\UserStore.cs" />
+    <Compile Include="App\Mapping\ImportExport\ProjectImportModelProfile.cs" />
     <Compile Include="App\Mapping\Projects\PostgresSERDProjectMappingProfile.cs" />
+    <Compile Include="App\Mapping\ImportExport\Resolvers.cs" />
     <Compile Include="App\Microsoft\GroupMembershipToRoleMap.cs" />
     <Compile Include="App\PortfolioExtensions.cs" />
     <Compile Include="App\ConfigurationExtensions.cs" />
@@ -222,6 +230,7 @@
     <Compile Include="App\Projects\ProjectProvider.cs" />
     <Compile Include="App\Projects\ProjectPropertyConstants.cs" />
     <Compile Include="App\Projects\ProjectSearchFilters.cs" />
+    <Compile Include="App\Projects\PropertyImporter.cs" />
     <Compile Include="App\Sync\BudgetTypeSyncMaps.cs" />
     <Compile Include="App\Sync\CategorySyncMaps.cs" />
     <Compile Include="App\Sync\DefaultFieldLabels.cs" />
@@ -260,7 +269,7 @@
     <Compile Include="App\Mapping\Organisation\PortfolioConfigurationMappingProfile.cs" />
     <Compile Include="App\Mapping\Projects\PostgresODDProjectMappingProfile.cs" />
     <Compile Include="App\Mapping\Projects\ProjectEditOptionsManualMaps.cs" />
-    <Compile Include="App\Mapping\Projects\ProjectExportModelProfile.cs" />
+    <Compile Include="App\Mapping\ImportExport\ProjectExportModelProfile.cs" />
     <Compile Include="App\Mapping\Projects\Resolvers\ProjectDataResolvers.cs" />
     <Compile Include="App\Mapping\Projects\ProjectQueryModelProfile.cs" />
     <Compile Include="App\Mapping\Projects\ProjectViewModelProfile.cs" />

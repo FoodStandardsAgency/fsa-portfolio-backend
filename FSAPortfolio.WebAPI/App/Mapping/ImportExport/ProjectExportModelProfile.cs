@@ -1,18 +1,17 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
+using FSAPortfolio.WebAPI.App.Mapping.Projects;
 using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
 using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Linq;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Projects
+namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
+
 {
     public class ProjectExportModelProfile : Profile
     {
-        public const string FullDateExportFormat = "dd/MM/yyyy";
-        public const string MonthDateExportFormat = "MM/yyyy";
-        public const string YearDateExportFormat = "yyyy";
         public ProjectExportModelProfile()
         {
             CreateMap<string, string>().ConvertUsing(s => s != null ? s.Replace(",", "") : null);
@@ -30,7 +29,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.start_date, o => o.MapFrom(s => s.StartDate))
                 .ForMember(p => p.short_desc, o => o.MapFrom(s => s.Description))
                 .ForMember(p => p.category, o => o.MapFrom(s => s.Category.Name))
-                .ForMember(p => p.subcat, o => o.MapFrom(s => string.Join(", ", s.Subcategories.Select(sc => sc.Name))))
+                .ForMember(p => p.subcat, o => o.MapFrom(s => string.Join("|", s.Subcategories.Select(sc => sc.Name))))
 
                 .ForMember(p => p.priority_main, o => o.MapFrom(s => s.Priority.HasValue ? s.Priority.Value.ToString("D2") : string.Empty))
                 .ForMember(p => p.funded, o => o.MapFrom(s => s.Funded))
@@ -63,7 +62,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives))
                 .ForMember(p => p.programme, o => o.MapFrom(s => s.Programme))
                 .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
-                .ForMember(p => p.documents, o => o.MapFrom(s => string.Join(", ", s.Documents.OrderBy(d => d.Order).Select(d => d.ExportText))))
+                .ForMember(p => p.documents, o => o.MapFrom(s => string.Join("; ", s.Documents.OrderBy(d => d.Order).Select(d => d.ExportText))))
 
                 .ForMember(p => p.key_contact1, o => o.MapFrom(s => s.KeyContact1.DisplayName))
                 .ForMember(p => p.key_contact2, o => o.MapFrom(s => s.KeyContact2.DisplayName))
@@ -147,21 +146,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
             string result = null;
             var lastTextUpdate = source.Updates.Where(u => !string.IsNullOrWhiteSpace(u.Text)).OrderBy(u => u.Timestamp).FirstOrDefault();
             result = lastTextUpdate?.Text;
-            return result;
-        }
-    }
-
-    public class ProjectExportDateConverter : ITypeConverter<ProjectDate, string>
-    {
-        public string Convert(ProjectDate source, string destination, ResolutionContext context)
-        {
-            string result = string.Empty;
-            if (source.Date.HasValue)
-            {
-                if (source.Flags.HasFlag(ProjectDateFlags.Day)) result = source.Date.Value.ToString(ProjectExportModelProfile.FullDateExportFormat);
-                else if (source.Flags.HasFlag(ProjectDateFlags.Month)) result = source.Date.Value.ToString(ProjectExportModelProfile.MonthDateExportFormat);
-                else if (source.Flags.HasFlag(ProjectDateFlags.Year)) result = source.Date.Value.ToString(ProjectExportModelProfile.YearDateExportFormat);
-            }
             return result;
         }
     }

@@ -45,7 +45,7 @@ namespace FSAPortfolio.Entities.Projects
                 ((PercentageComplete == null && update.PercentageComplete == null) || (PercentageComplete.HasValue && PercentageComplete.Equals(update.PercentageComplete))) &&
                 Budget.Equals(update.Budget) &&
                 Spent.Equals(update.Spent) &&
-                ((ExpectedCurrentPhaseEnd == null && update.ExpectedCurrentPhaseEnd.Date == null) || (ExpectedCurrentPhaseEnd != null && ExpectedCurrentPhaseEnd.Equals(update.ExpectedCurrentPhaseEnd.Date))) &&
+                ((ExpectedCurrentPhaseEnd?.Date == null && update.ExpectedCurrentPhaseEnd.Date == null) || (ExpectedCurrentPhaseEnd?.Date != null && ExpectedCurrentPhaseEnd.Date.Equals(update.ExpectedCurrentPhaseEnd.Date))) &&
                 (string.IsNullOrWhiteSpace(Text) || string.Equals(Text, update.Text, StringComparison.OrdinalIgnoreCase))
                 ;
         }

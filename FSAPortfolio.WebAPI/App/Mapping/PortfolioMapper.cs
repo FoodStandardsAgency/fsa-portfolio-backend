@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.WebAPI.App.Mapping.ActiveDirectory;
+using FSAPortfolio.WebAPI.App.Mapping.ImportExport;
 using FSAPortfolio.WebAPI.App.Mapping.Organisation;
 using FSAPortfolio.WebAPI.App.Mapping.Projects;
 using FSAPortfolio.WebAPI.Models;
@@ -64,6 +65,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping
             {
                 cfg.AllowNullCollections = true;
                 cfg.AddProfile<ProjectExportModelProfile>();
+                cfg.AddProfile<ProjectImportModelProfile>();
             });
             ExportMapper = exportConfig.CreateMapper();
 
