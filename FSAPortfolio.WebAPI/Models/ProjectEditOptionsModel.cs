@@ -165,6 +165,7 @@ namespace FSAPortfolio.WebAPI.Models
         public string SearchTokens { get; set; }
     }
 
+    // TODO: this is obsolete
     public class ProjectDataOptionsModel
     {
         public string FieldName { get; set; }
