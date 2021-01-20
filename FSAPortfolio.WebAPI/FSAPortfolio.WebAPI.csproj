@@ -214,6 +214,7 @@
     <Compile Include="App\Identity\PortfolioRoleManager.cs" />
     <Compile Include="App\Identity\UserStore.cs" />
     <Compile Include="App\Mapping\Projects\PostgresSERDProjectMappingProfile.cs" />
+    <Compile Include="App\Mapping\Projects\Resolvers\PeopleToStringResolver.cs" />
     <Compile Include="App\Microsoft\GroupMembershipToRoleMap.cs" />
     <Compile Include="App\PortfolioExtensions.cs" />
     <Compile Include="App\ConfigurationExtensions.cs" />
