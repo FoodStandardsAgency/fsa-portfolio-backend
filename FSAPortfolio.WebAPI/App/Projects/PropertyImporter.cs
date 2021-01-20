@@ -55,9 +55,9 @@ namespace FSAPortfolio.WebAPI.App.Projects
                                     object objValue;
 
                                     // For some reason, have to treat floats differently in automapper. This might be a bug in automapper.
-                                    if (property.property.PropertyType.IsAssignableFrom(typeof(float?)))
-                                        objValue = PortfolioMapper.ExportMapper.Map<float?>(value);
-                                    else
+                                        if (property.property.PropertyType.IsAssignableFrom(typeof(float?)))
+                                            objValue = PortfolioMapper.ExportMapper.Map<float?>(value);
+                                        else
                                         objValue = PortfolioMapper.ExportMapper.Map(value, typeof(string), property.property.PropertyType);
 
                                     // Set the property value on the project
