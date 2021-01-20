@@ -51,6 +51,7 @@ namespace FSAPortfolio.WebAPI.Models
         public string direct { get; set; }
         public float? p_comp { get; set; }
         public string g6team { get; set; }
+        public string team { get; set; }
         public string new_flag { get; set; }
         public DateTime? first_completed { get; set; }
 
