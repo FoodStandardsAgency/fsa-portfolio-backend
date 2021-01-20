@@ -168,6 +168,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 // Set the phase to completed and add it again (entity is untracked so a new one is added: saves cloning it)
                 update.Id = 0;
                 update.Phase_Id = portfolioConfig.CompletedPhase.Id;
+                update.SyncId = 0;
                 update.Project = null;
                 context.ProjectUpdates.Add(update);
 
