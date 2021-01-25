@@ -120,7 +120,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 var reservationIds = await (
                     from p in context.Projects
-                    where p.Reservation.Portfolio.ViewKey == viewKey && p.LatestUpdate.Phase.Id != p.Reservation.Portfolio.Configuration.CompletedPhase.Id
+                    where p.Reservation.Portfolio.ViewKey == viewKey
                     select p.ProjectReservation_Id
                     ).ToListAsync();
 

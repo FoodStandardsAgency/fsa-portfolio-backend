@@ -4,6 +4,7 @@ using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
 using FSAPortfolio.WebAPI.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FSAPortfolio.WebAPI.App.Mapping.Projects
@@ -17,7 +18,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         {
             CreateMap<string, string>().ConvertUsing(s => s != null ? s.Replace(",", "") : null);
             CreateMap<ProjectDate, string>().ConvertUsing<ProjectExportDateConverter>();
-
+            CreateMap<Person, string>().ConvertUsing(s => s != null ? s.DisplayName : null);
             // Outbound
             Project__ProjectExportModel();
         }
@@ -55,6 +56,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.supplier, o => o.MapFrom(s => s.Supplier))
 
                 .ForMember(p => p.g6team, o => o.MapFrom(s => s.Lead.Team.Name))
+                .ForMember(p => p.team, o => o.MapFrom<PeopleToStringResolver, ICollection<Person>>(s => s.People))
                 .ForMember(p => p.new_flag, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
                 .ForMember(p => p.first_completed, o => o.MapFrom<FirstCompletedResolver>())
                 .ForMember(p => p.pgroup, o => o.MapFrom(s => s.PriorityGroup.Name))
@@ -65,9 +67,9 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
                 .ForMember(p => p.documents, o => o.MapFrom(s => string.Join(", ", s.Documents.OrderBy(d => d.Order).Select(d => d.ExportText))))
 
-                .ForMember(p => p.key_contact1, o => o.MapFrom(s => s.KeyContact1.DisplayName))
-                .ForMember(p => p.key_contact2, o => o.MapFrom(s => s.KeyContact2.DisplayName))
-                .ForMember(p => p.key_contact3, o => o.MapFrom(s => s.KeyContact3.DisplayName))
+                .ForMember(p => p.key_contact1, o => o.MapFrom(s => s.KeyContact1))
+                .ForMember(p => p.key_contact2, o => o.MapFrom(s => s.KeyContact2))
+                .ForMember(p => p.key_contact3, o => o.MapFrom(s => s.KeyContact3))
                 .ForMember(p => p.supplier, o => o.MapFrom(s => s.Supplier))
                 .ForMember(p => p.link, o => o.MapFrom(s => s.ChannelLink))
                 .ForMember(p => p.oddlead, o => o.MapFrom<ProjectPersonViewResolver, Person>(s => s.Lead))

@@ -31,6 +31,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
     {
         private ICollection<string> log;
 
+        private const bool SyncODDOnly = false;
+
         IMapper mapper;
         internal bool debug;
 
@@ -209,13 +211,16 @@ namespace FSAPortfolio.WebAPI.App.Sync
         {
             using (var context = new PortfolioContext())
             {
-                AddPortfolio(context, "Portfolio Development", "DEV", "dev", "Superuser");
-                //AddPortfolio(context, "Open Data and Digital", "ODD", "odd");
-                //AddPortfolio(context, "Science, Evidence and Reseach Directorate", "SERD", "serd");
-                //AddPortfolio(context, "ABC", "ABC", "abc");
-                //AddPortfolio(context, "FHP", "FHP", "fhp");
-                //AddPortfolio(context, "OTP", "OTP", "otp");
-                //AddPortfolio(context, "Test", "Test", "test");
+                AddPortfolio(context, "Open Data and Digital", "ODD", "odd");
+                if (!SyncODDOnly)
+                {
+                    AddPortfolio(context, "Science, Evidence and Reseach Directorate", "SERD", "serd");
+                    AddPortfolio(context, "ABC", "ABC", "abc");
+                    AddPortfolio(context, "FHP", "FHP", "fhp");
+                    AddPortfolio(context, "OTP", "OTP", "otp");
+                    AddPortfolio(context, "Test", "Test", "test");
+                    AddPortfolio(context, "Portfolio Development", "DEV", "dev", "Superuser");
+                }
                 context.SaveChanges();
 
                 foreach (var portfolio in context.Portfolios.Where(p => p.ViewKey == "dev"))
