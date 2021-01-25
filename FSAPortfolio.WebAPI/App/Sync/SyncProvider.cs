@@ -31,7 +31,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
     {
         private ICollection<string> log;
 
-        private const bool SyncODDOnly = false;
+        private const bool SyncODDOnly = true;
 
         IMapper mapper;
         internal bool debug;
@@ -451,6 +451,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
                     break;
                 case "serd":
+                    if (SyncODDOnly) throw new HttpResponseException(HttpStatusCode.Forbidden);
                     using (var source = new MigratePortfolioContext<serdproject>(portfolio))
                     {
                         log.Add("Syncing SERD projects");
@@ -519,6 +520,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                             synched = SyncSERDProject(projectId, source, dest);
                         }
                         break;
+                    default:
+                        throw new HttpResponseException(HttpStatusCode.Forbidden);
                 }
             }
 
@@ -527,6 +530,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
         private bool SyncSERDProject(string projectId, MigratePortfolioContext<serdproject> source, PortfolioContext dest)
         {
+            if (SyncODDOnly) throw new HttpResponseException(HttpStatusCode.Forbidden);
             string portfolioViewKey = "serd";
             var sourceProjectItems = source.projects.Where(p => p.project_id == projectId).ToList();
             bool synched = SyncProject<serdproject>(projectId, dest, portfolioViewKey, sourceProjectItems);
