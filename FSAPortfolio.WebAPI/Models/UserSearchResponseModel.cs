@@ -23,6 +23,9 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("surname")]
         public string Surname { get; set; }
 
+        [JsonProperty("email")]
+        public string Email { get; set; }
+
         [JsonProperty("department")]
         public string Department { get; set; }
         

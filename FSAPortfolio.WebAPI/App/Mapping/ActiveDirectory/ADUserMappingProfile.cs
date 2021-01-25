@@ -21,6 +21,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ActiveDirectory
                 .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.displayName))
                 .ForMember(d => d.GivenName, o => o.MapFrom(s => s.givenName))
                 .ForMember(d => d.Surname, o => o.MapFrom(s => s.surname))
+                .ForMember(d => d.Email, o => o.MapFrom(s => s.mail ?? s.userPrincipalName))
                 .ForMember(d => d.UserPrincipalName, o => o.MapFrom(s => s.userPrincipalName))
                 .ForMember(d => d.Id, o => o.MapFrom(s => s.id))
                 ;
@@ -42,6 +43,21 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ActiveDirectory
             public IEnumerable<UserSearchModel> Resolve(MicrosoftGraphUserListResponse source, UserSearchResponseModel destination, List<MicrosoftGraphUserModel> sourceMember, IEnumerable<UserSearchModel> destMember, ResolutionContext context)
             {
                 var results = context.Mapper.Map<List<UserSearchModel>>(sourceMember);
+
+                var duplicates = from r in results
+                                 where !string.IsNullOrWhiteSpace(r.Email)
+                                 group r by new { r.GivenName, r.Surname } into dupes
+                                 where dupes.Count() > 1
+                                 select dupes;
+
+                foreach(var duplicate in duplicates)
+                {
+                    foreach(var d in duplicate)
+                    {
+                        d.DisplayName = $"{d.DisplayName} - {d.Email}";
+                    }
+                }
+
                 var key = nameof(ActiveDirectoryUserSelectModel.NoneOption);
                 if(context.Items.ContainsKey(key) && (bool)context.Items[key])
                 {
