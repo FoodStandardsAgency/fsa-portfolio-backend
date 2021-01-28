@@ -28,6 +28,9 @@ namespace FSAPortfolio.WebAPI.Models
 
         [JsonProperty(PropertyName = "department")]
         public string department { get; set; }
+
+        [JsonProperty(PropertyName = "companyName")]
+        public string companyName { get; set; }
     }
 
     public class MicrosoftGraphUserListResponse

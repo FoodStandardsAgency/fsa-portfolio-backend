@@ -21,7 +21,7 @@ namespace FSAPortfolio.WebAPI.App.Microsoft
         private static string ClientId = ConfigurationManager.AppSettings["Azure.ClientId"];
         private static string ClientSecret = ConfigurationManager.AppSettings["Azure.ClientSecret"];
         private const string AuthorityFormat = "https://login.microsoftonline.com/{0}/v2.0";
-        private const string userSelect = "$select=id,displayName,givenName,surname,mail,userPrincipalName,department";
+        private const string userSelect = "$select=id,displayName,givenName,surname,mail,userPrincipalName,department,companyName";
 
         private AuthenticationResult _auth;
         private PortfolioRoleManager roleManager;

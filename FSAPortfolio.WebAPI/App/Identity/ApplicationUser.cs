@@ -29,15 +29,16 @@ namespace FSAPortfolio.WebAPI.App.Identity
             var userIdentity = await manager.CreateIdentityAsync(this, authenticationType);
 
             // Add custom user claims here
-            if(AccessGroupViewKey != null)
+            if (AccessGroupViewKey != null)
+            {
+                // TODO: NEXT RELEASE!!!
+                // --- need to throw exception if accessgroupviewkey is not set! Should now always be set before getting here
                 userIdentity.AddClaim(new Claim(AccessGroupClaimType, AccessGroupViewKey));
+            }
 
             if (ActiveDirectoryUserId != null)
             {
                 userIdentity.AddClaim(new Claim(ActiveDirectoryClaimType, ActiveDirectoryUserId));
-
-                // TODO: revisit this - here we assume the user is FSA because came from active directory! Maybe we should be checking them against a AD group?
-                userIdentity.AddClaim(new Claim(AccessGroupClaimType, AccessGroupConstants.FSAViewKey));
             }
 
             return userIdentity;

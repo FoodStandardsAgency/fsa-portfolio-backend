@@ -1,6 +1,7 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.App.Microsoft;
+using FSAPortfolio.WebAPI.App.Users;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -73,6 +74,7 @@ namespace FSAPortfolio.WebAPI.App.Identity
                 user = new ApplicationUser()
                 {
                     Id = aduser.id,
+                    AccessGroupViewKey = aduser.companyName == "Food Standards Agency" ? AccessGroupConstants.FSAViewKey : AccessGroupConstants.SupplierViewKey, // TODO: NEXT RELEASE!!!
                     ActiveDirectoryUserId = aduser.id,
                     UserName = aduser.userPrincipalName
                 };
