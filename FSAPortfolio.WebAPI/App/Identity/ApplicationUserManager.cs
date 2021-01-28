@@ -74,7 +74,7 @@ namespace FSAPortfolio.WebAPI.App.Identity
                 user = new ApplicationUser()
                 {
                     Id = aduser.id,
-                    AccessGroupViewKey = aduser.companyName == "Food Standards Agency" ? AccessGroupConstants.FSAViewKey : AccessGroupConstants.SupplierViewKey, // TODO: NEXT RELEASE!!!
+                    AccessGroupViewKey = aduser.companyName == "Food Standards Agency" ? AccessGroupConstants.FSAViewKey : null, // TODO: NEXT RELEASE!!!
                     ActiveDirectoryUserId = aduser.id,
                     UserName = aduser.userPrincipalName
                 };
