@@ -17,7 +17,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         internal static Dictionary<string, string> StragicObjectivesMap = new Dictionary<string, string>()
         {
             { "none", "None" },
-            { "None", "None" },
             { "fsa", "FSA wide"},
             { "communications", "Communications" }
         };
@@ -189,6 +188,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects))
                 .ForMember(p => p.milestones, o => o.MapFrom(s => s.Milestones.OrderBy(d => d.Order)))
                 .ForMember(d => d.Properties, o => o.Ignore())
+                .ForMember(p => p.priority_main, o => o.MapFrom(s => s.Priority.HasValue ? s.Priority.Value.ToString() : string.Empty))
                 .ForMember(p => p.oddlead, o => o.MapFrom(s => s.Lead))
                 .ForMember(p => p.team, o => o.MapFrom(s => s.People))
                 .ForMember(p => p.start_date, o => o.MapFrom(s => s.StartDate))
@@ -342,6 +342,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         {
             string result = null;
             if (string.IsNullOrWhiteSpace(sourceMember)) sourceMember = "none";
+            else sourceMember = sourceMember.ToLower();
             if (!ProjectViewModelProfile.StragicObjectivesMap.TryGetValue(sourceMember, out result)) 
                 result = "Error";
             return result;
