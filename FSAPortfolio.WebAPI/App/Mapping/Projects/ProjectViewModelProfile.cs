@@ -85,7 +85,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.pgroup, o => o.MapFrom(s => s.PriorityGroup.Name))
 
                 .ForMember(p => p.project_type, o => o.MapFrom(s => s.ProjectType))
-                .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives))
+                .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives ?? "None"))
                 .ForMember(p => p.programme, o => o.MapFrom(s => s.Programme))
                 .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
                 .ForMember(p => p.documents, o => o.MapFrom(s => s.Documents.OrderBy(d => d.Order)))
