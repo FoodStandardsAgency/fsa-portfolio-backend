@@ -609,7 +609,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                 if (destProject != null)
                 {
-                    SyncUpdates(dest, sourceProjectItems, destProject);
+                    if (destProject.LatestUpdate_Id == null)
+                    {
+                        SyncUpdates(dest, sourceProjectItems, destProject);
+                    }
                     log.Add($"{projectId} Ok.");
                     synched = true;
                 }
