@@ -34,10 +34,11 @@ namespace FSAPortfolio.WebAPI.App.Identity
                 // TODO: NEXT RELEASE!!!
                 // --- need to throw exception if accessgroupviewkey is not set! Should now always be set before getting here
                 userIdentity.AddClaim(new Claim(AccessGroupClaimType, AccessGroupViewKey));
-                if (ActiveDirectoryUserId != null)
-                {
-                    userIdentity.AddClaim(new Claim(ActiveDirectoryClaimType, ActiveDirectoryUserId));
-                }
+            }
+
+            if (ActiveDirectoryUserId != null)
+            {
+                userIdentity.AddClaim(new Claim(ActiveDirectoryClaimType, ActiveDirectoryUserId));
             }
 
             return userIdentity;

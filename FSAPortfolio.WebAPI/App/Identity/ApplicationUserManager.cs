@@ -67,17 +67,20 @@ namespace FSAPortfolio.WebAPI.App.Identity
 
         public override async Task<ApplicationUser> FindAsync(string userName, string password)
         {
-            ApplicationUser user;
+            ApplicationUser user = null;
             if (accessToken != null)
             {
                 var aduser = await graph.GetUserForAccessToken(accessToken);
-                user = new ApplicationUser()
+                if (aduser.companyName == "Food Standards Agency")
                 {
-                    Id = aduser.id,
-                    AccessGroupViewKey = aduser.companyName == "Food Standards Agency" ? AccessGroupConstants.FSAViewKey : null, // TODO: NEXT RELEASE!!!
-                    ActiveDirectoryUserId = aduser.id,
-                    UserName = aduser.userPrincipalName
-                };
+                    user = new ApplicationUser()
+                    {
+                        Id = aduser.id,
+                        AccessGroupViewKey = aduser.companyName == "Food Standards Agency" ? AccessGroupConstants.FSAViewKey : null,
+                        ActiveDirectoryUserId = aduser.id,
+                        UserName = aduser.userPrincipalName
+                    };
+                }
             }
             else
             {
