@@ -158,7 +158,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         public string Convert(ProjectDate source, string destination, ResolutionContext context)
         {
             string result = string.Empty;
-            if (source.Date.HasValue)
+            if (source?.Date != null)
             {
                 if (source.Flags.HasFlag(ProjectDateFlags.Day)) result = source.Date.Value.ToString(ProjectExportModelProfile.FullDateExportFormat);
                 else if (source.Flags.HasFlag(ProjectDateFlags.Month)) result = source.Date.Value.ToString(ProjectExportModelProfile.MonthDateExportFormat);
