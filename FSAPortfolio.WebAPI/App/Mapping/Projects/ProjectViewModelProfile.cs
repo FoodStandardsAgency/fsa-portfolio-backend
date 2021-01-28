@@ -17,6 +17,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         internal static Dictionary<string, string> StragicObjectivesMap = new Dictionary<string, string>()
         {
             { "none", "None" },
+            { "None", "None" },
             { "fsa", "FSA wide"},
             { "communications", "Communications" }
         };
@@ -85,7 +86,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.pgroup, o => o.MapFrom(s => s.PriorityGroup.Name))
 
                 .ForMember(p => p.project_type, o => o.MapFrom(s => s.ProjectType))
-                .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives ?? "None"))
+                .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives))
                 .ForMember(p => p.programme, o => o.MapFrom(s => s.Programme))
                 .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
                 .ForMember(p => p.documents, o => o.MapFrom(s => s.Documents.OrderBy(d => d.Order)))
@@ -340,7 +341,8 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         public string Resolve(Project source, object destination, string sourceMember, string destMember, ResolutionContext context)
         {
             string result = null;
-            if (!ProjectViewModelProfile.StragicObjectivesMap.TryGetValue(sourceMember ?? "none", out result)) 
+            if (string.IsNullOrWhiteSpace(sourceMember)) sourceMember = "none";
+            if (!ProjectViewModelProfile.StragicObjectivesMap.TryGetValue(sourceMember, out result)) 
                 result = "Error";
             return result;
         }
