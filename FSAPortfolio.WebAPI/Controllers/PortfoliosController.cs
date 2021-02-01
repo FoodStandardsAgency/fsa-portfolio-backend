@@ -154,48 +154,41 @@ namespace FSAPortfolio.WebAPI.Controllers
                 throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
             }
 
-            try
+            // Get the files
+            var provider = new MultipartFormDataStreamProvider(Path.GetTempPath());
+            var files = await Request.Content.ReadAsMultipartAsync(provider);
+
+            using (var context = new PortfolioContext())
             {
-                // Get the files
-                var provider = new MultipartFormDataStreamProvider(Path.GetTempPath());
-                var files = await Request.Content.ReadAsMultipartAsync(provider);
+                // Get the config and options
+                var portfolioProvider = new PortfolioProvider(context, viewKey);
+                var config = await portfolioProvider.GetConfigAsync();
+                this.AssertPermission(config.Portfolio);
+                var options = await portfolioProvider.GetNewProjectOptionsAsync(config);
 
-                using (var context = new PortfolioContext())
+                // Import the projects
+                var importer = new PropertyImporter();
+                var projects = await importer.ImportProjectsAsync(files, config, options);
+
+                // Update/create the projects
+                var userProvider = new PersonProvider(context);
+                var projectprovider = new ProjectProvider(context);
+                foreach (var project in projects)
                 {
-                    // Get the config and options
-                    var portfolioProvider = new PortfolioProvider(context, viewKey);
-                    var config = await portfolioProvider.GetConfigAsync();
-                    this.AssertPermission(config.Portfolio);
-                    var options = await portfolioProvider.GetNewProjectOptionsAsync(config);
-
-                    // Import the projects
-                    var importer = new PropertyImporter();
-                    var projects = await importer.ImportProjectsAsync(files, config, options);
-
-                    // Update/create the projects
-                    var userProvider = new PersonProvider(context);
-                    var projectprovider = new ProjectProvider(context);
-                    foreach (var project in projects)
+                    if (string.IsNullOrWhiteSpace(project.project_id))
                     {
-                        if (string.IsNullOrWhiteSpace(project.project_id))
-                        {
-                            // Create a reservation
-                            var reservation = await portfolioProvider.GetProjectReservationAsync(config);
-                            project.project_id = reservation.ProjectId;
-                            await projectprovider.UpdateProject(project, userProvider, reservation);
-                        }
-                        else
-                        {
-                            await projectprovider.UpdateProject(project, userProvider);
-                        }
+                        // Create a reservation
+                        var reservation = await portfolioProvider.GetProjectReservationAsync(config);
+                        project.project_id = reservation.ProjectId;
+                        await projectprovider.UpdateProject(project, userProvider, reservation);
+                    }
+                    else
+                    {
+                        await projectprovider.UpdateProject(project, userProvider);
                     }
                 }
-                return Request.CreateResponse(HttpStatusCode.OK);
             }
-            catch(Exception e)
-            {
-                throw e;
-            }
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
 
 
