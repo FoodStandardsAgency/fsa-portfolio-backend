@@ -32,39 +32,39 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(d => d.Directorates, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
                 .ForMember(d => d.G6Team, o => o.Ignore()) // This comes from the context - set by the PortfolioProvider.
                 .ForMember(d => d.RiskRating, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.risk_rating)))
-                .ForMember(d => d.Theme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.theme))))
-                .ForMember(d => d.ProjectType, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_type))))
-                .ForMember(d => d.Programme, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.programme))))
+                .ForMember(d => d.Theme, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.theme)))
+                .ForMember(d => d.ProjectType, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.project_type)))
+                .ForMember(d => d.Programme, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.programme)))
                 .ForMember(d => d.ODDLeadRole, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.oddlead_role, addNoneOption: true)))
 
                 .ForMember(d => d.ODDLead, o => o.MapFrom(s => new ActiveDirectoryUserSelectModel() { NoneOption = false }))
-                .ForMember(d => d.PriorityItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.priority_main))))
-                .ForMember(d => d.PriorityGroupItems, o => o.MapFrom(new PriorityGroupLabelDropDownResolver(nameof(ProjectModel.pgroup))))
-                .ForMember(d => d.FundedItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.funded))))
-                .ForMember(d => d.ConfidenceItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.confidence))))
-                .ForMember(d => d.PrioritiesItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.priorities))))
-                .ForMember(d => d.BenefitItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.benefits))))
-                .ForMember(d => d.CriticalityItems, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.criticality))))
+                .ForMember(d => d.PriorityItems, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.priority_main)))
+                .ForMember(d => d.PriorityGroupItems, o => o.MapFrom(new PriorityGroupLabelDropDownResolver(ProjectPropertyConstants.pgroup)))
+                .ForMember(d => d.FundedItems, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.funded)))
+                .ForMember(d => d.ConfidenceItems, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.confidence)))
+                .ForMember(d => d.PrioritiesItems, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.priorities)))
+                .ForMember(d => d.BenefitItems, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.benefits)))
+                .ForMember(d => d.CriticalityItems, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.criticality)))
 
                 .ForMember(d => d.KeyContact1, o => o.MapFrom(s => new ActiveDirectoryUserSelectModel() { NoneOption = true }))
                 .ForMember(d => d.KeyContact2, o => o.MapFrom(s => new ActiveDirectoryUserSelectModel() { NoneOption = true }))
                 .ForMember(d => d.KeyContact3, o => o.MapFrom(s => new ActiveDirectoryUserSelectModel() { NoneOption = true }))
 
 
-                .ForMember(d => d.project_team_option1, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_team_option1))))
-                .ForMember(d => d.project_team_option2, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_team_option2))))
+                .ForMember(d => d.project_team_option1, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.project_team_option1)))
+                .ForMember(d => d.project_team_option2, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.project_team_option2)))
 
-                .ForMember(d => d.project_plan_option1, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_plan_option1))))
-                .ForMember(d => d.project_plan_option2, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.project_plan_option2))))
+                .ForMember(d => d.project_plan_option1, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.project_plan_option1)))
+                .ForMember(d => d.project_plan_option2, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.project_plan_option2)))
 
-                .ForMember(d => d.progress_option1, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.progress_option1))))
-                .ForMember(d => d.progress_option2, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.progress_option2))))
+                .ForMember(d => d.progress_option1, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.progress_option1)))
+                .ForMember(d => d.progress_option2, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.progress_option2)))
 
-                .ForMember(d => d.budget_option1, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.budget_option1))))
-                .ForMember(d => d.budget_option2, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.budget_option2))))
+                .ForMember(d => d.budget_option1, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.budget_option1)))
+                .ForMember(d => d.budget_option2, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.budget_option2)))
 
-                .ForMember(d => d.processes_option1, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.processes_option1))))
-                .ForMember(d => d.processes_option2, o => o.MapFrom(new LabelDropDownResolver(nameof(ProjectModel.processes_option2))))
+                .ForMember(d => d.processes_option1, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.processes_option1)))
+                .ForMember(d => d.processes_option2, o => o.MapFrom(new LabelDropDownResolver(ProjectPropertyConstants.processes_option2)))
 
                 .ForMember(d => d.StrategicObjectives, o => o.Ignore())
 

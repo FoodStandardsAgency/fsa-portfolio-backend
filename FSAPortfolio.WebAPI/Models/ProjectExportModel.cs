@@ -65,6 +65,7 @@ namespace FSAPortfolio.WebAPI.Models
         public string fs_number { get; set; }
         public string risk_rating { get; set; }
         public string theme { get; set; }
+        [JsonProperty(PropertyName = ProjectPropertyConstants.project_type)]
         public string project_type { get; set; }
         public string strategic_objectives { get; set; }
         public string programme { get; set; }

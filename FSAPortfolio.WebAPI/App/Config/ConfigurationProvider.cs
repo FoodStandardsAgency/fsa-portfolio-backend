@@ -121,7 +121,7 @@ namespace FSAPortfolio.WebAPI.App.Config
 
         private async Task UpdateRAGStatusOptions(PortfolioConfiguration config)
         {
-            var labelConfig = config.Labels.Single(l => l.FieldName == nameof(ProjectModel.rag));
+            var labelConfig = config.Labels.Single(l => l.FieldName == ProjectPropertyConstants.rag);
             int options = int.Parse(labelConfig.FieldOptions);
             if (config.RAGStatuses.Count != options)
             {
@@ -155,7 +155,7 @@ namespace FSAPortfolio.WebAPI.App.Config
 
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException($"The label configuration for fieldname=[{nameof(ProjectModel.rag)}] has an unrecognised value. Should be 3 or 5.");
+                        throw new ArgumentOutOfRangeException($"The label configuration for fieldname=[{ProjectPropertyConstants.rag}] has an unrecognised value. Should be 3 or 5.");
                 }
 
             }

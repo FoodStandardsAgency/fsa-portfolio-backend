@@ -23,13 +23,13 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(ProjectPropertyConstants.ProjectId)]
         public string ProjectId { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.project_name))]
+        [JsonProperty(ProjectPropertyConstants.project_name)]
         public string ProjectName { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.priority_main))]
+        [JsonProperty(ProjectPropertyConstants.priority_main)]
         public int? Priority { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.pgroup))]
+        [JsonProperty(ProjectPropertyConstants.pgroup)]
         public string PriorityGroup { get; set; }
 
     }

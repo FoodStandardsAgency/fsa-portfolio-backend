@@ -89,33 +89,61 @@ namespace FSAPortfolio.WebAPI.Models
 
         public string project_team_setting1 { get; set; }
         public string project_team_setting2 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.project_team_option1)]
         public string project_team_option1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.project_team_option2)]
         public string project_team_option2 { get; set; }
 
         public string project_plan_setting1 { get; set; }
         public string project_plan_setting2 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.project_plan_option1)]
         public string project_plan_option1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.project_plan_option2)]
         public string project_plan_option2 { get; set; }
 
         public string progress_setting1 { get; set; }
         public string progress_setting2 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.progress_option1)]
         public string progress_option1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.progress_option2)]
         public string progress_option2 { get; set; }
 
         public int budget_field1 { get; set; } // TODO: check! Existed prior to Project settings
         public int budget_field2 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.budget_option1)]
         public string budget_option1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.budget_option2)]
         public string budget_option2 { get; set; }
 
         public string processes_setting1 { get; set; }
         public string processes_setting2 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.processes_option1)]
         public string processes_option1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.processes_option2)]
         public string processes_option2 { get; set; }
 
 
+        [JsonProperty(PropertyName = ProjectPropertyConstants.theme)]
         public string theme { get; set; }
+
+
+        [JsonProperty(PropertyName = ProjectPropertyConstants.project_type)]
         public string project_type { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.strategic_objectives)]
         public string strategic_objectives { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.programme)]
         public string programme { get; set; }
 
         [JsonProperty(PropertyName = ProjectPropertyConstants.Supplier)]

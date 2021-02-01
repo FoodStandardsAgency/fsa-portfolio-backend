@@ -17,7 +17,7 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(ProjectPropertyConstants.phase)]
         public List<DropDownItemModel> PhaseItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.rag))]
+        [JsonProperty(ProjectPropertyConstants.rag)]
         public List<DropDownItemModel> RAGStatusItems { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.onhold)]
@@ -38,24 +38,24 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(ProjectPropertyConstants.direct)]
         public List<DropDownItemModel> Directorates { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.strategic_objectives))]
+        [JsonProperty(ProjectPropertyConstants.strategic_objectives)]
         public List<DropDownItemModel> StrategicObjectives => strategicObjectiveOptions; 
 
-        [JsonProperty(nameof(ProjectModel.programme))]
+        [JsonProperty(ProjectPropertyConstants.programme)]
         public List<DropDownItemModel> Programme { get; set; }
 
 
         [JsonProperty(ProjectPropertyConstants.risk_rating)]
         public List<DropDownItemModel> RiskRating { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.theme))]
+        [JsonProperty(ProjectPropertyConstants.theme)]
         public List<DropDownItemModel> Theme { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.project_type))]
+        [JsonProperty(ProjectPropertyConstants.project_type)]
         public List<DropDownItemModel> ProjectType { get; set; }
 
         // People
-        [JsonProperty(nameof(ProjectUpdateModel.oddlead))]
+        [JsonProperty(ProjectPropertyConstants.oddlead)]
         public ActiveDirectoryUserSelectModel ODDLead { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.oddlead_role)]
@@ -64,72 +64,72 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(FilterFieldConstants.LeadTeamFilter)]
         public List<DropDownItemModel> G6Team { get; set; }
 
-        [JsonProperty(nameof(ProjectUpdateModel.key_contact1))]
+        [JsonProperty(ProjectPropertyConstants.key_contact1)]
         public ActiveDirectoryUserSelectModel KeyContact1 { get; set; }
 
-        [JsonProperty(nameof(ProjectUpdateModel.key_contact2))]
+        [JsonProperty(ProjectPropertyConstants.key_contact2)]
         public ActiveDirectoryUserSelectModel KeyContact2 { get; set; }
 
-        [JsonProperty(nameof(ProjectUpdateModel.key_contact3))]
+        [JsonProperty(ProjectPropertyConstants.key_contact3)]
         public ActiveDirectoryUserSelectModel KeyContact3 { get; set; }
 
 
 
-        [JsonProperty(nameof(ProjectModel.priority_main))]
+        [JsonProperty(ProjectPropertyConstants.priority_main)]
         public List<DropDownItemModel> PriorityItems { get; set; }
 
         [JsonProperty(FilterFieldConstants.PriorityGroupFilter)]
         public List<DropDownItemModel> PriorityGroupItems { get; set; }
 
 
-        [JsonProperty(nameof(ProjectModel.funded))]
+        [JsonProperty(ProjectPropertyConstants.funded)]
         public List<DropDownItemModel> FundedItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.confidence))]
+        [JsonProperty(ProjectPropertyConstants.confidence)]
         public List<DropDownItemModel> ConfidenceItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.priorities))]
+        [JsonProperty(ProjectPropertyConstants.priorities)]
         public List<DropDownItemModel> PrioritiesItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.benefits))]
+        [JsonProperty(ProjectPropertyConstants.benefits)]
         public List<DropDownItemModel> BenefitItems { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.criticality))]
+        [JsonProperty(ProjectPropertyConstants.criticality)]
         public List<DropDownItemModel> CriticalityItems { get; set; }
 
 
-        [JsonProperty(nameof(ProjectModel.project_team_option1))]
+        [JsonProperty(ProjectPropertyConstants.project_team_option1)]
         public List<DropDownItemModel> project_team_option1 { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.project_team_option2))]
+        [JsonProperty(ProjectPropertyConstants.project_team_option2)]
         public List<DropDownItemModel> project_team_option2 { get; set; }
 
 
-        [JsonProperty(nameof(ProjectModel.project_plan_option1))]
+        [JsonProperty(ProjectPropertyConstants.project_plan_option1)]
         public List<DropDownItemModel> project_plan_option1 { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.project_plan_option2))]
+        [JsonProperty(ProjectPropertyConstants.project_plan_option2)]
         public List<DropDownItemModel> project_plan_option2 { get; set; }
 
 
-        [JsonProperty(nameof(ProjectModel.progress_option1))]
+        [JsonProperty(ProjectPropertyConstants.progress_option1)]
         public List<DropDownItemModel> progress_option1 { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.progress_option2))]
+        [JsonProperty(ProjectPropertyConstants.progress_option2)]
         public List<DropDownItemModel> progress_option2 { get; set; }
 
 
-        [JsonProperty(nameof(ProjectModel.budget_option1))]
+        [JsonProperty(ProjectPropertyConstants.budget_option1)]
         public List<DropDownItemModel> budget_option1 { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.budget_option2))]
+        [JsonProperty(ProjectPropertyConstants.budget_option2)]
         public List<DropDownItemModel> budget_option2 { get; set; }
 
 
-        [JsonProperty(nameof(ProjectModel.processes_option1))]
+        [JsonProperty(ProjectPropertyConstants.processes_option1)]
         public List<DropDownItemModel> processes_option1 { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.processes_option2))]
+        [JsonProperty(ProjectPropertyConstants.processes_option2)]
         public List<DropDownItemModel> processes_option2 { get; set; }
 
 

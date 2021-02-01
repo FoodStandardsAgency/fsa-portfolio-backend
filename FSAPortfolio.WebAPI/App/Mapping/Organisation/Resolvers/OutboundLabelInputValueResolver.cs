@@ -23,7 +23,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers
                 case ProjectPropertyConstants.phase:
                     result = GetValue(source.Configuration.Phases);
                     break;
-                case nameof(ProjectModel.rag):
+                case ProjectPropertyConstants.rag:
                     result = source.Configuration.RAGStatuses.Count.ToString();
                     break;
                 case ProjectPropertyConstants.project_size:

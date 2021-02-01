@@ -12,7 +12,7 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty("portfolio")]
         public string PortfolioViewKey { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.project_name))]
+        [JsonProperty(ProjectPropertyConstants.project_name)]
         public string Name { get; set; }
 
         [JsonProperty(FilterFieldConstants.TeamMemberNameFilter)]
@@ -21,13 +21,13 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(ProjectPropertyConstants.phase)]
         public string[] Phases { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.theme))]
+        [JsonProperty(ProjectPropertyConstants.theme)]
         public string[] Themes { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.project_type))]
+        [JsonProperty(PropertyName = ProjectPropertyConstants.project_type)]
         public string[] ProjectTypes { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.rag))]
+        [JsonProperty(ProjectPropertyConstants.rag)]
         public string[] RAGStatuses { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.onhold)]
@@ -39,16 +39,16 @@ namespace FSAPortfolio.WebAPI.Models
         [JsonProperty(ProjectPropertyConstants.direct)]
         public string[] Directorates { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.strategic_objectives))]
+        [JsonProperty(ProjectPropertyConstants.strategic_objectives)]
         public string[] StrategicObjectives { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.programme))]
+        [JsonProperty(ProjectPropertyConstants.programme)]
         public string[] Programmes { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.ProjectLead)]
         public string ProjectLeadName { get; set; }
 
-        [JsonProperty(nameof(ProjectModel.priority_main))]
+        [JsonProperty(ProjectPropertyConstants.priority_main)]
         public int[] Priorities { get; set; }
 
         [JsonProperty(FilterFieldConstants.LeadTeamFilter)]
