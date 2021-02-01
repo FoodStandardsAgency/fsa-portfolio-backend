@@ -1,4 +1,5 @@
-﻿using CsvHelper;
+﻿using AutoMapper;
+using CsvHelper;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.WebAPI.App.Mapping;
 using FSAPortfolio.WebAPI.Models;
@@ -50,18 +51,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                                 var project = new ProjectUpdateModel();
                                 foreach (var property in headerProperties)
                                 {
-                                    // Get the property value and translate it if necessary (using the edit options)
-                                    var value = property.Translate(csv.GetField(property.Name));
-                                    object objValue;
-
-                                    // For some reason, have to treat floats differently in automapper. This might be a bug in automapper.
-                                        if (property.property.PropertyType.IsAssignableFrom(typeof(float?)))
-                                            objValue = PortfolioMapper.ExportMapper.Map<float?>(value);
-                                        else
-                                        objValue = PortfolioMapper.ExportMapper.Map(value, typeof(string), property.property.PropertyType);
-
-                                    // Set the property value on the project
-                                    property.property.SetValue(project, objValue);
+                                    MapProperty(csv, project, property);
                                 }
                                 projects.Add(project);
                             }
@@ -72,6 +62,33 @@ namespace FSAPortfolio.WebAPI.App.Projects
             return projects;
         }
 
+        private static void MapProperty(CsvReader csv, ProjectUpdateModel project, _projectPropertyMap property)
+        {
+            // Get the property value and translate it if necessary (using the edit options)
+            var value = property.Translate(csv.GetField(property.Name));
+            try
+            {
+                object objValue;
+
+                // For some reason, have to treat floats differently in automapper. This might be a bug in automapper.
+                if (property.property.PropertyType.IsAssignableFrom(typeof(float?)))
+                {
+                    objValue = PortfolioMapper.ExportMapper.Map<float?>(value);
+                }
+                else
+                {
+                    objValue = PortfolioMapper.ExportMapper.Map(value, typeof(string), property.property.PropertyType);
+                }
+
+                // Set the property value on the project
+                property.property.SetValue(project, objValue);
+            }
+            catch(AutoMapperMappingException ame)
+            {
+                string msg = $"Error mapping property [${property.property.Name}] of type [${property.property.PropertyType.Name}], value is [${value}]";
+                throw new Exception(msg, ame);
+            }
+        }
     }
 
     internal class _propertyMap
