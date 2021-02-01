@@ -18,11 +18,23 @@ namespace FSAPortfolio.WebAPI
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 
-
             // Web API routes
             config.MapHttpAttributeRoutes();
 
+            #region Access Groups
+            config.Routes.MapHttpRoute(
+                name: "InitAccessGroups",
+                routeTemplate: "api/AccessGroups/init",
+                defaults: new { controller = ControllerName<AccessGroupsController>(), action = nameof(AccessGroupsController.Init) }
+            );
+            #endregion
+
             #region Users
+            config.Routes.MapHttpRoute(
+                name: "CreateUser",
+                routeTemplate: "api/Users/create",
+                defaults: new { controller = ControllerName<UsersController>(), action = nameof(UsersController.CreateUser) }
+            );
             config.Routes.MapHttpRoute(
                 name: "GetIdentity",
                 routeTemplate: "api/Users/identity",
@@ -77,9 +89,24 @@ namespace FSAPortfolio.WebAPI
                 defaults: new { controller = ControllerName<PortfoliosController>(), action = nameof(PortfoliosController.GetExportProjectsAsync) }
             );
             config.Routes.MapHttpRoute(
+                name: "PortfolioImport",
+                routeTemplate: "api/Portfolios/{portfolio}/import",
+                defaults: new { controller = ControllerName<PortfoliosController>(), action = nameof(PortfoliosController.ImportAsync) }
+            );
+            config.Routes.MapHttpRoute(
                 name: "PortfolioArchive",
                 routeTemplate: "api/Portfolios/{portfolio}/archive",
                 defaults: new { controller = ControllerName<PortfoliosController>(), action = nameof(PortfoliosController.ArchiveProjectsAsync) }
+            );
+            config.Routes.MapHttpRoute(
+                name: "CreatePortfolio",
+                routeTemplate: "api/NewPortfolio",
+                defaults: new { controller = ControllerName<PortfoliosController>(), action = nameof(PortfoliosController.CreateAsync) }
+            );
+            config.Routes.MapHttpRoute(
+                name: "AddPortfolioPermission",
+                routeTemplate: "api/Portfolios/{portfolio}/permission",
+                defaults: new { controller = ControllerName<PortfoliosController>(), action = nameof(PortfoliosController.AddPermissionAsync) }
             );
 
             #endregion

@@ -30,74 +30,15 @@ namespace FSAPortfolio.WebAPI.Controllers
         [HttpPost]
         public async Task Post([FromBody] ProjectUpdateModel update)
         {
-            try
+            using (var context = new PortfolioContext())
             {
-                using (var context = new PortfolioContext())
-                {
-                    // Load and map the project
-                    var provider = new ProjectProvider(context, update.project_id);
-                    var userProvider = new UsersProvider(context);
-                    var reservation = await provider.GetProjectReservationAsync();
-                    if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
-                    else
-                    {
-                        var project = reservation?.Project;
-                        if (project == null)
-                        {
-                            project = provider.CreateNewProject(reservation);
-                        }
-
-                        // Map the model to the project - map the leads manually because they can require an async AD lookup
-                        PortfolioMapper.ProjectMapper.Map(update, project, opt =>
-                        {
-                            opt.Items[nameof(PortfolioContext)] = context;
-                        });
-                        await userProvider.MapPeopleAsync(update, project);
-
-                        // Audit and save
-                        if (project.AuditLogs != null) provider.LogAuditChanges(project);
-                        await context.SaveChangesAsync();
-
-                        // Get the last update and create a new one if necessary
-                        ProjectUpdateItem lastUpdate = project.LatestUpdate;
-                        ProjectUpdateItem projectUpdate = lastUpdate;
-                        if (projectUpdate == null || projectUpdate.Timestamp.Date != DateTime.Today)
-                        {
-                            // Create a new update
-                            projectUpdate = new ProjectUpdateItem() { Project = project };
-                            if(project.FirstUpdate_Id == null)
-                            {
-                                project.FirstUpdate = projectUpdate;
-                            }
-                        }
-
-                        // Map the data to the update and add if not a duplicate
-                        PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[nameof(PortfolioContext)] = context);
-                        if (!projectUpdate.IsDuplicate(lastUpdate))
-                        {
-                            project.Updates.Add(projectUpdate);
-                            project.LatestUpdate = projectUpdate;
-                            project.LatestUpdate.Timestamp = DateTime.Now;
-                        }
-
-                        // Save
-                        await context.SaveChangesAsync();
-                    }
-                }
-            }
-            catch(AutoMapperMappingException ame)
-            {
-                if (ame.InnerException is FSAPortfolio.WebAPI.App.Config.PortfolioConfigurationException)
-                {
-                    var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
-                    {
-                        ReasonPhrase = ame.InnerException.Message
-                    };
-                    throw new HttpResponseException(resp);
-                }
-                else throw ame;
+                // Load and map the project
+                var userProvider = new PersonProvider(context);
+                var provider = new ProjectProvider(context);
+                await provider.UpdateProject(update, userProvider);
             }
         }
+
 
         // Get: api/Projects
         [AcceptVerbs("GET")]

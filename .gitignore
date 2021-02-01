@@ -343,3 +343,4 @@ healthchecksdb
 /FSAPortfolio.UnitTests/appSettings.config
 /FSAPortfolio.UnitTests/connectionStrings.config
 /FSAPortfolio.Entites/connectionStrings.config
+/Bootstrapping/setSecrets.sh

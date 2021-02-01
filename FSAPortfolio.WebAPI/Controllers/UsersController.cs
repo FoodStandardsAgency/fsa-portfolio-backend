@@ -15,6 +15,8 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -57,7 +59,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             using (var context = new PortfolioContext())
             {
-                var provider = new UsersProvider(context);
+                var provider = new PersonProvider(context);
                 return await provider.AddSupplierAsync(model.Portfolio, model.UserName, model.PasswordHash);
             }
         }
@@ -126,5 +128,16 @@ namespace FSAPortfolio.WebAPI.Controllers
             return result;
         }
 
+        [AcceptVerbs("POST")]
+        public async Task CreateUser([FromBody] AddUserModel model)
+        {
+            using (var context = new PortfolioContext())
+            {
+                var sha256 = SHA256.Create();
+                var hash = BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(model.Password))).Replace("-", "");
+                var users = new UserProvider(context);
+                await users.CreateUser(model.UserName, hash, model.AccessGroup);
+            }
+        }
     }
 }

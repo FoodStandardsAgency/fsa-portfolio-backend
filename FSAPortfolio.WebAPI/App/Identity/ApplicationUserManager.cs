@@ -106,7 +106,8 @@ namespace FSAPortfolio.WebAPI.App.Identity
             {
                 roles = (await Store.FindByIdAsync(userId)).Roles;
             }
-            return roles == null ? new List<string>() : roles.Select(r => r.ViewKey).ToList();
+            var result = roles == null ? new List<string>() : roles.Select(r => r.ViewKey).ToList();
+            return result;
         }
 
         public override async Task<IList<Claim>> GetClaimsAsync(string userId)

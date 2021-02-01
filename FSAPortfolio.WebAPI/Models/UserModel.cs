@@ -45,4 +45,16 @@ namespace FSAPortfolio.WebAPI.Models
     {
         public string result { get; set; }
     }
+
+    public class AddUserModel
+    {
+        [JsonProperty("userName")]
+        public string UserName { get; set; }
+
+        [JsonProperty("password")]
+        public string Password { get; set; }
+
+        [JsonProperty("accessgroup")]
+        public string AccessGroup { get; set; }
+    }
 }

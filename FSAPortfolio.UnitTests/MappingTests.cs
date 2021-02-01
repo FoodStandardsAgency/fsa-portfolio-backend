@@ -23,6 +23,15 @@ namespace FSAPortfolio.UnitTests
             PortfolioMapper.projectConfig.AssertConfigurationIsValid();
             PortfolioMapper.configConfig.AssertConfigurationIsValid();
             PortfolioMapper.updateConfig.AssertConfigurationIsValid();
+            PortfolioMapper.exportConfig.AssertConfigurationIsValid();
+        }
+
+        [TestMethod]
+        public void NullableFloatMap()
+        {
+            PortfolioMapper.Configure();
+            float? f = PortfolioMapper.ExportMapper.Map<float?>(string.Empty);
+            Assert.IsNull(f);
         }
     }
 }

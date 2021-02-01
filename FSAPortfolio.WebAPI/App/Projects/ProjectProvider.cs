@@ -1,26 +1,31 @@
-﻿using FSAPortfolio.Entities;
+﻿using AutoMapper;
+using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.WebAPI.App.Users;
+using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Http;
 
 namespace FSAPortfolio.WebAPI.App.Projects
 {
     public class ProjectProvider
     {
         internal PortfolioContext context;
-        private string projectId;
-        public ProjectProvider(PortfolioContext context, string projectId)
+        public ProjectProvider(PortfolioContext context)
         {
             this.context = context;
-            this.projectId = projectId;
         }
 
-        public async Task<ProjectReservation> GetProjectReservationAsync()
+        public async Task<ProjectReservation> GetProjectReservationAsync(string projectId)
         {
             return await context.ProjectReservations
                 .ProjectIncludes()
@@ -40,6 +45,72 @@ namespace FSAPortfolio.WebAPI.App.Projects
             };
             return reservation.Project;
         }
+
+        internal async Task UpdateProject(ProjectUpdateModel update, PersonProvider userProvider, ProjectReservation reservation = null)
+        {
+            try
+            {
+                if (reservation == null) reservation = await GetProjectReservationAsync(update.project_id);
+                if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+                else
+                {
+                    var project = reservation?.Project;
+                    if (project == null)
+                    {
+                        project = CreateNewProject(reservation);
+                    }
+
+                    // Map the model to the project - map the leads manually because they can require an async AD lookup
+                    PortfolioMapper.ProjectMapper.Map(update, project, opt =>
+                    {
+                        opt.Items[nameof(PortfolioContext)] = context;
+                    });
+                    await userProvider.MapPeopleAsync(update, project);
+
+                    // Audit and save
+                    if (project.AuditLogs != null) LogAuditChanges(project);
+                    await context.SaveChangesAsync();
+
+                    // Get the last update and create a new one if necessary
+                    ProjectUpdateItem lastUpdate = project.LatestUpdate;
+                    ProjectUpdateItem projectUpdate = lastUpdate;
+                    if (projectUpdate == null || projectUpdate.Timestamp.Date != DateTime.Today)
+                    {
+                        // Create a new update
+                        projectUpdate = new ProjectUpdateItem() { Project = project };
+                        if (project.FirstUpdate_Id == null)
+                        {
+                            project.FirstUpdate = projectUpdate;
+                        }
+                    }
+
+                    // Map the data to the update and add if not a duplicate
+                    PortfolioMapper.ProjectMapper.Map(update, projectUpdate, opt => opt.Items[nameof(PortfolioContext)] = context);
+                    if (!projectUpdate.IsDuplicate(lastUpdate))
+                    {
+                        project.Updates.Add(projectUpdate);
+                        project.LatestUpdate = projectUpdate;
+                        project.LatestUpdate.Timestamp = DateTime.Now;
+                    }
+
+                    // Save
+                    await context.SaveChangesAsync();
+                }
+            }
+            catch (AutoMapperMappingException ame)
+            {
+                if (ame.InnerException is Config.PortfolioConfigurationException)
+                {
+                    var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
+                    {
+                        ReasonPhrase = ame.InnerException.Message
+                    };
+                    throw new HttpResponseException(resp);
+                }
+                else throw ame;
+            }
+        }
+
 
         internal void LogAuditChanges(Project project)
         {

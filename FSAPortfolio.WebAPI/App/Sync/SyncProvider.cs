@@ -110,7 +110,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             using (var dest = new PortfolioContext())
             {
                 var portfolio = await dest.Portfolios.Include(p => p.Teams).SingleAsync(p => p.ViewKey == "odd");
-                var usersProvider = new UsersProvider(dest);
+                var usersProvider = new PersonProvider(dest);
                 var roleManager = new PortfolioRoleManager(dest);
 
                 // Sync the people
@@ -271,7 +271,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
-        private void AddPortfolio(PortfolioContext context, string name, string shortName, string viewKey, string requiredRoles = null)
+        internal Portfolio AddPortfolio(PortfolioContext context, string name, string shortName, string viewKey, string requiredRoles = null)
         {
             var portfolio = context.Portfolios
                 .Include(p => p.Configuration.Phases)
@@ -297,7 +297,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         ProjectSizes = new List<ProjectSize>(),
                         BudgetTypes = new List<BudgetType>(),
                         LabelGroups = new List<PortfolioLabelGroup>(),
-                        Labels = new List<PortfolioLabelConfig>()
+                        Labels = new List<PortfolioLabelConfig>(),
+                        ArchiveAgeDays = PortfolioSettings.DefaultProjectArchiveAgeDays
                     },
                     RequiredRoleData = requiredRoles
                 };
@@ -311,7 +312,9 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 string phaseName;
                 string vk = $"{ViewKeyPrefix.Phase}{o}";
                 if (!SyncMaps.phaseMap.TryGetValue(new Tuple<string, string>(viewKey, vk), out phaseName))
-                phaseName = SyncMaps.phaseMap.First().Value;
+                {
+                    phaseName = vk;
+                }
                 var phase = portfolio.Configuration.Phases.SingleOrDefault(p => p.ViewKey == vk);
                 if (phase == null)
                 {
@@ -411,10 +414,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
             onHoldFactory(2);
             onHoldFactory(3);
 
-            var categoryLookup = SyncMaps.categoryKeyMap[viewKey];
-            for (int i = 0; i < categoryLookup.Keys.Count; i++)
+            if (SyncMaps.categoryKeyMap.TryGetValue(viewKey, out var categoryLookup))
             {
-                categoryFactory(i);
+                for (int i = 0; i < categoryLookup.Keys.Count; i++)
+                {
+                    categoryFactory(i);
+                }
             }
             sizeFactory(0);
             sizeFactory(1);
@@ -423,10 +428,12 @@ namespace FSAPortfolio.WebAPI.App.Sync
             sizeFactory(4);
 
             // Need to lookup budgettypes based on portfolio view key
-            var budgetTypeLookup = SyncMaps.budgetTypeKeyMap[viewKey];
-            for (int i = 0; i < budgetTypeLookup.Keys.Count; i++)
+            if (SyncMaps.budgetTypeKeyMap.TryGetValue(viewKey, out var budgetTypeLookup))
             {
-                budgetTypeFactory(i);
+                for (int i = 0; i < budgetTypeLookup.Keys.Count; i++)
+                {
+                    budgetTypeFactory(i);
+                }
             }
             labelGroupFactory(FieldGroupConstants.FieldGroupName_ProjectIDs, 0);
             labelGroupFactory(FieldGroupConstants.FieldGroupName_AboutTheProject, 1);
@@ -437,6 +444,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
             labelGroupFactory(FieldGroupConstants.FieldGroupName_Prioritisation, 6);
             labelGroupFactory(FieldGroupConstants.FieldGroupName_Budget, 7);
             labelGroupFactory(FieldGroupConstants.FieldGroupName_FSAProcesses, 8);
+
+            return portfolio;
         }
 
         internal void SyncAllProjects(string portfolio = "odd")
