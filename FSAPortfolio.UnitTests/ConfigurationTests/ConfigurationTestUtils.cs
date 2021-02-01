@@ -14,7 +14,7 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
         internal static async Task TestCollectionLabel(string fieldName, string testValue, bool addToCurrent = true, Func<Task> midpointTest = null)
         {
             // 1. GET CONFIG the original 
-            var initialState = await ConfigTestData.LoadAsync("odd");
+            var initialState = await ConfigTestData.LoadAsync(TestSettings.TestPortfolio);
             var original_Config_Expected = initialState.ConfigJSON;
             var original_LabelValue_Expected = initialState.GetLabel(fieldName).InputValue;
 
@@ -28,7 +28,7 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
             var updated_Config_Expected = updatedState.ConfigJSON;
             await updatedState.UpdateAsync();
 
-            var afterUpdateState = await ConfigTestData.LoadAsync("odd");
+            var afterUpdateState = await ConfigTestData.LoadAsync(TestSettings.TestPortfolio);
             var updated_Config_Actual = afterUpdateState.ConfigJSON;
             var updated_LabelValue_Actual = afterUpdateState.GetLabel(fieldName).InputValue;
 
@@ -43,7 +43,7 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
             resetState.GetLabel(fieldName).InputValue = original_LabelValue_Expected;
             await resetState.UpdateAsync();
 
-            var afterResetState = await ConfigTestData.LoadAsync("odd");
+            var afterResetState = await ConfigTestData.LoadAsync(TestSettings.TestPortfolio);
             var original_Config_Actual = afterResetState.ConfigJSON;
             var original_LabelValue_Actual = afterResetState.GetLabel(fieldName).InputValue;
 

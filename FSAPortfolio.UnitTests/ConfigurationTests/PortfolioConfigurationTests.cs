@@ -19,10 +19,10 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
         [TestMethod]
         public async Task UpdateWithNoChange()
         {
-            var before = await ConfigTestData.LoadAsync("odd");
+            var before = await ConfigTestData.LoadAsync(TestSettings.TestPortfolio);
             var update = before.Clone();
             await update.UpdateAsync();
-            var after = await ConfigTestData.LoadAsync("odd");
+            var after = await ConfigTestData.LoadAsync(TestSettings.TestPortfolio);
 
             Assert.AreEqual(before.ConfigJSON, after.ConfigJSON);
         }
@@ -35,7 +35,7 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
             await ConfigurationTestUtils.TestCollectionLabel(ProjectPropertyConstants.budgettype, "EXTRA BUDGET TYPE");
             await ConfigurationTestUtils.TestCollectionLabel(ProjectPropertyConstants.onhold, "EXTRA STATUS");
             await ConfigurationTestUtils.TestCollectionLabel(ProjectPropertyConstants.risk_rating, "EXTRA RISK");
-            await ConfigurationTestUtils.TestCollectionLabel(ProjectPropertyConstants.phase, "Backlog, Phase1, Phase2, Phase3, Phase4", addToCurrent: false);
+            await ConfigurationTestUtils.TestCollectionLabel(ProjectPropertyConstants.phase, "Backlog, Phase1, Phase2, Phase3, Phase4, Phase5", addToCurrent: false);
 
             // TODO: add rest of collections
         }

@@ -16,7 +16,6 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
     public class PhaseTests
     {
         private const string PhaseBackup = "Backlog, Discovery, Implementation, Testing, Live, Completed";
-        private const string TestStartPhases = "Backlog, Discovery, Implementation, Testing, Live, Completed";
         private const string TestChangedPhases = "backlog, discovery, New1, New2, New3, Completed";
         private const string TestChanged_ReducedNumberPhases = "backlog, discovery, New1, New2, Completed";
         private const string TestChanged_ReducedNumberPhases_Fail = "backlog, discovery, Implementation, Live, Completed";
@@ -25,19 +24,19 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
         public static async Task CleanupTest()
         {
             await ProjectClient.DeleteTestProjectsAsync();
-            await PortfolioConfigClient.UpdatePhasesAsync("dev", PhaseBackup);
+            await PortfolioConfigClient.UpdatePhasesAsync(TestSettings.TestPortfolio, PhaseBackup);
         }
 
         [TestMethod]
         public async Task ReconfigurePhases_SameNumber_Test()
         {
-            await TestPhaseChange(TestStartPhases, TestChangedPhases);
+            await TestPhaseChange(TestSettings.TestStartPhases, TestChangedPhases);
         }
 
         [TestMethod]
         public async Task ReconfigurePhases_ReduceNumber_Test()
         {
-            await TestPhaseChange(TestStartPhases, TestChanged_ReducedNumberPhases, new string[] { "Testing" });
+            await TestPhaseChange(TestSettings.TestStartPhases, TestChanged_ReducedNumberPhases, new string[] { "Testing" });
         }
 
 
@@ -47,11 +46,11 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
         {
             try
             {
-                await TestPhaseChange(TestStartPhases, TestChanged_ReducedNumberPhases_Fail);
+                await TestPhaseChange(TestSettings.TestStartPhases, TestSettings.TestChanged_ReducedNumberPhases_Fail);
             }
             catch (Exception e)
             {
-                Assert.AreEqual("Phase [Testing] can't be removed because it has projects assigned to it. This is likely occurring because you are trying to reduce the number of phases but there are projects assigned to the phase to be removed.", e.Message);
+                Assert.AreEqual($"Phase [{TestSettings.AssignedPhase}] can't be removed because it has projects assigned to it. This is likely occurring because you are trying to reduce the number of phases but there are projects assigned to the phase to be removed.", e.Message);
             }
         }
 
@@ -62,10 +61,10 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
 
             // DATA SET UP -------------------------------
             // Reconfigure the categories
-            var categoriesBackup = await PortfolioConfigClient.UpdatePhasesAsync("dev", startPhases);
+            var categoriesBackup = await PortfolioConfigClient.UpdatePhasesAsync(TestSettings.TestPortfolio, startPhases);
             Assert.AreEqual(PhaseBackup, categoriesBackup);
 
-            GetProjectQueryDTO options = await PortfolioConfigClient.GetFilterOptionsAsync("dev");
+            GetProjectQueryDTO options = await PortfolioConfigClient.GetFilterOptionsAsync(TestSettings.TestPortfolio);
             var phaseOptions = options.Options.PhaseItems;
             if(ignorePhases != null) phaseOptions.RemoveAll(p => ignorePhases.Contains(p.Display));
 
@@ -92,11 +91,11 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
             updates.Clear();
 
             // CHANGE CATEGORIES  -------------------------------
-            categoriesBackup = await PortfolioConfigClient.UpdatePhasesAsync("dev", changedPhases);
+            categoriesBackup = await PortfolioConfigClient.UpdatePhasesAsync(TestSettings.TestPortfolio, changedPhases);
             Assert.AreEqual(startPhases, categoriesBackup);
 
             // Restore the categories
-            categoriesBackup = await PortfolioConfigClient.UpdatePhasesAsync("dev", categoriesBackup);
+            categoriesBackup = await PortfolioConfigClient.UpdatePhasesAsync(TestSettings.TestPortfolio, categoriesBackup);
             Assert.AreEqual(changedPhases, categoriesBackup);
         }
 

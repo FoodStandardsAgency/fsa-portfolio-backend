@@ -23,13 +23,13 @@ namespace FSAPortfolio.UnitTests.APIClients
             client.BaseAddress = new Uri("http://localhost/FSAPortfolio.WebAPI/");
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add("APIKey", ConfigurationManager.AppSettings["APIKey"]);
+            client.DefaultRequestHeaders.Add("APIKey", TestSettings.APIKey);
 
             var sha256 = SHA256.Create();
-            var hash = BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes("password"))).Replace("-", "");
+            var hash = BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(TestSettings.TestUserPassword))).Replace("-", "");
             var content = new FormUrlEncodedContent(new []
             {
-                new KeyValuePair<string, string>("username", "portfolio"),
+                new KeyValuePair<string, string>("username", TestSettings.TestUser),
                 new KeyValuePair<string, string>("password", hash),
                 new KeyValuePair<string, string>("grant_type", "password"),
             });

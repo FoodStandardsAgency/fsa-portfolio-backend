@@ -86,6 +86,7 @@
     <Compile Include="ConfigurationTests\PortfolioConfigurationTests.cs" />
     <Compile Include="TestMappings\TestMapper.cs" />
     <Compile Include="TestMappings\ProjectProfile.cs" />
+    <Compile Include="TestSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

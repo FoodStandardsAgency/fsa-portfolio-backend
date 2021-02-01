@@ -45,7 +45,7 @@ namespace FSAPortfolio.UnitTests.PortfolioTests
                 var portfolioConfig = await context.PortfolioConfigurations
                     .Include(c => c.CompletedPhase)
                     .Include(c => c.ArchivePhase)
-                    .SingleAsync(p => p.Portfolio.ViewKey == "dev");
+                    .SingleAsync(p => p.Portfolio.ViewKey == TestSettings.TestPortfolio);
 
                 // Set the timestamp to (half the test project count) days before the age cutoff: this is so half the test projects will get archived.
                 var cutoff = DateTime.Today.AddDays(-portfolioConfig.ArchiveAgeDays);
@@ -66,7 +66,7 @@ namespace FSAPortfolio.UnitTests.PortfolioTests
             }
 
             // Do the archival and check respoonse
-            var response = await PortfolioClient.ArchiveProjectsAsync("odd");
+            var response = await PortfolioClient.ArchiveProjectsAsync(TestSettings.TestPortfolio);
             Assert.AreEqual(expectedArchivedProjects.Count, response.ArchivedProjectIds.Length);
             for(int i = 0; i < expectedArchivedProjects.Count; i++)
             {

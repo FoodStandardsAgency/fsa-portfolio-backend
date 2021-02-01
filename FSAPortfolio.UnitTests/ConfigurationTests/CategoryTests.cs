@@ -5,6 +5,7 @@ using FSAPortfolio.WebAPI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,11 +19,13 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
         private const string TestStartCategories = "Food hypersensitivity, Chemical contaminants, Foodborne disease, Antimicrobial resistance, Nutrition and health, Consumer and business behaviour, Food crime, Novel food and processes, Data and digital, Best regulator, Emerging risks and opportunities, Not a current ARI, Unknown";
         private const string TestChangedCategories = "Food hypersensitivity, Chemical hazards in food and feed, Foodborne disease, Antimicrobial resistance, Nutrition and Health, Behaviour and perception, Data and digital innovations, Cutting edge regulator, Emerging challenges and opportunities, Novel and non-traditional foods and processes, Food crime, Other";
 
+
+
         [ClassCleanup]
         public static async Task CleanupTest()
         {
             await ProjectClient.DeleteTestProjectsAsync();
-            await PortfolioConfigClient.UpdateCategoriesAsync("dev", CategoryBackup);
+            await PortfolioConfigClient.UpdateCategoriesAsync(TestSettings.TestPortfolio, CategoryBackup);
         }
 
         [TestMethod]
@@ -33,10 +36,10 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
 
             // DATA SET UP -------------------------------
             // Reconfigure the categories
-            var categoriesBackup = await PortfolioConfigClient.UpdateCategoriesAsync("dev", TestStartCategories);
+            var categoriesBackup = await PortfolioConfigClient.UpdateCategoriesAsync(TestSettings.TestPortfolio, TestStartCategories);
             Assert.AreEqual(CategoryBackup, categoriesBackup);
 
-            GetProjectQueryDTO options = await PortfolioConfigClient.GetFilterOptionsAsync("dev");
+            GetProjectQueryDTO options = await PortfolioConfigClient.GetFilterOptionsAsync(TestSettings.TestPortfolio);
             var categoryOptions = options.Options.CategoryItems;
 
             List<ProjectUpdateModel> updates = new List<ProjectUpdateModel>();
@@ -89,18 +92,18 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
             updates.Clear();
 
             // CHANGE CATEGORIES  -------------------------------
-            categoriesBackup = await PortfolioConfigClient.UpdateCategoriesAsync("dev", TestChangedCategories);
+            categoriesBackup = await PortfolioConfigClient.UpdateCategoriesAsync(TestSettings.TestPortfolio, TestChangedCategories);
             Assert.AreEqual(TestStartCategories, categoriesBackup);
 
             // Restore the categories
-            categoriesBackup = await PortfolioConfigClient.UpdateCategoriesAsync("dev", categoriesBackup);
+            categoriesBackup = await PortfolioConfigClient.UpdateCategoriesAsync(TestSettings.TestPortfolio, categoriesBackup);
             Assert.AreEqual(TestChangedCategories, categoriesBackup);
         }
 
         [TestMethod]
         public async Task UpdateCategoryWithHistoryCheck()
         {
-            var projectId = "ODD2009001";
+            var projectId = TestSettings.TestProjectId;
             var testCategory = "EXTRA CATEGORY";
             string originalCategoryViewKey = null;
             Func<Task> updateCategory = async () => {
@@ -124,7 +127,7 @@ namespace FSAPortfolio.UnitTests.ConfigurationTests
             Assert.IsNull(categoryItem);
 
             // 4. Do a no-change update on config (hidden option should be removed - but no way to verify!)
-            var config = await ConfigTestData.LoadAsync("odd");
+            var config = await ConfigTestData.LoadAsync(TestSettings.TestPortfolio);
             await config.UpdateAsync();
 
         }

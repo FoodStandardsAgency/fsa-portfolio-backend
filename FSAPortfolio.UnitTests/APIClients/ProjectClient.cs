@@ -83,7 +83,7 @@ namespace FSAPortfolio.UnitTests.APIClients
                 var results = await GetProjectByNameOrIdAsync(name);
                 if (results.Count() == 0)
                 {
-                    await CreateProjectAsync("dev", name);
+                    await CreateProjectAsync(TestSettings.TestPortfolio, name);
                 }
             };
 
