@@ -66,27 +66,30 @@ namespace FSAPortfolio.WebAPI.App.Projects
         {
             // Get the property value and translate it if necessary (using the edit options)
             var value = property.Translate(csv.GetField(property.Name));
-            try
+            if (!string.IsNullOrWhiteSpace(value))
             {
-                object objValue;
-
-                // For some reason, have to treat floats differently in automapper. This might be a bug in automapper.
-                if (property.property.PropertyType.IsAssignableFrom(typeof(float?)))
+                try
                 {
-                    objValue = PortfolioMapper.ExportMapper.Map<float?>(value);
-                }
-                else
-                {
-                    objValue = PortfolioMapper.ExportMapper.Map(value, typeof(string), property.property.PropertyType);
-                }
+                    object objValue;
 
-                // Set the property value on the project
-                property.property.SetValue(project, objValue);
-            }
-            catch(AutoMapperMappingException ame)
-            {
-                string msg = $"Error mapping property [${property.property.Name}] of type [${property.property.PropertyType.Name}], value is [${value}]";
-                throw new Exception(msg, ame);
+                    // For some reason, have to treat floats differently in automapper. This might be a bug in automapper.
+                    if (property.property.PropertyType.IsAssignableFrom(typeof(float?)))
+                    {
+                        objValue = PortfolioMapper.ExportMapper.Map<float?>(value);
+                    }
+                    else
+                    {
+                        objValue = PortfolioMapper.ExportMapper.Map(value, typeof(string), property.property.PropertyType);
+                    }
+
+                    // Set the property value on the project
+                    property.property.SetValue(project, objValue);
+                }
+                catch (AutoMapperMappingException ame)
+                {
+                    string msg = $"Error mapping property [{property.property.Name}] of type [{property.property.PropertyType.Name}], value is [{value}]";
+                    throw new Exception(msg, ame);
+                }
             }
         }
     }
