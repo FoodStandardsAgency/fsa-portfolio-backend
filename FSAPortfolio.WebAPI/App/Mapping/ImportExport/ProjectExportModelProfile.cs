@@ -136,7 +136,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
                 //.AfterMap<ProjectJsonPropertiesOutboundMapper>()
                 ;
 
-            CreateMap<ProjectLink, string>().ConvertUsing(s => $"{s.Name}, {s.Link}");
+            CreateMap<ProjectLink, string>().ConvertUsing<ProjectLinkExportConverter>();
 
         }
 

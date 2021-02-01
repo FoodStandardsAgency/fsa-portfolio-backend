@@ -17,6 +17,8 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
             CreateMap<string, float>().ConvertUsing(s => float.Parse(s));
             CreateMap<string, ProjectDateEditModel>().ConvertUsing<ProjectImportDateConverter>();
             CreateMap<string, ProjectPersonModel>().ConvertUsing(s => new ProjectPersonModel() { Value = s, Email = s });
+            CreateMap<string, LinkModel>().ConvertUsing<ProjectLinkImportResolver>();
+
         }
     }
 }
