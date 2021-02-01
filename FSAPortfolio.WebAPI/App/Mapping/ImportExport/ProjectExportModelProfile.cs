@@ -64,7 +64,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
                 .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives))
                 .ForMember(p => p.programme, o => o.MapFrom(s => s.Programme))
                 .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
-                .ForMember(p => p.documents, o => o.MapFrom(s => string.Join("; ", s.Documents.OrderBy(d => d.Order).Select(d => d.ExportText))))
+                .ForMember(p => p.documents, o => o.MapFrom(s => s.Documents))
 
                 .ForMember(p => p.key_contact1, o => o.MapFrom(s => s.KeyContact1))
                 .ForMember(p => p.key_contact2, o => o.MapFrom(s => s.KeyContact2))
@@ -137,6 +137,8 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
                 ;
 
             CreateMap<ProjectLink, string>().ConvertUsing<ProjectLinkExportConverter>();
+            CreateMap<ICollection<Document>, string>().ConvertUsing<DocumentCollectionExportConverter>();
+            CreateMap<Document, string>().ConvertUsing<DocumentExportConverter>();
 
         }
 

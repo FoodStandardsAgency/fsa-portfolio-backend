@@ -28,7 +28,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
             LinkModel link = new LinkModel();
             if(!string.IsNullOrWhiteSpace(source))
             {
-                var match = Regex.Match(source, @"$\[(?<name>.*)\]\[(?<link>.*)\]^");
+                var match = Regex.Match(source, @"^\[(?<name>.*)\]\[(?<link>.*)\]$");
                 if(match.Success)
                 {
                     link.Name = match.Groups["name"].Value;
@@ -36,6 +36,19 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
                 }
             }
             return link;
+        }
+    }
+    public class ProjectLinkCollectionImportResolver : ITypeConverter<string, LinkModel[]>
+    {
+        public LinkModel[] Convert(string source, LinkModel[] destination, ResolutionContext context)
+        {
+            LinkModel[] links = null;
+            if (!string.IsNullOrWhiteSpace(source))
+            {
+                var linkStrings = source.Split('|');
+                links = linkStrings.Select(s => context.Mapper.Map<LinkModel>(s)).ToArray();
+            }
+            return links;
         }
     }
 
