@@ -163,9 +163,9 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         private async Task<int> GetNextOrderAsync()
         {
-            var storeMax = await context.Teams.Select(t => t.Order).DefaultIfEmpty(0).MaxAsync();
-            var localMax = context.Teams.Local.Select(t => t.Order).DefaultIfEmpty(0).Max();
-            return localMax > storeMax ? localMax : storeMax;
+            var storeMax = await context.Teams.Select(t => t.Order).DefaultIfEmpty(-1).MaxAsync();
+            var localMax = context.Teams.Local.Select(t => t.Order).DefaultIfEmpty(-1).Max();
+            return (localMax > storeMax ? localMax : storeMax) + 1;
         }
 
         private async Task<Team> GetExistingTeamAsync(string teamViewKey)
