@@ -135,10 +135,10 @@ namespace FSAPortfolio.WebAPI.App.Users
                         }
 
                         // Find the team (or create one)
-                        var team = await context.Teams.SingleOrDefaultAsync(t => t.ViewKey == teamViewKey);
+                        var team = await GetExistingTeamAsync(teamViewKey);
                         if (team == null)
                         {
-                            int order = await context.Teams.Select(t => t.Order).DefaultIfEmpty(0).MaxAsync();
+                            int order = await GetNextOrderAsync();
                             team = new Team()
                             {
                                 ViewKey = teamViewKey,
@@ -159,6 +159,19 @@ namespace FSAPortfolio.WebAPI.App.Users
                 }
             }
             return person;
+        }
+
+        private async Task<int> GetNextOrderAsync()
+        {
+            var storeMax = await context.Teams.Select(t => t.Order).DefaultIfEmpty(0).MaxAsync();
+            var localMax = context.Teams.Local.Select(t => t.Order).DefaultIfEmpty(0).Max();
+            return localMax > storeMax ? localMax : storeMax;
+        }
+
+        private async Task<Team> GetExistingTeamAsync(string teamViewKey)
+        {
+            // Check local first, then the database
+            return context.Teams.Local.SingleOrDefault(t => t.ViewKey == teamViewKey) ?? (await context.Teams.SingleOrDefaultAsync(t => t.ViewKey == teamViewKey));
         }
 
         private async Task MapTeamMembersAsync(ProjectUpdateModel update, Project project)

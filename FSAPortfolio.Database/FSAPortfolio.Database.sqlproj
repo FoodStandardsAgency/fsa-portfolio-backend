@@ -109,7 +109,7 @@
     <Build Include="dbo\Views\vwPortfolioPhases.sql" />
     <Build Include="dbo\Views\vwProjectCategories.sql" />
     <None Include="Deployment\03_Archive.sql" />
-    <Build Include="Deployment\FixDuplicateUpdates.sql" />
-    <Build Include="Deployment\RemoveDuplicateTeams.sql" />
+    <None Include="Deployment\FixDuplicateUpdates.sql" />
+    <None Include="Deployment\RemoveDuplicateTeams.sql" />
   </ItemGroup>
 </Project>
