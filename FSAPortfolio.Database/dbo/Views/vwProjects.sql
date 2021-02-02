@@ -6,6 +6,7 @@ SELECT
 	ps.[Name] as Size,
 	pc.[Name] as Category,
 	bt.[Name] as BudgetType,
+	ld.Email as [Lead],
 	pr.[Priority],
 	pr.[StartDate_Date] as StartDate,
 	pr.[ExpectedEndDate_Date] as ExpectedEndDate,
@@ -24,6 +25,7 @@ FROM [dbo].[ProjectReservations] rv
 	LEFT JOIN [dbo].[ProjectSizes] ps ON pr.ProjectSize_Id = ps.Id
 	LEFT JOIN [dbo].[ProjectCategories] pc ON pr.ProjectCategory_Id = pc.Id
 	LEFT JOIN [dbo].[BudgetTypes] bt ON pr.BudgetType_Id = bt.Id
+	LEFT JOIN [dbo].[People] ld ON ld.Id = pr.Lead_Id
 	LEFT JOIN [dbo].[ProjectUpdateItems] lu ON pr.LatestUpdate_Id = lu.Id
 		LEFT JOIN [dbo].[ProjectRAGStatus] lurs ON lu.RAGStatus_Id = lurs.Id
 		LEFT JOIN [dbo].[ProjectPhases] luph ON lu.Phase_Id = luph.Id

@@ -2,6 +2,7 @@
 ==================================
 - DEV2012008 CSV Upload
 - Fixes to CSV export/import for links and documents
+- BUG: Some historic options were not handled correctly. Fixed.
 
 Version 0.1.3 - Released 28/1/2021
 ==================================
