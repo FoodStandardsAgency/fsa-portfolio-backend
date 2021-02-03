@@ -17,8 +17,10 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
         internal static Dictionary<string, string> StragicObjectivesMap = new Dictionary<string, string>()
         {
             { "none", "None" },
-            { "fsa", "FSA wide"},
-            { "communications", "Communications" }
+            { "safety", "Food is safe and what it says it is" },
+            { "regulation", "Modernising Regulation" },
+            { "gather", "Gathering and using science, evidence and information" },
+            { "best", "Being the best organisation we can be"}
         };
 
         public ProjectViewModelProfile()
