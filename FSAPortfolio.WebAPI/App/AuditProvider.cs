@@ -32,15 +32,24 @@ namespace FSAPortfolio.WebAPI.App
             var changes = context.ChangeTracker.Entries().Where(c => c.State == EntityState.Modified);
             if (changes.Count() > 0)
             {
-                var logText = new List<string>();
-                foreach (var change in changes)
+                string text;
+                try
                 {
-                    var originalValues = change.OriginalValues;
-                    var currentValues = change.CurrentValues;
-                    builLog(logText, originalValues, currentValues);
+                    var logText = new List<string>();
+                    foreach (var change in changes)
+                    {
+                        var originalValues = change.OriginalValues;
+                        var currentValues = change.CurrentValues;
+                        builLog(logText, originalValues, currentValues);
+                    }
+                    text = string.Join("; ", logText);
                 }
-                string text = string.Join("; ", logText);
+                catch(Exception e)
+                {
+                    text = e.ToString();
+                }
                 log = logFactory(timestamp, text);
+
             }
 
             return log;
