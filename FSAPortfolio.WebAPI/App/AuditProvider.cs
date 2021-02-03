@@ -1,8 +1,11 @@
 ﻿using FSAPortfolio.Entities;
+using FSAPortfolio.Entities.Projects;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace FSAPortfolio.WebAPI.App
@@ -34,15 +37,7 @@ namespace FSAPortfolio.WebAPI.App
                 {
                     var originalValues = change.OriginalValues;
                     var currentValues = change.CurrentValues;
-                    foreach (string pname in originalValues.PropertyNames)
-                    {
-                        var originalValue = originalValues[pname];
-                        var currentValue = currentValues[pname];
-                        if (!Equals(originalValue, currentValue))
-                        {
-                            logText.Add($"{pname}: [{originalValue}] to [{currentValue}]");
-                        }
-                    }
+                    builLog(logText, originalValues, currentValues);
                 }
                 string text = string.Join("; ", logText);
                 log = logFactory(timestamp, text);
@@ -51,5 +46,54 @@ namespace FSAPortfolio.WebAPI.App
             return log;
         }
 
+        private static void builLog(List<string> logText, DbPropertyValues originalValues, DbPropertyValues currentValues)
+        {
+            foreach (string pname in originalValues.PropertyNames)
+            {
+                var originalValue = originalValues[pname];
+                var currentValue = currentValues[pname];
+                if(!(originalValue == null && currentValue == null))
+                {
+                    string origString = getStringValue(originalValue);
+                    string currentString = getStringValue(currentValue);
+                    if (!string.Equals(origString, currentString))
+                    {
+                        string log = $"{pname}: [{origString}] to [{currentString}]";
+                        logText.Add(log);
+                    }
+                }
+            }
+        }
+        private static string getStringValue(object value)
+        {
+            if (value == null) return null;
+            if (value is DbPropertyValues)
+            {
+                var pvalues = value as DbPropertyValues;
+                var list = new List<string>();
+                foreach (var pname in pvalues.PropertyNames)
+                {
+                    var pvalue = getStringValue(pvalues[pname]);
+                    if (!string.IsNullOrWhiteSpace(pvalue))
+                    {
+                        list.Add($"{pname}: [{pvalue}]");
+                    }
+                }
+                return (list.Count > 0) ? string.Join(", ", list) : null;
+            }
+            else if (value is ProjectDateFlags)
+            {
+                return ((int)value) > 0 ? value.ToString() : null;
+            }
+            else if (value is decimal)
+            {
+                var dec = (decimal)value;
+                return dec > 0m ? dec.ToString() : null;
+            }
+            else
+            {
+                return value.ToString();
+            }
+        }
     }
 }
