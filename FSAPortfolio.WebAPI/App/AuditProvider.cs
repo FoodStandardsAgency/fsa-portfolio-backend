@@ -1,4 +1,5 @@
 ﻿using FSAPortfolio.Entities;
+using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using System;
 using System.Collections.Generic;
@@ -38,9 +39,15 @@ namespace FSAPortfolio.WebAPI.App
                     var logText = new List<string>();
                     foreach (var change in changes)
                     {
+                        string container = null;
+                        if(change.Entity is PortfolioLabelConfig)
+                        {
+                            var label = change.Entity as PortfolioLabelConfig;
+                            container = (label.Label ?? label.FieldName).Replace(" ", "_");
+                        }
                         var originalValues = change.OriginalValues;
                         var currentValues = change.CurrentValues;
-                        builLog(logText, originalValues, currentValues);
+                        builLog(logText, originalValues, currentValues, container);
                     }
                     text = string.Join("; ", logText);
                 }
@@ -55,7 +62,7 @@ namespace FSAPortfolio.WebAPI.App
             return log;
         }
 
-        private static void builLog(List<string> logText, DbPropertyValues originalValues, DbPropertyValues currentValues)
+        private static void builLog(List<string> logText, DbPropertyValues originalValues, DbPropertyValues currentValues, string container = null)
         {
             foreach (string pname in originalValues.PropertyNames)
             {
@@ -67,7 +74,15 @@ namespace FSAPortfolio.WebAPI.App
                     string currentString = getStringValue(currentValue);
                     if (!string.Equals(origString, currentString))
                     {
-                        string log = $"{pname}: [{origString}] to [{currentString}]";
+                        string log;
+                        if (container != null)
+                        {
+                            log = $"{container}.{pname}: [{origString}] to [{currentString}]";
+                        }
+                        else
+                        {
+                            log = $"{pname}: [{origString}] to [{currentString}]";
+                        }
                         logText.Add(log);
                     }
                 }
