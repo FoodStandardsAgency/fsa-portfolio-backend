@@ -16,6 +16,7 @@ using System.Data.Entity;
 using System.Reflection;
 using Newtonsoft.Json;
 using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
+using FSAPortfolio.WebAPI.App.Projects;
 
 namespace FSAPortfolio.WebAPI.App.Mapping.Projects
 {
@@ -260,16 +261,23 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                         month = 12;
                     }
 
-                    if (source.Day.HasValue)
+                    try
                     {
-                        day = source.Day.Value;
-                        result.Flags |= ProjectDateFlags.Day;
+                        if (source.Day.HasValue)
+                        {
+                            day = source.Day.Value;
+                            result.Flags |= ProjectDateFlags.Day;
+                        }
+                        else
+                        {
+                            day = DateTime.DaysInMonth(year, month);
+                        }
+                        result.Date = new DateTime(year, month, day);
                     }
-                    else
+                    catch(ArgumentOutOfRangeException argEx)
                     {
-                        day = DateTime.DaysInMonth(year, month);
+                        throw new ProjectDataValidationException(argEx.Message);
                     }
-                    result.Date = new DateTime(year, month, day);
                 }
             }
             return result;

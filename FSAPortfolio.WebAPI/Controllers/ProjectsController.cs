@@ -20,6 +20,7 @@ using FSAPortfolio.Entities.Organisation;
 using System.Linq.Expressions;
 using AutoMapper;
 using FSAPortfolio.WebAPI.App.Users;
+using FSAPortfolio.WebAPI.App.Config;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -30,12 +31,30 @@ namespace FSAPortfolio.WebAPI.Controllers
         [HttpPost]
         public async Task Post([FromBody] ProjectUpdateModel update)
         {
-            using (var context = new PortfolioContext())
+            try
             {
-                // Load and map the project
-                var userProvider = new PersonProvider(context);
-                var provider = new ProjectProvider(context);
-                await provider.UpdateProject(update, userProvider);
+                using (var context = new PortfolioContext())
+                {
+                    // Load and map the project
+                    var userProvider = new PersonProvider(context);
+                    var provider = new ProjectProvider(context);
+                    await provider.UpdateProject(update, userProvider);
+                }
+            }
+            catch (AutoMapperMappingException amex)
+            {
+                if (amex.InnerException is ProjectDataValidationException)
+                {
+                    var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                    {
+                        ReasonPhrase = amex.InnerException.Message
+                    };
+                    throw new HttpResponseException(resp);
+                }
+                else
+                {
+                    throw amex;
+                }
             }
         }
 

@@ -230,6 +230,7 @@
     <Compile Include="App\ConfigurationExtensions.cs" />
     <Compile Include="App\ProjectQueryExtensions.cs" />
     <Compile Include="App\Projects\PortfolioProvider.cs" />
+    <Compile Include="App\Projects\ProjectDataValidationException.cs" />
     <Compile Include="App\Projects\ProjectProvider.cs" />
     <Compile Include="App\Projects\ProjectPropertyConstants.cs" />
     <Compile Include="App\Projects\ProjectSearchFilters.cs" />
