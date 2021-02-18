@@ -1,5 +1,10 @@
-﻿Version 0.1.4 - Release Pending...
-==================================
+﻿Version 0.1.5 - Released 18/02/2021
+===================================
+- Better invalid date error handling
+- DEV2102019 Better permission checking on update/delete/import
+
+Version 0.1.4 - Released 04/02/2021
+===================================
 - DEV2012008 CSV Upload
 - Fixes to CSV export/import for links and documents
 - BUG: Some historic options were not handled correctly. Fixed.
