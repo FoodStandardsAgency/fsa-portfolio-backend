@@ -163,7 +163,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 // Get the config and options
                 var portfolioProvider = new PortfolioProvider(context, viewKey);
                 var config = await portfolioProvider.GetConfigAsync();
-                this.AssertPermission(config.Portfolio);
+                this.AssertAdmin(config.Portfolio);
                 var options = await portfolioProvider.GetNewProjectOptionsAsync(config);
 
                 // Import the projects

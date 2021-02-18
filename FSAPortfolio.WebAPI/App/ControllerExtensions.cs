@@ -1,4 +1,5 @@
 ﻿using FSAPortfolio.Entities.Organisation;
+using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.App.Identity;
 using FSAPortfolio.WebAPI.App.Users;
 using System;
@@ -40,7 +41,12 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
         public static void AssertAdmin(this ApiController controller, Portfolio portfolio)
         {
-            if (!HasPermission(controller, portfolio, "Admin", "Superuser")) throw new HttpResponseException(HttpStatusCode.Forbidden);
+            if (!HasPermission(controller, portfolio, "Admin", "Superuser")) 
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+        }
+        public static void AssertEditor(this ApiController controller, Portfolio portfolio)
+        {
+            if (!HasPermission(controller, portfolio, "Admin", "Superuser", "Editor")) throw new HttpResponseException(HttpStatusCode.Forbidden);
         }
 
         public static bool UserHasFSAClaim(this ApiController controller) => UserHasClaim(controller, fsaClaims);

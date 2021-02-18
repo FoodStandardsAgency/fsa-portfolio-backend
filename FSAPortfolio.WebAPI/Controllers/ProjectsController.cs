@@ -38,7 +38,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                     // Load and map the project
                     var userProvider = new PersonProvider(context);
                     var provider = new ProjectProvider(context);
-                    await provider.UpdateProject(update, userProvider);
+                    await provider.UpdateProject(update, userProvider, permissionCallback: this.AssertEditor);
                 }
             }
             catch (AutoMapperMappingException amex)
@@ -131,7 +131,8 @@ namespace FSAPortfolio.WebAPI.Controllers
                                                           includeHistory: false,
                                                           includeLastUpdate: true,
                                                           includeConfig: true,
-                                                          flags: PortfolioFieldFlags.Update);
+                                                          flags: PortfolioFieldFlags.Update,
+                                                          this.AssertEditor);
         }
 
         [HttpDelete, Route("api/Projects/{projectId}")]
@@ -143,7 +144,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                                      where p.Reservation.ProjectId == projectId 
                                      select p).SingleOrDefaultAsync();
                 if (project == null) return NotFound();
-                this.AssertPermission(project.Reservation.Portfolio);
+                this.AssertAdmin(project.Reservation.Portfolio);
 
                 project.DeleteCollections(context);
                 await context.SaveChangesAsync();
@@ -161,7 +162,8 @@ namespace FSAPortfolio.WebAPI.Controllers
                                                                   bool includeHistory,
                                                                   bool includeLastUpdate,
                                                                   bool includeConfig,
-                                                                  PortfolioFieldFlags flags = PortfolioFieldFlags.Read)
+                                                                  PortfolioFieldFlags flags = PortfolioFieldFlags.Read,
+                                                                  Action<Portfolio> permissionCallback = null)
             where T : ProjectModel, new()
         {
             string portfolio;
@@ -182,7 +184,10 @@ namespace FSAPortfolio.WebAPI.Controllers
 
                 var project = await query.SingleOrDefaultAsync();
                 if (project == null) throw new HttpResponseException(HttpStatusCode.NotFound);
-                this.AssertPermission(project.Reservation.Portfolio);
+                if (permissionCallback != null)
+                    permissionCallback(project.Reservation.Portfolio);
+                else
+                    this.AssertPermission(project.Reservation.Portfolio);
 
                 portfolio = project.Reservation.Portfolio.ViewKey;
 

@@ -46,7 +46,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             return reservation.Project;
         }
 
-        internal async Task UpdateProject(ProjectUpdateModel update, PersonProvider userProvider, ProjectReservation reservation = null)
+        internal async Task UpdateProject(ProjectUpdateModel update, PersonProvider userProvider, ProjectReservation reservation = null, Action<Portfolio> permissionCallback = null)
         {
             try
             {
@@ -54,6 +54,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
                 else
                 {
+                    if(permissionCallback != null) permissionCallback(reservation.Portfolio);
                     var project = reservation?.Project;
                     if (project == null)
                     {
