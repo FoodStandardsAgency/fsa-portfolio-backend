@@ -53,6 +53,11 @@ namespace FSAPortfolio.WebAPI.Models
     [JsonConverter(typeof(ProjectEditViewModelConverter))]
     public class ProjectEditViewModel : ProjectModel, IJsonProperties
     {
+        [JsonProperty(ProjectPropertyConstants.MinProjectYear)]
+        public int MinProjectYear { get; set; }
+        [JsonProperty(ProjectPropertyConstants.MaxProjectYear)]
+        public int MaxProjectYear { get; set; }
+
         [JsonProperty(ProjectPropertyConstants.ProjectLead)]
         public ProjectPersonModel oddlead { get; set; }
         public ProjectPersonModel[] team { get; set; }

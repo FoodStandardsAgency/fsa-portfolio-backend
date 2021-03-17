@@ -7,7 +7,9 @@ namespace FSAPortfolio.WebAPI.App
 {
     public static class ProjectPropertyConstants
     {
-        
+        public const string MinProjectYear = "project_year_min";
+        public const string MaxProjectYear = "project_year_max";
+
         public const string ProjectId = "project_id";
         public const string ProjectLead = "oddlead";
         public const string project_name = "project_name";
