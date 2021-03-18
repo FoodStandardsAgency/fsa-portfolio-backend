@@ -11,6 +11,9 @@ namespace FSAPortfolio.Entities
         public static int NewProjectLimitDays = GetIntSetting("Projects.NewLimitDays", 14);
         public static int DefaultProjectArchiveAgeDays = GetIntSetting("Projects.DefaultArchiveAgeDays", 90);
 
+        public static int ProjectDateMinYearOffset = GetIntSetting("ProjectDate.MinOffset", 5);
+        public static int ProjectDateMaxYearOffset = GetIntSetting("ProjectDate.MaxOffset", 10);
+
         private static int GetIntSetting(string key, int? defaultValue)
         {
             int result;

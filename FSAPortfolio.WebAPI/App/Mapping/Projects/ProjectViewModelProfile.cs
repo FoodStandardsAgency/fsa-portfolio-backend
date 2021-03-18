@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
@@ -185,6 +186,8 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 ;
 
             CreateMap<Project, ProjectEditViewModel>()
+                .ForMember(p => p.MinProjectYear, o => o.MapFrom(s => DateTime.Now.Year - PortfolioSettings.ProjectDateMinYearOffset))
+                .ForMember(p => p.MaxProjectYear, o => o.MapFrom(s => DateTime.Now.Year + PortfolioSettings.ProjectDateMaxYearOffset))
                 .ForMember(p => p.LastUpdate, o => o.MapFrom<LastUpdateResolver>())
                 .ForMember(p => p.rels, o => o.MapFrom(s => s.RelatedProjects))
                 .ForMember(p => p.dependencies, o => o.MapFrom(s => s.DependantProjects))
