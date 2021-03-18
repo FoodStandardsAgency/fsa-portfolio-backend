@@ -1,4 +1,8 @@
-﻿Version 0.1.5 - Released 18/02/2021
+﻿Version 0.1.6 - Released 18/03/2021
+===================================
+- Min/max year for project date validation in project edit model.
+
+Version 0.1.5 - Released 18/02/2021
 ===================================
 - Better invalid date error handling
 - DEV2102019 Better permission checking on update/delete/import
