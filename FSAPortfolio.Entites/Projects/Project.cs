@@ -19,7 +19,6 @@ namespace FSAPortfolio.Entities.Projects
         [StringLength(250)]
         public string Name { get; set; }
 
-        [StringLength(1000)]
         public string Description { get; set; }
 
         public virtual Directorate Directorate { get; set; }

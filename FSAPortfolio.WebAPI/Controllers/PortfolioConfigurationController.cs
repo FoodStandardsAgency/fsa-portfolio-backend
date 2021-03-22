@@ -63,7 +63,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
             catch(PortfolioConfigurationException pce)
             {
-                var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
                     ReasonPhrase = pce.Message
                 };
@@ -85,7 +85,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                         stringBuilder.Append($"Contact administrator: unrecognised issue with configuration update.");
                     }
                 }
-                var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
                     ReasonPhrase = stringBuilder.ToString()
                 };
@@ -94,7 +94,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             catch (Exception e)
             {
                 Logger.Error(e);
-                var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
                     ReasonPhrase = e.Message
                 };

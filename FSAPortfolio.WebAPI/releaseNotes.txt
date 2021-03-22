@@ -1,4 +1,9 @@
-﻿Version 0.1.6 - Released 18/03/2021
+﻿Version 0.1.7 - Pending
+===================================
+- Remove size limit on Description field.
+- Improved error handling of entity validation errors.
+
+Version 0.1.6 - Released 18/03/2021
 ===================================
 - Min/max year for project date validation in project edit model.
 

@@ -8,6 +8,7 @@ using FSAPortfolio.WebAPI.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -102,13 +103,27 @@ namespace FSAPortfolio.WebAPI.App.Projects
             {
                 if (ame.InnerException is Config.PortfolioConfigurationException)
                 {
-                    var resp = new HttpResponseMessage(HttpStatusCode.Forbidden)
+                    var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
                     {
                         ReasonPhrase = ame.InnerException.Message
                     };
                     throw new HttpResponseException(resp);
                 }
                 else throw ame;
+            }
+            catch (DbEntityValidationException e)
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest);
+                if (e.EntityValidationErrors != null && e.EntityValidationErrors.Count() > 0)
+                {
+                    resp.ReasonPhrase = string.Join(", ", e.EntityValidationErrors.SelectMany(err => err.ValidationErrors).Select(ve => ve.ErrorMessage));
+                }
+                else
+                {
+                    resp.ReasonPhrase = e.Message;
+                }
+
+                throw new HttpResponseException(resp);
             }
         }
 
