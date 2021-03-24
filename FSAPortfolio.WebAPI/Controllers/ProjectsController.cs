@@ -97,11 +97,15 @@ namespace FSAPortfolio.WebAPI.Controllers
                     var reservation = await provider.GetProjectReservationAsync(config);
                     await context.SaveChangesAsync();
 
+                    var newProject = new Project() { Reservation = reservation };
+
+                    ProjectEditViewModel newProjectModel = ProjectModelFactory.GetProjectEditModel(newProject);
+
                     var result = new GetProjectDTO<ProjectEditViewModel>()
                     {
                         Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.Create),
                         Options = await provider.GetNewProjectOptionsAsync(config),
-                        Project = new ProjectEditViewModel() { project_id = reservation.ProjectId }
+                        Project = newProjectModel
                     };
                     return result;
                 }
@@ -192,14 +196,11 @@ namespace FSAPortfolio.WebAPI.Controllers
                 portfolio = project.Reservation.Portfolio.ViewKey;
 
                 // Build the result
-                result = new GetProjectDTO<T>()
-                {
-                    Project = PortfolioMapper.ProjectMapper.Map<T>(project, opt =>
-                    {
-                        opt.Items[nameof(ProjectViewModel.UpdateHistory)] = includeHistory;
-                        opt.Items[nameof(ProjectEditViewModel.LastUpdate)] = includeLastUpdate;
-                    })
+                result = new GetProjectDTO<T>() 
+                { 
+                    Project = ProjectModelFactory.GetProjectModel<T>(project, includeHistory, includeLastUpdate) 
                 };
+
                 if (includeConfig)
                 {
                     var userIsFSA = this.UserHasFSAClaim();

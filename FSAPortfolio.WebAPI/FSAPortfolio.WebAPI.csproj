@@ -300,6 +300,7 @@
     <Compile Include="Models\ProjectLabelConfigModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />
     <Compile Include="Models\ProjectEditOptionsModel.cs" />
+    <Compile Include="Models\ProjectModelFactory.cs" />
     <Compile Include="Models\ProjectQueryModel.cs" />
     <Compile Include="Models\ProjectQueryResultProjectModel.cs" />
     <Compile Include="Models\ProjectUpdateModel.cs" />

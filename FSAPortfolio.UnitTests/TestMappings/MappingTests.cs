@@ -10,6 +10,7 @@ using FSAPortfolio.WebAPI.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq.Expressions;
 using Newtonsoft.Json;
+using FSAPortfolio.Entities;
 
 namespace FSAPortfolio.UnitTests
 {
@@ -33,5 +34,24 @@ namespace FSAPortfolio.UnitTests
             float? f = PortfolioMapper.ExportMapper.Map<float?>(string.Empty);
             Assert.IsNull(f);
         }
+
+        [TestMethod]
+        public void NewProjectMap()
+        {
+            PortfolioMapper.Configure();
+            var newProject = new Project() {
+                Reservation = new ProjectReservation() { ProjectId = "TEST123" }
+            };
+
+            var model = ProjectModelFactory.GetProjectEditModel(newProject);
+
+            Assert.IsNotNull(model);
+
+            var minYear = DateTime.Now.Year - PortfolioSettings.ProjectDateMinYearOffset;
+            var maxYear = DateTime.Now.Year + PortfolioSettings.ProjectDateMaxYearOffset;
+            Assert.AreEqual(minYear, model.MinProjectYear);
+            Assert.AreEqual(maxYear, model.MaxProjectYear);
+        }
+
     }
 }

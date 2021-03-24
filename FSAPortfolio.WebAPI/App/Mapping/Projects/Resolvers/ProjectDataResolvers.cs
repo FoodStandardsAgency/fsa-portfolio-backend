@@ -98,12 +98,15 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers
         public void Process(Project source, T destination, ResolutionContext context)
         {
             // Project data properties
-            foreach (var dataItem in source.ProjectData)
+            if (source.ProjectData != null)
             {
-                PropertyInfo property;
-                if (unmappedProperties.TryGetValue(dataItem.Label.FieldName, out property))
+                foreach (var dataItem in source.ProjectData)
                 {
-                    property.SetValue(destination, JsonConvert.DeserializeObject(dataItem.Value, property.PropertyType));
+                    PropertyInfo property;
+                    if (unmappedProperties.TryGetValue(dataItem.Label.FieldName, out property))
+                    {
+                        property.SetValue(destination, JsonConvert.DeserializeObject(dataItem.Value, property.PropertyType));
+                    }
                 }
             }
         }
@@ -116,14 +119,17 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers
     {
         public void Process(Project source, IJsonProperties destination, ResolutionContext context)
         {
-            // Unmodelled properties
-            var unmodelledPropertiesQuery = from l in source.Reservation.Portfolio.Configuration.Labels
-                                            where l.Flags.HasFlag(PortfolioFieldFlags.NotModelled)
-                                            join d in source.ProjectData on l.Id equals d.Label_Id into unmd
-                                            from d in unmd.DefaultIfEmpty()
-                                            select new ProjectPropertyModel() { FieldName = l.FieldName, ProjectDataValue = d?.Value };
+            if (source.Reservation?.Portfolio?.Configuration?.Labels != null && source.ProjectData != null)
+            {
+                // Unmodelled properties
+                var unmodelledPropertiesQuery = from l in source.Reservation.Portfolio.Configuration.Labels
+                                                where l.Flags.HasFlag(PortfolioFieldFlags.NotModelled)
+                                                join d in source.ProjectData on l.Id equals d.Label_Id into unmd
+                                                from d in unmd.DefaultIfEmpty()
+                                                select new ProjectPropertyModel() { FieldName = l.FieldName, ProjectDataValue = d?.Value };
 
-            destination.Properties = unmodelledPropertiesQuery.ToList();
+                destination.Properties = unmodelledPropertiesQuery.ToList();
+            }
         }
     }
 }

@@ -145,7 +145,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.programme_description, o => o.MapFrom(s => s.ProgrammeDescription))
                 .ForMember(p => p.link, o =>
                 {
-                    o.PreCondition(s => s.ChannelLink.Link != null);
+                    o.PreCondition(s => s.ChannelLink?.Link != null);
                     o.MapFrom(s => s.ChannelLink);
                 })
                 .ForMember(p => p.how_get_green, o => o.MapFrom(s => s.HowToGetToGreen))

@@ -77,7 +77,7 @@
     <Compile Include="ConfigurationTests\ConfigurationTestUtils.cs" />
     <Compile Include="ConfigurationTests\ProjectTestData.cs" />
     <Compile Include="ConfigurationTests\ConfigTestData.cs" />
-    <Compile Include="MappingTests.cs" />
+    <Compile Include="TestMappings\MappingTests.cs" />
     <Compile Include="APIClients\ProjectClient.cs" />
     <Compile Include="PortfolioTests\ArchiveTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
