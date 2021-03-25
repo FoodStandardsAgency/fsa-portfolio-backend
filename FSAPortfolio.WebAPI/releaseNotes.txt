@@ -1,4 +1,4 @@
-﻿Version 0.1.7 - Pending
+﻿Version 0.1.7 - Released 25/03/2021
 ===================================
 - Remove size limit on Description field.
 - Improved error handling of entity validation errors.
