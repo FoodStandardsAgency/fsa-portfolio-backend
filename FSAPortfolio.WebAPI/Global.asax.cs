@@ -1,4 +1,5 @@
 using FSAPortfolio.Security.ApiKey;
+using FSAPortfolio.WebAPI.App.Logging;
 using FSAPortfolio.WebAPI.App.Mapping;
 using System;
 using System.Collections.Generic;
@@ -13,9 +14,13 @@ namespace FSAPortfolio.WebAPI
     {
         protected void Application_Start()
         {
+            AppLog.TraceInformation("Portfolio application starting...");
+            AppLog.Indent();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             GlobalConfiguration.Configuration.MessageHandlers.Add(new ApiKeyMessageHandler());
             PortfolioMapper.Configure();
+            AppLog.Unindent();
+            AppLog.TraceInformation("Portfolio application started.");
         }
     }
 }

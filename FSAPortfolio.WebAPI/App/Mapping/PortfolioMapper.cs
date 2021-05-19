@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Organisation;
+using FSAPortfolio.WebAPI.App.Logging;
 using FSAPortfolio.WebAPI.App.Mapping.ActiveDirectory;
 using FSAPortfolio.WebAPI.App.Mapping.ImportExport;
 using FSAPortfolio.WebAPI.App.Mapping.Organisation;
@@ -29,6 +30,10 @@ namespace FSAPortfolio.WebAPI.App.Mapping
         internal static IMapper ActiveDirectoryMapper { get; private set; }
         internal static void Configure()
         {
+            AppLog.TraceInformation("Configuring mappers...");
+            AppLog.Indent();
+
+            AppLog.TraceInformation($"Creating {nameof(ProjectMapper)}");
             projectConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AllowNullCollections = true;
@@ -41,6 +46,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping
             });
             ProjectMapper = projectConfig.CreateMapper();
 
+            AppLog.TraceInformation($"Creating {nameof(ConfigMapper)}");
             configConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<PortfolioMappingProfile>();
@@ -49,18 +55,21 @@ namespace FSAPortfolio.WebAPI.App.Mapping
             });
             ConfigMapper = configConfig.CreateMapper();
 
+            AppLog.TraceInformation($"Creating {nameof(UpdateMapper)}");
             updateConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<PortfolioConfigUpdateProfile>();
             });
             UpdateMapper = updateConfig.CreateMapper();
 
+            AppLog.TraceInformation($"Creating {nameof(ActiveDirectoryMapper)}");
             activeDirectoryConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<ADUserMappingProfile>();
             });
             ActiveDirectoryMapper = activeDirectoryConfig.CreateMapper();
 
+            AppLog.TraceInformation($"Creating {nameof(ExportMapper)}");
             exportConfig = new MapperConfiguration(cfg =>
             {
                 cfg.AllowNullCollections = true;
@@ -69,6 +78,8 @@ namespace FSAPortfolio.WebAPI.App.Mapping
             });
             ExportMapper = exportConfig.CreateMapper();
 
+            AppLog.Unindent();
+            AppLog.TraceInformation("Mappers configured.");
         }
 
         internal static ProjectLabelConfigModel GetProjectLabelConfigModel(

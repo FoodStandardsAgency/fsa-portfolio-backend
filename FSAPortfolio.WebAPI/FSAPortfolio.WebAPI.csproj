@@ -219,6 +219,7 @@
     <Compile Include="App\Identity\ApplicationUser.cs" />
     <Compile Include="App\Identity\PortfolioRoleManager.cs" />
     <Compile Include="App\Identity\UserStore.cs" />
+    <Compile Include="App\Logging\AppLog.cs" />
     <Compile Include="App\Mapping\ImportExport\DocumentConverters.cs" />
     <Compile Include="App\Mapping\ImportExport\ProjectImportModelProfile.cs" />
     <Compile Include="App\Mapping\ImportExport\ProjectLinkConverters.cs" />
