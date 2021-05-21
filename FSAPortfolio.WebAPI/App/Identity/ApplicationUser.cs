@@ -1,12 +1,9 @@
 ﻿using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.App.Users;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace FSAPortfolio.WebAPI.App.Identity
 {
@@ -21,7 +18,12 @@ namespace FSAPortfolio.WebAPI.App.Identity
         public string AccessGroupViewKey { get; set; }
         public string PasswordHash { get; set; }
 
-        public List<Role> Roles { get; set; }
+        /// <summary>
+        /// These roles are only transient and used by non-AD users (i.e. stored in the database user table) to populate the claims.
+        /// For AD users, this collection is not populated.
+        /// To get the actual roles for any user identity, use the role claims in the identity.
+        /// </summary>
+        public List<Role> UserStoreRoleList { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
@@ -43,6 +45,8 @@ namespace FSAPortfolio.WebAPI.App.Identity
 
             return userIdentity;
         }
+
+
 
     }
 }

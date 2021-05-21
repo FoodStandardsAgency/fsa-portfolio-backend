@@ -104,7 +104,7 @@ namespace FSAPortfolio.WebAPI.App.Identity
             }
             else
             {
-                roles = (await Store.FindByIdAsync(userId)).Roles;
+                roles = (await Store.FindByIdAsync(userId)).UserStoreRoleList;
             }
             var result = roles == null ? new List<string>() : roles.Select(r => r.ViewKey).ToList();
             return result;

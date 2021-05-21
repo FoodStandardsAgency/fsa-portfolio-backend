@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using FSAPortfolio.WebAPI.App.Logging;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -31,6 +33,7 @@ namespace FSAPortfolio.WebAPI.App.Identity
             if (user == null)
             {
                 context.SetError("invalid_grant", "The user name or password is incorrect.");
+                AppLog.TraceWarning($"Login failed for {nameof(context.UserName)}='{context.UserName}': the user name or password is incorrect.");
                 return;
             }
 
@@ -43,6 +46,9 @@ namespace FSAPortfolio.WebAPI.App.Identity
             AuthenticationTicket ticket = new AuthenticationTicket(oAuthIdentity, properties);
             context.Validated(ticket);
             context.Request.Context.Authentication.SignIn(cookiesIdentity);
+
+            AppLog.TraceWarning($"OAuth identity created: { TraceUser(user, oAuthIdentity) }");
+            AppLog.TraceWarning($"Login succeeded for {nameof(context.UserName)}='{context.UserName}'.");
         }
 
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)
@@ -89,5 +95,17 @@ namespace FSAPortfolio.WebAPI.App.Identity
             };
             return new AuthenticationProperties(data);
         }
+
+        private static string TraceUser(ApplicationUser user, ClaimsIdentity identity)
+        {
+            var log = new List<string>();
+            log.Add($"{nameof(user.UserName)}='{user.UserName}'");
+            if (!string.IsNullOrWhiteSpace(user.AccessGroupViewKey)) log.Add($"{nameof(user.AccessGroupViewKey)}='{user.AccessGroupViewKey}'");
+            if (!string.IsNullOrWhiteSpace(user.ActiveDirectoryUserId)) log.Add($"{nameof(user.ActiveDirectoryUserId)}='{user.ActiveDirectoryUserId}'");
+            var roles = identity.FindAll(c => c.Type == identity.RoleClaimType);
+            if (roles != null && roles.Count() > 0) log.Add($"Roles='{string.Join("|", roles.Select(r => r.Value))}'");
+            return string.Join(", ", log);
+        }
+
     }
 }

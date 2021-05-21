@@ -317,6 +317,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <None Include="connectionStrings.config" />
     <None Include="packages.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\fsa-portfoliodev-back - Web Deploy.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
