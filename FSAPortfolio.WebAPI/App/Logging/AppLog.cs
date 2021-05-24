@@ -13,5 +13,7 @@ namespace FSAPortfolio.WebAPI.App.Logging
 
         public static void Indent() => System.Diagnostics.Trace.Indent();
         public static void Unindent() => System.Diagnostics.Trace.Unindent();
+
+        public static void Trace(Exception ex) => System.Diagnostics.Trace.TraceError(ex.ToString());
     }
 }

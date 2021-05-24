@@ -22,5 +22,11 @@ namespace FSAPortfolio.WebAPI
             AppLog.Unindent();
             AppLog.TraceInformation("Portfolio application started.");
         }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            Exception ex = Server.GetLastError();
+            AppLog.Trace(ex);
+        }
     }
 }
