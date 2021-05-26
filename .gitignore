@@ -346,4 +346,5 @@ healthchecksdb
 /FSAPortfolio.UnitTests/connectionStrings.config
 /FSAPortfolio.Entites/connectionStrings.config
 /Bootstrapping/setSecrets.sh
+/TestScripts/setSecrets.sh
 /FSAPortfolio.WebAPI/Properties/ServiceDependencies/fsa-portfoliodev-back - Web Deploy/profile.arm.json
