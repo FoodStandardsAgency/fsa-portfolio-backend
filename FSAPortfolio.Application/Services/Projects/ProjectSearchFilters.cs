@@ -15,7 +15,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
     {
         private ProjectQueryModel searchTerms;
 
-        internal IQueryable<Project> Query { get; private set; }
+        public IQueryable<Project> Query { get; private set; }
 
         private PortfolioConfiguration config;
 
@@ -26,7 +26,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             this.config = config;
         }
 
-        internal void BuildFilters()
+        public void BuildFilters()
         {
             if (!string.IsNullOrWhiteSpace(searchTerms.Name))
             {

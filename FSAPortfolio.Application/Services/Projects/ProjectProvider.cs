@@ -36,7 +36,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 .SingleOrDefaultAsync(r => r.ProjectId == projectId);
         }
 
-        internal Project CreateNewProject(ProjectReservation reservation)
+        public Project CreateNewProject(ProjectReservation reservation)
         {
             reservation.Project = new Project()
             {
@@ -47,7 +47,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             return reservation.Project;
         }
 
-        internal async Task UpdateProject(ProjectUpdateModel update, PersonProvider userProvider, ProjectReservation reservation = null, Action<Portfolio> permissionCallback = null)
+        public async Task UpdateProject(ProjectUpdateModel update, PersonProvider userProvider, ProjectReservation reservation = null, Action<Portfolio> permissionCallback = null)
         {
             try
             {

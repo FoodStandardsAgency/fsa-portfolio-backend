@@ -9,9 +9,9 @@ namespace FSAPortfolio.WebAPI.Models
     public class IdentityResponseModel
     {
         [JsonProperty(PropertyName = "roles")]
-        public string[] Roles { get; internal set; }
+        public string[] Roles { get; set; }
 
         [JsonProperty(PropertyName = "accessGroup")]
-        public string AccessGroup { get; internal set; }
+        public string AccessGroup { get; set; }
     }
 }

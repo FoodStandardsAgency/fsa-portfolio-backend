@@ -16,9 +16,9 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.App.Projects
 {
-    internal class PropertyImporter
+    public class PropertyImporter
     {
-        internal async Task<List<ProjectUpdateModel>> ImportProjectsAsync(MultipartFormDataStreamProvider files, PortfolioConfiguration config, ProjectEditOptionsModel options)
+        public async Task<List<ProjectUpdateModel>> ImportProjectsAsync(MultipartFormDataStreamProvider files, PortfolioConfiguration config, ProjectEditOptionsModel options)
         {
             var projects = new List<ProjectUpdateModel>();
             var optionsProperties = typeof(ProjectEditOptionsModel).GetProperties().Select(p => new _optionsPropertyMap(p, options)).ToList(); ;

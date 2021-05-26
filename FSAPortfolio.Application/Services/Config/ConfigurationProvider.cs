@@ -24,7 +24,7 @@ namespace FSAPortfolio.WebAPI.App.Config
             this.context = context;
         }
 
-        internal async Task UpdateCollections(PortfolioConfiguration config)
+        public async Task UpdateCollections(PortfolioConfiguration config)
         {
             await UpdateRAGStatusOptions(config);
 

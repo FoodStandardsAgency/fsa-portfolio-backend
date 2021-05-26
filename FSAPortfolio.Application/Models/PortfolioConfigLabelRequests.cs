@@ -9,8 +9,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Web;
-using System.Web.Http.Controllers;
-using System.Web.Http.ModelBinding;
 
 namespace FSAPortfolio.WebAPI.Models
 {

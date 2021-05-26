@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FC96DE85-FD34-4D6B-B627-B896E71FCF14}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FSAPortfolio.Application</RootNamespace>
+    <AssemblyName>FSAPortfolio.Application</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.0.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="CsvHelper, Version=20.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.20.0.0\lib\net47\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqKit, Version=1.1.20.0, Culture=neutral, PublicKeyToken=bc217f8844052a91, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqKit.1.1.20\lib\net45\LinqKit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.3\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.0\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Identity.Client, Version=4.22.0.0, Culture=neutral, PublicKeyToken=0a613f4dd989e8ae, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Identity.Client.4.22.0\lib\net461\Microsoft.Identity.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.JsonWebTokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.JsonWebTokens.5.3.0\lib\net461\Microsoft.IdentityModel.JsonWebTokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Logging, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Logging.5.3.0\lib\net461\Microsoft.IdentityModel.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.IdentityModel.Tokens.5.3.0\lib\net461\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.1.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.4.1.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Jwt, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Jwt.4.1.1\lib\net45\Microsoft.Owin.Security.Jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.1.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.5.3.0\lib\net461\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.7\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DTO\GetProjectDTO.cs" />
+    <Compile Include="DTO\GetProjectExportDTO.cs" />
+    <Compile Include="DTO\GetProjectQueryDTO.cs" />
+    <Compile Include="Models\Archive.cs" />
+    <Compile Include="Models\IdentityResponseModel.cs" />
+    <Compile Include="Models\IJsonProperties.cs" />
+    <Compile Include="Models\JsonConverters\NonReentrantJsonConverter.cs" />
+    <Compile Include="Models\JsonConverters\ProjectEditOptionsModelConverter.cs" />
+    <Compile Include="Models\JsonConverters\ProjectEditViewModelConverter.cs" />
+    <Compile Include="Models\MicrosoftGraphUserModel.cs" />
+    <Compile Include="Models\ODDLeadResponse.cs" />
+    <Compile Include="Models\PortfolioConfigLabelRequests.cs" />
+    <Compile Include="Models\PortfolioConfigModel.cs" />
+    <Compile Include="Models\PortfolioConfigUpdateRequest.cs" />
+    <Compile Include="Models\PortfolioModel.cs" />
+    <Compile Include="Models\PortfolioSummaryModel.cs" />
+    <Compile Include="Models\ProjectEditOptionsModel.cs" />
+    <Compile Include="Models\ProjectExportModel.cs" />
+    <Compile Include="Models\ProjectLabelConfigModel.cs" />
+    <Compile Include="Models\ProjectModel.cs" />
+    <Compile Include="Models\ProjectModelFactory.cs" />
+    <Compile Include="Models\ProjectQueryModel.cs" />
+    <Compile Include="Models\ProjectQueryResultProjectModel.cs" />
+    <Compile Include="Models\ProjectUpdateModel.cs" />
+    <Compile Include="Models\ProjectViewModel.cs" />
+    <Compile Include="Models\SyncRequestModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\UserSearchResponseModel.cs" />
+    <Compile Include="Services\AuditProvider.cs" />
+    <Compile Include="ConfigurationExtensions.cs" />
+    <Compile Include="Services\Config\ConfigurationProvider.cs" />
+    <Compile Include="Services\Config\PortfolioConfigurationException.cs" />
+    <Compile Include="FieldGroupConstants.cs" />
+    <Compile Include="FilterFieldConstants.cs" />
+    <Compile Include="Services\Identity\ApplicationOAuthProvider.cs" />
+    <Compile Include="Services\Identity\ApplicationUser.cs" />
+    <Compile Include="Services\Identity\ApplicationUserManager.cs" />
+    <Compile Include="Services\Identity\PortfolioRoleManager.cs" />
+    <Compile Include="Services\Identity\UserStore.cs" />
+    <Compile Include="Logging\AppLog.cs" />
+    <Compile Include="Mapping\ActiveDirectory\ADUserMappingProfile.cs" />
+    <Compile Include="Mapping\ImportExport\DocumentConverters.cs" />
+    <Compile Include="Mapping\ImportExport\ProjectExportModelProfile.cs" />
+    <Compile Include="Mapping\ImportExport\ProjectImportModelProfile.cs" />
+    <Compile Include="Mapping\ImportExport\ProjectLinkConverters.cs" />
+    <Compile Include="Mapping\ImportExport\Resolvers.cs" />
+    <Compile Include="Mapping\Organisation\PortfolioConfigUpdateProfile.cs" />
+    <Compile Include="Mapping\Organisation\PortfolioConfigurationMappingProfile.cs" />
+    <Compile Include="Mapping\Organisation\PortfolioMappingProfile.cs" />
+    <Compile Include="Mapping\Organisation\Resolvers\OutboundLabelInputValueResolver.cs" />
+    <Compile Include="Mapping\PortfolioMapper.cs" />
+    <Compile Include="Mapping\Projects\PostgresODDProjectMappingProfile.cs" />
+    <Compile Include="Mapping\Projects\PostgresSERDProjectMappingProfile.cs" />
+    <Compile Include="Mapping\Projects\ProjectEditOptionsManualMaps.cs" />
+    <Compile Include="Mapping\Projects\ProjectEditOptionsMappingProfile.cs" />
+    <Compile Include="Mapping\Projects\ProjectQueryModelProfile.cs" />
+    <Compile Include="Mapping\Projects\ProjectUpdateModelProfile.cs" />
+    <Compile Include="Mapping\Projects\ProjectViewModelProfile.cs" />
+    <Compile Include="Mapping\Projects\Resolvers\PeopleToStringResolver.cs" />
+    <Compile Include="Mapping\Projects\Resolvers\PostgresPersonFromEmailResolver.cs" />
+    <Compile Include="Mapping\Projects\Resolvers\ProjectDataResolvers.cs" />
+    <Compile Include="Mapping\Projects\Resolvers\ProjectEditOptionsResolvers.cs" />
+    <Compile Include="Mapping\Projects\Resolvers\ProjectPersonViewResolver.cs" />
+    <Compile Include="Mapping\Projects\Resolvers\ProjectStatusOptionsResolvers.cs" />
+    <Compile Include="Mapping\Projects\Resolvers\ProjectUpdateItemOptionsResolvers.cs" />
+    <Compile Include="Mapping\Summaries\PortfolioSummariesMappingProfile.cs" />
+    <Compile Include="Mapping\Summaries\SummaryResolvers.cs" />
+    <Compile Include="Services\Microsoft\GroupMembershipToRoleMap.cs" />
+    <Compile Include="Services\Microsoft\MicrosoftGraphUserStore.cs" />
+    <Compile Include="PortfolioExtensions.cs" />
+    <Compile Include="ProjectQueryExtensions.cs" />
+    <Compile Include="Services\Projects\PortfolioProvider.cs" />
+    <Compile Include="Services\Projects\ProjectDataValidationException.cs" />
+    <Compile Include="Services\Projects\ProjectPropertyConstants.cs" />
+    <Compile Include="Services\Projects\ProjectProvider.cs" />
+    <Compile Include="Services\Projects\ProjectSearchFilters.cs" />
+    <Compile Include="Services\Projects\PropertyImporter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Sync\BudgetTypeSyncMaps.cs" />
+    <Compile Include="Services\Sync\CategorySyncMaps.cs" />
+    <Compile Include="Services\Sync\DefaultFieldLabels.cs" />
+    <Compile Include="Services\Sync\PhaseSyncMaps.cs" />
+    <Compile Include="Services\Sync\ProjectTypeSyncMaps.cs" />
+    <Compile Include="Services\Sync\SERDSyncMaps.cs" />
+    <Compile Include="Services\Sync\SyncMaps.cs" />
+    <Compile Include="Services\Sync\SyncProvider.cs" />
+    <Compile Include="Services\Users\AccessGroupConstants.cs" />
+    <Compile Include="Services\Users\PersonProvider.cs" />
+    <Compile Include="Services\Users\UserProvider.cs" />
+    <Compile Include="ViewKeyPrefix.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FSAPortfolio.Entites\FSAPortfolio.Entities.csproj">
+      <Project>{d5026ba6-1eaf-43a5-8df0-1a560dba2460}</Project>
+      <Name>FSAPortfolio.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FSAPortfolio.PostgreSQL\FSAPortfolio.PostgreSQL.csproj">
+      <Project>{81700de3-5931-48bd-88d7-37f4e31d38b3}</Project>
+      <Name>FSAPortfolio.PostgreSQL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+</Project>

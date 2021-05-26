@@ -30,7 +30,7 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         private const string TeamKeyPrefix = "AzureAD.Team.Name.";
 
-        internal async Task<AddSupplierResponseModel> AddSupplierAsync(string portfolioViewKey, string userName, string passwordHash)
+        public async Task<AddSupplierResponseModel> AddSupplierAsync(string portfolioViewKey, string userName, string passwordHash)
         {
             var response = new AddSupplierResponseModel();
             try

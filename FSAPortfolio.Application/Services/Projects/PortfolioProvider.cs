@@ -66,7 +66,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             return options;
         }
 
-        internal PortfolioLabelConfig[] GetCustomFilterLabels(PortfolioConfiguration config)
+        public PortfolioLabelConfig[] GetCustomFilterLabels(PortfolioConfiguration config)
         {
             var customLabels = new PortfolioLabelConfig[] {
                     new PortfolioLabelConfig()
@@ -131,7 +131,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
 
         }
 
-        internal async Task<string[]> ArchiveProjectsAsync()
+        public async Task<string[]> ArchiveProjectsAsync()
         {
 
             // Get the config and set the date cutoff

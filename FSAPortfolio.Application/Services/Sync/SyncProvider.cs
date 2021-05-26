@@ -21,13 +21,12 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.UI.WebControls;
 using System.Text.RegularExpressions;
 using FSAPortfolio.WebAPI.App.Identity;
 
 namespace FSAPortfolio.WebAPI.App.Sync
 {
-    internal class SyncProvider
+    public class SyncProvider
     {
         private ICollection<string> log;
 
@@ -36,7 +35,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
         IMapper mapper;
         internal bool debug;
 
-        internal SyncProvider(ICollection<string> log, bool debug = false)
+        public SyncProvider(ICollection<string> log, bool debug = false)
         {
             this.log = log;
             this.debug = debug;
@@ -54,7 +53,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
         }
 
-        internal void SyncUsers()
+        public void SyncUsers()
         {
             log.Add("Syncing users...");
             using (var source = new MigratePortfolioContext<oddproject>("odd"))
@@ -102,7 +101,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
-        internal async Task SyncPeople(string viewKey = "odd", bool forceADSync = false)
+        public async Task SyncPeople(string viewKey = "odd", bool forceADSync = false)
         {
             log.Add("Syncing people...");
 
@@ -185,7 +184,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
-        internal void SyncDirectorates()
+        public void SyncDirectorates()
         {
             using (var context = new PortfolioContext())
             {
@@ -207,7 +206,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
-        internal void SyncPortfolios()
+        public void SyncPortfolios()
         {
             using (var context = new PortfolioContext())
             {
@@ -271,7 +270,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
-        internal Portfolio AddPortfolio(PortfolioContext context, string name, string shortName, string viewKey, string requiredRoles = null)
+        public Portfolio AddPortfolio(PortfolioContext context, string name, string shortName, string viewKey, string requiredRoles = null)
         {
             var portfolio = context.Portfolios
                 .Include(p => p.Configuration.Phases)
@@ -448,7 +447,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             return portfolio;
         }
 
-        internal void SyncAllProjects(string portfolio = "odd")
+        public void SyncAllProjects(string portfolio = "odd")
         {
             IEnumerable<string> projectIds;
             switch (portfolio)
@@ -493,7 +492,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
-        internal bool SyncProject(string projectId, string portfolioViewKey = null)
+        public bool SyncProject(string projectId, string portfolioViewKey = null)
         {
             bool synched = false;
             logDebug(projectId, $"syncing...");

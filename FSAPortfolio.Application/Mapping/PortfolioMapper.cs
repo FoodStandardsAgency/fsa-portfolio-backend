@@ -15,7 +15,7 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.App.Mapping
 {
-    internal class PortfolioMapper
+    public class PortfolioMapper
     {
         internal static MapperConfiguration projectConfig;
         internal static MapperConfiguration configConfig;
@@ -23,12 +23,12 @@ namespace FSAPortfolio.WebAPI.App.Mapping
         internal static MapperConfiguration exportConfig;
         internal static MapperConfiguration activeDirectoryConfig;
 
-        internal static IMapper ProjectMapper { get; private set; }
-        internal static IMapper ConfigMapper { get; private set; }
-        internal static IMapper UpdateMapper { get; private set; }
-        internal static IMapper ExportMapper { get; private set; }
-        internal static IMapper ActiveDirectoryMapper { get; private set; }
-        internal static void Configure()
+        public static IMapper ProjectMapper { get; private set; }
+        public static IMapper ConfigMapper { get; private set; }
+        public static IMapper UpdateMapper { get; private set; }
+        public static IMapper ExportMapper { get; private set; }
+        public static IMapper ActiveDirectoryMapper { get; private set; }
+        public static void Configure()
         {
             AppLog.TraceInformation("Configuring mappers...");
             AppLog.Indent();
@@ -82,7 +82,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping
             AppLog.TraceInformation("Mappers configured.");
         }
 
-        internal static ProjectLabelConfigModel GetProjectLabelConfigModel(
+        public static ProjectLabelConfigModel GetProjectLabelConfigModel(
             PortfolioConfiguration config,
             PortfolioFieldFlags flags = PortfolioFieldFlags.Read,
             bool includedOnly = false,
@@ -97,7 +97,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping
             });
         }
 
-        internal static PropertyInfo[] GetUnmappedSourceMembers<TSource, TDest>(MapperConfiguration config)
+        public static PropertyInfo[] GetUnmappedSourceMembers<TSource, TDest>(MapperConfiguration config)
         {
             TypeMap typeMap = config.FindTypeMapFor<TSource, TDest>();
             var memberMaps = typeMap.MemberMaps.Where(m => !m.Ignored);
@@ -112,7 +112,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping
             var unmappedProperties = typeof(TSource).GetProperties().Where(p => !mappedProperties.Contains(p.Name)).ToArray();
             return unmappedProperties;
         }
-        internal static PropertyInfo[] GetUnmappedDestinationMembers<TSource, TDest>(MapperConfiguration config)
+        public static PropertyInfo[] GetUnmappedDestinationMembers<TSource, TDest>(MapperConfiguration config)
         {
             TypeMap typeMap = config.FindTypeMapFor<TSource, TDest>();
             var memberMaps = typeMap.MemberMaps.Where(m => !m.Ignored);

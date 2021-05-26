@@ -209,47 +209,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App\AuditProvider.cs" />
-    <Compile Include="App\Config\ConfigurationProvider.cs" />
-    <Compile Include="App\Config\PortfolioConfigurationException.cs" />
     <Compile Include="App\ControllerExtensions.cs" />
-    <Compile Include="App\FieldGroupConstants.cs" />
-    <Compile Include="App\FilterFieldConstants.cs" />
-    <Compile Include="App\Identity\ApplicationOAuthProvider.cs" />
-    <Compile Include="App\Identity\ApplicationUser.cs" />
-    <Compile Include="App\Identity\PortfolioRoleManager.cs" />
-    <Compile Include="App\Identity\UserStore.cs" />
-    <Compile Include="App\Logging\AppLog.cs" />
-    <Compile Include="App\Mapping\ImportExport\DocumentConverters.cs" />
-    <Compile Include="App\Mapping\ImportExport\ProjectImportModelProfile.cs" />
-    <Compile Include="App\Mapping\ImportExport\ProjectLinkConverters.cs" />
-    <Compile Include="App\Mapping\Projects\PostgresSERDProjectMappingProfile.cs" />
-    <Compile Include="App\Mapping\Projects\Resolvers\PeopleToStringResolver.cs" />
-    <Compile Include="App\Mapping\ImportExport\Resolvers.cs" />
-    <Compile Include="App\Microsoft\GroupMembershipToRoleMap.cs" />
-    <Compile Include="App\PortfolioExtensions.cs" />
-    <Compile Include="App\ConfigurationExtensions.cs" />
-    <Compile Include="App\ProjectQueryExtensions.cs" />
-    <Compile Include="App\Projects\PortfolioProvider.cs" />
-    <Compile Include="App\Projects\ProjectDataValidationException.cs" />
-    <Compile Include="App\Projects\ProjectProvider.cs" />
-    <Compile Include="App\Projects\ProjectPropertyConstants.cs" />
-    <Compile Include="App\Projects\ProjectSearchFilters.cs" />
-    <Compile Include="App\Projects\PropertyImporter.cs" />
-    <Compile Include="App\Sync\BudgetTypeSyncMaps.cs" />
-    <Compile Include="App\Sync\CategorySyncMaps.cs" />
-    <Compile Include="App\Sync\DefaultFieldLabels.cs" />
-    <Compile Include="App\Sync\PhaseSyncMaps.cs" />
-    <Compile Include="App\Sync\ProjectTypeSyncMaps.cs" />
-    <Compile Include="App\Sync\SERDSyncMaps.cs" />
-    <Compile Include="App\Sync\SyncMaps.cs" />
-    <Compile Include="App\Sync\SyncProvider.cs" />
-    <Compile Include="App\Users\AccessGroupConstants.cs" />
-    <Compile Include="App\Identity\ApplicationUserManager.cs" />
-    <Compile Include="App\Microsoft\MicrosoftGraphUserStore.cs" />
-    <Compile Include="App\Users\PersonProvider.cs" />
-    <Compile Include="App\Users\UserProvider.cs" />
-    <Compile Include="App\ViewKeyPrefix.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccessGroupsController.cs" />
     <Compile Include="Controllers\PortfoliosController.cs" />
@@ -258,58 +218,9 @@
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
-    <Compile Include="DTO\GetProjectExportDTO.cs" />
-    <Compile Include="DTO\GetProjectQueryDTO.cs" />
-    <Compile Include="DTO\GetProjectDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="App\Mapping\ActiveDirectory\ADUserMappingProfile.cs" />
-    <Compile Include="App\Mapping\Summaries\PortfolioSummariesMappingProfile.cs" />
-    <Compile Include="App\Mapping\Organisation\Resolvers\OutboundLabelInputValueResolver.cs" />
-    <Compile Include="App\Mapping\Organisation\PortfolioMappingProfile.cs" />
-    <Compile Include="App\Mapping\Organisation\PortfolioConfigUpdateProfile.cs" />
-    <Compile Include="App\Mapping\Summaries\SummaryResolvers.cs" />
-    <Compile Include="App\Mapping\PortfolioMapper.cs" />
-    <Compile Include="App\Mapping\Organisation\PortfolioConfigurationMappingProfile.cs" />
-    <Compile Include="App\Mapping\Projects\PostgresODDProjectMappingProfile.cs" />
-    <Compile Include="App\Mapping\Projects\ProjectEditOptionsManualMaps.cs" />
-    <Compile Include="App\Mapping\ImportExport\ProjectExportModelProfile.cs" />
-    <Compile Include="App\Mapping\Projects\Resolvers\ProjectDataResolvers.cs" />
-    <Compile Include="App\Mapping\Projects\ProjectQueryModelProfile.cs" />
-    <Compile Include="App\Mapping\Projects\ProjectViewModelProfile.cs" />
-    <Compile Include="App\Mapping\Projects\ProjectEditOptionsMappingProfile.cs" />
-    <Compile Include="App\Mapping\Projects\ProjectUpdateModelProfile.cs" />
-    <Compile Include="App\Mapping\Projects\Resolvers\ProjectEditOptionsResolvers.cs" />
-    <Compile Include="App\Mapping\Projects\Resolvers\PostgresPersonFromEmailResolver.cs" />
-    <Compile Include="App\Mapping\Projects\Resolvers\ProjectPersonViewResolver.cs" />
-    <Compile Include="App\Mapping\Projects\Resolvers\ProjectStatusOptionsResolvers.cs" />
-    <Compile Include="App\Mapping\Projects\Resolvers\ProjectUpdateItemOptionsResolvers.cs" />
-    <Compile Include="Models\Archive.cs" />
-    <Compile Include="Models\IdentityResponseModel.cs" />
-    <Compile Include="Models\IJsonProperties.cs" />
-    <Compile Include="Models\JsonConverters\NonReentrantJsonConverter.cs" />
-    <Compile Include="Models\JsonConverters\ProjectEditOptionsModelConverter.cs" />
-    <Compile Include="Models\JsonConverters\ProjectEditViewModelConverter.cs" />
-    <Compile Include="Models\MicrosoftGraphUserModel.cs" />
-    <Compile Include="Models\PortfolioConfigLabelRequests.cs" />
-    <Compile Include="Models\PortfolioConfigModel.cs" />
-    <Compile Include="Models\PortfolioConfigUpdateRequest.cs" />
-    <Compile Include="Models\PortfolioModel.cs" />
-    <Compile Include="Models\PortfolioSummaryModel.cs" />
-    <Compile Include="Models\ProjectExportModel.cs" />
-    <Compile Include="Models\ProjectLabelConfigModel.cs" />
-    <Compile Include="Models\ProjectModel.cs" />
-    <Compile Include="Models\ProjectEditOptionsModel.cs" />
-    <Compile Include="Models\ProjectModelFactory.cs" />
-    <Compile Include="Models\ProjectQueryModel.cs" />
-    <Compile Include="Models\ProjectQueryResultProjectModel.cs" />
-    <Compile Include="Models\ProjectUpdateModel.cs" />
-    <Compile Include="Models\ProjectViewModel.cs" />
-    <Compile Include="Models\SyncRequestModel.cs" />
-    <Compile Include="Models\ODDLeadResponse.cs" />
-    <Compile Include="Models\UserModel.cs" />
-    <Compile Include="Models\UserSearchResponseModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -331,6 +242,10 @@
     <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FSAPortfolio.Application\FSAPortfolio.Application.csproj">
+      <Project>{fc96de85-fd34-4d6b-b627-b896e71fcf14}</Project>
+      <Name>FSAPortfolio.Application</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FSAPortfolio.Entites\FSAPortfolio.Entities.csproj">
       <Project>{D5026BA6-1EAF-43A5-8DF0-1A560DBA2460}</Project>
       <Name>FSAPortfolio.Entities</Name>

@@ -31,7 +31,7 @@ namespace FSAPortfolio.WebAPI.App.Microsoft
             this.roleManager = roleManager;
         }
 
-        internal async Task<MicrosoftGraphUserModel> GetUserForPrincipalNameAsync(string term)
+        public async Task<MicrosoftGraphUserModel> GetUserForPrincipalNameAsync(string term)
         {
             MicrosoftGraphUserModel user;
             var auth = await AuthenticateAsync();
@@ -61,7 +61,7 @@ namespace FSAPortfolio.WebAPI.App.Microsoft
             }
             return user;
         }
-        internal async Task<MicrosoftGraphUserListResponse> GetUsersAsync(string term, int count = 10)
+        public async Task<MicrosoftGraphUserListResponse> GetUsersAsync(string term, int count = 10)
         {
             var auth = await AuthenticateAsync();
             var filter = $"$filter=startswith(displayName,'{term}') or startswith(givenName,'{term}') or startswith(surname,'{term}') or startswith(mail,'{term}') or startswith(userPrincipalName,'{term}')";
@@ -77,7 +77,7 @@ namespace FSAPortfolio.WebAPI.App.Microsoft
             return users;
         }
 
-        internal async Task<IEnumerable<Role>> GetUserRolesAsync(string userId)
+        public async Task<IEnumerable<Role>> GetUserRolesAsync(string userId)
         {
             // First get group memberships
             var groups = await GetGroupMemberships(userId);
@@ -116,7 +116,7 @@ namespace FSAPortfolio.WebAPI.App.Microsoft
             return result;
         }
 
-        internal async Task<MicrosoftGraphUserModel> GetUserForAccessToken(string accessToken)
+        public async Task<MicrosoftGraphUserModel> GetUserForAccessToken(string accessToken)
         {
             MicrosoftGraphUserModel user;
 
