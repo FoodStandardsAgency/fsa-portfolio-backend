@@ -1,4 +1,4 @@
-﻿using FSAPortfolio.WebAPI.App.Logging;
+﻿using FSAPortfolio.Common.Logging;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;

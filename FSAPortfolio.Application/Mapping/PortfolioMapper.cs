@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Organisation;
-using FSAPortfolio.WebAPI.App.Logging;
+using FSAPortfolio.Common.Logging;
 using FSAPortfolio.WebAPI.App.Mapping.ActiveDirectory;
 using FSAPortfolio.WebAPI.App.Mapping.ImportExport;
 using FSAPortfolio.WebAPI.App.Mapping.Organisation;

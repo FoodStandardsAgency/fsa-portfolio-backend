@@ -1,10 +1,15 @@
-﻿using FSAPortfolio.WebAPI.Controllers;
+﻿using FSAPortfolio.Application.Services;
+using FSAPortfolio.Application.Services.Projects;
+using FSAPortfolio.WebAPI.App;
+using FSAPortfolio.WebAPI.Controllers;
 using FSAPortfolio.WebAPI.Models;
 using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Unity;
+using Unity.Lifetime;
 
 namespace FSAPortfolio.WebAPI
 {

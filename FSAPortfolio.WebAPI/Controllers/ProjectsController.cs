@@ -21,12 +21,20 @@ using System.Linq.Expressions;
 using AutoMapper;
 using FSAPortfolio.WebAPI.App.Users;
 using FSAPortfolio.WebAPI.App.Config;
+using FSAPortfolio.Application.Services.Projects;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
     [Authorize]
     public class ProjectsController : ApiController
     {
+        private readonly PortfolioService provider;
+
+        public ProjectsController(PortfolioService provider)
+        {
+            this.provider = provider;
+        }
+
         // POST: api/Projects
         [HttpPost]
         public async Task Post([FromBody] ProjectUpdateModel update)
@@ -91,8 +99,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 using (var context = new PortfolioContext())
                 {
-                    var provider = new PortfolioProvider(context, portfolio);
-                    var config = await provider.GetConfigAsync();
+                    var config = await provider.GetConfigAsync(portfolio);
                     this.AssertPermission(config.Portfolio);
                     var reservation = await provider.GetProjectReservationAsync(config);
                     await context.SaveChangesAsync();
@@ -208,8 +215,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 }
                 if (includeOptions)
                 {
-                    var provider = new PortfolioProvider(context, portfolio);
-                    var config = await provider.GetConfigAsync();
+                    var config = await provider.GetConfigAsync(portfolio);
                     result.Options = await provider.GetNewProjectOptionsAsync(config, result.Project as ProjectEditViewModel);
                 }
 

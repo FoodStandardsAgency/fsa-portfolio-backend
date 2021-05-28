@@ -9,6 +9,7 @@ namespace FSAPortfolio.Entities
     using FSAPortfolio.Entities.Projects;
     using System.Configuration;
     using FSAPortfolio.Entities.Organisation;
+    using FSAPortfolio.Common.Logging;
 
     public partial class PortfolioContext : DbContext
     {
@@ -17,15 +18,28 @@ namespace FSAPortfolio.Entities
             : base("name=PortfolioContext")
         {
             Configuration.LazyLoadingEnabled = LazyLoad;
+#if DEBUG
+            AppLog.TraceVerbose($"{nameof(PortfolioContext)} created.");
+#endif
+
         }
 
         public PortfolioContext(ConnectionStringSettings cs)
             : base(cs.ConnectionString)
         {
             Configuration.LazyLoadingEnabled = LazyLoad;
+#if DEBUG
+            AppLog.TraceVerbose($"{nameof(PortfolioContext)} created from explicit connection string settings.");
+#endif
         }
 
-        public static PortfolioContext Create() => new PortfolioContext();
+        public static PortfolioContext Create()
+        {
+#if DEBUG
+            AppLog.TraceVerbose($"Creating {nameof(PortfolioContext)} from static factory method...");
+#endif
+            return new PortfolioContext(); 
+        }
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Person> People { get; set; }
@@ -215,6 +229,14 @@ namespace FSAPortfolio.Entities
 
 
 
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+#if DEBUG
+            AppLog.TraceVerbose($"{nameof(PortfolioContext)} disposed.");
+#endif
         }
     }
 }

@@ -123,6 +123,7 @@
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Http, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
@@ -168,6 +169,7 @@
     <Compile Include="Models\UserSearchResponseModel.cs" />
     <Compile Include="Services\AuditProvider.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
+    <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\Config\ConfigurationProvider.cs" />
     <Compile Include="Services\Config\PortfolioConfigurationException.cs" />
     <Compile Include="FieldGroupConstants.cs" />
@@ -177,7 +179,6 @@
     <Compile Include="Services\Identity\ApplicationUserManager.cs" />
     <Compile Include="Services\Identity\PortfolioRoleManager.cs" />
     <Compile Include="Services\Identity\UserStore.cs" />
-    <Compile Include="Logging\AppLog.cs" />
     <Compile Include="Mapping\ActiveDirectory\ADUserMappingProfile.cs" />
     <Compile Include="Mapping\ImportExport\DocumentConverters.cs" />
     <Compile Include="Mapping\ImportExport\ProjectExportModelProfile.cs" />
@@ -205,17 +206,22 @@
     <Compile Include="Mapping\Projects\Resolvers\ProjectUpdateItemOptionsResolvers.cs" />
     <Compile Include="Mapping\Summaries\PortfolioSummariesMappingProfile.cs" />
     <Compile Include="Mapping\Summaries\SummaryResolvers.cs" />
+    <Compile Include="Services\IServiceContext.cs" />
     <Compile Include="Services\Microsoft\GroupMembershipToRoleMap.cs" />
     <Compile Include="Services\Microsoft\MicrosoftGraphUserStore.cs" />
     <Compile Include="PortfolioExtensions.cs" />
     <Compile Include="ProjectQueryExtensions.cs" />
-    <Compile Include="Services\Projects\PortfolioProvider.cs" />
+    <Compile Include="Services\Projects\IPortfolioService.cs" />
+    <Compile Include="Services\Projects\IProjectDataService.cs" />
+    <Compile Include="Services\Projects\PortfolioService.cs" />
+    <Compile Include="Services\Projects\ProjectDataService.cs" />
     <Compile Include="Services\Projects\ProjectDataValidationException.cs" />
     <Compile Include="Services\Projects\ProjectPropertyConstants.cs" />
     <Compile Include="Services\Projects\ProjectProvider.cs" />
     <Compile Include="Services\Projects\ProjectSearchFilters.cs" />
     <Compile Include="Services\Projects\PropertyImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ServiceContext.cs" />
     <Compile Include="Services\Sync\BudgetTypeSyncMaps.cs" />
     <Compile Include="Services\Sync\CategorySyncMaps.cs" />
     <Compile Include="Services\Sync\DefaultFieldLabels.cs" />
@@ -230,6 +236,10 @@
     <Compile Include="ViewKeyPrefix.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FSAPortfolio.Common\FSAPortfolio.Common.csproj">
+      <Project>{c57b446e-77de-4a79-87c3-523ec2e8a9f7}</Project>
+      <Name>FSAPortfolio.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FSAPortfolio.Entites\FSAPortfolio.Entities.csproj">
       <Project>{d5026ba6-1eaf-43a5-8df0-1a560dba2460}</Project>
       <Name>FSAPortfolio.Entities</Name>

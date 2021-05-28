@@ -127,6 +127,12 @@
       <DependentUpon>202103221543431_04_NoDescriptionSizeLimit.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FSAPortfolio.Common\FSAPortfolio.Common.csproj">
+      <Project>{c57b446e-77de-4a79-87c3-523ec2e8a9f7}</Project>
+      <Name>FSAPortfolio.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

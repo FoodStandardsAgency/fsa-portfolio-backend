@@ -16,18 +16,28 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using FSAPortfolio.WebAPI.App.Sync;
 using System.IO;
-using CsvHelper;
-using System.Globalization;
-using System.Reflection;
-using Newtonsoft.Json;
 using FSAPortfolio.WebAPI.App.Users;
-using AutoMapper;
+using FSAPortfolio.Application.Services.Projects;
+using FSAPortfolio.Common.Logging;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
     [Authorize]
     public class PortfoliosController : ApiController
     {
+        private readonly IPortfolioService portfolioService;
+        private readonly IProjectDataService projectDataService;
+        public PortfoliosController(IPortfolioService portfolioService, IProjectDataService projectDataService)
+        {
+            this.portfolioService = portfolioService;
+            this.projectDataService = projectDataService;
+
+#if DEBUG
+            AppLog.TraceVerbose($"{nameof(PortfoliosController)} created.");
+#endif
+
+        }
+
         [HttpGet]
         public async Task<IEnumerable<PortfolioModel>> Index()
         {
@@ -87,14 +97,13 @@ namespace FSAPortfolio.WebAPI.Controllers
             GetProjectQueryDTO result = null;
             using (var context = new PortfolioContext())
             {
-                var provider = new PortfolioProvider(context, viewKey);
-                var config = await provider.GetConfigAsync();
-                var customFields = provider.GetCustomFilterLabels(config);
+                var config = await portfolioService.GetConfigAsync(viewKey);
+                var customFields = portfolioService.GetCustomFilterLabels(config);
 
                 result = new GetProjectQueryDTO()
                 {
                     Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.FilterProject|PortfolioFieldFlags.FilterRequired, customLabels: customFields),
-                    Options = await provider.GetNewProjectOptionsAsync(config)
+                    Options = await portfolioService.GetNewProjectOptionsAsync(config)
                 };
 
 
@@ -122,28 +131,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         [HttpGet]
         public async Task<GetProjectExportDTO> GetExportProjectsAsync([FromUri(Name = "portfolio")] string viewKey)
         {
-            using (var context = new PortfolioContext())
-            {
-                var reservationIds = await (
-                    from p in context.Projects
-                    where p.Reservation.Portfolio.ViewKey == viewKey
-                    select p.ProjectReservation_Id
-                    ).ToListAsync();
-
-                var projectQuery = from p in context.Projects.IncludeProject()
-                                   where reservationIds.Contains(p.ProjectReservation_Id)
-                                   select p;
-
-                var provider = new PortfolioProvider(context, viewKey);
-                var config = await provider.GetConfigAsync();
-                var projects = await projectQuery.OrderByDescending(p => p.Priority).ToArrayAsync();
-                GetProjectExportDTO result = new GetProjectExportDTO()
-                {
-                    Config = PortfolioMapper.GetProjectLabelConfigModel(config, includedOnly: true),
-                    Projects = PortfolioMapper.ExportMapper.Map<IEnumerable<ProjectExportModel>>(projects)
-                };
-                return result;
-            }
+            return await projectDataService.GetProjectExportDTOAsync(viewKey);
         }
 
         [HttpPost]
@@ -161,10 +149,9 @@ namespace FSAPortfolio.WebAPI.Controllers
             using (var context = new PortfolioContext())
             {
                 // Get the config and options
-                var portfolioProvider = new PortfolioProvider(context, viewKey);
-                var config = await portfolioProvider.GetConfigAsync();
+                var config = await portfolioService.GetConfigAsync(viewKey);
                 this.AssertAdmin(config.Portfolio);
-                var options = await portfolioProvider.GetNewProjectOptionsAsync(config);
+                var options = await portfolioService.GetNewProjectOptionsAsync(config);
 
                 // Import the projects
                 var importer = new PropertyImporter();
@@ -178,7 +165,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                     if (string.IsNullOrWhiteSpace(project.project_id))
                     {
                         // Create a reservation
-                        var reservation = await portfolioProvider.GetProjectReservationAsync(config);
+                        var reservation = await portfolioService.GetProjectReservationAsync(config);
                         project.project_id = reservation.ProjectId;
                         await projectprovider.UpdateProject(project, userProvider, reservation);
                     }
@@ -202,8 +189,7 @@ namespace FSAPortfolio.WebAPI.Controllers
 
             using (var context = new PortfolioContext())
             {
-                var provider = new PortfolioProvider(context, viewKey);
-                response.ArchivedProjectIds = await provider.ArchiveProjectsAsync();
+                response.ArchivedProjectIds = await portfolioService.ArchiveProjectsAsync(viewKey);
             }
 
             return response;

@@ -1,6 +1,8 @@
-﻿using FSAPortfolio.Entities;
+﻿using FSAPortfolio.Application.Services;
+using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Mapping;
 using FSAPortfolio.WebAPI.App.Mapping.Projects;
 using FSAPortfolio.WebAPI.Models;
@@ -15,21 +17,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Projects
+namespace FSAPortfolio.Application.Services.Projects
 {
-    public class PortfolioProvider
+    public class PortfolioService : BaseService, IPortfolioService
     {
-        private PortfolioContext context;
-        private string portfolioViewKey;
-        public PortfolioProvider(PortfolioContext context, string portfolioViewKey)
+        public PortfolioService(IServiceContext context) : base(context)
         {
-            this.context = context;
-            this.portfolioViewKey = portfolioViewKey;
         }
 
-        public async Task<PortfolioConfiguration> GetConfigAsync(bool includedOnly = false)
+        public async Task<PortfolioConfiguration> GetConfigAsync(string portfolioViewKey, bool includedOnly = false)
         {
-            var query = (from c in context.PortfolioConfigurations.IncludeFullConfiguration()
+            var query = (from c in ServiceContext.PortfolioContext.PortfolioConfigurations.IncludeFullConfiguration()
                          where c.Portfolio.ViewKey == portfolioViewKey
                          select c);
             return await query.SingleAsync();
@@ -41,7 +39,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             int year = timestamp.Year;
             int month = timestamp.Month;
 
-            var maxIndexQuery = context.ProjectReservations
+            var maxIndexQuery = ServiceContext.PortfolioContext.ProjectReservations
                 .Where(r => r.Portfolio_Id == config.Portfolio_Id && r.Year == year && r.Month == month)
                 .Select(r => (int?)r.Index);
             int maxIndex = (await maxIndexQuery.MaxAsync()) ?? 0;
@@ -55,14 +53,14 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 Portfolio_Id = config.Portfolio_Id
             };
 
-            context.ProjectReservations.Add(reservation);
+            ServiceContext.PortfolioContext.ProjectReservations.Add(reservation);
             return reservation;
         }
 
         public async Task<ProjectEditOptionsModel> GetNewProjectOptionsAsync(PortfolioConfiguration config, ProjectEditViewModel projectModel = null)
         {
             var options = PortfolioMapper.ProjectMapper.Map<ProjectEditOptionsModel>(config);
-            await ProjectEditOptionsManualMaps.MapAsync(context, config, options, projectModel);
+            await ProjectEditOptionsManualMaps.MapAsync(ServiceContext.PortfolioContext, config, options, projectModel);
             return options;
         }
 
@@ -131,11 +129,11 @@ namespace FSAPortfolio.WebAPI.App.Projects
 
         }
 
-        public async Task<string[]> ArchiveProjectsAsync()
+        public async Task<string[]> ArchiveProjectsAsync(string portfolioViewKey)
         {
 
             // Get the config and set the date cutoff
-            var portfolioConfig = await context.PortfolioConfigurations
+            var portfolioConfig = await ServiceContext.PortfolioContext.PortfolioConfigurations
                 .Include(c => c.CompletedPhase)
                 .Include(c => c.ArchivePhase)
                 .SingleAsync(p => p.Portfolio.ViewKey == portfolioViewKey);
@@ -143,7 +141,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             var cutoff = DateTime.Today.AddDays(-portfolioConfig.ArchiveAgeDays);
 
             // Get all archivable projects last updated before the cutoff
-            var projects = await (from p in context.Projects.Include(p => p.Reservation)
+            var projects = await (from p in ServiceContext.PortfolioContext.Projects.Include(p => p.Reservation)
                                   where p.LatestUpdate.Phase.Id == p.Reservation.Portfolio.Configuration.ArchivePhase.Id && p.LatestUpdate.Timestamp < cutoff
                                   select p)
                                   .ToListAsync();
@@ -151,10 +149,10 @@ namespace FSAPortfolio.WebAPI.App.Projects
             string[] archivedIds = projects.Select(p => p.Reservation.ProjectId).ToArray();
 
             // Use untracked entities to save explicit cloning
-            var untracked_updates = await (from u in context.ProjectUpdates
+            var untracked_updates = await (from u in ServiceContext.PortfolioContext.ProjectUpdates
                                       .AsNoTracking() // Entities are not tracked
-                                      where latestUpdateIds.Contains(u.Id)
-                                      select u)
+                                           where latestUpdateIds.Contains(u.Id)
+                                           select u)
                                       .ToListAsync();
 
             var archiveTimestamp = DateTime.Now;
@@ -171,7 +169,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 update.SyncId = 0;
                 update.Project = null;
                 update.Timestamp = archiveTimestamp;
-                context.ProjectUpdates.Add(update);
+                ServiceContext.PortfolioContext.ProjectUpdates.Add(update);
 
                 // Add an audit log
                 var audit = new ProjectAuditLog()
@@ -180,13 +178,13 @@ namespace FSAPortfolio.WebAPI.App.Projects
                     Text = auditLogText,
                     Project_Id = project.ProjectReservation_Id
                 };
-                context.ProjectAuditLogs.Add(audit);
+                ServiceContext.PortfolioContext.ProjectAuditLogs.Add(audit);
 
                 // Set the new update as the latest
                 project.LatestUpdate = update;
             }
 
-            await context.SaveChangesAsync();
+            await ServiceContext.PortfolioContext.SaveChangesAsync();
 
 
             return archivedIds;
