@@ -68,7 +68,13 @@ namespace FSAPortfolio.WebAPI.Controllers
 
 
         // Get: api/Projects
-        [AcceptVerbs("GET")]
+        /// <summary>
+        /// This is used by front end for AJAX project search drop downs 
+        /// </summary>
+        /// <param name="term">Either the project ID or part of name</param>
+        /// <param name="includeNone">Include a none option (not used)</param>
+        /// <returns></returns>
+        [HttpGet, Route("api/Projects/search")]
         [Authorize]
         public async Task<IEnumerable<SelectItemModel>> SearchProjects([FromUri] string term, [FromUri(Name = "addnone")] bool includeNone = false)
         {
