@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.WebAPI.App;
+﻿using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Mapping;
 using FSAPortfolio.WebAPI.DTO;
 using FSAPortfolio.WebAPI.Models;
@@ -21,21 +22,27 @@ namespace FSAPortfolio.Application.Services.Projects
 
         public async Task<GetProjectExportDTO> GetProjectExportDTOAsync(string viewKey)
         {
-            var context = ServiceContext.PortfolioContext;
+            // Get the data
             List<int> reservationIds = await getReservationIdsForPortfolio(viewKey);
-
-            var projectQuery = from p in context.Projects.IncludeProject()
-                               where reservationIds.Contains(p.ProjectReservation_Id)
-                               select p;
-
+            var projects = await getProjectsAsArrayAsync(reservationIds);
             var config = await portfolioService.GetConfigAsync(viewKey);
-            var projects = await projectQuery.OrderByDescending(p => p.Priority).ToArrayAsync();
+
+            // To the mapping
             GetProjectExportDTO result = new GetProjectExportDTO()
             {
                 Config = PortfolioMapper.GetProjectLabelConfigModel(config, includedOnly: true),
                 Projects = PortfolioMapper.ExportMapper.Map<IEnumerable<ProjectExportModel>>(projects)
             };
             return result;
+        }
+
+        private async Task<Project[]> getProjectsAsArrayAsync(List<int> reservationIds)
+        {
+            var projectQuery = from p in ServiceContext.PortfolioContext.Projects.IncludeProject()
+                               where reservationIds.Contains(p.ProjectReservation_Id)
+                               select p;
+            var projects = await projectQuery.OrderByDescending(p => p.Priority).ToArrayAsync();
+            return projects;
         }
 
         private async Task<List<int>> getReservationIdsForPortfolio(string viewKey)
