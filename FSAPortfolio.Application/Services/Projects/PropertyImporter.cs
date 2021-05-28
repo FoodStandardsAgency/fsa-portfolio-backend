@@ -2,7 +2,7 @@
 using CsvHelper;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.WebAPI.App.Mapping;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

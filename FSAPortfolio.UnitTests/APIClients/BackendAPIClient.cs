@@ -1,5 +1,5 @@
 ﻿using FSAPortfolio.WebAPI.DTO;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

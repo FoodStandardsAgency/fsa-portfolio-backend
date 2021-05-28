@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FSAPortfolio.WebAPI.DTO;
 using FSAPortfolio.WebAPI.App.Mapping;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using FSAPortfolio.UnitTests.APIClients;

@@ -3,7 +3,7 @@ using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Sync;
 using FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 
 namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
 {

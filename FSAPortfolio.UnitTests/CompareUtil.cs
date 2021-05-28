@@ -1,4 +1,4 @@
-﻿using FSAPortfolio.WebAPI.Models;
+﻿using FSAPortfolio.Application.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections;

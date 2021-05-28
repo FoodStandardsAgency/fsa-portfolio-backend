@@ -4,7 +4,7 @@ using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Sync;
 using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

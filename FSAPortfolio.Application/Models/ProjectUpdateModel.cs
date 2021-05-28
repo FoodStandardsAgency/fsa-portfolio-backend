@@ -1,6 +1,6 @@
 ﻿using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.Models.JsonConverters;
+using FSAPortfolio.Application.Models.JsonConverters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Models
+namespace FSAPortfolio.Application.Models
 {
     public class ProjectUpdateModel : ProjectModel
     {

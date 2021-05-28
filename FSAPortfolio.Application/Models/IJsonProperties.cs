@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FSAPortfolio.WebAPI.Models
+namespace FSAPortfolio.Application.Models
 {
     public interface IJsonProperties
     {

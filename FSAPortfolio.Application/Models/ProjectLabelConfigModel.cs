@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Models
+namespace FSAPortfolio.Application.Models
 {
     /// <summary>
     /// Need a separate model for labels when viewing a project so can handle master labels

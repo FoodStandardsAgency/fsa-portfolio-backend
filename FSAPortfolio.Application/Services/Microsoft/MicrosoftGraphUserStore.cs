@@ -1,6 +1,6 @@
 ﻿using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.App.Identity;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System;

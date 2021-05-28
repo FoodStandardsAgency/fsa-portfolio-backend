@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Models
+namespace FSAPortfolio.Application.Models
 {
     /// <summary>
     /// This class forms the main contract between the front end and the API.

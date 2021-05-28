@@ -2,7 +2,7 @@
 using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

@@ -4,7 +4,7 @@ using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.App.Microsoft;
 using FSAPortfolio.WebAPI.App.Mapping;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System;

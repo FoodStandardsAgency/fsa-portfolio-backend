@@ -4,7 +4,7 @@ using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.App.Mapping;
 using FSAPortfolio.WebAPI.App.Users;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

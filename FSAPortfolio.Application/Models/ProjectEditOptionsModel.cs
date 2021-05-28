@@ -1,11 +1,11 @@
 ﻿using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Mapping.Projects;
-using FSAPortfolio.WebAPI.Models.JsonConverters;
+using FSAPortfolio.Application.Models.JsonConverters;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FSAPortfolio.WebAPI.Models
+namespace FSAPortfolio.Application.Models
 {
     [JsonConverter(typeof(ProjectEditOptionsModelConverter))]
     public class ProjectEditOptionsModel

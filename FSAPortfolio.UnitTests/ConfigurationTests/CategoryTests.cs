@@ -1,7 +1,7 @@
 ﻿using FSAPortfolio.UnitTests.APIClients;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.DTO;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;

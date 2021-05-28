@@ -10,7 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Models
+namespace FSAPortfolio.Application.Models
 {
     public class PortfolioConfigAddLabelRequest
     {

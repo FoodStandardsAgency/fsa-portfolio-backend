@@ -1,6 +1,6 @@
 ﻿using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using System.Threading.Tasks;
 
 namespace FSAPortfolio.Application.Services.Projects

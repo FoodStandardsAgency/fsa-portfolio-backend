@@ -9,7 +9,7 @@ using System.Linq;
 using System.Web.Http;
 using System.Web.UI.WebControls;
 using System.Data.Entity;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using System.Net;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Sync;

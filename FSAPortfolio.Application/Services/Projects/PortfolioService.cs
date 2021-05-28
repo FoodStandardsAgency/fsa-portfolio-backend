@@ -5,7 +5,7 @@ using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.App.Mapping;
 using FSAPortfolio.WebAPI.App.Mapping.Projects;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;

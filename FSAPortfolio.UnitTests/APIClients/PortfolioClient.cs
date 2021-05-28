@@ -1,7 +1,7 @@
 ﻿using FSAPortfolio.UnitTests.ConfigurationTests;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.DTO;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

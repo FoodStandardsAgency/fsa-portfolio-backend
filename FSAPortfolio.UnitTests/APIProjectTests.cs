@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using FSAPortfolio.UnitTests.TestMappings;
 using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 

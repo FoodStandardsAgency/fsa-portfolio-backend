@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Models.JsonConverters
+namespace FSAPortfolio.Application.Models.JsonConverters
 {
     public class ProjectEditViewModelConverter : NonReentrantJsonConverter<ProjectEditViewModel>
     {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.Models.JsonConverters
+namespace FSAPortfolio.Application.Models.JsonConverters
 {
     /// <summary>
     /// Allows us to get a default JObject inside a converter without going into an infinite recursion.

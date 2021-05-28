@@ -1,5 +1,5 @@
 ﻿using FSAPortfolio.Entities;
-using FSAPortfolio.WebAPI.Models;
+using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,11 +28,13 @@ namespace FSAPortfolio.WebAPI.Controllers
     [Authorize]
     public class ProjectsController : ApiController
     {
-        private readonly PortfolioService provider;
+        private readonly IPortfolioService portfolioService;
+        private readonly IProjectDataService projectDataService;
 
-        public ProjectsController(PortfolioService provider)
+        public ProjectsController(IPortfolioService provider, IProjectDataService projectDataService)
         {
-            this.provider = provider;
+            this.portfolioService = provider;
+            this.projectDataService = projectDataService;
         }
 
         // POST: api/Projects
@@ -90,6 +92,14 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
+        [HttpGet, Route("api/Projects")]
+        [Authorize]
+        public async Task<IEnumerable<SelectItemModel>> GetProjects([FromUri] string portfolio)
+        {
+            return await projectDataService.GetProjectDataAsync(portfolio);
+        }
+
+
 
         /// <summary>
         /// Gets a new project with any default settings and reserves a project_id.
@@ -105,9 +115,9 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 using (var context = new PortfolioContext())
                 {
-                    var config = await provider.GetConfigAsync(portfolio);
+                    var config = await portfolioService.GetConfigAsync(portfolio);
                     this.AssertPermission(config.Portfolio);
-                    var reservation = await provider.GetProjectReservationAsync(config);
+                    var reservation = await portfolioService.GetProjectReservationAsync(config);
                     await context.SaveChangesAsync();
 
                     var newProject = new Project() { Reservation = reservation };
@@ -117,7 +127,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                     var result = new GetProjectDTO<ProjectEditViewModel>()
                     {
                         Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.Create),
-                        Options = await provider.GetNewProjectOptionsAsync(config),
+                        Options = await portfolioService.GetNewProjectOptionsAsync(config),
                         Project = newProjectModel
                     };
                     return result;
@@ -221,8 +231,8 @@ namespace FSAPortfolio.WebAPI.Controllers
                 }
                 if (includeOptions)
                 {
-                    var config = await provider.GetConfigAsync(portfolio);
-                    result.Options = await provider.GetNewProjectOptionsAsync(config, result.Project as ProjectEditViewModel);
+                    var config = await portfolioService.GetConfigAsync(portfolio);
+                    result.Options = await portfolioService.GetNewProjectOptionsAsync(config, result.Project as ProjectEditViewModel);
                 }
 
             }
