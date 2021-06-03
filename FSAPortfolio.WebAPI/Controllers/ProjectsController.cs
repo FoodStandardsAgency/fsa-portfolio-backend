@@ -38,7 +38,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         // POST: api/Projects
-        [HttpPost]
+        [HttpPost, Route("api/Projects")]
         public async Task Post([FromBody] ProjectUpdateModel update)
         {
             try
@@ -93,10 +93,15 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         [HttpGet, Route("api/Projects")]
-        [Authorize]
-        public async Task<IEnumerable<SelectItemModel>> GetProjects([FromUri] string portfolio)
+        public async Task<ProjectCollectionModel> GetProjects([FromUri] string portfolio)
         {
             return await projectDataService.GetProjectDataAsync(portfolio);
+        }
+
+        [HttpGet, Route("api/Projects/updates")]
+        public async Task<ProjectUpdateCollectionModel> GetProjectUpdatess([FromUri] string portfolio, [FromUri] string[] id = null)
+        {
+            return await projectDataService.GetProjectUpdateDataAsync(portfolio, id);
         }
 
 

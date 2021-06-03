@@ -20,6 +20,25 @@ namespace FSAPortfolio.Application.Services.Projects
             this.portfolioService = portfolioService;
         }
 
+        public async Task<ProjectCollectionModel> GetProjectDataAsync(string portfolio)
+        {
+            List<int> reservationIds = await getReservationIdsForPortfolio(portfolio);
+            var projectData = await getProjectsAsArrayAsync(reservationIds);
+            var projectModel = PortfolioMapper.ExportMapper.Map<IEnumerable<ProjectExportModel>>(projectData);
+
+            return new ProjectCollectionModel() { Projects = projectModel };
+        }
+
+        public async Task<ProjectUpdateCollectionModel> GetProjectUpdateDataAsync(string portfolio, string[] projectIds)
+        {
+            List<int> reservationIds = await getReservationIdsForPortfolio(portfolio, projectIds);
+            var projectData = await getProjectUpdatesAsArrayAsync(reservationIds);
+            var updateModel = PortfolioMapper.ExportMapper.Map<IEnumerable<ProjectUpdateExportModel>>(projectData);
+
+            return new ProjectUpdateCollectionModel() { Updates = updateModel };
+        }
+
+
         public async Task<GetProjectExportDTO> GetProjectExportDTOAsync(string viewKey)
         {
             // Get the data
@@ -45,13 +64,25 @@ namespace FSAPortfolio.Application.Services.Projects
             return projects;
         }
 
-        private async Task<List<int>> getReservationIdsForPortfolio(string viewKey)
+        private async Task<ProjectUpdateItem[]> getProjectUpdatesAsArrayAsync(List<int> reservationIds)
         {
-            return await (
-                from p in ServiceContext.PortfolioContext.Projects
-                where p.Reservation.Portfolio.ViewKey == viewKey
-                select p.ProjectReservation_Id
-                ).ToListAsync();
+            var projectQuery = from u in ServiceContext.PortfolioContext.ProjectUpdates.IncludeUpdates()
+                               where reservationIds.Contains(u.Project.ProjectReservation_Id)
+                               select u;
+            var updates = await projectQuery.OrderByDescending(p => p.Project.Reservation.ProjectId).ThenBy(u => u.Timestamp).ToArrayAsync();
+            return updates;
+        }
+
+        private async Task<List<int>> getReservationIdsForPortfolio(string viewKey, string[] projectIds = null)
+        {
+            var query = from p in ServiceContext.PortfolioContext.Projects
+                        where p.Reservation.Portfolio.ViewKey == viewKey
+                        select p;
+
+            if (projectIds != null && projectIds.Length > 0)
+                query = query.Where(p => projectIds.Contains(p.Reservation.ProjectId));
+
+            return await (from p in query select p.ProjectReservation_Id).ToListAsync();
         }
 
 

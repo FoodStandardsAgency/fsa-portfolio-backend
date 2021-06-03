@@ -155,7 +155,9 @@
     <Compile Include="Models\PortfolioConfigUpdateRequest.cs" />
     <Compile Include="Models\PortfolioModel.cs" />
     <Compile Include="Models\PortfolioSummaryModel.cs" />
+    <Compile Include="Models\ProjectCollectionModel.cs" />
     <Compile Include="Models\ProjectEditOptionsModel.cs" />
+    <Compile Include="Models\ProjectUpdateExportModel.cs" />
     <Compile Include="Models\ProjectExportModel.cs" />
     <Compile Include="Models\ProjectLabelConfigModel.cs" />
     <Compile Include="Models\ProjectModel.cs" />

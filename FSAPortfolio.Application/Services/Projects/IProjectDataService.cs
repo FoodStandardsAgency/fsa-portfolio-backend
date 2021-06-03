@@ -8,6 +8,7 @@ namespace FSAPortfolio.Application.Services.Projects
     public interface IProjectDataService
     {
         Task<GetProjectExportDTO> GetProjectExportDTOAsync(string viewKey);
-        Task<IEnumerable<SelectItemModel>> GetProjectDataAsync(string portfolio);
+        Task<ProjectCollectionModel> GetProjectDataAsync(string portfolio);
+        Task<ProjectUpdateCollectionModel> GetProjectUpdateDataAsync(string portfolio, string[] projectIds);
     }
 }

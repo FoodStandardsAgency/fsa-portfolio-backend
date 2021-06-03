@@ -20,6 +20,23 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
             CreateMap<Person, string>().ConvertUsing(s => s != null ? s.DisplayName : null);
             // Outbound
             Project__ProjectExportModel();
+            Project__ProjectUpdateExportModel();
+        }
+
+        private void Project__ProjectUpdateExportModel()
+        {
+            CreateMap<ProjectUpdateItem, ProjectUpdateExportModel>()
+                .ForMember(p => p.project_id, o => o.MapFrom(s => s.Project.Reservation.ProjectId))
+                .ForMember(p => p.timestamp, o => o.MapFrom(s => s.Timestamp))
+                .ForMember(p => p.phase, o => o.MapFrom(s => s.Phase.Name))
+                .ForMember(p => p.rag, o => o.MapFrom(s => s.RAGStatus.Name))
+                .ForMember(p => p.onhold, o => o.MapFrom(s => s.OnHoldStatus.Name))
+                .ForMember(p => p.update, o => o.MapFrom(s => s.Text))
+                .ForMember(p => p.budget, o => o.MapFrom(s => s.Budget))
+                .ForMember(p => p.spent, o => o.MapFrom(s => Convert.ToInt32(s.Spent)))
+                .ForMember(p => p.expendp, o => o.MapFrom(s => s.ExpectedCurrentPhaseEnd))
+                .ForMember(p => p.p_comp, o => o.MapFrom(s => s.PercentageComplete))
+                ;
         }
 
         private void Project__ProjectExportModel()
@@ -141,6 +158,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
             CreateMap<Document, string>().ConvertUsing<DocumentExportConverter>();
 
         }
+
 
     }
     public class ExportUpdateTextResolver : IValueResolver<Project, ProjectExportModel, string>

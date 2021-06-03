@@ -94,6 +94,16 @@ namespace FSAPortfolio.WebAPI.App
                 ;
         }
 
+        public static IQueryable<ProjectUpdateItem> IncludeUpdates(this IQueryable<ProjectUpdateItem> query)
+        {
+            return query
+                .Include(u => u.Project.Reservation)
+                .Include(p => p.OnHoldStatus)
+                .Include(p => p.RAGStatus)
+                .Include(p => p.Phase)
+                ;
+        }
+
         public static IQueryable<Project> IncludeQueryResult(this IQueryable<Project> query)
         {
             return query.Include(p => p.Reservation)
