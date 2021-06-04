@@ -33,9 +33,14 @@ namespace FSAPortfolio.Application.Services.Projects
         {
             List<int> reservationIds = await getReservationIdsForPortfolio(portfolio, projectIds);
             var projectData = await getProjectUpdatesAsArrayAsync(reservationIds);
-            var updateModel = PortfolioMapper.ExportMapper.Map<IEnumerable<ProjectUpdateExportModel>>(projectData);
-
-            return new ProjectUpdateCollectionModel() { Updates = updateModel };
+            var updates = PortfolioMapper.ExportMapper.Map<ProjectUpdateCollectionModel>(projectData);
+            return updates;
+        }
+        public async Task<ProjectChangeCollectionModel> GetProjectChangeDataAsync(string portfolio, string[] projectIds)
+        {
+            var updates = await GetProjectUpdateDataAsync(portfolio, projectIds);
+            var changes = PortfolioMapper.ExportMapper.Map<ProjectChangeCollectionModel>(updates);
+            return changes;
         }
 
 

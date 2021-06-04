@@ -21,10 +21,17 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
             // Outbound
             Project__ProjectExportModel();
             Project__ProjectUpdateExportModel();
+
         }
 
         private void Project__ProjectUpdateExportModel()
         {
+
+            CreateMap<IEnumerable<ProjectUpdateItem>, ProjectUpdateCollectionModel>()
+                .ForMember(d => d.Updates, o => o.MapFrom(s => s))
+                .AfterMap<ExportUpdateSequenceMapper>()
+                ;
+
             CreateMap<ProjectUpdateItem, ProjectUpdateExportModel>()
                 .ForMember(p => p.project_id, o => o.MapFrom(s => s.Project.Reservation.ProjectId))
                 .ForMember(p => p.timestamp, o => o.MapFrom(s => s.Timestamp))
@@ -36,6 +43,10 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
                 .ForMember(p => p.spent, o => o.MapFrom(s => Convert.ToInt32(s.Spent)))
                 .ForMember(p => p.expendp, o => o.MapFrom(s => s.ExpectedCurrentPhaseEnd))
                 .ForMember(p => p.p_comp, o => o.MapFrom(s => s.PercentageComplete))
+                ;
+
+            CreateMap<ProjectUpdateCollectionModel, ProjectChangeCollectionModel>()
+                .ForMember(d => d.Changes, o => o.MapFrom(s => s.Updates.SelectMany(u => u.Changes)))
                 ;
         }
 
@@ -172,5 +183,24 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
         }
     }
 
+    public class ExportUpdateSequenceMapper : IMappingAction<IEnumerable<ProjectUpdateItem>, ProjectUpdateCollectionModel>
+    {
+        public void Process(IEnumerable<ProjectUpdateItem> source, ProjectUpdateCollectionModel destination, ResolutionContext context)
+        {
+            // Point each update at the previous update in the chain
+            var pgroup = from u in destination.Updates
+                        group u by u.project_id into projectGroup
+                        select projectGroup;
 
+            foreach(var project in pgroup)
+            {
+                ProjectUpdateExportModel lastModel = null;
+                foreach(var update in project.OrderBy(u => u.timestamp))
+                {
+                    update.PreviousUpdate = lastModel;
+                    lastModel = update;
+                }
+            }
+        }
+    }
 }

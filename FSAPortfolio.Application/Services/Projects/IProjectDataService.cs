@@ -10,5 +10,6 @@ namespace FSAPortfolio.Application.Services.Projects
         Task<GetProjectExportDTO> GetProjectExportDTOAsync(string viewKey);
         Task<ProjectCollectionModel> GetProjectDataAsync(string portfolio);
         Task<ProjectUpdateCollectionModel> GetProjectUpdateDataAsync(string portfolio, string[] projectIds);
+        Task<ProjectChangeCollectionModel> GetProjectChangeDataAsync(string portfolio, string[] projectIds);
     }
 }

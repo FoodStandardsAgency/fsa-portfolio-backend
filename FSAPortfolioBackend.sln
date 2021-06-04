@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bootstrapping", "Bootstrapp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestScripts", "TestScripts", "{0A567BB7-327C-4D53-8729-54FA3E942E89}"
 	ProjectSection(SolutionItems) = preProject
+		TestScripts\getPortfolioChanges.sh = TestScripts\getPortfolioChanges.sh
 		TestScripts\getPortfolioConfig.sh = TestScripts\getPortfolioConfig.sh
 		TestScripts\getPortfolioProjects.sh = TestScripts\getPortfolioProjects.sh
 		TestScripts\getPortfolioUpdates.sh = TestScripts\getPortfolioUpdates.sh
