@@ -29,7 +29,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
 
             CreateMap<IEnumerable<ProjectUpdateItem>, ProjectUpdateCollectionModel>()
                 .ForMember(d => d.Updates, o => o.MapFrom(s => s))
-                .AfterMap<ExportUpdateSequenceMapper>()
                 ;
 
             CreateMap<ProjectUpdateItem, ProjectUpdateExportModel>()
@@ -45,7 +44,16 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
                 .ForMember(p => p.p_comp, o => o.MapFrom(s => s.PercentageComplete))
                 ;
 
-            CreateMap<ProjectUpdateCollectionModel, ProjectChangeCollectionModel>()
+            CreateMap<IEnumerable<ProjectUpdateItem>, ProjectChangePrecursorCollection>()
+                .ForMember(d => d.Updates, o => o.MapFrom(s => s))
+                .AfterMap<ExportUpdateSequenceMapper>()
+                ;
+
+            CreateMap<ProjectUpdateItem, ProjectUpdateChangePrecursor>()
+                .IncludeBase<ProjectUpdateItem, ProjectUpdateExportModel>()
+                ;
+
+            CreateMap<ProjectChangePrecursorCollection, ProjectChangeCollectionModel>()
                 .ForMember(d => d.Changes, o => o.MapFrom(s => s.Updates.SelectMany(u => u.Changes)))
                 ;
         }
@@ -183,9 +191,9 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
         }
     }
 
-    public class ExportUpdateSequenceMapper : IMappingAction<IEnumerable<ProjectUpdateItem>, ProjectUpdateCollectionModel>
+    public class ExportUpdateSequenceMapper : IMappingAction<IEnumerable<ProjectUpdateItem>, ProjectChangePrecursorCollection>
     {
-        public void Process(IEnumerable<ProjectUpdateItem> source, ProjectUpdateCollectionModel destination, ResolutionContext context)
+        public void Process(IEnumerable<ProjectUpdateItem> source, ProjectChangePrecursorCollection destination, ResolutionContext context)
         {
             // Point each update at the previous update in the chain
             var pgroup = from u in destination.Updates

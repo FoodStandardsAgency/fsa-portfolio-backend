@@ -31,14 +31,16 @@ namespace FSAPortfolio.Application.Services.Projects
 
         public async Task<ProjectUpdateCollectionModel> GetProjectUpdateDataAsync(string portfolio, string[] projectIds)
         {
-            List<int> reservationIds = await getReservationIdsForPortfolio(portfolio, projectIds);
-            var projectData = await getProjectUpdatesAsArrayAsync(reservationIds);
+            ProjectUpdateItem[] projectData = await getProjectUpdatesAsArrayAsync(portfolio, projectIds);
             var updates = PortfolioMapper.ExportMapper.Map<ProjectUpdateCollectionModel>(projectData);
             return updates;
         }
+
+
         public async Task<ProjectChangeCollectionModel> GetProjectChangeDataAsync(string portfolio, string[] projectIds)
         {
-            var updates = await GetProjectUpdateDataAsync(portfolio, projectIds);
+            ProjectUpdateItem[] projectData = await getProjectUpdatesAsArrayAsync(portfolio, projectIds);
+            var updates = PortfolioMapper.ExportMapper.Map<ProjectChangePrecursorCollection>(projectData);
             var changes = PortfolioMapper.ExportMapper.Map<ProjectChangeCollectionModel>(updates);
             return changes;
         }
@@ -69,8 +71,9 @@ namespace FSAPortfolio.Application.Services.Projects
             return projects;
         }
 
-        private async Task<ProjectUpdateItem[]> getProjectUpdatesAsArrayAsync(List<int> reservationIds)
+        private async Task<ProjectUpdateItem[]> getProjectUpdatesAsArrayAsync(string portfolio, string[] projectIds)
         {
+            List<int> reservationIds = await getReservationIdsForPortfolio(portfolio, projectIds);
             var projectQuery = from u in ServiceContext.PortfolioContext.ProjectUpdates.IncludeUpdates()
                                where reservationIds.Contains(u.Project.ProjectReservation_Id)
                                select u;

@@ -92,19 +92,19 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
-        [HttpGet, Route("api/Projects")]
+        [HttpGet, Route("api/Projects/{portfolio}")]
         public async Task<ProjectCollectionModel> GetProjects([FromUri] string portfolio)
         {
             return await projectDataService.GetProjectDataAsync(portfolio);
         }
 
-        [HttpGet, Route("api/Projects/updates")]
+        [HttpGet, Route("api/Projects/updates/{portfolio}")]
         public async Task<ProjectUpdateCollectionModel> GetProjectUpdates([FromUri] string portfolio, [FromUri] string[] id = null)
         {
             return await projectDataService.GetProjectUpdateDataAsync(portfolio, id);
         }
 
-        [HttpGet, Route("api/Projects/changes")]
+        [HttpGet, Route("api/Projects/changes/{portfolio}")]
         public async Task<ProjectChangeCollectionModel> GetProjectChanges([FromUri] string portfolio, [FromUri] string[] id = null)
         {
             return await projectDataService.GetProjectChangeDataAsync(portfolio, id);

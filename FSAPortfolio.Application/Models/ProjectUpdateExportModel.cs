@@ -22,7 +22,9 @@ namespace FSAPortfolio.Application.Models
         public string spent { get; set; }
         public string expendp { get; set; }
         public string p_comp { get; set; }
-
+    }
+    public class ProjectUpdateChangePrecursor : ProjectUpdateExportModel
+    {
         public ProjectUpdateExportModel PreviousUpdate { get; set; }
 
         public IEnumerable<ProjectUpdateChangeModel> Changes
@@ -44,7 +46,7 @@ namespace FSAPortfolio.Application.Models
 
         private void addChange(List<ProjectUpdateChangeModel> changes, string tag, string value, string previousValue)
         {
-            if((PreviousUpdate != null && value != previousValue) || (PreviousUpdate == null) && !string.IsNullOrEmpty(value))
+            if ((PreviousUpdate != null && value != previousValue) || (PreviousUpdate == null) && !string.IsNullOrEmpty(value))
             {
                 var change = new ProjectUpdateChangeModel()
                 {

@@ -15,6 +15,11 @@ namespace FSAPortfolio.Application.Models
     {
         public IEnumerable<ProjectUpdateExportModel> Updates { get; set; }
     }
+    public class ProjectChangePrecursorCollection
+    {
+        public IEnumerable<ProjectUpdateChangePrecursor> Updates { get; set; }
+    }
+
     public class ProjectChangeCollectionModel
     {
         public IEnumerable<ProjectUpdateChangeModel> Changes { get; set; }
