@@ -1,4 +1,5 @@
 using FSAPortfolio.Application.Services;
+using FSAPortfolio.Application.Services.Config;
 using FSAPortfolio.Application.Services.Projects;
 using FSAPortfolio.Common.Logging;
 using FSAPortfolio.Entities;
@@ -53,6 +54,7 @@ namespace FSAPortfolio.WebAPI
             container.RegisterType<IServiceContext, ServiceContext>(new HierarchicalLifetimeManager());
             container.RegisterType<IProjectDataService, ProjectDataService>(new HierarchicalLifetimeManager());
             container.RegisterType<IPortfolioService, PortfolioService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IPortfolioConfigurationService, PortfolioConfigurationService>(new HierarchicalLifetimeManager());
         }
     }
 }

@@ -19,7 +19,7 @@ namespace FSAPortfolio.UnitTests.APIClients
             var queryParams = new Dictionary<string, string>() {
                     { "term", nameOrId }
             };
-            return await BackendAPIClient.GetAsync<IEnumerable<SelectItemModel>>("api/Projects", queryParams);
+            return await BackendAPIClient.GetAsync<IEnumerable<SelectItemModel>>("api/Projects/search", queryParams);
         }
 
         public static async Task CreateProjectAsync(string portfolio, string title)

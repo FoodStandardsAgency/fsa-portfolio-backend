@@ -16,6 +16,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Http;
+using System.Net;
 
 namespace FSAPortfolio.Application.Services.Projects
 {
@@ -23,6 +25,53 @@ namespace FSAPortfolio.Application.Services.Projects
     {
         public PortfolioService(IServiceContext context) : base(context)
         {
+        }
+
+        public async Task<IEnumerable<PortfolioModel>> GetPortfoliosAsync()
+        {
+            var context = ServiceContext.PortfolioContext;
+            var portfolios = await context.Portfolios.ToListAsync();
+            List<Portfolio> validPortfolios = null;
+            validPortfolios = new List<Portfolio>();
+            foreach (var portfolio in portfolios)
+            {
+                if (ServiceContext.HasPermission(portfolio))
+                {
+                    validPortfolios.Add(portfolio);
+                }
+            }
+            var result = PortfolioMapper.ConfigMapper.Map<IEnumerable<PortfolioModel>>(validPortfolios);
+            return result;
+        }
+
+        public async Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType)
+        {
+            PortfolioSummaryModel result = null;
+            var context = ServiceContext.PortfolioContext;
+                var portfolio = await context.Portfolios
+                    .Include(p => p.Teams)
+                    .IncludeConfig()
+                    .IncludeProjects()
+                    .SingleOrDefaultAsync(p => p.ViewKey == viewKey);
+
+                if (portfolio == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+
+                if (ServiceContext.HasPermission(portfolio))
+                {
+                    result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(
+                    portfolio,
+                    opt =>
+                    {
+                        opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
+                        opt.Items[nameof(PortfolioSummaryModel)] = summaryType;
+                    });
+                }
+                else
+                {
+                    throw new HttpResponseException(HttpStatusCode.Forbidden);
+                }
+            
+            return result;
         }
 
         public async Task<PortfolioConfiguration> GetConfigAsync(string portfolioViewKey, bool includedOnly = false)

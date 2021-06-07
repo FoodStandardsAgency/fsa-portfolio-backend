@@ -12,20 +12,120 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using FSAPortfolio.Application.Services;
+using FSAPortfolio.WebAPI.App.Mapping;
+using System.Net.Http;
+using System.Net;
+using System.Web.Http;
+using System.Data.Entity.Validation;
+using FSAPortfolio.WebAPI.App;
+using FSAPortfolio.Common.Logging;
 
-namespace FSAPortfolio.WebAPI.App.Config
+namespace FSAPortfolio.Application.Services.Config
 {
-    public class ConfigurationProvider
+    public class PortfolioConfigurationService : BaseService, IPortfolioConfigurationService
     {
-        private PortfolioContext context;
-
-        public ConfigurationProvider(PortfolioContext context)
+        public PortfolioConfigurationService(IServiceContext context) : base(context)
         {
-            this.context = context;
         }
 
-        public async Task UpdateCollections(PortfolioConfiguration config)
+
+        public async Task UpdateConfigAsync(string viewKey, PortfolioConfigUpdateRequest update)
         {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(viewKey)) viewKey = update.ViewKey;
+
+                var context = ServiceContext.PortfolioContext;
+
+                // Map the updates to labels
+                var labelUpdates = PortfolioMapper.ConfigMapper.Map<IEnumerable<PortfolioLabelConfig>>(update.Labels);
+
+                // Get the config with labels
+                var config = await context.PortfolioConfigurations
+                    .IncludeFullConfiguration()
+                    .Where(p => p.Portfolio.ViewKey == viewKey)
+                    .SingleAsync();
+
+                ServiceContext.AssertAdmin(config.Portfolio);
+
+                // Update the labels
+                foreach (var labelUpdate in labelUpdates)
+                {
+                    var label = config.Labels.Single(l => l.FieldName == labelUpdate.FieldName);
+                    PortfolioMapper.UpdateMapper.Map(labelUpdate, label);
+                }
+
+                // Record changes
+                AuditProvider.LogChanges(
+                    context,
+                    (ts, txt) => auditLogFactory(config, nameof(PortfolioLabelConfig), ts, txt),
+                    context.PortfolioConfigAuditLogs,
+                    DateTime.Now);
+
+                // Map the collections here: don't do this in mapping because can't use async in resolvers
+                await UpdateCollections(config);
+            }
+            catch (PortfolioConfigurationException pce)
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    ReasonPhrase = pce.Message
+                };
+                throw new HttpResponseException(resp);
+            }
+            catch (DbEntityValidationException e)
+            {
+                var stringBuilder = new StringBuilder();
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    var label = eve.Entry.Entity as PortfolioLabelConfig;
+                    if (label != null)
+                    {
+                        stringBuilder.Append($"Problem with configuration for field {label.FieldTitle}: ");
+                        stringBuilder.Append(string.Join("; ", eve.ValidationErrors.Select(ve => ve.ErrorMessage)));
+                    }
+                    else
+                    {
+                        stringBuilder.Append($"Contact administrator: unrecognised issue with configuration update.");
+                    }
+                }
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    ReasonPhrase = stringBuilder.ToString()
+                };
+                throw new HttpResponseException(resp);
+            }
+            catch (Exception e)
+            {
+                AppLog.Trace(e);
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    ReasonPhrase = e.Message
+                };
+                throw new HttpResponseException(resp);
+
+            }
+        }
+        public async Task<PortfolioConfigModel> GetConfigurationAsync(string portfolio)
+        {
+            var context = ServiceContext.PortfolioContext;
+            var pfolio = await context.Portfolios.IncludeConfig()
+                .SingleAsync(p => p.ViewKey == portfolio);
+
+            ServiceContext.AssertAdmin(pfolio);
+
+            var model = PortfolioMapper.ConfigMapper.Map<PortfolioConfigModel>(pfolio.Configuration);
+            model.Labels = model.Labels.OrderBy(l => l.FieldGroup).ThenBy(l => l.FieldOrder).ToList();
+
+            return model;
+        }
+
+
+        private async Task UpdateCollections(PortfolioConfiguration config)
+        {
+            var context = ServiceContext.PortfolioContext;
+
             await UpdateRAGStatusOptions(config);
 
             UpdatePhaseOptions(config);
@@ -103,9 +203,9 @@ namespace FSAPortfolio.WebAPI.App.Config
             catch (DbUpdateException e)
             {
                 var builder = new StringBuilder();
-                foreach(var entry in e.Entries)
+                foreach (var entry in e.Entries)
                 {
-                    if(entry.Entity is ProjectPhase && entry.State == EntityState.Deleted)
+                    if (entry.Entity is ProjectPhase && entry.State == EntityState.Deleted)
                     {
                         var phase = entry.Entity as ProjectPhase;
                         builder.Append($"Phase [{phase.Name}] can't be removed because it has projects assigned to it. This is likely occurring because you are trying to reduce the number of phases but there are projects assigned to the phase to be removed.");
@@ -118,9 +218,9 @@ namespace FSAPortfolio.WebAPI.App.Config
                 throw new PortfolioConfigurationException(builder.ToString(), e);
             }
         }
-
         private async Task UpdateRAGStatusOptions(PortfolioConfiguration config)
         {
+            var context = ServiceContext.PortfolioContext;
             var labelConfig = config.Labels.Single(l => l.FieldName == ProjectPropertyConstants.rag);
             int options = int.Parse(labelConfig.FieldOptions);
             if (config.RAGStatuses.Count != options)
@@ -164,6 +264,7 @@ namespace FSAPortfolio.WebAPI.App.Config
 
         private void UpdatePhaseOptions(PortfolioConfiguration config)
         {
+            var context = ServiceContext.PortfolioContext;
             var labelConfig = config.Labels.Single(l => l.FieldName == ProjectPropertyConstants.phase);
             var optionNames = labelConfig.FieldOptions
                 .Split(',')
@@ -250,7 +351,7 @@ namespace FSAPortfolio.WebAPI.App.Config
             string optionDescription,
             string viewKeyPrefix,
             int? maxOptionCount = null,
-            bool hideHistoric = true) 
+            bool hideHistoric = true)
             where T : class, IProjectOption, new()
         {
             var labelConfig = config.Labels.Single(l => l.FieldName == fieldName);
@@ -258,7 +359,7 @@ namespace FSAPortfolio.WebAPI.App.Config
             var optionNames = labelConfig.FieldOptions
                 .Split(',')
                 .Where(n => !string.IsNullOrWhiteSpace(n))
-                .Select((n, i) => (index: i, value: n.Trim(), lowervalue: n.Trim().ToLower() ))
+                .Select((n, i) => (index: i, value: n.Trim(), lowervalue: n.Trim().ToLower()))
                 .ToArray();
 
             if (maxOptionCount.HasValue && optionNames.Length > maxOptionCount.Value)
@@ -300,7 +401,7 @@ namespace FSAPortfolio.WebAPI.App.Config
                 if (hideHistoric)
                 {
                     // Use Order = -1 to hide options
-                    foreach(var noDeleteOption in unableToDelete)
+                    foreach (var noDeleteOption in unableToDelete)
                     {
                         noDeleteOption.option.Order = ProjectOptionConstants.HideOrderValue;
 
@@ -357,6 +458,18 @@ namespace FSAPortfolio.WebAPI.App.Config
 
             }
         }
+
+        private PortfolioConfigAuditLog auditLogFactory(PortfolioConfiguration con, string type, DateTime timestamp, string text)
+        {
+            return new PortfolioConfigAuditLog()
+            {
+                Timestamp = timestamp,
+                PortfolioConfiguration_Id = con.Portfolio_Id,
+                AuditType = type,
+                Text = text
+            };
+        }
+
 
     }
 }

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.WebAPI.App.Config;
 using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using FSAPortfolio.Application.Services.Config;
 
 namespace FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers
 {

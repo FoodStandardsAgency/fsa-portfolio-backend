@@ -41,55 +41,17 @@ namespace FSAPortfolio.WebAPI.Controllers
         [HttpGet]
         public async Task<IEnumerable<PortfolioModel>> Index()
         {
-            IEnumerable<PortfolioModel> result = null;
-            using (var context = new PortfolioContext())
-            {
-                var portfolios = await context.Portfolios.ToListAsync();
-                List<Portfolio> validPortfolios = null;
-                validPortfolios = new List<Portfolio>();
-                foreach(var portfolio in portfolios)
-                {
-                    if(this.HasPermission(portfolio))
-                    {
-                        validPortfolios.Add(portfolio);
-                    }
-                }
-                result = PortfolioMapper.ConfigMapper.Map<IEnumerable<PortfolioModel>>(validPortfolios);
-            }
-            return result;
+            return await portfolioService.GetPortfoliosAsync();
         }
+
+
 
         [HttpGet]
         public async Task<PortfolioSummaryModel> Summary([FromUri(Name = "portfolio")] string viewKey, [FromUri(Name = "type")] string summaryType = PortfolioSummaryModel.ByCategory)
         {
-            PortfolioSummaryModel result = null;
-            using (var context = new PortfolioContext())
-            {
-                var portfolio = await context.Portfolios
-                    .Include(p => p.Teams)
-                    .IncludeConfig()
-                    .IncludeProjects()
-                    .SingleOrDefaultAsync(p => p.ViewKey == viewKey);
-
-                if (portfolio == null) throw new HttpResponseException(HttpStatusCode.NotFound);
-
-                if (this.HasPermission(portfolio))
-                {
-                    result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(
-                    portfolio,
-                    opt =>
-                    {
-                        opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
-                        opt.Items[nameof(PortfolioSummaryModel)] = summaryType;
-                    });
-                }
-                else
-                {
-                    throw new HttpResponseException(HttpStatusCode.Forbidden);
-                }
-            }
-            return result;
+            return await portfolioService.GetSummaryAsync(viewKey, summaryType);
         }
+
 
         [HttpGet]
         public async Task<GetProjectQueryDTO> FilterOptionsAsync([FromUri(Name = "portfolio")] string viewKey)
@@ -146,38 +108,10 @@ namespace FSAPortfolio.WebAPI.Controllers
             var provider = new MultipartFormDataStreamProvider(Path.GetTempPath());
             var files = await Request.Content.ReadAsMultipartAsync(provider);
 
-            using (var context = new PortfolioContext())
-            {
-                // Get the config and options
-                var config = await portfolioService.GetConfigAsync(viewKey);
-                this.AssertAdmin(config.Portfolio);
-                var options = await portfolioService.GetNewProjectOptionsAsync(config);
+            await projectDataService.ImportProjectsAsync(viewKey, files);
 
-                // Import the projects
-                var importer = new PropertyImporter();
-                var projects = await importer.ImportProjectsAsync(files, config, options);
-
-                // Update/create the projects
-                var userProvider = new PersonProvider(context);
-                var projectprovider = new ProjectProvider(context);
-                foreach (var project in projects)
-                {
-                    if (string.IsNullOrWhiteSpace(project.project_id))
-                    {
-                        // Create a reservation
-                        var reservation = await portfolioService.GetProjectReservationAsync(config);
-                        project.project_id = reservation.ProjectId;
-                        await projectprovider.UpdateProject(project, userProvider, reservation);
-                    }
-                    else
-                    {
-                        await projectprovider.UpdateProject(project, userProvider);
-                    }
-                }
-            }
             return Request.CreateResponse(HttpStatusCode.OK);
         }
-
 
         [HttpGet, OverrideAuthorization]
         public async Task<ArchiveResponse> ArchiveProjectsAsync([FromUri(Name = "portfolio")] string viewKey)

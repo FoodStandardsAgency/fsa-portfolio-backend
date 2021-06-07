@@ -15,6 +15,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using FSAPortfolio.Application.Services.Config;
 
 namespace FSAPortfolio.WebAPI.App.Projects
 {
@@ -101,7 +102,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             }
             catch (AutoMapperMappingException ame)
             {
-                if (ame.InnerException is Config.PortfolioConfigurationException)
+                if (ame.InnerException is PortfolioConfigurationException)
                 {
                     var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
                     {

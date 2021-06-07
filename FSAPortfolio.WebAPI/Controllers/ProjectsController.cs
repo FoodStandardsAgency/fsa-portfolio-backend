@@ -20,8 +20,8 @@ using FSAPortfolio.Entities.Organisation;
 using System.Linq.Expressions;
 using AutoMapper;
 using FSAPortfolio.WebAPI.App.Users;
-using FSAPortfolio.WebAPI.App.Config;
 using FSAPortfolio.Application.Services.Projects;
+using FSAPortfolio.Common.Logging;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -35,38 +35,20 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             this.portfolioService = provider;
             this.projectDataService = projectDataService;
+
+#if DEBUG
+            AppLog.TraceVerbose($"{nameof(ProjectsController)} created.");
+#endif
+
         }
 
         // POST: api/Projects
         [HttpPost, Route("api/Projects")]
         public async Task Post([FromBody] ProjectUpdateModel update)
         {
-            try
-            {
-                using (var context = new PortfolioContext())
-                {
-                    // Load and map the project
-                    var userProvider = new PersonProvider(context);
-                    var provider = new ProjectProvider(context);
-                    await provider.UpdateProject(update, userProvider, permissionCallback: this.AssertEditor);
-                }
-            }
-            catch (AutoMapperMappingException amex)
-            {
-                if (amex.InnerException is ProjectDataValidationException)
-                {
-                    var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
-                    {
-                        ReasonPhrase = amex.InnerException.Message
-                    };
-                    throw new HttpResponseException(resp);
-                }
-                else
-                {
-                    throw amex;
-                }
-            }
+            await projectDataService.UpdateProjectAsync(update);
         }
+
 
 
         // Get: api/Projects
@@ -92,19 +74,19 @@ namespace FSAPortfolio.WebAPI.Controllers
             }
         }
 
-        [HttpGet, Route("api/Projects/{portfolio}")]
-        public async Task<ProjectCollectionModel> GetProjects([FromUri] string portfolio)
-        {
-            return await projectDataService.GetProjectDataAsync(portfolio);
-        }
+        //[HttpGet, Route("api/Projects")]
+        //public async Task<ProjectCollectionModel> GetProjects([FromUri] string portfolio)
+        //{
+        //    return await projectDataService.GetProjectDataAsync(portfolio);
+        //}
 
-        [HttpGet, Route("api/Projects/updates/{portfolio}")]
+        [HttpGet, Route("api/Projects/updates")]
         public async Task<ProjectUpdateCollectionModel> GetProjectUpdates([FromUri] string portfolio, [FromUri] string[] id = null)
         {
             return await projectDataService.GetProjectUpdateDataAsync(portfolio, id);
         }
 
-        [HttpGet, Route("api/Projects/changes/{portfolio}")]
+        [HttpGet, Route("api/Projects/changes")]
         public async Task<ProjectChangeCollectionModel> GetProjectChanges([FromUri] string portfolio, [FromUri] string[] id = null)
         {
             return await projectDataService.GetProjectChangeDataAsync(portfolio, id);
@@ -122,34 +104,8 @@ namespace FSAPortfolio.WebAPI.Controllers
         [HttpGet, Route("api/Projects/{portfolio}/newproject")]
         public async Task<GetProjectDTO<ProjectEditViewModel>> GetNewProject([FromUri] string portfolio)
         {
-            try
-            {
-                using (var context = new PortfolioContext())
-                {
-                    var config = await portfolioService.GetConfigAsync(portfolio);
-                    this.AssertPermission(config.Portfolio);
-                    var reservation = await portfolioService.GetProjectReservationAsync(config);
-                    await context.SaveChangesAsync();
-
-                    var newProject = new Project() { Reservation = reservation };
-
-                    ProjectEditViewModel newProjectModel = ProjectModelFactory.GetProjectEditModel(newProject);
-
-                    var result = new GetProjectDTO<ProjectEditViewModel>()
-                    {
-                        Config = PortfolioMapper.GetProjectLabelConfigModel(config, PortfolioFieldFlags.Create),
-                        Options = await portfolioService.GetNewProjectOptionsAsync(config),
-                        Project = newProjectModel
-                    };
-                    return result;
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            return await projectDataService.CreateNewProjectAsync(portfolio);
         }
-
 
         [HttpGet, Route("api/Projects/{projectId}")]
         public async Task<GetProjectDTO<ProjectViewModel>> Get([FromUri] string projectId,
@@ -158,97 +114,23 @@ namespace FSAPortfolio.WebAPI.Controllers
                                                                [FromUri] bool includeLastUpdate = false,
                                                                [FromUri] bool includeConfig = false)
         {
-            return await GetProject<ProjectViewModel>(projectId, includeOptions, includeHistory, includeLastUpdate, includeConfig);
+            return await projectDataService.GetProjectAsync(projectId, includeOptions, includeHistory, includeLastUpdate, includeConfig);
         }
 
         [HttpGet, Route("api/Projects/{projectId}/edit")]
         public async Task<GetProjectDTO<ProjectEditViewModel>> GetForEdit([FromUri] string projectId)
         {
-            return await GetProject<ProjectEditViewModel>(projectId,
-                                                          includeOptions: true,
-                                                          includeHistory: false,
-                                                          includeLastUpdate: true,
-                                                          includeConfig: true,
-                                                          flags: PortfolioFieldFlags.Update,
-                                                          this.AssertEditor);
+            return await projectDataService.GetProjectForEdit(projectId);
         }
+
 
         [HttpDelete, Route("api/Projects/{projectId}")]
         public async Task<IHttpActionResult> DeleteProject([FromUri] string projectId)
         {
-            using(var context = new PortfolioContext())
-            {
-                var project = await (from p in context.Projects.IncludeProjectForDelete() 
-                                     where p.Reservation.ProjectId == projectId 
-                                     select p).SingleOrDefaultAsync();
-                if (project == null) return NotFound();
-                this.AssertAdmin(project.Reservation.Portfolio);
-
-                project.DeleteCollections(context);
-                await context.SaveChangesAsync();
-
-                project.Reservation.Portfolio.Projects.Remove(project);
-                context.ProjectReservations.Remove(project.Reservation);
-                context.Projects.Remove(project);
-                await context.SaveChangesAsync();
-                return Ok();
-            }
+            var project = await projectDataService.DeleteProjectAsync(projectId);
+            if (project == null) return NotFound();
+            else return Ok();
         }
 
-        private async Task<GetProjectDTO<T>> GetProject<T>(string projectId,
-                                                                  bool includeOptions,
-                                                                  bool includeHistory,
-                                                                  bool includeLastUpdate,
-                                                                  bool includeConfig,
-                                                                  PortfolioFieldFlags flags = PortfolioFieldFlags.Read,
-                                                                  Action<Portfolio> permissionCallback = null)
-            where T : ProjectModel, new()
-        {
-            string portfolio;
-            GetProjectDTO<T> result;
-            using (var context = new PortfolioContext())
-            {
-                var reservation = await context.ProjectReservations
-                    .SingleOrDefaultAsync(r => r.ProjectId == projectId);
-
-                if(reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
-
-                var query = (from p in context.Projects
-                             .IncludeProject()
-                             .IncludeLabelConfigs() // Need label configs so can map project data fields
-                             where p.ProjectReservation_Id == reservation.Id
-                             select p);
-                if (includeHistory || includeLastUpdate) query = query.IncludeUpdates();
-
-                var project = await query.SingleOrDefaultAsync();
-                if (project == null) throw new HttpResponseException(HttpStatusCode.NotFound);
-                if (permissionCallback != null)
-                    permissionCallback(project.Reservation.Portfolio);
-                else
-                    this.AssertPermission(project.Reservation.Portfolio);
-
-                portfolio = project.Reservation.Portfolio.ViewKey;
-
-                // Build the result
-                result = new GetProjectDTO<T>() 
-                { 
-                    Project = ProjectModelFactory.GetProjectModel<T>(project, includeHistory, includeLastUpdate) 
-                };
-
-                if (includeConfig)
-                {
-                    var userIsFSA = this.UserHasFSAClaim();
-                    result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration, flags: flags, fsaOnly: !userIsFSA);
-                }
-                if (includeOptions)
-                {
-                    var config = await portfolioService.GetConfigAsync(portfolio);
-                    result.Options = await portfolioService.GetNewProjectOptionsAsync(config, result.Project as ProjectEditViewModel);
-                }
-
-            }
-
-            return result;
-        }
     }
 }

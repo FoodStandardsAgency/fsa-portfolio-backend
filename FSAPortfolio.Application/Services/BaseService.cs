@@ -1,9 +1,16 @@
 ﻿using FSAPortfolio.Common.Logging;
+using FSAPortfolio.Entities.Organisation;
+using FSAPortfolio.WebAPI.App.Identity;
+using FSAPortfolio.WebAPI.App.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace FSAPortfolio.Application.Services
 {
@@ -19,5 +26,10 @@ namespace FSAPortfolio.Application.Services
 
             this.serviceContext = context;
         }
+
+
+
+
+
     }
 }

@@ -51,6 +51,8 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
 
             CreateMap<ProjectUpdateItem, ProjectUpdateChangePrecursor>()
                 .IncludeBase<ProjectUpdateItem, ProjectUpdateExportModel>()
+                .ForMember(d => d.PreviousUpdate, o => o.Ignore())
+                .ForMember(d => d.Changes, o => o.Ignore())
                 ;
 
             CreateMap<ProjectChangePrecursorCollection, ProjectChangeCollectionModel>()

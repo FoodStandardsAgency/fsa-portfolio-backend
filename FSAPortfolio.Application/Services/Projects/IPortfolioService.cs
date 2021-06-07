@@ -2,6 +2,7 @@
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Application.Models;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace FSAPortfolio.Application.Services.Projects
 {
@@ -11,6 +12,8 @@ namespace FSAPortfolio.Application.Services.Projects
         Task<PortfolioConfiguration> GetConfigAsync(string portfolioViewKey, bool includedOnly = false);
         PortfolioLabelConfig[] GetCustomFilterLabels(PortfolioConfiguration config);
         Task<ProjectEditOptionsModel> GetNewProjectOptionsAsync(PortfolioConfiguration config, ProjectEditViewModel projectModel = null);
+        Task<IEnumerable<PortfolioModel>> GetPortfoliosAsync();
         Task<ProjectReservation> GetProjectReservationAsync(PortfolioConfiguration config);
+        Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType);
     }
 }

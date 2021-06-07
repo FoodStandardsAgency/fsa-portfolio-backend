@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Config
+namespace FSAPortfolio.Application.Services.Config
 {
     public class PortfolioConfigurationException : Exception
     {

@@ -172,7 +172,8 @@
     <Compile Include="Services\AuditProvider.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="Services\BaseService.cs" />
-    <Compile Include="Services\Config\ConfigurationProvider.cs" />
+    <Compile Include="Services\Config\IPortfolioConfigurationService.cs" />
+    <Compile Include="Services\Config\PortfolioConfigurationService.cs" />
     <Compile Include="Services\Config\PortfolioConfigurationException.cs" />
     <Compile Include="FieldGroupConstants.cs" />
     <Compile Include="FilterFieldConstants.cs" />
