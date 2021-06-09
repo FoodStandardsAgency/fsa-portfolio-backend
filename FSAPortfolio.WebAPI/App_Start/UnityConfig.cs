@@ -55,6 +55,7 @@ namespace FSAPortfolio.WebAPI
             container.RegisterType<IProjectDataService, ProjectDataService>(new HierarchicalLifetimeManager());
             container.RegisterType<IPortfolioService, PortfolioService>(new HierarchicalLifetimeManager());
             container.RegisterType<IPortfolioConfigurationService, PortfolioConfigurationService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IDataDumpService, DataDumpService>(new HierarchicalLifetimeManager());
         }
     }
 }

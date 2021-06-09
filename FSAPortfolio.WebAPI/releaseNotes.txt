@@ -1,4 +1,20 @@
-﻿Version 0.1.7 - Released 25/03/2021
+﻿Version 0.1.9 - Pending Release
+===================================
+- Added diagnostics logging
+- Added dependency injection using Unity
+- Added data dumps to Azure File Share
+
+Azure Storage Account Connection string
+- Ensure a storage account exists - the connection string is required (under Access Keys).
+- Ensure a file share for data dumps exists - the share name is required.
+
+New App Settings:
+- DataDumpStorageConnectionString - from the Azure portal/Storage Account/Access Keys
+- DataDumpStorageShareName - the name of the file share for data dumps
+
+
+
+Version 0.1.7 - Released 25/03/2021
 ===================================
 - Remove size limit on Description field.
 - Improved error handling of entity validation errors.

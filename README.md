@@ -8,10 +8,6 @@
 
 ### Recommended for development bootstrapping
 * GitBash
-* Chocolatey Nuget
-* jq
-
-	> $ chocolatey install jq
 
 ### Optional useful tools
 * Visual Studio 2019 (or latest)
@@ -20,6 +16,14 @@
 * Grip for viewing README.md (see https://github.com/joeyespo/grip)
 
 	> $ pip install grip
+
+* Chocolatey Nuget
+	* Used to install `jq`
+	* The open source version will suffice
+	* Note that you must set the execution policy (see chocolatey docs) to allow package installation
+* jq - a tool for processing JSON at the command line
+	> Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+	> $ chocolatey install jq
 
 
 

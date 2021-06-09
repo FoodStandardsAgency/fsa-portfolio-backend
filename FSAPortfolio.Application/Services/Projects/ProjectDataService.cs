@@ -27,9 +27,9 @@ namespace FSAPortfolio.Application.Services.Projects
             this.portfolioService = portfolioService;
         }
 
-        public async Task<ProjectCollectionModel> GetProjectDataAsync(string portfolio)
+        public async Task<ProjectCollectionModel> GetProjectDataAsync(string portfolio, string[] projectIds)
         {
-            List<int> reservationIds = await getReservationIdsForPortfolio(portfolio);
+            List<int> reservationIds = await getReservationIdsForPortfolio(portfolio, projectIds);
             var projectData = await getProjectsAsArrayAsync(reservationIds);
             var projectModel = PortfolioMapper.ExportMapper.Map<IEnumerable<ProjectExportModel>>(projectData);
 
