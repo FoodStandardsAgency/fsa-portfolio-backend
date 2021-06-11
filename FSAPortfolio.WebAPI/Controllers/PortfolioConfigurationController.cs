@@ -37,7 +37,8 @@ namespace FSAPortfolio.WebAPI.Controllers
 
         // GET: api/PortfolioConfiguration
         [HttpGet]
-        public async Task<PortfolioConfigModel> Get([FromUri(Name ="id")] string portfolio)
+        [OverrideAuthorization]
+        public async Task<PortfolioConfigModel> Get([FromUri] string portfolio)
         {
             return await portfolioConfigurationService.GetConfigurationAsync(portfolio);
         }

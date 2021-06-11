@@ -11,6 +11,8 @@ Azure Storage Account Connection string
 New App Settings:
 - DataDumpStorageConnectionString - from the Azure portal/Storage Account/Access Keys
 - DataDumpStorageShareName - the name of the file share for data dumps
+- PowerBIAPIKey - key for PowerBI usage of API
+- PowerBIRoles - Roles required for data, e.g. ODD.Admin, SERD.Admin
 
 
 

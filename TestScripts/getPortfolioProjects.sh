@@ -1,2 +1,2 @@
-curl -s "$apiUrl/DataDump/projects?portfolio=$apiPortfolioKey" -X GET -H "APIKey: $apiKey" -H "Authorization: Bearer $access_token" 
-#curl -s $apiUrl/Projects?portfolio=$apiPortfolioKey -X GET -H "APIKey: $apiKey" -H "Authorization: Bearer $access_token" > "${outputDir}/${apiPortfolioKey}_projects.json"
+curl -s "$apiUrl/Projects?portfolio=$apiPortfolioKey&id=DV2103008" -X GET -H "PowerBIAPIKey: $apiKeyPowerBI" 
+#curl -s "$apiUrl/Projects?portfolio=$apiPortfolioKey&id=DV2103008" -X GET -H "PowerBIAPIKey: $apiKeyPowerBI" > "${outputDir}/${apiPortfolioKey}_projects.json"

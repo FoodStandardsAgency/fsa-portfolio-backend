@@ -77,18 +77,21 @@ namespace FSAPortfolio.WebAPI.Controllers
         /// <param name="portfolio"></param>
         /// <returns></returns>
         [HttpGet, Route("api/Projects")]
+        [OverrideAuthorization]
         public async Task<ProjectCollectionModel> GetProjects([FromUri] string portfolio, [FromUri] string[] id = null)
         {
             return await projectDataService.GetProjectDataAsync(portfolio, id);
         }
 
         [HttpGet, Route("api/Projects/updates")]
+        [OverrideAuthorization]
         public async Task<ProjectUpdateCollectionModel> GetProjectUpdates([FromUri] string portfolio, [FromUri] string[] id = null)
         {
             return await projectDataService.GetProjectUpdateDataAsync(portfolio, id);
         }
 
         [HttpGet, Route("api/Projects/changes")]
+        [OverrideAuthorization]
         public async Task<ProjectChangeCollectionModel> GetProjectChanges([FromUri] string portfolio, [FromUri] string[] id = null)
         {
             return await projectDataService.GetProjectChangeDataAsync(portfolio, id);

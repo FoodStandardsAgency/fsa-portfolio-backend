@@ -42,7 +42,6 @@ namespace FSAPortfolio.Application.Services.Projects
             await DumpJson(projects, $"{portfolio}_projects.json");
         }
 
-
         public async Task DumpProjectUpdates(string portfolio, string[] ids = null)
         {
             var updates = await projectDataService.GetProjectUpdateDataAsync(portfolio, ids);
@@ -54,8 +53,6 @@ namespace FSAPortfolio.Application.Services.Projects
             var changes = await projectDataService.GetProjectChangeDataAsync(portfolio, ids);
             await DumpJson(changes, $"{portfolio}_changes.json");
         }
-
-
 
         private async Task DumpJson<T>(T obj, string fileName)
         {
