@@ -28,19 +28,74 @@ namespace FSAPortfolio.WebAPI.App.Projects
 
         public void BuildFilters()
         {
+            // Project title: project_name, project_id
             if (!string.IsNullOrWhiteSpace(searchTerms.Name))
             {
                 Query = Query.Where(p => p.Name.Contains(searchTerms.Name) || p.Reservation.ProjectId.Contains(searchTerms.Name));
             }
+
+            Query = AddExactMatchFilter(searchTerms.RiskRatings, Query, p => searchTerms.RiskRatings.Contains(p.RiskRating));
             Query = AddExactMatchFilter(searchTerms.Themes, Query, p => searchTerms.Themes.Contains(p.Theme));
             Query = AddExactMatchFilter(searchTerms.ProjectTypes, Query, p => searchTerms.ProjectTypes.Contains(p.ProjectType));
+            Query = AddExactMatchFilter(searchTerms.ProjectSizes, Query, p => searchTerms.ProjectSizes.Contains(p.Size.ViewKey));
             Query = AddExactMatchFilter(searchTerms.Categories, Query, p => searchTerms.Categories.Contains(p.Category.ViewKey) || searchTerms.Categories.Intersect(p.Subcategories.Select(sc => sc.ViewKey)).Any());
             Query = AddExactMatchFilter(searchTerms.Directorates, Query, p => searchTerms.Directorates.Contains(p.Directorate.ViewKey));
             Query = AddExactMatchFilter(searchTerms.StrategicObjectives, Query, p => searchTerms.StrategicObjectives.Contains(p.StrategicObjectives));
             Query = AddExactMatchFilter(searchTerms.Programmes, Query, p => searchTerms.Programmes.Contains(p.Programme));
-            Query = AddExactMatchFilter(searchTerms.Teams, Query, p => searchTerms.Teams.Contains(p.Lead.Team.ViewKey));
+
+            // Budget search terms
+            Query = AddExactMatchFilter(searchTerms.BudgetTypes, Query, p => searchTerms.BudgetTypes.Contains(p.BudgetType.ViewKey));
+            Query = AddTextFilter(searchTerms.CostCentre, Query, p => p.CostCentre.Contains(searchTerms.CostCentre));
+
+            if (searchTerms.BudgetOptions1 != null && searchTerms.BudgetOptions1.Length > 0)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var option in searchTerms.BudgetOptions1)
+                {
+                    predicate = predicate.Or(p => p.BudgetSettings.Option1 == option);
+                }
+                Query = Query.Where(predicate);
+            }
+
+            if (searchTerms.BudgetOptions2 != null && searchTerms.BudgetOptions2.Length > 0)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var option in searchTerms.BudgetOptions2)
+                {
+                    predicate = predicate.Or(p => p.BudgetSettings.Option2 == option);
+                }
+                Query = Query.Where(predicate);
+            }
+
+            // FSA Process
+            Query = AddExactMatchFilter(searchTerms.AssuranceGateNumber, Query, p => searchTerms.AssuranceGateNumber == p.AssuranceGateNumber);
+            Query = AddExactMatchFilter(searchTerms.AssuranceNextGate, Query, p => searchTerms.AssuranceNextGate == p.NextAssuranceGateNumber);
+            Query = AddExactMatchFilter(searchTerms.ProcessSetting1, Query, p => searchTerms.ProcessSetting1 == p.ProcessSettings.Setting1);
+            Query = AddExactMatchFilter(searchTerms.ProcessSetting2, Query, p => searchTerms.ProcessSetting2 == p.ProcessSettings.Setting2);
+            if (searchTerms.ProcessOptions1 != null && searchTerms.ProcessOptions1.Length > 0)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var option in searchTerms.ProcessOptions1)
+                {
+                    predicate = predicate.Or(p => p.ProcessSettings.Option1 == option);
+                }
+                Query = Query.Where(predicate);
+            }
+
+            if (searchTerms.ProcessOptions2 != null && searchTerms.ProcessOptions2.Length > 0)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var option in searchTerms.ProcessOptions2)
+                {
+                    predicate = predicate.Or(p => p.ProcessSettings.Option2 == option);
+                }
+                Query = Query.Where(predicate);
+            }
+
 
             // Project team
+            Query = AddExactMatchFilter(searchTerms.Teams, Query, p => searchTerms.Teams.Contains(p.Lead.Team.ViewKey));
+
             if (!string.IsNullOrWhiteSpace(searchTerms.TeamMemberName))
             {
                 searchTerms.TeamMemberName = searchTerms.TeamMemberName.ToLower();
@@ -61,7 +116,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             }
 
             // Project lead search
-            // TODO: split search term by spaces? Currently, searching for "forename surname" won't match anything.
+            // TODO: split search term by spaces? Currently, searching for "surname forename" won't match anything.
             if (!string.IsNullOrWhiteSpace(searchTerms.ProjectLeadName))
             {
                 searchTerms.ProjectLeadName = searchTerms.ProjectLeadName.ToLower();
@@ -133,9 +188,19 @@ namespace FSAPortfolio.WebAPI.App.Projects
                     )
                 );
         }
+
+        private IQueryable<Project> AddTextFilter(string term, IQueryable<Project> query, Expression<Func<Project, bool>> filter)
+        {
+            return (!string.IsNullOrWhiteSpace(term)) ? query.Where(filter) : query;
+        }
+
         private IQueryable<Project> AddExactMatchFilter(string[] terms, IQueryable<Project> query, Expression<Func<Project, bool>> filter)
         {
             return (terms != null && terms.Length > 0) ? query.Where(filter) : query;
+        }
+        private IQueryable<Project> AddExactMatchFilter(string term, IQueryable<Project> query, Expression<Func<Project, bool>> filter)
+        {
+            return (!string.IsNullOrWhiteSpace(term)) ? query.Where(filter) : query;
         }
         private IQueryable<Project> AddExactMatchFilter(DateTime? term, IQueryable<Project> query, Expression<Func<Project, bool>> filter)
         {
@@ -145,6 +210,5 @@ namespace FSAPortfolio.WebAPI.App.Projects
         {
             return term.HasValue ? query.Where(filter) : query;
         }
-
     }
 }

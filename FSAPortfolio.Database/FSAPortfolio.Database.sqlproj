@@ -82,7 +82,6 @@
     <Build Include="dbo\Tables\Portfolios.sql" />
     <Build Include="dbo\Tables\PortfolioProjects.sql" />
     <Build Include="dbo\Tables\PortfolioLabelGroups.sql" />
-    <Build Include="dbo\Tables\PortfolioLabelConfigs.sql" />
     <Build Include="dbo\Tables\PortfolioConfigurations.sql" />
     <Build Include="dbo\Tables\PortfolioConfigAuditLogs.sql" />
     <Build Include="dbo\Tables\People.sql" />
@@ -112,5 +111,7 @@
     <None Include="Deployment\FixDuplicateUpdates.sql" />
     <None Include="Deployment\RemoveDuplicateTeams.sql" />
     <None Include="Deployment\04_NoDescriptionSizeLimit.sql" />
+    <None Include="Deployment\05_Filters.sql" />
+    <Build Include="dbo\Tables\PortfolioLabelConfigs.sql" />
   </ItemGroup>
 </Project>

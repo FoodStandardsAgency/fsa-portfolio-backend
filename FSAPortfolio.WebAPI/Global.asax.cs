@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
+using System.Web.Http.Filters;
 
 namespace FSAPortfolio.WebAPI
 {
@@ -18,6 +19,7 @@ namespace FSAPortfolio.WebAPI
             AppLog.Indent();
             GlobalConfiguration.Configure(WebApiConfig.Register);
             GlobalConfiguration.Configuration.MessageHandlers.Add(new ApiKeyMessageHandler());
+            GlobalConfiguration.Configuration.Filters.Add(new LogExceptionFilterAttribute());
             PortfolioMapper.Configure();
             AppLog.Unindent();
             AppLog.TraceInformation("Portfolio application started.");
@@ -27,6 +29,14 @@ namespace FSAPortfolio.WebAPI
         {
             Exception ex = Server.GetLastError();
             AppLog.Trace(ex);
+        }
+
+        public class LogExceptionFilterAttribute : ExceptionFilterAttribute
+        {
+            public override void OnException(HttpActionExecutedContext context)
+            {
+                AppLog.Trace(context.Exception);
+            }
         }
     }
 }

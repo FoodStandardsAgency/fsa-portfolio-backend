@@ -15,6 +15,9 @@ namespace FSAPortfolio.Application.Models
         [JsonProperty(ProjectPropertyConstants.project_name)]
         public string Name { get; set; }
 
+        [JsonProperty(ProjectPropertyConstants.risk_rating)]
+        public string[] RiskRatings { get; set; }
+
         [JsonProperty(FilterFieldConstants.TeamMemberNameFilter)]
         public string TeamMemberName { get; set; }
 
@@ -26,6 +29,10 @@ namespace FSAPortfolio.Application.Models
 
         [JsonProperty(PropertyName = ProjectPropertyConstants.project_type)]
         public string[] ProjectTypes { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.project_size)]
+        public string[] ProjectSizes { get; set; }
+
 
         [JsonProperty(ProjectPropertyConstants.rag)]
         public string[] RAGStatuses { get; set; }
@@ -45,11 +52,45 @@ namespace FSAPortfolio.Application.Models
         [JsonProperty(ProjectPropertyConstants.programme)]
         public string[] Programmes { get; set; }
 
+
+        [JsonProperty(ProjectPropertyConstants.budgettype)]
+        public string[] BudgetTypes { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.cost_centre)]
+        public string CostCentre { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.budget_option1)]
+        public string[] BudgetOptions1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.budget_option2)]
+        public string[] BudgetOptions2 { get; set; }
+
+
+        [JsonProperty(ProjectPropertyConstants.fsaproc_assurance_gatenumber)]
+        public string AssuranceGateNumber { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.fsaproc_assurance_nextgate)]
+        public string AssuranceNextGate { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.processes_setting1)]
+        public string ProcessSetting1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.processes_setting2)]
+        public string ProcessSetting2 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.processes_option1)]
+        public string[] ProcessOptions1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.processes_option2)]
+        public string[] ProcessOptions2 { get; set; }
+
+
+
+
+
         [JsonProperty(ProjectPropertyConstants.ProjectLead)]
         public string ProjectLeadName { get; set; }
 
-        [JsonProperty(ProjectPropertyConstants.priority_main)]
-        public int[] Priorities { get; set; }
 
         [JsonProperty(FilterFieldConstants.LeadTeamFilter)]
         public string[] Teams { get; set; }

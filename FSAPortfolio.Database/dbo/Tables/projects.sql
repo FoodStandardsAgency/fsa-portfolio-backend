@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Projects] (
     [ProjectReservation_Id]            INT             NOT NULL,
     [Name]                             NVARCHAR (250)  NULL,
-    [Description]                      NVARCHAR (1000) NULL,
+    [Description]                      NVARCHAR (MAX)  NULL,
     [Theme]                            NVARCHAR (50)   NULL,
     [ProjectType]                      NVARCHAR (50)   NULL,
     [StrategicObjectives]              NVARCHAR (50)   NULL,
@@ -82,6 +82,8 @@
     CONSTRAINT [FK_dbo.Projects_dbo.ProjectUpdateItems_FirstUpdate_Id] FOREIGN KEY ([FirstUpdate_Id]) REFERENCES [dbo].[ProjectUpdateItems] ([Id]),
     CONSTRAINT [FK_dbo.Projects_dbo.ProjectUpdateItems_LatestUpdate_Id] FOREIGN KEY ([LatestUpdate_Id]) REFERENCES [dbo].[ProjectUpdateItems] ([Id])
 );
+
+
 
 
 

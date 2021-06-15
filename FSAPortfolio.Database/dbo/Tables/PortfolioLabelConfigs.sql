@@ -22,8 +22,6 @@
 );
 
 
-
-
 GO
 CREATE NONCLUSTERED INDEX [IX_Group_Id]
     ON [dbo].[PortfolioLabelConfigs]([Group_Id] ASC);
