@@ -128,6 +128,11 @@ namespace FSAPortfolio.WebAPI.App.Projects
             }
 
             // FSA Process
+            if(searchTerms?.AssuranceGateCompleted?.Date != null)
+            {
+                Query = Query.Where(p => p.AssuranceGateCompletedDate.Date > searchTerms.AssuranceGateCompleted.Date);
+            }
+
             if (searchTerms.ProcessOptions1 != null && searchTerms.ProcessOptions1.Length > 0)
             {
                 var predicate = PredicateBuilder.New<Project>();
@@ -268,6 +273,37 @@ namespace FSAPortfolio.WebAPI.App.Projects
             Query = AddExactMatchFilter(searchTerms.NoUpdates, Query, p => p.Updates.Any(u => u.Text != null && u.Text != string.Empty) != searchTerms.NoUpdates.Value);
 
             // Key dates
+            if (searchTerms?.IntendedStartDate?.Date != null)
+            {
+                Query = Query.Where(p => p.StartDate.Date > searchTerms.IntendedStartDate.Date);
+            }
+
+            if (searchTerms?.ActualStartDate?.Date != null)
+            {
+                Query = Query.Where(p => p.ActualStartDate.Date > searchTerms.ActualStartDate.Date);
+            }
+
+            if (searchTerms?.ExpectedCurrentPhaseEndDate?.Date != null)
+            {
+                Query = Query.Where(p => p.LatestUpdate.ExpectedCurrentPhaseEnd.Date > searchTerms.ExpectedCurrentPhaseEndDate.Date);
+            }
+
+            if (searchTerms?.ExpectedEndDate?.Date != null)
+            {
+                Query = Query.Where(p => p.ExpectedEndDate.Date > searchTerms.ExpectedEndDate.Date);
+            }
+
+            if (searchTerms?.ActualEndDate?.Date != null)
+            {
+                Query = Query.Where(p => p.ActualEndDate.Date > searchTerms.ActualEndDate.Date);
+            }
+
+            if (searchTerms?.HardDeadline?.Date != null)
+            {
+                Query = Query.Where(p => p.HardEndDate.Date > searchTerms.HardDeadline.Date);
+            }
+
+
             Query = AddExactMatchFilter(searchTerms.PastStartDate, Query,
                 p => searchTerms.PastStartDate.Value ==
                 (

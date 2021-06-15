@@ -79,6 +79,11 @@ namespace FSAPortfolio.Application.Models
         public string[] BudgetOptions2 { get; set; }
 
 
+        [JsonProperty(ProjectPropertyConstants.fsaproc_assurance_gatecompleted)]
+        public DateFieldQueryModel AssuranceGateCompleted { get; set; }
+
+
+
         [JsonProperty(ProjectPropertyConstants.processes_option1)]
         public string[] ProcessOptions1 { get; set; }
 
@@ -113,6 +118,24 @@ namespace FSAPortfolio.Application.Models
         public string[] PriorityGroups { get; set; }
 
 
+        [JsonProperty(ProjectPropertyConstants.IntendedStartDate)]
+        public DateFieldQueryModel IntendedStartDate { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.ActualStartDate)]
+        public DateFieldQueryModel ActualStartDate { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.ExpectedCurrentPhaseEndDate)]
+        public DateFieldQueryModel ExpectedCurrentPhaseEndDate { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.ExpectedEndDate)]
+        public DateFieldQueryModel ExpectedEndDate { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.ActualEndDate)]
+        public DateFieldQueryModel ActualEndDate { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.HardDeadline)]
+        public DateFieldQueryModel HardDeadline { get; set; }
+
 
         [JsonProperty(FilterFieldConstants.LastUpdateFilter)]
         public DateTime? LastUpdateBefore { get; set; }
@@ -137,5 +160,13 @@ namespace FSAPortfolio.Application.Models
         public string Operator { get; set; }
 
     }
+
+    public class DateFieldQueryModel
+    {
+        [JsonProperty("date")]
+        public DateTime? Date { get; set; }
+
+    }
+
 
 }

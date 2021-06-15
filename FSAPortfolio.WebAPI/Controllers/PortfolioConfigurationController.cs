@@ -30,7 +30,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         [HttpPatch]
-        public async Task Patch([FromUri(Name = "id")] string viewKey, [FromBody] PortfolioConfigUpdateRequest update)
+        public async Task Patch([FromUri(Name = "portfolio")] string viewKey, [FromBody] PortfolioConfigUpdateRequest update)
         {
             await portfolioConfigurationService.UpdateConfigAsync(viewKey, update);
         }
