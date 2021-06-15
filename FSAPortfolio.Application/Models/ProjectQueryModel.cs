@@ -56,27 +56,13 @@ namespace FSAPortfolio.Application.Models
         [JsonProperty(ProjectPropertyConstants.budgettype)]
         public string[] BudgetTypes { get; set; }
 
-        [JsonProperty(ProjectPropertyConstants.cost_centre)]
-        public string CostCentre { get; set; }
-
+        
         [JsonProperty(ProjectPropertyConstants.budget_option1)]
         public string[] BudgetOptions1 { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.budget_option2)]
         public string[] BudgetOptions2 { get; set; }
 
-
-        [JsonProperty(ProjectPropertyConstants.fsaproc_assurance_gatenumber)]
-        public string AssuranceGateNumber { get; set; }
-
-        [JsonProperty(ProjectPropertyConstants.fsaproc_assurance_nextgate)]
-        public string AssuranceNextGate { get; set; }
-
-        [JsonProperty(ProjectPropertyConstants.processes_setting1)]
-        public string ProcessSetting1 { get; set; }
-
-        [JsonProperty(ProjectPropertyConstants.processes_setting2)]
-        public string ProcessSetting2 { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.processes_option1)]
         public string[] ProcessOptions1 { get; set; }

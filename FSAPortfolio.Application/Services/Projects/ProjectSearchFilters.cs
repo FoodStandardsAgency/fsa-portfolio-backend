@@ -45,7 +45,6 @@ namespace FSAPortfolio.WebAPI.App.Projects
 
             // Budget search terms
             Query = AddExactMatchFilter(searchTerms.BudgetTypes, Query, p => searchTerms.BudgetTypes.Contains(p.BudgetType.ViewKey));
-            Query = AddTextFilter(searchTerms.CostCentre, Query, p => p.CostCentre.Contains(searchTerms.CostCentre));
 
             if (searchTerms.BudgetOptions1 != null && searchTerms.BudgetOptions1.Length > 0)
             {
@@ -68,10 +67,6 @@ namespace FSAPortfolio.WebAPI.App.Projects
             }
 
             // FSA Process
-            Query = AddExactMatchFilter(searchTerms.AssuranceGateNumber, Query, p => searchTerms.AssuranceGateNumber == p.AssuranceGateNumber);
-            Query = AddExactMatchFilter(searchTerms.AssuranceNextGate, Query, p => searchTerms.AssuranceNextGate == p.NextAssuranceGateNumber);
-            Query = AddExactMatchFilter(searchTerms.ProcessSetting1, Query, p => searchTerms.ProcessSetting1 == p.ProcessSettings.Setting1);
-            Query = AddExactMatchFilter(searchTerms.ProcessSetting2, Query, p => searchTerms.ProcessSetting2 == p.ProcessSettings.Setting2);
             if (searchTerms.ProcessOptions1 != null && searchTerms.ProcessOptions1.Length > 0)
             {
                 var predicate = PredicateBuilder.New<Project>();
