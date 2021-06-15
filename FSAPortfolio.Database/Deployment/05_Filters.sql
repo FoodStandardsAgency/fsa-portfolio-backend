@@ -7,9 +7,10 @@ UPDATE dbo.PortfolioLabelConfigs SET Flags = (Flags | 0x800) WHERE FieldName IN 
 'project_size', 
 'budgettype', 
 'budget', 
+'budget_option1', 'budget_option2',
 'spent', 'forecast_spend', 'budget_field1', 'budget_field2',
-'budget_option1', 
-'budget_option2',
-'processes_option1',
-'processes_option2'
+'processes_option1', 'processes_option2',
+'progress_option1', 'progress_option2',
+'project_plan_option1', 'project_plan_option2'
+
 )

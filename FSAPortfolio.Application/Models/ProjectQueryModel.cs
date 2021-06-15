@@ -86,6 +86,19 @@ namespace FSAPortfolio.Application.Models
         public string[] ProcessOptions2 { get; set; }
 
 
+        [JsonProperty(ProjectPropertyConstants.project_plan_option1)]
+        public string[] ProjectPlanOptions1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.project_plan_option2)]
+        public string[] ProjectPlanOptions2 { get; set; }
+
+
+        [JsonProperty(ProjectPropertyConstants.progress_option1)]
+        public string[] ProgressOptions1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.progress_option2)]
+        public string[] ProgressOptions2 { get; set; }
+
 
 
 

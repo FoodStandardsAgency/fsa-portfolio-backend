@@ -148,6 +148,50 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 Query = Query.Where(predicate);
             }
 
+            // FSA Progress
+            if (searchTerms.ProgressOptions1 != null && searchTerms.ProgressOptions1.Length > 0)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var option in searchTerms.ProgressOptions1)
+                {
+                    predicate = predicate.Or(p => p.ProgressSettings.Option1 == option);
+                }
+                Query = Query.Where(predicate);
+            }
+
+            if (searchTerms.ProgressOptions2 != null && searchTerms.ProgressOptions2.Length > 0)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var option in searchTerms.ProgressOptions2)
+                {
+                    predicate = predicate.Or(p => p.ProgressSettings.Option2 == option);
+                }
+                Query = Query.Where(predicate);
+            }
+
+
+            // FSA Project Plan
+            if (searchTerms.ProjectPlanOptions1 != null && searchTerms.ProjectPlanOptions1.Length > 0)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var option in searchTerms.ProjectPlanOptions1)
+                {
+                    predicate = predicate.Or(p => p.PlanSettings.Option1 == option);
+                }
+                Query = Query.Where(predicate);
+            }
+
+            if (searchTerms.ProjectPlanOptions2 != null && searchTerms.ProjectPlanOptions2.Length > 0)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var option in searchTerms.ProjectPlanOptions2)
+                {
+                    predicate = predicate.Or(p => p.PlanSettings.Option2 == option);
+                }
+                Query = Query.Where(predicate);
+            }
+
+
 
             // Project team
             Query = AddExactMatchFilter(searchTerms.Teams, Query, p => searchTerms.Teams.Contains(p.Lead.Team.ViewKey));
