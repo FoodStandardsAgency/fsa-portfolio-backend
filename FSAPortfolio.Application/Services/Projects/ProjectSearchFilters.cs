@@ -66,6 +66,67 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 Query = Query.Where(predicate);
             }
 
+            if (searchTerms?.Budget?.Amount != null)
+            {
+                switch (searchTerms.Budget.Operator)
+                {
+                    case "<":
+                        Query = Query.Where(p => p.LatestUpdate.Budget < searchTerms.Budget.Amount);
+                        break;
+                    case ">":
+                        Query = Query.Where(p => p.LatestUpdate.Budget > searchTerms.Budget.Amount);
+                        break;
+                }
+            }
+            if (searchTerms?.Spent?.Amount != null)
+            {
+                switch (searchTerms.Spent.Operator)
+                {
+                    case "<":
+                        Query = Query.Where(p => p.LatestUpdate.Spent < searchTerms.Spent.Amount);
+                        break;
+                    case ">":
+                        Query = Query.Where(p => p.LatestUpdate.Spent > searchTerms.Spent.Amount);
+                        break;
+                }
+            }
+            if (searchTerms?.ForecastSpend?.Amount != null)
+            {
+                switch (searchTerms.ForecastSpend.Operator)
+                {
+                    case "<":
+                        Query = Query.Where(p => p.ForecastSpend < searchTerms.ForecastSpend.Amount);
+                        break;
+                    case ">":
+                        Query = Query.Where(p => p.ForecastSpend > searchTerms.ForecastSpend.Amount);
+                        break;
+                }
+            }
+            if (searchTerms?.BudgetField1?.Amount != null)
+            {
+                switch (searchTerms.BudgetField1.Operator)
+                {
+                    case "<":
+                        Query = Query.Where(p => p.BudgetSettings.Setting1 < searchTerms.BudgetField1.Amount);
+                        break;
+                    case ">":
+                        Query = Query.Where(p => p.BudgetSettings.Setting1 > searchTerms.BudgetField1.Amount);
+                        break;
+                }
+            }
+            if (searchTerms?.BudgetField2?.Amount != null)
+            {
+                switch (searchTerms.BudgetField2.Operator)
+                {
+                    case "<":
+                        Query = Query.Where(p => p.BudgetSettings.Setting2 < searchTerms.BudgetField2.Amount);
+                        break;
+                    case ">":
+                        Query = Query.Where(p => p.BudgetSettings.Setting2 > searchTerms.BudgetField2.Amount);
+                        break;
+                }
+            }
+
             // FSA Process
             if (searchTerms.ProcessOptions1 != null && searchTerms.ProcessOptions1.Length > 0)
             {

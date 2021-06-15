@@ -3,6 +3,7 @@
 - Added diagnostics logging
 - Added dependency injection using Unity
 - Added data dumps to Azure File Share
+- More filter options
 
 Azure Storage Account Connection string
 - Ensure a storage account exists - the connection string is required (under Access Keys).
@@ -13,6 +14,9 @@ New App Settings:
 - DataDumpStorageShareName - the name of the file share for data dumps
 - PowerBIAPIKey - key for PowerBI usage of API
 - PowerBIRoles - Roles required for data, e.g. ODD.Admin, SERD.Admin
+
+Database Changes
+- Run script 05_Filters.sql to update the field configurations for filterable fields.
 
 
 

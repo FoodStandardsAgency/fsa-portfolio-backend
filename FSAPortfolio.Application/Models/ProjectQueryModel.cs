@@ -56,7 +56,22 @@ namespace FSAPortfolio.Application.Models
         [JsonProperty(ProjectPropertyConstants.budgettype)]
         public string[] BudgetTypes { get; set; }
 
-        
+        [JsonProperty(ProjectPropertyConstants.budget)]
+        public BudgetFieldQueryModel Budget { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.spent)]
+        public BudgetFieldQueryModel Spent { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.forecast_spend)]
+        public BudgetFieldQueryModel ForecastSpend { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.budget_field1)]
+        public BudgetFieldQueryModel BudgetField1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.budget_field2)]
+        public BudgetFieldQueryModel BudgetField2 { get; set; }
+
+
         [JsonProperty(ProjectPropertyConstants.budget_option1)]
         public string[] BudgetOptions1 { get; set; }
 
@@ -97,6 +112,16 @@ namespace FSAPortfolio.Application.Models
 
         [JsonProperty(FilterFieldConstants.MissedEndDateFilter)]
         public bool? MissedEndDate { get; set; }
+
+    }
+
+    public class BudgetFieldQueryModel
+    {
+        [JsonProperty("amount")]
+        public decimal? Amount { get; set; }
+
+        [JsonProperty("operator")]
+        public string Operator { get; set; }
 
     }
 
