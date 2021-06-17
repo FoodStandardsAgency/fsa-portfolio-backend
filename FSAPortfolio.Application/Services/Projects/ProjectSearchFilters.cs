@@ -220,16 +220,59 @@ namespace FSAPortfolio.WebAPI.App.Projects
                     );
             }
 
-            // Project lead search
-            // TODO: split search term by spaces? Currently, searching for "surname forename" won't match anything.
-            if (!string.IsNullOrWhiteSpace(searchTerms.ProjectLeadName))
+            // People
+            if (searchTerms.ProjectLeadName != null)
             {
-                searchTerms.ProjectLeadName = searchTerms.ProjectLeadName.ToLower();
-                Query = Query.Where(p =>
-                    (p.Lead.Firstname + " " + p.Lead.Surname).ToLower().StartsWith(searchTerms.ProjectLeadName) ||
-                    p.Lead.Email.ToLower().StartsWith(searchTerms.ProjectLeadName)
-                    );
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var name in searchTerms.ProjectLeadName)
+                {
+                    if (!string.IsNullOrWhiteSpace(name))
+                    {
+                        predicate = predicate.Or(p => p.Lead.Email.Equals(name, StringComparison.OrdinalIgnoreCase));
+                    }
+                }
+                Query = Query.Where(predicate);
             }
+
+            if (searchTerms.KeyContact1 != null)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var name in searchTerms.KeyContact1)
+                {
+                    if (!string.IsNullOrWhiteSpace(name))
+                    {
+                        predicate = predicate.Or(p => p.KeyContact1.Email.Equals(name, StringComparison.OrdinalIgnoreCase));
+                    }
+                }
+                Query = Query.Where(predicate);
+            }
+
+            if (searchTerms.KeyContact2 != null)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var name in searchTerms.KeyContact2)
+                {
+                    if (!string.IsNullOrWhiteSpace(name))
+                    {
+                        predicate = predicate.Or(p => p.KeyContact2.Email.Equals(name, StringComparison.OrdinalIgnoreCase));
+                    }
+                }
+                Query = Query.Where(predicate);
+            }
+
+            if (searchTerms.KeyContact3 != null)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var name in searchTerms.KeyContact3)
+                {
+                    if (!string.IsNullOrWhiteSpace(name))
+                    {
+                        predicate = predicate.Or(p => p.KeyContact3.Email.Equals(name, StringComparison.OrdinalIgnoreCase));
+                    }
+                }
+                Query = Query.Where(predicate);
+            }
+
 
             // Progress
             Query = AddExactMatchFilter(searchTerms.Phases, Query, p => searchTerms.Phases.Contains(p.LatestUpdate.Phase.ViewKey));

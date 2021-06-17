@@ -108,7 +108,17 @@ namespace FSAPortfolio.Application.Models
 
 
         [JsonProperty(ProjectPropertyConstants.ProjectLead)]
-        public string ProjectLeadName { get; set; }
+        public string[] ProjectLeadName { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.key_contact1)]
+        public string[] KeyContact1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.key_contact2)]
+        public string[] KeyContact2 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.key_contact3)]
+        public string[] KeyContact3 { get; set; }
+
 
 
         [JsonProperty(FilterFieldConstants.LeadTeamFilter)]
