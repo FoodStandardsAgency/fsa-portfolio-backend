@@ -197,7 +197,6 @@ namespace FSAPortfolio.WebAPI.App.Projects
             }
 
 
-
             // Project team
             Query = AddExactMatchFilter(searchTerms.Teams, Query, p => searchTerms.Teams.Contains(p.Lead.Team.ViewKey));
 
@@ -219,6 +218,27 @@ namespace FSAPortfolio.WebAPI.App.Projects
                         t.Email.ToLower().StartsWith(searchTerms.TeamMemberName))
                     );
             }
+
+            if (searchTerms.ProjectTeamOptions1 != null && searchTerms.ProjectTeamOptions1.Length > 0)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var option in searchTerms.ProjectTeamOptions1)
+                {
+                    predicate = predicate.Or(p => p.TeamSettings.Option1 == option);
+                }
+                Query = Query.Where(predicate);
+            }
+
+            if (searchTerms.ProjectTeamOptions2 != null && searchTerms.ProjectTeamOptions2.Length > 0)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var option in searchTerms.ProjectTeamOptions2)
+                {
+                    predicate = predicate.Or(p => p.TeamSettings.Option2 == option);
+                }
+                Query = Query.Where(predicate);
+            }
+
 
             // People
             if (searchTerms.ProjectLeadName != null)
@@ -273,6 +293,18 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 Query = Query.Where(predicate);
             }
 
+            if (searchTerms.LeadRoles != null)
+            {
+                var predicate = PredicateBuilder.New<Project>();
+                foreach (var roles in searchTerms.LeadRoles)
+                {
+                    if (!string.IsNullOrWhiteSpace(roles))
+                    {
+                        predicate = predicate.Or(p => p.LeadRole.Equals(roles, StringComparison.OrdinalIgnoreCase));
+                    }
+                }
+                Query = Query.Where(predicate);
+            }
 
             // Progress
             Query = AddExactMatchFilter(searchTerms.Phases, Query, p => searchTerms.Phases.Contains(p.LatestUpdate.Phase.ViewKey));

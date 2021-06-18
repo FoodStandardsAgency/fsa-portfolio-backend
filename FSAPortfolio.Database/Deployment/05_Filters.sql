@@ -13,5 +13,7 @@ UPDATE dbo.PortfolioLabelConfigs SET Flags = (Flags | 0x800) WHERE FieldName IN 
 'progress_option1', 'progress_option2',
 'project_plan_option1', 'project_plan_option2',
 'start_date', 'actstart', 'expendp', 'expend', 'actual_end_date', 'hardend',
-'key_contact1', 'key_contact2', 'key_contact3'
+'key_contact1', 'key_contact2', 'key_contact3',
+'project_team_option1', 'project_team_option2',
+'oddlead_role'
 )

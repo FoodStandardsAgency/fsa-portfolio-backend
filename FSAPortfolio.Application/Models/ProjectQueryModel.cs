@@ -124,6 +124,17 @@ namespace FSAPortfolio.Application.Models
         [JsonProperty(FilterFieldConstants.LeadTeamFilter)]
         public string[] Teams { get; set; }
 
+        [JsonProperty(ProjectPropertyConstants.project_team_option1)]
+        public string[] ProjectTeamOptions1 { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.project_team_option2)]
+        public string[] ProjectTeamOptions2 { get; set; }
+
+
+        [JsonProperty(ProjectPropertyConstants.oddlead_role)]
+        public string[] LeadRoles { get; set; }
+
+
         [JsonProperty(FilterFieldConstants.PriorityGroupFilter)]
         public string[] PriorityGroups { get; set; }
 
