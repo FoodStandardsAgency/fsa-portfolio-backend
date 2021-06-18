@@ -21,6 +21,10 @@ namespace FSAPortfolio.Application.Models
 
         [JsonProperty("phases")]
         public IEnumerable<PhaseSummaryModel> Phases { get; set; }
+
+        [JsonProperty("labels")]
+        public IEnumerable<PortfolioLabelModel> Labels { get; set; }
+
     }
 
     public class ProjectSummaryModel

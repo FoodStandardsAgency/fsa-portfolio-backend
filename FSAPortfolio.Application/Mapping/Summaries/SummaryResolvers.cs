@@ -161,4 +161,22 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
             return SummaryLinqQuery.GetQuery(config, p => source.Id == 0 ? !p.Lead_Id.HasValue : p.Lead_Id == source.Id, context);
         }
     }
+
+    public class ProjectSummaryLabelResolver : IValueResolver<Portfolio, PortfolioSummaryModel, IEnumerable<PortfolioLabelModel>>
+    {
+        private static string[] summaryFields = new string[] {
+                ProjectPropertyConstants.category,
+                ProjectPropertyConstants.pgroup,
+                ProjectPropertyConstants.g6team,
+                ProjectPropertyConstants.ProjectLead,
+                ProjectPropertyConstants.rag,
+                ProjectPropertyConstants.phase
+            };
+        public IEnumerable<PortfolioLabelModel> Resolve(Portfolio source, PortfolioSummaryModel destination, IEnumerable<PortfolioLabelModel> destMember, ResolutionContext context)
+        {
+            var summaryLabels = source.Configuration.Labels.Where(l => summaryFields.Contains(l.FieldName));
+            return context.Mapper.Map<IEnumerable<PortfolioLabelModel>>(summaryLabels);
+        }
+    }
+
 }
