@@ -18,6 +18,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Net;
+using LinqKit;
+using System.Linq.Expressions;
 
 namespace FSAPortfolio.Application.Services.Projects
 {
@@ -44,7 +46,7 @@ namespace FSAPortfolio.Application.Services.Projects
             return result;
         }
 
-        public async Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType, string user)
+        public async Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType, string user, string projectType)
         {
             PortfolioSummaryModel result = null;
             var context = ServiceContext.PortfolioContext;
@@ -57,14 +59,9 @@ namespace FSAPortfolio.Application.Services.Projects
 
             if (ServiceContext.HasPermission(portfolio))
             {
-                if (string.IsNullOrWhiteSpace(user))
-                {
-                    await context.LoadProjectsIntoPortfolioAsync(portfolio);
-                }
-                else
-                {
-                    await context.LoadProjectsIntoPortfolioAsync(portfolio, p => p.Lead.Email == user);
-                }
+                var projectFilter = BuildProjectFilter(user, projectType);
+
+                await context.LoadProjectsIntoPortfolioAsync(portfolio, projectFilter);
 
                 result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(
                     portfolio,
@@ -82,6 +79,44 @@ namespace FSAPortfolio.Application.Services.Projects
             }
             
             return result;
+        }
+
+        private static Expression<Func<Project, bool>> BuildProjectFilter(string user, string projectType)
+        {
+
+            Expression<Func<Project, bool>> projectFilter = null;
+
+            if (!(string.IsNullOrWhiteSpace(user) && string.IsNullOrWhiteSpace(projectType)))
+            {
+                var projectTypePredicate = PredicateBuilder.New<Project>();
+                var userPredicate = PredicateBuilder.New<Project>();
+
+                // User predicates
+                if (!string.IsNullOrWhiteSpace(user))
+                {
+                    userPredicate = userPredicate.Start(p => p.Lead.ActiveDirectoryPrincipalName == user);
+                }
+
+                // ProjectType predicates
+                if (!string.IsNullOrWhiteSpace(projectType))
+                {
+                    projectTypePredicate = projectTypePredicate.Start(p => p.ProjectType == projectType);
+                }
+
+                // Combine predicates to build project filter
+                var test = userPredicate.And(projectTypePredicate);
+
+                if (userPredicate.IsStarted && projectTypePredicate.IsStarted)
+                {
+                    projectFilter = userPredicate.And(projectTypePredicate);
+                }
+                else
+                {
+                    projectFilter = userPredicate.IsStarted ? userPredicate : projectTypePredicate;
+                }
+            }
+
+            return projectFilter;
         }
 
         public async Task<PortfolioConfiguration> GetConfigAsync(string portfolioViewKey, bool includedOnly = false)

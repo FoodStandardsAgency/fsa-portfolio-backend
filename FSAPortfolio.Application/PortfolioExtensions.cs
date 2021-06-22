@@ -26,16 +26,6 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Configuration.LabelGroups)
                 ;
         }
-        public static IQueryable<Portfolio> IncludeProjects(this IQueryable<Portfolio> query)
-        {
-            return query
-                .Include(p => p.Projects.Select(pr => pr.Reservation))
-                .Include(p => p.Projects.Select(pr => pr.Lead.Team))
-                .Include(p => p.Projects.Select(pr => pr.Category))
-                .Include(p => p.Projects.Select(pr => pr.LatestUpdate.Phase))
-                .Include(p => p.Projects.Select(pr => pr.FirstUpdate))
-                ;
-        }
 
         public static async Task LoadProjectsIntoPortfolioAsync(this PortfolioContext context, Portfolio portfolio, Expression<Func<Project, bool>> filter = null)
         {
