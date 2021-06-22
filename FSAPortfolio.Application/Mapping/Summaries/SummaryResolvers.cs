@@ -162,7 +162,10 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                     break;
                 case PortfolioSummaryModel.ByTeam:
                 default:
-                    result = SummaryLinqQuery.GetQuery(portfolioConfiguration, p => p.Lead?.Team != null && p.Lead.Team.ViewKey == source.ViewKey, context);
+                    result = SummaryLinqQuery.GetQuery(portfolioConfiguration, p => 
+                        (p.Lead?.Team != null && p.Lead.Team.ViewKey == source.ViewKey) ||
+                        (p.Lead?.Team == null && source.Id == 0) // No team set
+                        , context);
                     break;
             }
 
