@@ -44,32 +44,42 @@ namespace FSAPortfolio.Application.Services.Projects
             return result;
         }
 
-        public async Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType)
+        public async Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType, string user)
         {
             PortfolioSummaryModel result = null;
             var context = ServiceContext.PortfolioContext;
                 var portfolio = await context.Portfolios
                     .Include(p => p.Teams)
                     .IncludeConfig()
-                    .IncludeProjects()
                     .SingleOrDefaultAsync(p => p.ViewKey == viewKey);
 
                 if (portfolio == null) throw new HttpResponseException(HttpStatusCode.NotFound);
 
-                if (ServiceContext.HasPermission(portfolio))
+            if (ServiceContext.HasPermission(portfolio))
+            {
+                if (string.IsNullOrWhiteSpace(user))
                 {
-                    result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(
-                    portfolio,
-                    opt =>
-                    {
-                        opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
-                        opt.Items[nameof(PortfolioSummaryModel)] = summaryType;
-                    });
+                    await context.LoadProjectsIntoPortfolioAsync(portfolio);
                 }
                 else
                 {
-                    throw new HttpResponseException(HttpStatusCode.Forbidden);
+                    await context.LoadProjectsIntoPortfolioAsync(portfolio, p => p.Lead.Email == user);
                 }
+
+                result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(
+                    portfolio,
+                    opt =>
+                    {
+                        opt.Items[nameof(PortfolioContext)] = context;
+                        opt.Items[nameof(PortfolioSummaryModel.Person)] = user;
+                        opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
+                        opt.Items[nameof(PortfolioSummaryModel)] = summaryType;
+                    });
+            }
+            else
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
             
             return result;
         }

@@ -11,6 +11,23 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
 {
+    public class PortfolioPersonResolver : IValueResolver<Portfolio, PortfolioSummaryModel, string>
+    {
+        public string Resolve(Portfolio source, PortfolioSummaryModel destination, string destMember, ResolutionContext context)
+        {
+            string result = null;
+            string userName = (string)context.Items[nameof(PortfolioSummaryModel.Person)];
+            if(!string.IsNullOrWhiteSpace(userName))
+            {
+                var portfolioContext = (PortfolioContext)context.Items[nameof(PortfolioContext)];
+                var person = portfolioContext.People.SingleOrDefault(p => p.ActiveDirectoryPrincipalName == userName);
+                if (person != null) result = person.DisplayName;
+            }
+            return result;   
+        }
+    }
+
+
     public class ProjectCountByPhaseResolver : IValueResolver<ProjectPhase, PhaseSummaryModel, int>
     {
         public int Resolve(ProjectPhase source, PhaseSummaryModel destination, int destMember, ResolutionContext context)

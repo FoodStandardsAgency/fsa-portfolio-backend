@@ -121,6 +121,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 result = new IdentityResponseModel()
                 {
+                    UserId = principal.Identity.Name,
                     Roles = identity.Claims.Where(c => c.Type == identity.RoleClaimType).Select(c => c.Value.ToLower()).ToArray(),
                     AccessGroup = identity.Claims.SingleOrDefault(c => c.Type == ApplicationUser.AccessGroupClaimType)?.Value?.ToLower()
                 };

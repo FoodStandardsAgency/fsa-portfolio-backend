@@ -8,6 +8,9 @@ namespace FSAPortfolio.Application.Models
 {
     public class IdentityResponseModel
     {
+        [JsonProperty(PropertyName = "userid")]
+        public string UserId { get; set; }
+
         [JsonProperty(PropertyName = "roles")]
         public string[] Roles { get; set; }
 

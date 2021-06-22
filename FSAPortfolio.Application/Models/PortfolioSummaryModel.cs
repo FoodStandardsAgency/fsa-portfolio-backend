@@ -16,6 +16,9 @@ namespace FSAPortfolio.Application.Models
         public const string ByTeam = "team";
         public const string NewProjectsByTeam = "newbyteam";
 
+        [JsonProperty("person")]
+        public string Person { get; set; }
+
         [JsonProperty("summaries")]
         public IEnumerable<ProjectSummaryModel> Summaries { get; set; }
 

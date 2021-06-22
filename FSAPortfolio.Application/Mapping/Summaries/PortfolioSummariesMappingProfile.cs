@@ -17,6 +17,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
         public PortfolioSummariesMappingProfile()
         {
             CreateMap<Portfolio, PortfolioSummaryModel>()
+                .ForMember(d => d.Person, o => o.MapFrom<PortfolioPersonResolver>())
                 .ForMember(d => d.Summaries, o => o.MapFrom<PortfolioSummaryResolver>())
                 .ForMember(d => d.Phases, o => o.MapFrom(s => s.Configuration.Phases.Where(p => p.Id != s.Configuration.CompletedPhase.Id).OrderBy(c => c.Order)))
                 .ForMember(d => d.Labels, o => o.MapFrom<ProjectSummaryLabelResolver>())
