@@ -20,6 +20,7 @@ using System.Web.Http;
 using System.Net;
 using LinqKit;
 using System.Linq.Expressions;
+using FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries;
 
 namespace FSAPortfolio.Application.Services.Projects
 {
@@ -50,12 +51,12 @@ namespace FSAPortfolio.Application.Services.Projects
         {
             PortfolioSummaryModel result = null;
             var context = ServiceContext.PortfolioContext;
-                var portfolio = await context.Portfolios
-                    .Include(p => p.Teams)
-                    .IncludeConfig()
-                    .SingleOrDefaultAsync(p => p.ViewKey == viewKey);
+            var portfolio = await context.Portfolios
+                .Include(p => p.Teams)
+                .IncludeConfig()
+                .SingleOrDefaultAsync(p => p.ViewKey == viewKey);
 
-                if (portfolio == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+            if (portfolio == null) throw new HttpResponseException(HttpStatusCode.NotFound);
 
             if (ServiceContext.HasPermission(portfolio))
             {
@@ -68,7 +69,7 @@ namespace FSAPortfolio.Application.Services.Projects
                     opt =>
                     {
                         opt.Items[nameof(PortfolioContext)] = context;
-                        opt.Items[nameof(PortfolioSummaryModel.Person)] = user;
+                        opt.Items[PortfolioPersonResolver.PersonKey] = user;
                         opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
                         opt.Items[nameof(PortfolioSummaryModel)] = summaryType;
                     });
@@ -77,7 +78,7 @@ namespace FSAPortfolio.Application.Services.Projects
             {
                 throw new HttpResponseException(HttpStatusCode.Forbidden);
             }
-            
+
             return result;
         }
 
@@ -104,15 +105,17 @@ namespace FSAPortfolio.Application.Services.Projects
                 }
 
                 // Combine predicates to build project filter
-                var test = userPredicate.And(projectTypePredicate);
-
                 if (userPredicate.IsStarted && projectTypePredicate.IsStarted)
                 {
                     projectFilter = userPredicate.And(projectTypePredicate);
                 }
                 else
                 {
-                    projectFilter = userPredicate.IsStarted ? userPredicate : projectTypePredicate;
+                    projectFilter = userPredicate.IsStarted ? 
+                        userPredicate : 
+                        projectTypePredicate.IsStarted ? 
+                            projectTypePredicate : 
+                            null;
                 }
             }
 

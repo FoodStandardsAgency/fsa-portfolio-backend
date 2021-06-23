@@ -3,6 +3,11 @@ using FSAPortfolio.Application.Services.Config;
 using FSAPortfolio.Application.Services.Projects;
 using FSAPortfolio.Common.Logging;
 using FSAPortfolio.Entities;
+using FSAPortfolio.WebAPI.App.Identity;
+using FSAPortfolio.WebAPI.App.Microsoft;
+using FSAPortfolio.WebAPI.App.Projects;
+using FSAPortfolio.WebAPI.App.Sync;
+using FSAPortfolio.WebAPI.App.Users;
 using System;
 using System.Web;
 using Unity;
@@ -56,6 +61,13 @@ namespace FSAPortfolio.WebAPI
             container.RegisterType<IPortfolioService, PortfolioService>(new HierarchicalLifetimeManager());
             container.RegisterType<IPortfolioConfigurationService, PortfolioConfigurationService>(new HierarchicalLifetimeManager());
             container.RegisterType<IDataDumpService, DataDumpService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IMicrosoftGraphUserStoreService, MicrosoftGraphUserStoreService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IRoleService, RoleService>(new HierarchicalLifetimeManager());
+
+            container.RegisterType<IProjectService, ProjectService>(new HierarchicalLifetimeManager());
+            container.RegisterType<ISyncService, SyncService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IPersonService, PersonService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IUserService, UserService>(new HierarchicalLifetimeManager());
         }
     }
 }

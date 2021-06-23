@@ -22,14 +22,23 @@ namespace FSAPortfolio.WebAPI.Controllers
 {
     public class UsersController : ApiController
     {
+        private readonly IPersonService personService;
+        private readonly IMicrosoftGraphUserStoreService microsoftGraphUserStoreService;
+        private readonly IUserService userService;
+
+        public UsersController(IPersonService personService, IMicrosoftGraphUserStoreService microsoftGraphUserStoreService, IUserService userService)
+        {
+            this.personService = personService;
+            this.microsoftGraphUserStoreService = microsoftGraphUserStoreService;
+            this.userService = userService;
+        }
 
         // Get: api/Users/search
         [AcceptVerbs("GET")]
         [Authorize]
         public async Task<UserSearchResponseModel> SearchUsers([FromUri] string portfolio, [FromUri] string term, [FromUri(Name = "addnone")] bool includeNone = false)
         {
-            var provider = new MicrosoftGraphUserStore();
-            var result = await provider.GetUsersAsync(term);
+            var result = await microsoftGraphUserStoreService.GetUsersAsync(term);
             var response = PortfolioMapper.ActiveDirectoryMapper.Map<UserSearchResponseModel>(result, opt => opt.Items[nameof(ActiveDirectoryUserSelectModel.NoneOption)] = includeNone);
             return response;
         }
@@ -59,8 +68,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             using (var context = new PortfolioContext())
             {
-                var provider = new PersonProvider(context);
-                return await provider.AddSupplierAsync(model.Portfolio, model.UserName, model.PasswordHash);
+                return await personService.AddSupplierAsync(model.Portfolio, model.UserName, model.PasswordHash);
             }
         }
 
@@ -132,13 +140,9 @@ namespace FSAPortfolio.WebAPI.Controllers
         [AcceptVerbs("POST")]
         public async Task CreateUser([FromBody] AddUserModel model)
         {
-            using (var context = new PortfolioContext())
-            {
-                var sha256 = SHA256.Create();
-                var hash = BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(model.Password))).Replace("-", "");
-                var users = new UserProvider(context);
-                await users.CreateUser(model.UserName, hash, model.AccessGroup);
-            }
+            var sha256 = SHA256.Create();
+            var hash = BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(model.Password))).Replace("-", "");
+            await userService.CreateUser(model.UserName, hash, model.AccessGroup);
         }
     }
 }

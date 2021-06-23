@@ -12,9 +12,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
+using FSAPortfolio.Application.Services;
+
 namespace FSAPortfolio.WebAPI.App.Microsoft
 {
-    public class MicrosoftGraphUserStore
+    public class MicrosoftGraphUserStoreService : IMicrosoftGraphUserStoreService
     {
         private static HttpClient client = new HttpClient();
         private static string TenantId = ConfigurationManager.AppSettings["Azure.TenantId"];
@@ -24,9 +26,9 @@ namespace FSAPortfolio.WebAPI.App.Microsoft
         private const string userSelect = "$select=id,displayName,givenName,surname,mail,userPrincipalName,department,companyName";
 
         private AuthenticationResult _auth;
-        private PortfolioRoleManager roleManager;
+        private IRoleService roleManager;
 
-        public MicrosoftGraphUserStore(PortfolioRoleManager roleManager = null)
+        public MicrosoftGraphUserStoreService(IRoleService roleManager)
         {
             this.roleManager = roleManager;
         }
@@ -38,10 +40,10 @@ namespace FSAPortfolio.WebAPI.App.Microsoft
 
             // Build the uri
             var uri = new UriBuilder($"https://graph.microsoft.com/v1.0/users/{term}?{userSelect}");
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri.ToString());
-                request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", auth.AccessToken);
-                HttpResponseMessage response = await client.SendAsync(request);
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, uri.ToString());
+            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", auth.AccessToken);
+            HttpResponseMessage response = await client.SendAsync(request);
 
             if (response.IsSuccessStatusCode)
             {

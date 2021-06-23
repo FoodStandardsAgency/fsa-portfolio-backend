@@ -11,15 +11,17 @@ namespace FSAPortfolio.WebAPI.Controllers
 {
     public class AccessGroupsController : ApiController
     {
+        IUserService userService;
+        public AccessGroupsController(IUserService userService)
+        {
+            this.userService = userService;
+        }
+
         // GET: AccessGroup
         [AcceptVerbs("GET")]
         public async Task Init()
         {
-            using (var context = new PortfolioContext())
-            {
-                var users = new UserProvider(context);
-                await users.SeedAccessGroups();
-            }
+            await userService.SeedAccessGroups();
         }
     }
 }

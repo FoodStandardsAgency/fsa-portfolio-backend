@@ -204,7 +204,8 @@
     <Compile Include="Services\Identity\ApplicationOAuthProvider.cs" />
     <Compile Include="Services\Identity\ApplicationUser.cs" />
     <Compile Include="Services\Identity\ApplicationUserManager.cs" />
-    <Compile Include="Services\Identity\PortfolioRoleManager.cs" />
+    <Compile Include="Services\Identity\IRoleService.cs" />
+    <Compile Include="Services\Identity\RoleService.cs" />
     <Compile Include="Services\Identity\UserStore.cs" />
     <Compile Include="Mapping\ActiveDirectory\ADUserMappingProfile.cs" />
     <Compile Include="Mapping\ImportExport\DocumentConverters.cs" />
@@ -235,18 +236,20 @@
     <Compile Include="Mapping\Summaries\SummaryResolvers.cs" />
     <Compile Include="Services\IServiceContext.cs" />
     <Compile Include="Services\Microsoft\GroupMembershipToRoleMap.cs" />
-    <Compile Include="Services\Microsoft\MicrosoftGraphUserStore.cs" />
+    <Compile Include="Services\Microsoft\IMicrosoftGraphUserStoreService.cs" />
+    <Compile Include="Services\Microsoft\MicrosoftGraphUserStoreService.cs" />
     <Compile Include="PortfolioExtensions.cs" />
     <Compile Include="ProjectQueryExtensions.cs" />
     <Compile Include="Services\Projects\DataDumpService.cs" />
     <Compile Include="Services\Projects\IDataDumpService.cs" />
     <Compile Include="Services\Projects\IPortfolioService.cs" />
     <Compile Include="Services\Projects\IProjectDataService.cs" />
+    <Compile Include="Services\Projects\IProjectService.cs" />
     <Compile Include="Services\Projects\PortfolioService.cs" />
     <Compile Include="Services\Projects\ProjectDataService.cs" />
     <Compile Include="Services\Projects\ProjectDataValidationException.cs" />
     <Compile Include="Services\Projects\ProjectPropertyConstants.cs" />
-    <Compile Include="Services\Projects\ProjectProvider.cs" />
+    <Compile Include="Services\Projects\ProjectService.cs" />
     <Compile Include="Services\Projects\ProjectSearchFilters.cs" />
     <Compile Include="Services\Projects\PropertyImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -254,14 +257,17 @@
     <Compile Include="Services\Sync\BudgetTypeSyncMaps.cs" />
     <Compile Include="Services\Sync\CategorySyncMaps.cs" />
     <Compile Include="Services\Sync\DefaultFieldLabels.cs" />
+    <Compile Include="Services\Sync\ISyncService.cs" />
     <Compile Include="Services\Sync\PhaseSyncMaps.cs" />
     <Compile Include="Services\Sync\ProjectTypeSyncMaps.cs" />
     <Compile Include="Services\Sync\SERDSyncMaps.cs" />
     <Compile Include="Services\Sync\SyncMaps.cs" />
-    <Compile Include="Services\Sync\SyncProvider.cs" />
+    <Compile Include="Services\Sync\SyncService.cs" />
     <Compile Include="Services\Users\AccessGroupConstants.cs" />
-    <Compile Include="Services\Users\PersonProvider.cs" />
-    <Compile Include="Services\Users\UserProvider.cs" />
+    <Compile Include="Services\Users\IPersonService.cs" />
+    <Compile Include="Services\Users\IUserService.cs" />
+    <Compile Include="Services\Users\PersonService.cs" />
+    <Compile Include="Services\Users\UserService.cs" />
     <Compile Include="ViewKeyPrefix.cs" />
   </ItemGroup>
   <ItemGroup>

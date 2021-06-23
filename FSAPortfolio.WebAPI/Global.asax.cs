@@ -30,13 +30,12 @@ namespace FSAPortfolio.WebAPI
             Exception ex = Server.GetLastError();
             AppLog.Trace(ex);
         }
-
-        public class LogExceptionFilterAttribute : ExceptionFilterAttribute
+    }
+    public class LogExceptionFilterAttribute : ExceptionFilterAttribute
+    {
+        public override void OnException(HttpActionExecutedContext context)
         {
-            public override void OnException(HttpActionExecutedContext context)
-            {
-                AppLog.Trace(context.Exception);
-            }
+            AppLog.Trace(context.Exception);
         }
     }
 }

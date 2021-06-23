@@ -17,8 +17,8 @@ namespace FSAPortfolio.WebAPI.App.Identity
     public class UserStore : IUserStore<ApplicationUser>, IUserStore<ApplicationUser, string>
     {
         private PortfolioContext context;
-        private PortfolioRoleManager roleManager;
-        public UserStore(PortfolioContext context, PortfolioRoleManager roleManager)
+        private RoleService roleManager;
+        public UserStore(PortfolioContext context, RoleService roleManager)
         {
             this.context = context;
             this.roleManager = roleManager;

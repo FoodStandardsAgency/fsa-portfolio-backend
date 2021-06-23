@@ -19,53 +19,55 @@ namespace FSAPortfolio.WebAPI.Controllers
 {
     public class SyncController : ApiController
     {
+        private readonly ISyncService syncService;
+
+        public SyncController(ISyncService syncService)
+        {
+            this.syncService = syncService;
+        }
+
         // GET: api/Sync/SyncAll
         [AcceptVerbs("GET")]
         public async Task<IEnumerable<string>> SyncAll([FromUri] bool syncPortfolios = true)
         {
-            List<string> messages = new List<string>();
-            var sync = new SyncProvider(messages);
-
             if (syncPortfolios)
             {
-                sync.SyncUsers();
-                sync.SyncDirectorates();
-                sync.SyncPortfolios();
-                await sync.SyncPeople();
+                syncService.ClearLog();
+                syncService.SyncUsers();
+                syncService.SyncDirectorates();
+                syncService.SyncPortfolios();
+                await syncService.SyncPeople();
             }
 
-            sync.SyncAllProjects();
-            return messages;
+            syncService.SyncAllProjects();
+            return syncService.Messages();
         }
 
         // GET: api/Sync/SyncUsers
         [AcceptVerbs("GET")]
         public IEnumerable<string> SyncUsers()
         {
-            List<string> messages = new List<string>();
-            var sync = new SyncProvider(messages);
-            sync.SyncUsers();
-            return messages;
+            syncService.ClearLog();
+            syncService.SyncUsers();
+            return syncService.Messages();
         }
 
         // GET: api/Sync/SyncPeople
         [AcceptVerbs("GET")]
         public async Task<IEnumerable<string>> SyncPeople()
         {
-            List<string> messages = new List<string>();
-            var sync = new SyncProvider(messages);
-            await sync.SyncPeople(forceADSync: true);
-            return messages;
+            syncService.ClearLog();
+            await syncService.SyncPeople(forceADSync: true);
+            return syncService.Messages();
         }
 
         // GET: api/Sync/SyncPortfolios
         [AcceptVerbs("GET")]
         public IEnumerable<string> SyncPortfolios()
         {
-            List<string> messages = new List<string>();
-            var sync = new SyncProvider(messages);
-            sync.SyncPortfolios();
-            return messages;
+            syncService.ClearLog();
+            syncService.SyncPortfolios();
+            return syncService.Messages();
         }
 
 
@@ -74,18 +76,19 @@ namespace FSAPortfolio.WebAPI.Controllers
         [AcceptVerbs("PUT")]
         public IEnumerable<string> SyncProject([FromBody] SyncRequestModel syncRequest)
         {
-            List<string> messages = new List<string>();
-            var sync = new SyncProvider(messages, true);
-
+            List<string> messages;
             try
             {
-                if (!sync.SyncProject(syncRequest.ProjectId))
+                syncService.ClearLog();
+                if (!syncService.SyncProject(syncRequest.ProjectId))
                 {
                     throw new HttpResponseException(HttpStatusCode.NotFound);
                 }
+                messages = syncService.Messages().ToList();
             }
             catch(Exception e)
             {
+                messages = syncService.Messages().ToList();
                 messages.Add(e.Message);
                 messages.Add(e.StackTrace);
             }
@@ -96,10 +99,9 @@ namespace FSAPortfolio.WebAPI.Controllers
         [AcceptVerbs("GET")]
         public IEnumerable<string> SyncAllProjects([FromUri] string portfolio = null)
         {
-            List<string> messages = new List<string>();
-            var sync = new SyncProvider(messages);
-            sync.SyncAllProjects(portfolio);
-            return messages;
+            syncService.ClearLog();
+            syncService.SyncAllProjects(portfolio);
+            return syncService.Messages();
         }
     }
 }

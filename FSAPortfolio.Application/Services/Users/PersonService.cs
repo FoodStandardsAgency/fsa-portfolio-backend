@@ -21,20 +21,33 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Text.RegularExpressions;
+using FSAPortfolio.Application.Services;
 
 namespace FSAPortfolio.WebAPI.App.Users
 {
-    public class PersonProvider
+    public class PersonService : IPersonService
     {
-        private PortfolioContext context;
+        private IServiceContext serviceContext;
 
         private const string TeamKeyPrefix = "AzureAD.Team.Name.";
+        private Lazy<Dictionary<string, string>> lazyTeamViewKeyMap; // Maps team name to team viewkey
+        private IMicrosoftGraphUserStoreService msgraphService;
 
+        public PersonService(IServiceContext serviceContext, IMicrosoftGraphUserStoreService msgraphService)
+        {
+            this.serviceContext = serviceContext;
+            lazyTeamViewKeyMap = new Lazy<Dictionary<string, string>>(() =>
+                ConfigurationManager.AppSettings.AllKeys.Where(k => k.StartsWith(TeamKeyPrefix))
+                .ToDictionary(k => ConfigurationManager.AppSettings[k], k => k.Substring(TeamKeyPrefix.Length)));
+
+            this.msgraphService = msgraphService;
+        }
         public async Task<AddSupplierResponseModel> AddSupplierAsync(string portfolioViewKey, string userName, string passwordHash)
         {
             var response = new AddSupplierResponseModel();
             try
             {
+                var context = serviceContext.PortfolioContext;
                 var accessGroup = await context.AccessGroups.SingleAsync(a => a.ViewKey == AccessGroupConstants.SupplierViewKey);
                 var portfolio = await context.Portfolios.SingleAsync(p => p.ViewKey == portfolioViewKey);
                 var roleList = $"{portfolio.IDPrefix}.Read";
@@ -49,11 +62,11 @@ namespace FSAPortfolio.WebAPI.App.Users
                 await context.SaveChangesAsync();
                 response.result = "Ok";
             }
-            catch(DbUpdateException updateException)
+            catch (DbUpdateException updateException)
             {
                 var duplicateException = updateException.InnerException?.InnerException as SqlException;
 
-                if(duplicateException != null && duplicateException.Message.StartsWith("Cannot insert duplicate key row in object 'dbo.Users' with unique index 'IX_UserName'"))
+                if (duplicateException != null && duplicateException.Message.StartsWith("Cannot insert duplicate key row in object 'dbo.Users' with unique index 'IX_UserName'"))
                 {
                     response.result = "Duplicate";
                 }
@@ -65,21 +78,7 @@ namespace FSAPortfolio.WebAPI.App.Users
             return response;
         }
 
-
-        private Lazy<Dictionary<string, string>> lazyTeamViewKeyMap; // Maps team name to team viewkey
-        private Lazy<MicrosoftGraphUserStore> lazyMsGraph;
-
-        public PersonProvider(PortfolioContext context = null)
-        {
-            this.context = context;
-            lazyTeamViewKeyMap = new Lazy<Dictionary<string, string>>(() => 
-                ConfigurationManager.AppSettings.AllKeys.Where(k => k.StartsWith(TeamKeyPrefix))
-                .ToDictionary(k => ConfigurationManager.AppSettings[k], k => k.Substring(TeamKeyPrefix.Length)));
-
-            lazyMsGraph = new Lazy<MicrosoftGraphUserStore>(() => new MicrosoftGraphUserStore());
-        }
-
-        internal async Task MapPeopleAsync(ProjectUpdateModel update, Project project)
+        public async Task MapPeopleAsync(ProjectUpdateModel update, Project project)
         {
             project.Lead = await EnsureForAsync(update.oddlead, project.Lead, project.Reservation.Portfolio);
             project.KeyContact1 = await EnsureForAsync(update.key_contact1, project.KeyContact1, project.Reservation.Portfolio);
@@ -93,13 +92,14 @@ namespace FSAPortfolio.WebAPI.App.Users
             Person person = null;
             if (!string.IsNullOrWhiteSpace(name))
             {
+                var context = serviceContext.PortfolioContext;
                 MicrosoftGraphUserModel user = null;
                 person =
                     context.People.Local.SingleOrDefault(p => p.ActiveDirectoryPrincipalName == name || p.Email == name) ??
                     await context.People.SingleOrDefaultAsync(p => p.ActiveDirectoryPrincipalName == name || p.Email == name);
                 if (person == null)
                 {
-                    user = await lazyMsGraph.Value.GetUserForPrincipalNameAsync(name);
+                    user = await msgraphService.GetUserForPrincipalNameAsync(name);
                     if (user != null)
                     {
                         person = PortfolioMapper.ActiveDirectoryMapper.Map<Person>(user);
@@ -119,7 +119,7 @@ namespace FSAPortfolio.WebAPI.App.Users
                     // Get the AD user if haven't already
                     if (user == null && !string.IsNullOrWhiteSpace(person.ActiveDirectoryId))
                     {
-                        user = await lazyMsGraph.Value.GetUserForPrincipalNameAsync(name);
+                        user = await msgraphService.GetUserForPrincipalNameAsync(name);
                     }
 
                     // Look up the team from the user's department
@@ -163,6 +163,7 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         private async Task<int> GetNextOrderAsync()
         {
+            var context = serviceContext.PortfolioContext;
             var storeMax = await context.Teams.Select(t => t.Order).DefaultIfEmpty(-1).MaxAsync();
             var localMax = context.Teams.Local.Select(t => t.Order).DefaultIfEmpty(-1).Max();
             return (localMax > storeMax ? localMax : storeMax) + 1;
@@ -170,6 +171,7 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         private async Task<Team> GetExistingTeamAsync(string teamViewKey)
         {
+            var context = serviceContext.PortfolioContext;
             // Check local first, then the database
             return context.Teams.Local.SingleOrDefault(t => t.ViewKey == teamViewKey) ?? (await context.Teams.SingleOrDefaultAsync(t => t.ViewKey == teamViewKey));
         }

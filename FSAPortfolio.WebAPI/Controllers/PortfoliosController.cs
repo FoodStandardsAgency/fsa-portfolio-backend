@@ -27,10 +27,12 @@ namespace FSAPortfolio.WebAPI.Controllers
     {
         private readonly IPortfolioService portfolioService;
         private readonly IProjectDataService projectDataService;
-        public PortfoliosController(IPortfolioService portfolioService, IProjectDataService projectDataService)
+        private readonly ISyncService syncService;
+        public PortfoliosController(IPortfolioService portfolioService, IProjectDataService projectDataService, ISyncService syncService)
         {
             this.portfolioService = portfolioService;
             this.projectDataService = projectDataService;
+            this.syncService = syncService;
 
 #if DEBUG
             AppLog.TraceVerbose($"{nameof(PortfoliosController)} created.");
@@ -138,9 +140,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             using (var context = new PortfolioContext())
             {
-                var log = new List<string>();
-                var syncProvider = new SyncProvider(log);
-                var portfolio = syncProvider.AddPortfolio(context, model.Name, model.ShortName, model.ViewKey);
+                var portfolio = syncService.AddPortfolio(context, model.Name, model.ShortName, model.ViewKey);
                 var labels = new DefaultFieldLabels(portfolio.Configuration);
                 portfolio.Configuration.Labels = labels.GetDefaultLabels();
                 portfolio.IDPrefix = portfolio.ViewKey.ToUpper();

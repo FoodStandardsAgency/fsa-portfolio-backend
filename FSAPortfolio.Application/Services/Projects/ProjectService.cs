@@ -16,19 +16,21 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using FSAPortfolio.Application.Services.Config;
+using FSAPortfolio.Application.Services;
 
 namespace FSAPortfolio.WebAPI.App.Projects
 {
-    public class ProjectProvider
+    public class ProjectService : BaseService, IProjectService
     {
-        internal PortfolioContext context;
-        public ProjectProvider(PortfolioContext context)
+        private IPersonService personService;
+        public ProjectService(IServiceContext context, IPersonService personService) : base(context)
         {
-            this.context = context;
+            this.personService = personService;
         }
 
         public async Task<ProjectReservation> GetProjectReservationAsync(string projectId)
         {
+            var context = ServiceContext.PortfolioContext;
             return await context.ProjectReservations
                 .ProjectIncludes()
                 .ProjectUpdateIncludes()
@@ -48,7 +50,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
             return reservation.Project;
         }
 
-        public async Task UpdateProject(ProjectUpdateModel update, PersonProvider userProvider, ProjectReservation reservation = null, Action<Portfolio> permissionCallback = null)
+        public async Task UpdateProject(ProjectUpdateModel update, ProjectReservation reservation = null, Action<Portfolio> permissionCallback = null)
         {
             try
             {
@@ -56,7 +58,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
                 if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
                 else
                 {
-                    if(permissionCallback != null) permissionCallback(reservation.Portfolio);
+                    if (permissionCallback != null) permissionCallback(reservation.Portfolio);
                     var project = reservation?.Project;
                     if (project == null)
                     {
@@ -64,11 +66,12 @@ namespace FSAPortfolio.WebAPI.App.Projects
                     }
 
                     // Map the model to the project - map the leads manually because they can require an async AD lookup
+                    var context = ServiceContext.PortfolioContext;
                     PortfolioMapper.ProjectMapper.Map(update, project, opt =>
                     {
                         opt.Items[nameof(PortfolioContext)] = context;
                     });
-                    await userProvider.MapPeopleAsync(update, project);
+                    await personService.MapPeopleAsync(update, project);
 
                     // Audit and save
                     if (project.AuditLogs != null) LogAuditChanges(project);
@@ -133,7 +136,7 @@ namespace FSAPortfolio.WebAPI.App.Projects
         {
             // Record changes
             AuditProvider.LogChanges(
-                context,
+                ServiceContext.PortfolioContext,
                 (ts, txt) => auditLogFactory(ts, txt),
                 project.AuditLogs,
                 DateTime.Now);

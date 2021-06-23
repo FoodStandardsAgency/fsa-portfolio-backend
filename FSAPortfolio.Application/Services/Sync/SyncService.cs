@@ -23,21 +23,25 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Text.RegularExpressions;
 using FSAPortfolio.WebAPI.App.Identity;
+using FSAPortfolio.Application.Services;
 
 namespace FSAPortfolio.WebAPI.App.Sync
 {
-    public class SyncProvider
+    public class SyncService : BaseService, ISyncService
     {
+        private IPersonService personService;
+        private IRoleService roleManager;
         private ICollection<string> log;
-
         private const bool SyncODDOnly = true;
 
         IMapper mapper;
         internal bool debug;
 
-        public SyncProvider(ICollection<string> log, bool debug = false)
+        public SyncService(IServiceContext context, IPersonService personService, IRoleService roleManager, bool debug = false) : base(context)
         {
-            this.log = log;
+            this.personService = personService;
+            this.roleManager = roleManager;
+            this.log = new List<string>();
             this.debug = debug;
             var config = new MapperConfiguration(cfg =>
             {
@@ -106,17 +110,15 @@ namespace FSAPortfolio.WebAPI.App.Sync
             log.Add("Syncing people...");
 
             using (var source = new MigratePortfolioContext<oddproject>("odd"))
-            using (var dest = new PortfolioContext())
             {
+                var dest = ServiceContext.PortfolioContext;
                 var portfolio = await dest.Portfolios.Include(p => p.Teams).SingleAsync(p => p.ViewKey == "odd");
-                var usersProvider = new PersonProvider(dest);
-                var roleManager = new PortfolioRoleManager(dest);
 
                 // Sync the people
                 foreach (var sourcePerson in source.odd_people.AsEnumerable().Where(p => !string.IsNullOrWhiteSpace(p.email)))
                 {
-                    var destPerson = 
-                        dest.People.Local.SingleOrDefault(u => u.Email == sourcePerson.email) ?? 
+                    var destPerson =
+                        dest.People.Local.SingleOrDefault(u => u.Email == sourcePerson.email) ??
                         dest.People.Include(p => p.Team).SingleOrDefault(u => u.Email == sourcePerson.email);
 
                     if (destPerson == null)
@@ -132,7 +134,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                         log.Add($"Added person {destPerson.Firstname} {destPerson.Surname}");
                     }
 
-                    if (SyncMaps.emailMap.ContainsKey(destPerson.Email)) 
+                    if (SyncMaps.emailMap.ContainsKey(destPerson.Email))
                         destPerson.Email = SyncMaps.emailMap[destPerson.Email];
 
                     // Set the active directory user
@@ -141,7 +143,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     {
                         if (destPerson.Email != null)
                         {
-                            var graph = new MicrosoftGraphUserStore(roleManager);
+                            var graph = new MicrosoftGraphUserStoreService(roleManager);
                             adUser = await graph.GetUserForPrincipalNameAsync(destPerson.Email);
                             if (adUser != null)
                             {
@@ -263,7 +265,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                     }
 
                     // Add or update labels
-                    context.PortfolioConfigurationLabels.AddOrUpdate(l => new { l.Configuration_Id, l.FieldName },  defaultLabels);
+                    context.PortfolioConfigurationLabels.AddOrUpdate(l => new { l.Configuration_Id, l.FieldName }, defaultLabels);
                 }
 
                 context.SaveChanges();
@@ -283,9 +285,10 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 .Include(p => p.Configuration.Labels)
                 .SingleOrDefault(p => p.ViewKey == viewKey);
 
-            if(portfolio == null)
+            if (portfolio == null)
             {
-                portfolio = new Portfolio() { 
+                portfolio = new Portfolio()
+                {
                     ViewKey = viewKey,
                     Configuration = new PortfolioConfiguration()
                     {
@@ -307,7 +310,8 @@ namespace FSAPortfolio.WebAPI.App.Sync
             portfolio.ShortName = shortName;
             portfolio.IDPrefix = viewKey.ToUpper();
 
-            Action<int> phaseFactory = (o) => {
+            Action<int> phaseFactory = (o) =>
+            {
                 string phaseName;
                 string vk = $"{ViewKeyPrefix.Phase}{o}";
                 if (!SyncMaps.phaseMap.TryGetValue(new Tuple<string, string>(viewKey, vk), out phaseName))
@@ -480,7 +484,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 catch (DbEntityValidationException e)
                 {
                     log.Add($"FAIL: {id}");
-                    foreach(var eve in e.EntityValidationErrors)
+                    foreach (var eve in e.EntityValidationErrors)
                     {
                         foreach (var ve in eve.ValidationErrors)
                         {
@@ -507,14 +511,14 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 else
                 {
                     logDebug(projectId, $"Porfolio viewkey not found in id {projectId}...");
-                    if(!m.Success) logDebug(projectId, "...viewkey not found");
+                    if (!m.Success) logDebug(projectId, "...viewkey not found");
                     else logDebug(projectId, $"...match index = {m.Index}");
                 }
             }
 
             using (var dest = new PortfolioContext())
             {
-                switch(portfolioViewKey)
+                switch (portfolioViewKey)
                 {
                     case "odd":
                         using (var source = new MigratePortfolioContext<oddproject>(portfolioViewKey))
@@ -710,7 +714,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
                 if (latestSourceUpdate is oddproject && new string[] { "Size", "Directorate" }.Contains(ame.MemberMap.DestinationName))
                 {
                     var oddProject = latestSourceUpdate as oddproject;
-                    switch(ame.MemberMap.DestinationName)
+                    switch (ame.MemberMap.DestinationName)
                     {
                         case "Directorate":
                             log.Add($"MAPPING ERROR: Destination member = {ame.MemberMap.DestinationName}, source data = {oddProject.direct}");
@@ -764,5 +768,14 @@ namespace FSAPortfolio.WebAPI.App.Sync
             }
         }
 
+        public IEnumerable<string> Messages()
+        {
+            return log;
+        }
+
+        public void ClearLog()
+        {
+            log.Clear();
+        }
     }
 }
