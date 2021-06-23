@@ -37,6 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestScripts", "TestScripts"
 		TestScripts\getPortfolioUpdates.sh = TestScripts\getPortfolioUpdates.sh
 		TestScripts\getToken.sh = TestScripts\getToken.sh
 		TestScripts\setSecrets.sh = TestScripts\setSecrets.sh
+		TestScripts\deduplicateADUsers.sh = TestScripts\deduplicateADUsers.sh
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.Application", "FSAPortfolio.Application\FSAPortfolio.Application.csproj", "{FC96DE85-FD34-4D6B-B627-B896E71FCF14}"

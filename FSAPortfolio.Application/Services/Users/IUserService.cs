@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using FSAPortfolio.Application.Models;
+using System.Threading.Tasks;
 
 namespace FSAPortfolio.WebAPI.App.Users
 {
@@ -6,5 +7,9 @@ namespace FSAPortfolio.WebAPI.App.Users
     {
         Task CreateUser(string userName, string passwordHash, string accessGroupViewKey);
         Task SeedAccessGroups();
+        Task<UserSearchResponseModel> SearchUsersAsync(string portfolio, string term, bool includeNone = false);
+        Task<SupplierResponseModel> GetSuppliersAsync();
+        Task<UserModel> GetADUserAsync(string userName);
+        Task<UserModel> GetUserAsync(string userName, string passwordHash);
     }
 }

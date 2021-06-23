@@ -1,6 +1,9 @@
-﻿using FSAPortfolio.Application.Services;
+﻿using FSAPortfolio.Application.Models;
+using FSAPortfolio.Application.Services;
 using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Users;
+using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.WebAPI.App.Microsoft;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -13,9 +16,68 @@ namespace FSAPortfolio.WebAPI.App.Users
 {
     public class UserService : BaseService, IUserService
     {
-        public UserService(IServiceContext context) : base(context)
+        private readonly IMicrosoftGraphUserStoreService microsoftGraphUserStoreService;
+
+        public UserService(IServiceContext context, IMicrosoftGraphUserStoreService microsoftGraphUserStoreService) : base(context)
         {
+            this.microsoftGraphUserStoreService = microsoftGraphUserStoreService;
         }
+
+        public async Task<UserSearchResponseModel> SearchUsersAsync(string portfolio, string term, bool includeNone = false)
+        {
+            var result = await microsoftGraphUserStoreService.GetUsersAsync(term);
+            var response = PortfolioMapper.ActiveDirectoryMapper.Map<UserSearchResponseModel>(result, opt => opt.Items[nameof(ActiveDirectoryUserSelectModel.NoneOption)] = includeNone);
+            return response;
+        }
+
+        public async Task<SupplierResponseModel> GetSuppliersAsync()
+        {
+            var response = new SupplierResponseModel()
+            {
+                Suppliers = await ServiceContext.PortfolioContext.Users
+                    .Where(u => u.AccessGroup.ViewKey == AccessGroupConstants.SupplierViewKey)
+                    .Select(s => s.UserName)
+                    .ToListAsync()
+            };
+            return response;
+        }
+
+        public async Task<UserModel> GetADUserAsync(string userName)
+        {
+            UserModel result = null;
+            var user = await ServiceContext.PortfolioContext.Users
+                .Include(u => u.AccessGroup)
+                .FirstOrDefaultAsync(u => u.UserName == userName);
+
+            if (user != null)
+            {
+                result = new UserModel()
+                {
+                    UserName = user.UserName,
+                    AccessGroup = user.AccessGroup.ViewKey
+                };
+            }
+            return result;
+        }
+
+        public async Task<UserModel> GetUserAsync(string userName, string passwordHash)
+        {
+            UserModel result = null;
+            var user = await ServiceContext.PortfolioContext.Users
+                .Include(u => u.AccessGroup)
+                .FirstOrDefaultAsync(u => u.UserName == userName && u.PasswordHash == passwordHash);
+
+            if (user != null)
+            {
+                result = new UserModel()
+                {
+                    UserName = user.UserName,
+                    AccessGroup = user.AccessGroup.ViewKey
+                };
+            }
+            return result;
+        }
+
 
         public async Task SeedAccessGroups()
         {
@@ -45,5 +107,6 @@ namespace FSAPortfolio.WebAPI.App.Users
                 await context.SaveChangesAsync();
             }
         }
+
     }
 }

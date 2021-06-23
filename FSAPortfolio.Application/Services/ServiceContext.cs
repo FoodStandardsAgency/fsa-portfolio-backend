@@ -48,22 +48,29 @@ namespace FSAPortfolio.Application.Services
             var roleViewKeys = roles.Select(r => $"{portfolio.IDPrefix}.{r}").ToArray();
             return roleViewKeys.Any(k => User.IsInRole(k) && portfolio.RequiredRoles.Contains(k));
         }
+        public bool HasPermission(params string[] roles)
+        {
+            return roles.Any(k => User.IsInRole(k));
+        }
         public void AssertPermission(Portfolio portfolio)
         {
-            if (!HasPermission(portfolio)) throw new HttpResponseException(HttpStatusCode.Forbidden);
+            if (!HasPermission(portfolio)) ThrowResponseException(HttpStatusCode.Forbidden);
         }
         public void AssertPermission(Portfolio portfolio, params string[] roles)
         {
-            if (!HasPermission(portfolio, roles)) throw new HttpResponseException(HttpStatusCode.Forbidden);
+            if (!HasPermission(portfolio, roles)) ThrowResponseException(HttpStatusCode.Forbidden);
         }
         public void AssertAdmin(Portfolio portfolio)
         {
-            if (!HasPermission(portfolio, "Admin", "Superuser"))
-                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            if (!HasPermission(portfolio, "Admin", "Superuser")) ThrowResponseException(HttpStatusCode.Forbidden);
+        }
+        public void AssertAdmin()
+        {
+            if (!HasPermission("Admin", "Superuser")) ThrowResponseException(HttpStatusCode.Forbidden);
         }
         public void AssertEditor(Portfolio portfolio)
         {
-            if (!HasPermission(portfolio, "Admin", "Superuser", "Editor")) throw new HttpResponseException(HttpStatusCode.Forbidden);
+            if (!HasPermission(portfolio, "Admin", "Superuser", "Editor")) ThrowResponseException(HttpStatusCode.Forbidden);
         }
 
         public bool UserHasFSAClaim() => UserHasClaim(fsaClaims);
@@ -78,6 +85,12 @@ namespace FSAPortfolio.Application.Services
                 return identity.Claims.Any(c => c.Type == ApplicationUser.AccessGroupClaimType && claims.Contains(c.Value));
             }
             return false;
+        }
+
+        private void ThrowResponseException(HttpStatusCode code)
+        {
+            AppLog.TraceWarning($"Returning Http Response Code '{code}'");
+            throw new HttpResponseException(code);
         }
     }
 }

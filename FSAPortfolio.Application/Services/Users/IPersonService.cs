@@ -8,5 +8,7 @@ namespace FSAPortfolio.WebAPI.App.Users
     {
         Task<AddSupplierResponseModel> AddSupplierAsync(string portfolioViewKey, string userName, string passwordHash);
         Task MapPeopleAsync(ProjectUpdateModel update, Project project);
+        Task ResetADReferencesAsync();
+        Task RemoveDuplicatesAsync();
     }
 }

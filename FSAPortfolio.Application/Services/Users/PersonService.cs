@@ -25,17 +25,14 @@ using FSAPortfolio.Application.Services;
 
 namespace FSAPortfolio.WebAPI.App.Users
 {
-    public class PersonService : IPersonService
+    public class PersonService : BaseService, IPersonService
     {
-        private IServiceContext serviceContext;
-
         private const string TeamKeyPrefix = "AzureAD.Team.Name.";
         private Lazy<Dictionary<string, string>> lazyTeamViewKeyMap; // Maps team name to team viewkey
         private IMicrosoftGraphUserStoreService msgraphService;
 
-        public PersonService(IServiceContext serviceContext, IMicrosoftGraphUserStoreService msgraphService)
+        public PersonService(IServiceContext serviceContext, IMicrosoftGraphUserStoreService msgraphService) : base(serviceContext)
         {
-            this.serviceContext = serviceContext;
             lazyTeamViewKeyMap = new Lazy<Dictionary<string, string>>(() =>
                 ConfigurationManager.AppSettings.AllKeys.Where(k => k.StartsWith(TeamKeyPrefix))
                 .ToDictionary(k => ConfigurationManager.AppSettings[k], k => k.Substring(TeamKeyPrefix.Length)));
@@ -47,7 +44,7 @@ namespace FSAPortfolio.WebAPI.App.Users
             var response = new AddSupplierResponseModel();
             try
             {
-                var context = serviceContext.PortfolioContext;
+                var context = ServiceContext.PortfolioContext;
                 var accessGroup = await context.AccessGroups.SingleAsync(a => a.ViewKey == AccessGroupConstants.SupplierViewKey);
                 var portfolio = await context.Portfolios.SingleAsync(p => p.ViewKey == portfolioViewKey);
                 var roleList = $"{portfolio.IDPrefix}.Read";
@@ -87,30 +84,113 @@ namespace FSAPortfolio.WebAPI.App.Users
             await MapTeamMembersAsync(update, project);
         }
 
+        public async Task ResetADReferencesAsync()
+        {
+            ServiceContext.AssertAdmin();
+            var context = ServiceContext.PortfolioContext;
+            foreach (var person in context.People.Where(p => p.ActiveDirectoryPrincipalName == null))
+            {
+                if (person.Surname == null && person.Firstname == null && person.Email != null && !person.Email.Contains("@"))
+                {
+                    await EnsurePersonForPrincipalName(person.Email);
+                }
+            }
+            await context.SaveChangesAsync();
+        }
+
+        public async Task RemoveDuplicatesAsync()
+        {
+            ServiceContext.AssertAdmin();
+            var context = ServiceContext.PortfolioContext;
+
+            var dupes = await (from p in context.People
+                               where p.ActiveDirectoryId != null
+                               group p by p.ActiveDirectoryId into adPeople
+                               where adPeople.Count() > 1
+                               select adPeople).ToListAsync();
+
+            foreach(var dupe in dupes)
+            {
+                Person latest = null;
+                foreach(var person in dupe.OrderByDescending(p => p.Timestamp))
+                {
+                    if(latest == null)
+                    {
+                        latest = person;
+                    }
+                    else
+                    {
+                        var projects = await context.Projects
+                            .Include(p => p.KeyContact1)
+                            .Include(p => p.KeyContact2)
+                            .Include(p => p.KeyContact3)
+                            .Include(p => p.People)
+                            .Where(p => 
+                            p.Lead_Id == person.Id ||
+                            p.KeyContact1.Id == person.Id ||
+                            p.KeyContact2.Id == person.Id ||
+                            p.KeyContact3.Id == person.Id ||
+                            p.People.Any(pp => pp.Id == person.Id) ||
+                            p.Updates.Any(u => u.Person.Id == person.Id)
+                            ).ToListAsync();
+                        foreach(var project in projects)
+                        {
+                            if (project.Lead_Id == person.Id) project.Lead = latest;
+                            if (project.KeyContact1?.Id == person.Id) project.KeyContact1 = latest;
+                            if (project.KeyContact2?.Id == person.Id) project.KeyContact2 = latest;
+                            if (project.KeyContact3?.Id == person.Id) project.KeyContact3 = latest;
+                            if (project.People.Contains(person))
+                            {
+                                project.People.Remove(person);
+                                if (!project.People.Contains(latest)) project.People.Add(latest);
+                            }
+                        }
+                        context.People.Remove(person);
+                    }
+                }
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+
         private async Task<Person> EnsurePersonForPrincipalName(string name, Portfolio portfolio = null)
         {
             Person person = null;
             if (!string.IsNullOrWhiteSpace(name))
             {
-                var context = serviceContext.PortfolioContext;
+                var context = ServiceContext.PortfolioContext;
                 MicrosoftGraphUserModel user = null;
                 person =
                     context.People.Local.SingleOrDefault(p => p.ActiveDirectoryPrincipalName == name || p.Email == name) ??
                     await context.People.SingleOrDefaultAsync(p => p.ActiveDirectoryPrincipalName == name || p.Email == name);
-                if (person == null)
+                if (person == null || person.ActiveDirectoryId == null)
                 {
-                    user = await msgraphService.GetUserForPrincipalNameAsync(name);
-                    if (user != null)
+                    if (name.Contains("@"))
                     {
-                        person = PortfolioMapper.ActiveDirectoryMapper.Map<Person>(user);
+                        user = await msgraphService.GetUserForPrincipalNameAsync(name);
                     }
                     else
                     {
-                        // Assume an email was passed in
-                        person = new Person() { Email = name };
+                        var result = await msgraphService.GetUsersAsync(name);
+                        var users = result.value.Where(u => u.companyName == "Food Standards Agency" && u.department != null).ToList();
+                        if(users.Count == 1)
+                        {
+                            user = users[0];
+                        }
                     }
-                    person.Timestamp = DateTime.Now;
-                    context.People.Add(person);
+
+                    if (user != null)
+                    {
+                        if (person == null)
+                        {
+                            // Assume an email was passed in
+                            person = new Person() { Email = name };
+                            person.Timestamp = DateTime.Now;
+                            context.People.Add(person);
+                        }
+                        PortfolioMapper.ActiveDirectoryMapper.Map(user, person);
+                    }
                 }
 
                 // Set the team
@@ -148,7 +228,7 @@ namespace FSAPortfolio.WebAPI.App.Users
                         }
 
                         person.Team = team;
-                        if (portfolio.Teams != null)
+                        if (portfolio?.Teams != null)
                         {
                             if (!portfolio.Teams.Contains(team))
                             {
@@ -163,7 +243,7 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         private async Task<int> GetNextOrderAsync()
         {
-            var context = serviceContext.PortfolioContext;
+            var context = ServiceContext.PortfolioContext;
             var storeMax = await context.Teams.Select(t => t.Order).DefaultIfEmpty(-1).MaxAsync();
             var localMax = context.Teams.Local.Select(t => t.Order).DefaultIfEmpty(-1).Max();
             return (localMax > storeMax ? localMax : storeMax) + 1;
@@ -171,7 +251,7 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         private async Task<Team> GetExistingTeamAsync(string teamViewKey)
         {
-            var context = serviceContext.PortfolioContext;
+            var context = ServiceContext.PortfolioContext;
             // Check local first, then the database
             return context.Teams.Local.SingleOrDefault(t => t.ViewKey == teamViewKey) ?? (await context.Teams.SingleOrDefaultAsync(t => t.ViewKey == teamViewKey));
         }
@@ -208,6 +288,7 @@ namespace FSAPortfolio.WebAPI.App.Users
             }
             return result;
         }
+
 
     }
 }

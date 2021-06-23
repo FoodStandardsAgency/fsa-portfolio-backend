@@ -8,6 +8,7 @@ namespace FSAPortfolio.Application.Services
     {
         PortfolioContext PortfolioContext { get; }
 
+        void AssertAdmin();
         void AssertAdmin(Portfolio portfolio);
         void AssertEditor(Portfolio portfolio);
         void AssertPermission(Portfolio portfolio);
