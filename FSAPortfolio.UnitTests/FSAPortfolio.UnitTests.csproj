@@ -90,9 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="appSettings.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="appSettings.config" />
     <None Include="connectionStrings.config" />
     <None Include="packages.config" />
   </ItemGroup>
