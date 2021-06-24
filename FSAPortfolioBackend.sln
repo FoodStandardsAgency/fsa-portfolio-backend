@@ -29,11 +29,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bootstrapping", "Bootstrapp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestScripts", "TestScripts", "{0A567BB7-327C-4D53-8729-54FA3E942E89}"
 	ProjectSection(SolutionItems) = preProject
+		TestScripts\dumpAll.sh = TestScripts\dumpAll.sh
 		TestScripts\getPortfolioChanges.sh = TestScripts\getPortfolioChanges.sh
 		TestScripts\getPortfolioConfig.sh = TestScripts\getPortfolioConfig.sh
 		TestScripts\getPortfolioProjects.sh = TestScripts\getPortfolioProjects.sh
 		TestScripts\getPortfolioUpdates.sh = TestScripts\getPortfolioUpdates.sh
-		TestScripts\dumpAll.sh = TestScripts\dumpAll.sh
 		TestScripts\getToken.sh = TestScripts\getToken.sh
 		TestScripts\setSecrets.sh = TestScripts\setSecrets.sh
 	EndProjectSection
@@ -41,6 +41,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.Application", "FSAPortfolio.Application\FSAPortfolio.Application.csproj", "{FC96DE85-FD34-4D6B-B627-B896E71FCF14}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.Common", "FSAPortfolio.Common\FSAPortfolio.Common.csproj", "{C57B446E-77DE-4A79-87C3-523EC2E8A9F7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{47141CC4-E525-46F6-8AA7-F55EF975763F}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\powerBIAPI_to_DEV.yml = .github\workflows\powerBIAPI_to_DEV.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +94,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D3941507-B7AE-49F5-92D1-1A563CD7A4CB} = {FB34D729-247E-4F80-8973-17D32250F044}
 		{0A567BB7-327C-4D53-8729-54FA3E942E89} = {FB34D729-247E-4F80-8973-17D32250F044}
+		{47141CC4-E525-46F6-8AA7-F55EF975763F} = {FB34D729-247E-4F80-8973-17D32250F044}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F64A1A69-285B-486A-9F2F-7CD57130A9E0}
