@@ -45,6 +45,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{47141CC4-E525-46F6-8AA7-F55EF975763F}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\powerBIAPI_to_DEV.yml = .github\workflows\powerBIAPI_to_DEV.yml
+		.github\workflows\powerBIAPI_to_LIVE.yml = .github\workflows\powerBIAPI_to_LIVE.yml
 	EndProjectSection
 EndProject
 Global
