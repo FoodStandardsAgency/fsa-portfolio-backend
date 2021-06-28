@@ -340,11 +340,7 @@ ASALocalRun/
 healthchecksdb
 
 # Adhoc files
-/FSAPortfolio.WebAPI/connectionStrings.config
-/FSAPortfolio.WebAPI/appSettings.config
-/FSAPortfolio.UnitTests/appSettings.config
-/FSAPortfolio.UnitTests/connectionStrings.config
-/FSAPortfolio.Entites/connectionStrings.config
-/Bootstrapping/setSecrets.sh
-/TestScripts/setSecrets.sh
+*appSettings.config
+*connectionStrings.config
+*setSecrets.sh
 /FSAPortfolio.WebAPI/Properties/ServiceDependencies/fsa-portfoliodev-back - Web Deploy/profile.arm.json

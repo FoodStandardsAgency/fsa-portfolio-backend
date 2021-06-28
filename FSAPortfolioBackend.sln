@@ -15,7 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.Security", "FS
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FB34D729-247E-4F80-8973-17D32250F044}"
 	ProjectSection(SolutionItems) = preProject
+		BOOTSTRAPPING.md = BOOTSTRAPPING.md
 		README.md = README.md
+		UTILITY.md = UTILITY.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.UnitTests", "FSAPortfolio.UnitTests\FSAPortfolio.UnitTests.csproj", "{84175E53-9CCF-4939-AEF6-A3FE2204EC98}"
@@ -48,6 +50,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\workInProgress_to_DEV.yml = .github\workflows\workInProgress_to_DEV.yml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.Utility", "FSAPortfolio.Utility\FSAPortfolio.Utility.csproj", "{93B0D739-F2A1-46F3-9C1D-7735C1C77DA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +93,10 @@ Global
 		{C57B446E-77DE-4A79-87C3-523EC2E8A9F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C57B446E-77DE-4A79-87C3-523EC2E8A9F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C57B446E-77DE-4A79-87C3-523EC2E8A9F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93B0D739-F2A1-46F3-9C1D-7735C1C77DA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93B0D739-F2A1-46F3-9C1D-7735C1C77DA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93B0D739-F2A1-46F3-9C1D-7735C1C77DA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93B0D739-F2A1-46F3-9C1D-7735C1C77DA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
