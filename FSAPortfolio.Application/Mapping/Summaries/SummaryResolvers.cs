@@ -230,9 +230,22 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
             var result = new ProjectDateIndexModel();
             if (source.LatestUpdate.Phase.ViewKey == PhaseConstants.BacklogViewKey)
             {
-
+                // TODO: fill out
             }
-            throw new NotImplementedException();
+            return result;
+        }
+    }
+
+    public class ProjectIndexPriorityResolver : IValueResolver<Project, ProjectIndexModel, ProjectPriorityIndexModel>
+    {
+        public ProjectPriorityIndexModel Resolve(Project source, ProjectIndexModel destination, ProjectPriorityIndexModel destMember, ResolutionContext context)
+        {
+            var result = new ProjectPriorityIndexModel();
+            if (source.LatestUpdate.Phase.ViewKey == PhaseConstants.BacklogViewKey)
+            {
+                // TODO: fill out
+            }
+            return result;
         }
     }
 

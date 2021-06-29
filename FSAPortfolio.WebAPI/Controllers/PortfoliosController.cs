@@ -19,6 +19,8 @@ using System.IO;
 using FSAPortfolio.WebAPI.App.Users;
 using FSAPortfolio.Application.Services.Projects;
 using FSAPortfolio.Common.Logging;
+using FSAPortfolio.Common;
+using FSAPortfolio.Entities.Projects;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -147,8 +149,8 @@ namespace FSAPortfolio.WebAPI.Controllers
                 context.Portfolios.Add(portfolio);
                 await context.SaveChangesAsync();
 
-                portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == $"{ViewKeyPrefix.Phase}5");
-                portfolio.Configuration.ArchivePhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == $"{ViewKeyPrefix.Phase}4");
+                portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == PhaseConstants.BacklogViewKey);
+                portfolio.Configuration.ArchivePhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == PhaseConstants.ArchiveViewKey);
                 await context.SaveChangesAsync();
             }
         }

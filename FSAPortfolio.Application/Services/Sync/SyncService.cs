@@ -24,6 +24,7 @@ using System.Web.Http;
 using System.Text.RegularExpressions;
 using FSAPortfolio.WebAPI.App.Identity;
 using FSAPortfolio.Application.Services;
+using FSAPortfolio.Common;
 
 namespace FSAPortfolio.WebAPI.App.Sync
 {
@@ -226,7 +227,7 @@ namespace FSAPortfolio.WebAPI.App.Sync
 
                 foreach (var portfolio in context.Portfolios.Where(p => p.ViewKey == "dev"))
                 {
-                    portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == $"{ViewKeyPrefix.Phase}5");
+                    portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == PhaseConstants.CompletedViewKey);
                 }
                 context.SaveChanges();
 

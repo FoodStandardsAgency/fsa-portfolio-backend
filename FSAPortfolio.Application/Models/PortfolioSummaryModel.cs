@@ -88,5 +88,30 @@ namespace FSAPortfolio.Application.Models
 
         [JsonProperty("new_flag")]
         public string IsNew { get; set; }
+
+        [JsonProperty("date")]
+        public ProjectDateIndexModel Deadline { get; set; }
+
+        [JsonProperty("priority")]
+        public ProjectPriorityIndexModel Priority { get; set; }
+    }
+
+    public class ProjectDateIndexModel
+    {
+        [JsonProperty("label")]
+        public string Label { get; set; }
+
+        [JsonProperty("value")]
+        public DateTime? Value { get; set; }
+
+    }
+    public class ProjectPriorityIndexModel
+    {
+        [JsonProperty("label")]
+        public string Label { get; set; }
+
+        [JsonProperty("value")]
+        public string Value { get; set; }
+
     }
 }

@@ -43,6 +43,7 @@ namespace FSAPortfolio.Utility.AzureDiagnostics
             var config = new CsvConfiguration(culture);
 
             // App Service name is the prefix to filter on.
+            var x = containerClient.GetBlobs().ToList();
             await foreach (var item in containerClient.GetBlobsAsync(prefix: appServiceName))
             {
                 if (!todayOnly || dateCheckFunc(item))

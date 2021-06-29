@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FSAPortfolio.Common;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace FSAPortfolio.Entities.Projects
     public static class PhaseConstants
     {
         public const int MaxCount = 6;
+        public static string BacklogViewKey = $"{ViewKeyPrefix.Phase}0";
+        public static string ArchiveViewKey = $"{ViewKeyPrefix.Phase}4";
+        public static string CompletedViewKey = $"{ViewKeyPrefix.Phase}5";
         public static string BacklogName = ConfigurationManager.AppSettings["Phase.Backlog.Name"] ?? "Backlog";
         public static string DiscoveryName = ConfigurationManager.AppSettings["Phase.Discovery.Name"] ?? "Discovery";
         public static string AlphaName = ConfigurationManager.AppSettings["Phase.Alpha.Name"] ?? "Alpha";
