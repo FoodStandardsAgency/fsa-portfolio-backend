@@ -209,7 +209,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
         public List<DropDownItemModel> Resolve(Portfolio source, PortfolioSummaryModel destination, List<DropDownItemModel> destMember, ResolutionContext context)
         {
             var label = source.Configuration.Labels.Single(l => l.FieldName == ProjectPropertyConstants.project_type);
-            var options = label.FieldOptions.Split(',').Select((o, i) => {
+            var options = (label.FieldOptions ?? string.Empty).Split(',').Select((o, i) => {
                 var ot = o.Trim();
                 return new DropDownItemModel()
                 {
@@ -220,6 +220,19 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
             }).ToList();
             options.Insert(0, new DropDownItemModel() { Order = 0, Display="All projects" });
             return options;
+        }
+    }
+
+    public class ProjectIndexDateResolver : IValueResolver<Project, ProjectIndexModel, ProjectDateIndexModel>
+    {
+        public ProjectDateIndexModel Resolve(Project source, ProjectIndexModel destination, ProjectDateIndexModel destMember, ResolutionContext context)
+        {
+            var result = new ProjectDateIndexModel();
+            if (source.LatestUpdate.Phase.ViewKey == PhaseConstants.BacklogViewKey)
+            {
+
+            }
+            throw new NotImplementedException();
         }
     }
 
