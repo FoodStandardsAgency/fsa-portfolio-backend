@@ -218,7 +218,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                     Value = ot
                 };
             }).ToList();
-            options.Insert(0, new DropDownItemModel() { Order = 0 });
+            options.Insert(0, new DropDownItemModel() { Order = 0, Display="All projects" });
             return options;
         }
     }
