@@ -228,9 +228,23 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
         public ProjectDateIndexModel Resolve(Project source, ProjectIndexModel destination, ProjectDateIndexModel destMember, ResolutionContext context)
         {
             var result = new ProjectDateIndexModel();
-            if (source.LatestUpdate.Phase.ViewKey == PhaseConstants.BacklogViewKey)
+            if(source.LatestUpdate.Phase.ViewKey == PhaseConstants.BacklogViewKey)
             {
-                // TODO: fill out
+                // Backlog: use intended start date
+                result.Label = "Start date";
+                result.Value = context.Mapper.Map<ProjectDateViewModel>(source.StartDate);
+            }
+            else if (source.LatestUpdate.Phase.ViewKey == PhaseConstants.ArchiveViewKey || source.LatestUpdate.Phase.ViewKey == PhaseConstants.CompletedViewKey)
+            {
+                // Archive/Completed: use actual end date with custom label
+                result.Label = "Completed";
+                result.Value = context.Mapper.Map<ProjectDateViewModel>(source.ActualEndDate);
+            }
+            else
+            {
+                // Use current phase expected end
+                result.Label = "Deadline";
+                result.Value = context.Mapper.Map<ProjectDateViewModel>(source.LatestUpdate.ExpectedCurrentPhaseEnd);
             }
             return result;
         }
@@ -240,11 +254,11 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
     {
         public ProjectPriorityIndexModel Resolve(Project source, ProjectIndexModel destination, ProjectPriorityIndexModel destMember, ResolutionContext context)
         {
-            var result = new ProjectPriorityIndexModel();
-            if (source.LatestUpdate.Phase.ViewKey == PhaseConstants.BacklogViewKey)
+            var result = new ProjectPriorityIndexModel()
             {
-                // TODO: fill out
-            }
+                Value = source.PriorityGroup.Name,
+                Label = "Priority"
+            };
             return result;
         }
     }

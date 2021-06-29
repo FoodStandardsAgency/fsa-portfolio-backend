@@ -102,7 +102,7 @@ namespace FSAPortfolio.Application.Models
         public string Label { get; set; }
 
         [JsonProperty("value")]
-        public DateTime? Value { get; set; }
+        public ProjectDateViewModel Value { get; set; }
 
     }
     public class ProjectPriorityIndexModel

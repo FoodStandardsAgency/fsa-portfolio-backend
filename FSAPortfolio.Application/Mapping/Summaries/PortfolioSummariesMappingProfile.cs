@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
+using FSAPortfolio.WebAPI.App.Mapping.Projects;
 
 namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
 {
@@ -76,6 +77,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.Count, o => o.MapFrom<ProjectCountByPhaseResolver>())
                 ;
 
+            CreateMap<ProjectDate, ProjectDateViewModel>().ConvertUsing<ProjectDateConverter>();
             CreateMap<Project, ProjectIndexModel>()
                 .ForMember(d => d.ProjectId, o => o.MapFrom(s => s.Reservation.ProjectId))
                 .ForMember(d => d.Name, o => o.MapFrom(s => string.IsNullOrWhiteSpace(s.Name) ? s.Reservation.ProjectId : s.Name))
