@@ -47,7 +47,7 @@ namespace FSAPortfolio.Application.Services.Projects
             return result;
         }
 
-        public async Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType, string user, string projectType)
+        public async Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType, string user, string projectType, bool includeKeyData = false)
         {
             PortfolioSummaryModel result = null;
             var context = ServiceContext.PortfolioContext;
@@ -68,6 +68,7 @@ namespace FSAPortfolio.Application.Services.Projects
                     portfolio,
                     opt =>
                     {
+                        opt.Items[ProjectIndexDateResolver.OptionKey] = includeKeyData;
                         opt.Items[nameof(PortfolioContext)] = context;
                         opt.Items[PortfolioPersonResolver.PersonKey] = user;
                         opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
@@ -95,7 +96,12 @@ namespace FSAPortfolio.Application.Services.Projects
                 // User predicates
                 if (!string.IsNullOrWhiteSpace(user))
                 {
-                    userPredicate = userPredicate.Start(p => p.Lead.ActiveDirectoryPrincipalName == user);
+                    userPredicate = userPredicate.Start(p => p.Lead.ActiveDirectoryPrincipalName == user)
+                        .Or(p => p.KeyContact1.ActiveDirectoryPrincipalName == user)
+                        .Or(p => p.KeyContact2.ActiveDirectoryPrincipalName == user)
+                        .Or(p => p.KeyContact3.ActiveDirectoryPrincipalName == user)
+                        .Or(p => p.People.Any(pp => pp.ActiveDirectoryPrincipalName == user))
+                        ;
                 }
 
                 // ProjectType predicates

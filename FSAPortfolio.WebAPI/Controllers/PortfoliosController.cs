@@ -54,10 +54,11 @@ namespace FSAPortfolio.WebAPI.Controllers
         public async Task<PortfolioSummaryModel> Summary([FromUri(Name = "portfolio")] string viewKey,
                                                          [FromUri(Name = "type")] string summaryType = PortfolioSummaryModel.ByCategory,
                                                          [FromUri(Name = "user")] string user = null,
-                                                         [FromUri(Name = "projectType")] string projectType = null)
+                                                         [FromUri(Name = "projectType")] string projectType = null,
+                                                         [FromUri(Name = "includeKeyData")] bool includeKeyData = false)
         {
             // TODO: projectType parameter
-            return await portfolioService.GetSummaryAsync(viewKey, summaryType, user, projectType);
+            return await portfolioService.GetSummaryAsync(viewKey, summaryType, user, projectType, includeKeyData);
         }
 
 

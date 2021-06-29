@@ -33,6 +33,7 @@ namespace FSAPortfolio.WebAPI.App
                 .Query()
                 .Include(p => p.Reservation)
                 .Include(p => p.Lead.Team)
+                .Include(p => p.People)
                 .Include(p => p.Category)
                 .Include(p => p.LatestUpdate.Phase)
                 .Include(p => p.FirstUpdate);

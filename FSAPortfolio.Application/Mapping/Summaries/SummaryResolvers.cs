@@ -77,6 +77,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                         .OrderBy(p => p.Firstname)
                         .ThenBy(p => p.Surname)
                         .ToList();
+
                     people.Insert(0, new Person() { Id = 0, ActiveDirectoryDisplayName = ProjectTeamConstants.NotSetName });
 
                     var allResults = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(people);
@@ -85,6 +86,9 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                 case PortfolioSummaryModel.ByTeam:
                 case PortfolioSummaryModel.NewProjectsByTeam:
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Teams.OrderBy(t => t.Order).Union(new Team[] { new Team() { Name = ProjectTeamConstants.NotSetName, Id = 0 } }));
+                    break;
+                case PortfolioSummaryModel.ByUser:
+                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(ProjectUserCategory.All());
                     break;
                 default:
                     throw new ArgumentException($"Unrecognised summary type: {summaryType}");
@@ -129,6 +133,17 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
             return SummaryLinqQuery.GetQuery(source.Configuration, p => p.ProjectCategory_Id == source.Id, context);
         }
     }
+
+    public class PhaseProjectsByUserCategoryResolver : IValueResolver<ProjectUserCategory, ProjectSummaryModel, IEnumerable<PhaseProjectsModel>>
+    {
+        public IEnumerable<PhaseProjectsModel> Resolve(ProjectUserCategory source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
+        {
+            var config = context.Items[nameof(PortfolioConfiguration)] as PortfolioConfiguration;
+            var user = context.Items[PortfolioPersonResolver.PersonKey] as string;
+            return SummaryLinqQuery.GetQuery(config, p => p.GetUserCategory(user) == source.CategoryType, context);
+        }
+    }
+
 
     public class PhaseProjectsByRAGResolver : IValueResolver<ProjectRAGStatus, ProjectSummaryModel, IEnumerable<PhaseProjectsModel>>
     {
@@ -225,26 +240,32 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
 
     public class ProjectIndexDateResolver : IValueResolver<Project, ProjectIndexModel, ProjectDateIndexModel>
     {
+        public const string OptionKey = nameof(ProjectIndexDateResolver);
         public ProjectDateIndexModel Resolve(Project source, ProjectIndexModel destination, ProjectDateIndexModel destMember, ResolutionContext context)
         {
-            var result = new ProjectDateIndexModel();
-            if(source.LatestUpdate.Phase.ViewKey == PhaseConstants.BacklogViewKey)
+            ProjectDateIndexModel result = null;
+
+            if (context.Items.ContainsKey(OptionKey) && (bool)context.Items[OptionKey])
             {
-                // Backlog: use intended start date
-                result.Label = "Start date";
-                result.Value = context.Mapper.Map<ProjectDateViewModel>(source.StartDate);
-            }
-            else if (source.LatestUpdate.Phase.ViewKey == PhaseConstants.ArchiveViewKey || source.LatestUpdate.Phase.ViewKey == PhaseConstants.CompletedViewKey)
-            {
-                // Archive/Completed: use actual end date with custom label
-                result.Label = "Completed";
-                result.Value = context.Mapper.Map<ProjectDateViewModel>(source.ActualEndDate);
-            }
-            else
-            {
-                // Use current phase expected end
-                result.Label = "Deadline";
-                result.Value = context.Mapper.Map<ProjectDateViewModel>(source.LatestUpdate.ExpectedCurrentPhaseEnd);
+                result = new ProjectDateIndexModel();
+                if (source.LatestUpdate.Phase.ViewKey == PhaseConstants.BacklogViewKey)
+                {
+                    // Backlog: use intended start date
+                    result.Label = "Start date";
+                    result.Value = context.Mapper.Map<ProjectDateViewModel>(source.StartDate);
+                }
+                else if (source.LatestUpdate.Phase.ViewKey == PhaseConstants.ArchiveViewKey || source.LatestUpdate.Phase.ViewKey == PhaseConstants.CompletedViewKey)
+                {
+                    // Archive/Completed: use actual end date with custom label
+                    result.Label = "Completed";
+                    result.Value = context.Mapper.Map<ProjectDateViewModel>(source.ActualEndDate);
+                }
+                else
+                {
+                    // Use current phase expected end
+                    result.Label = "Deadline";
+                    result.Value = context.Mapper.Map<ProjectDateViewModel>(source.LatestUpdate.ExpectedCurrentPhaseEnd);
+                }
             }
             return result;
         }
@@ -252,13 +273,19 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
 
     public class ProjectIndexPriorityResolver : IValueResolver<Project, ProjectIndexModel, ProjectPriorityIndexModel>
     {
+        public const string OptionKey = nameof(ProjectIndexPriorityResolver);
+
         public ProjectPriorityIndexModel Resolve(Project source, ProjectIndexModel destination, ProjectPriorityIndexModel destMember, ResolutionContext context)
         {
-            var result = new ProjectPriorityIndexModel()
+            ProjectPriorityIndexModel result = null;
+            if (context.Items.ContainsKey(OptionKey) && (bool)context.Items[OptionKey])
             {
-                Value = source.PriorityGroup.Name,
-                Label = "Priority"
-            };
+                result = new ProjectPriorityIndexModel()
+                {
+                    Value = source.PriorityGroup.Name,
+                    Label = "Priority"
+                };
+            }
             return result;
         }
     }

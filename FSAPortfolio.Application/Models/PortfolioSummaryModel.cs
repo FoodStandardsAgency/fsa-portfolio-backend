@@ -15,6 +15,7 @@ namespace FSAPortfolio.Application.Models
         public const string ByPhase = "phase";
         public const string ByLead = "lead";
         public const string ByTeam = "team";
+        public const string ByUser = "user";
         public const string NewProjectsByTeam = "newbyteam";
 
         [JsonProperty("person")]
