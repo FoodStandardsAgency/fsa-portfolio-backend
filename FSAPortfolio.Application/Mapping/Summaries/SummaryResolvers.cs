@@ -194,7 +194,8 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                 ProjectPropertyConstants.g6team,
                 ProjectPropertyConstants.ProjectLead,
                 ProjectPropertyConstants.rag,
-                ProjectPropertyConstants.phase
+                ProjectPropertyConstants.phase,
+                ProjectPropertyConstants.project_type
             };
         public IEnumerable<PortfolioLabelModel> Resolve(Portfolio source, PortfolioSummaryModel destination, IEnumerable<PortfolioLabelModel> destMember, ResolutionContext context)
         {
@@ -202,5 +203,25 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
             return context.Mapper.Map<IEnumerable<PortfolioLabelModel>>(summaryLabels);
         }
     }
+
+    public class ProjectSummaryProjectTypeResolver : IValueResolver<Portfolio, PortfolioSummaryModel, List<DropDownItemModel>>
+    {
+        public List<DropDownItemModel> Resolve(Portfolio source, PortfolioSummaryModel destination, List<DropDownItemModel> destMember, ResolutionContext context)
+        {
+            var label = source.Configuration.Labels.Single(l => l.FieldName == ProjectPropertyConstants.project_type);
+            var options = label.FieldOptions.Split(',').Select((o, i) => {
+                var ot = o.Trim();
+                return new DropDownItemModel()
+                {
+                    Order = i + 1,
+                    Display = ot,
+                    Value = ot
+                };
+            }).ToList();
+            options.Insert(0, new DropDownItemModel() { Order = 0 });
+            return options;
+        }
+    }
+
 
 }

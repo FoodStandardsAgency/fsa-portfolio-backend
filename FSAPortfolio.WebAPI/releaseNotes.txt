@@ -1,9 +1,11 @@
-﻿Version 0.1.9 - Pending Release
+﻿Version 0.1.10 - Pending Release
 ===================================
 - Added diagnostics logging
 - Added dependency injection using Unity
 - Added data dumps to Azure File Share
 - More filter options
+- User summary view
+- ProjectType filter in summary view
 
 Azure Storage Account Connection string
 - Ensure a storage account exists - the connection string is required (under Access Keys).
@@ -18,7 +20,9 @@ New App Settings:
 Database Changes
 - Run script 05_Filters.sql to update the field configurations for filterable fields.
 
-
+Version 0.1.9 - Released 24/06/2021
+===================================
+- PowerBI Data API
 
 Version 0.1.7 - Released 25/03/2021
 ===================================

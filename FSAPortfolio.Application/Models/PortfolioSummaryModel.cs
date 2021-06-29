@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FSAPortfolio.WebAPI.App;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,10 @@ namespace FSAPortfolio.Application.Models
 
         [JsonProperty("labels")]
         public IEnumerable<PortfolioLabelModel> Labels { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.project_type)]
+        public List<DropDownItemModel> ProjectTypes { get; set; }
+
 
     }
 
