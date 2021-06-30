@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.Entities;
+﻿using FSAPortfolio.Application.Services;
+using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Users;
 using System;
 using System.Collections.Generic;
@@ -9,13 +10,10 @@ using System.Web;
 
 namespace FSAPortfolio.WebAPI.App.Identity
 {
-    public class PortfolioRoleManager
+    public class RoleService : BaseService, IRoleService
     {
-        private PortfolioContext context;
-
-        public PortfolioRoleManager(PortfolioContext context)
+        public RoleService(IServiceContext context) : base(context)
         {
-            this.context = context;
         }
 
         public Task<string[]> GetFilteredRoleListAsync(IEnumerable<Role> userRoleList, bool isSupplier) =>
@@ -24,7 +22,7 @@ namespace FSAPortfolio.WebAPI.App.Identity
         public async Task<string[]> GetFilteredRoleListAsync(string[] userRoleList, bool isSupplier)
         {
             // Now do the roles, filtering using portfolio required roles...
-            var portfolios = await context.Portfolios.ToListAsync();
+            var portfolios = await ServiceContext.PortfolioContext.Portfolios.ToListAsync();
             var portfolioRoles = portfolios
                 .SelectMany(p => p.RequiredRoles)
                 .ToArray();

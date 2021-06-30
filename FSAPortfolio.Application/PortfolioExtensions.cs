@@ -1,8 +1,12 @@
-﻿using FSAPortfolio.Entities.Organisation;
+﻿using FSAPortfolio.Entities;
+using FSAPortfolio.Entities.Organisation;
+using FSAPortfolio.Entities.Projects;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using System.Web;
 
 namespace FSAPortfolio.WebAPI.App
@@ -22,15 +26,21 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Configuration.LabelGroups)
                 ;
         }
-        public static IQueryable<Portfolio> IncludeProjects(this IQueryable<Portfolio> query)
+
+        public static async Task LoadProjectsIntoPortfolioAsync(this PortfolioContext context, Portfolio portfolio, Expression<Func<Project, bool>> filter = null)
         {
-            return query
-                .Include(p => p.Projects.Select(pr => pr.Reservation))
-                .Include(p => p.Projects.Select(pr => pr.Lead.Team))
-                .Include(p => p.Projects.Select(pr => pr.Category))
-                .Include(p => p.Projects.Select(pr => pr.LatestUpdate.Phase))
-                .Include(p => p.Projects.Select(pr => pr.FirstUpdate))
-                ;
+            var query = context.Entry(portfolio).Collection(p => p.Projects)
+                .Query()
+                .Include(p => p.Reservation)
+                .Include(p => p.Lead.Team)
+                .Include(p => p.People)
+                .Include(p => p.Category)
+                .Include(p => p.LatestUpdate.Phase)
+                .Include(p => p.FirstUpdate);
+
+            if (filter != null) query = query.Where(filter);
+            await query.LoadAsync();
+            portfolio.Projects = context.Projects.Local;
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FSAPortfolio.WebAPI.App;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +15,25 @@ namespace FSAPortfolio.Application.Models
         public const string ByPhase = "phase";
         public const string ByLead = "lead";
         public const string ByTeam = "team";
+        public const string ByUser = "user";
         public const string NewProjectsByTeam = "newbyteam";
+
+        [JsonProperty("person")]
+        public string Person { get; set; }
 
         [JsonProperty("summaries")]
         public IEnumerable<ProjectSummaryModel> Summaries { get; set; }
 
         [JsonProperty("phases")]
         public IEnumerable<PhaseSummaryModel> Phases { get; set; }
+
+        [JsonProperty("labels")]
+        public IEnumerable<PortfolioLabelModel> Labels { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.project_type)]
+        public List<DropDownItemModel> ProjectTypes { get; set; }
+
+
     }
 
     public class ProjectSummaryModel
@@ -76,5 +89,30 @@ namespace FSAPortfolio.Application.Models
 
         [JsonProperty("new_flag")]
         public string IsNew { get; set; }
+
+        [JsonProperty("date")]
+        public ProjectDateIndexModel Deadline { get; set; }
+
+        [JsonProperty("priority")]
+        public ProjectPriorityIndexModel Priority { get; set; }
+    }
+
+    public class ProjectDateIndexModel
+    {
+        [JsonProperty("label")]
+        public string Label { get; set; }
+
+        [JsonProperty("value")]
+        public ProjectDateViewModel Value { get; set; }
+
+    }
+    public class ProjectPriorityIndexModel
+    {
+        [JsonProperty("label")]
+        public string Label { get; set; }
+
+        [JsonProperty("value")]
+        public string Value { get; set; }
+
     }
 }

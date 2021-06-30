@@ -19,6 +19,8 @@ using System.IO;
 using FSAPortfolio.WebAPI.App.Users;
 using FSAPortfolio.Application.Services.Projects;
 using FSAPortfolio.Common.Logging;
+using FSAPortfolio.Common;
+using FSAPortfolio.Entities.Projects;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -27,10 +29,12 @@ namespace FSAPortfolio.WebAPI.Controllers
     {
         private readonly IPortfolioService portfolioService;
         private readonly IProjectDataService projectDataService;
-        public PortfoliosController(IPortfolioService portfolioService, IProjectDataService projectDataService)
+        private readonly ISyncService syncService;
+        public PortfoliosController(IPortfolioService portfolioService, IProjectDataService projectDataService, ISyncService syncService)
         {
             this.portfolioService = portfolioService;
             this.projectDataService = projectDataService;
+            this.syncService = syncService;
 
 #if DEBUG
             AppLog.TraceVerbose($"{nameof(PortfoliosController)} created.");
@@ -47,9 +51,14 @@ namespace FSAPortfolio.WebAPI.Controllers
 
 
         [HttpGet]
-        public async Task<PortfolioSummaryModel> Summary([FromUri(Name = "portfolio")] string viewKey, [FromUri(Name = "type")] string summaryType = PortfolioSummaryModel.ByCategory)
+        public async Task<PortfolioSummaryModel> Summary([FromUri(Name = "portfolio")] string viewKey,
+                                                         [FromUri(Name = "type")] string summaryType = PortfolioSummaryModel.ByCategory,
+                                                         [FromUri(Name = "user")] string user = null,
+                                                         [FromUri(Name = "projectType")] string projectType = null,
+                                                         [FromUri(Name = "includeKeyData")] bool includeKeyData = false)
         {
-            return await portfolioService.GetSummaryAsync(viewKey, summaryType);
+            // TODO: projectType parameter
+            return await portfolioService.GetSummaryAsync(viewKey, summaryType, user, projectType, includeKeyData);
         }
 
 
@@ -134,17 +143,15 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             using (var context = new PortfolioContext())
             {
-                var log = new List<string>();
-                var syncProvider = new SyncProvider(log);
-                var portfolio = syncProvider.AddPortfolio(context, model.Name, model.ShortName, model.ViewKey);
+                var portfolio = syncService.AddPortfolio(context, model.Name, model.ShortName, model.ViewKey);
                 var labels = new DefaultFieldLabels(portfolio.Configuration);
                 portfolio.Configuration.Labels = labels.GetDefaultLabels();
                 portfolio.IDPrefix = portfolio.ViewKey.ToUpper();
                 context.Portfolios.Add(portfolio);
                 await context.SaveChangesAsync();
 
-                portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == $"{ViewKeyPrefix.Phase}5");
-                portfolio.Configuration.ArchivePhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == $"{ViewKeyPrefix.Phase}4");
+                portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == PhaseConstants.BacklogViewKey);
+                portfolio.Configuration.ArchivePhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == PhaseConstants.ArchiveViewKey);
                 await context.SaveChangesAsync();
             }
         }

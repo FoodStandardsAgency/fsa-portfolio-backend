@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.Entities;
+﻿using FSAPortfolio.Application.Services;
+using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.App.Microsoft;
 using FSAPortfolio.WebAPI.App.Users;
@@ -25,17 +26,17 @@ namespace FSAPortfolio.WebAPI.App.Identity
         private const string _accessTokenRegexPattern = "AccessToken (?<accessToken>.*)";
 
         private PortfolioContext portfolioContext;
-        private PortfolioRoleManager roleManager;
-        private MicrosoftGraphUserStore graph;
+        private IRoleService roleManager;
+        private MicrosoftGraphUserStoreService graph;
         private string accessToken;
-        public ApplicationUserManager(PortfolioContext portfolioContext, IUserStore<ApplicationUser> store, PortfolioRoleManager roleManager, string accessToken) : base(store)
+        public ApplicationUserManager(PortfolioContext portfolioContext, IUserStore<ApplicationUser> store, IRoleService roleManager, string accessToken) : base(store)
         {
             this.portfolioContext = portfolioContext;
             this.roleManager = roleManager;
             if (accessToken != null)
             {
                 this.accessToken = accessToken;
-                graph = new MicrosoftGraphUserStore(roleManager);
+                graph = new MicrosoftGraphUserStoreService(roleManager);
             }
         }
 
@@ -43,7 +44,8 @@ namespace FSAPortfolio.WebAPI.App.Identity
         {
             string activeDirectoryAccessToken = null;
             var portfolioContext = context.Get<PortfolioContext>();
-            var roleManager = new PortfolioRoleManager(portfolioContext);
+            var serviceContext = new ServiceContext(new Lazy<PortfolioContext>(() => new PortfolioContext()));
+            var roleManager = new RoleService(serviceContext);
 
             // If we have an access token in the header, use active directory to authenticate the user.
             if (context.Request.Headers.ContainsKey("Authorization"))

@@ -22,9 +22,11 @@ namespace FSAPortfolio.Application.Services.Projects
     public class ProjectDataService : BaseService, IProjectDataService
     {
         private IPortfolioService portfolioService;
-        public ProjectDataService(IServiceContext context, IPortfolioService portfolioService) : base(context)
+        private IProjectService projectService;
+        public ProjectDataService(IServiceContext context, IPortfolioService portfolioService, IProjectService projectService) : base(context)
         {
             this.portfolioService = portfolioService;
+            this.projectService = projectService;
         }
 
         public async Task<ProjectCollectionModel> GetProjectDataAsync(string portfolio, string[] projectIds)
@@ -143,8 +145,6 @@ namespace FSAPortfolio.Application.Services.Projects
             var projects = await importer.ImportProjectsAsync(files, config, options);
 
             // Update/create the projects
-            var userProvider = new PersonProvider(context);
-            var projectprovider = new ProjectProvider(context);
             foreach (var project in projects)
             {
                 if (string.IsNullOrWhiteSpace(project.project_id))
@@ -152,11 +152,11 @@ namespace FSAPortfolio.Application.Services.Projects
                     // Create a reservation
                     var reservation = await portfolioService.GetProjectReservationAsync(config);
                     project.project_id = reservation.ProjectId;
-                    await projectprovider.UpdateProject(project, userProvider, reservation);
+                    await projectService.UpdateProject(project, reservation);
                 }
                 else
                 {
-                    await projectprovider.UpdateProject(project, userProvider);
+                    await projectService.UpdateProject(project);
                 }
             }
         }
@@ -167,9 +167,7 @@ namespace FSAPortfolio.Application.Services.Projects
             {
                 var context = ServiceContext.PortfolioContext;
                 // Load and map the project
-                var userProvider = new PersonProvider(context);
-                var provider = new ProjectProvider(context);
-                await provider.UpdateProject(update, userProvider, permissionCallback: ServiceContext.AssertEditor);
+                await projectService.UpdateProject(update, permissionCallback: ServiceContext.AssertEditor);
             }
             catch (AutoMapperMappingException amex)
             {

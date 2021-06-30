@@ -22,16 +22,21 @@ namespace FSAPortfolio.WebAPI.Controllers
 {
     public class UsersController : ApiController
     {
+        private readonly IPersonService personService;
+        private readonly IUserService userService;
+
+        public UsersController(IPersonService personService, IUserService userService)
+        {
+            this.personService = personService;
+            this.userService = userService;
+        }
 
         // Get: api/Users/search
         [AcceptVerbs("GET")]
         [Authorize]
         public async Task<UserSearchResponseModel> SearchUsers([FromUri] string portfolio, [FromUri] string term, [FromUri(Name = "addnone")] bool includeNone = false)
         {
-            var provider = new MicrosoftGraphUserStore();
-            var result = await provider.GetUsersAsync(term);
-            var response = PortfolioMapper.ActiveDirectoryMapper.Map<UserSearchResponseModel>(result, opt => opt.Items[nameof(ActiveDirectoryUserSelectModel.NoneOption)] = includeNone);
-            return response;
+            return await userService.SearchUsersAsync(portfolio, term, includeNone);
         }
 
         // Get: api/Users/suppliers
@@ -39,17 +44,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         [Authorize]
         public async Task<SupplierResponseModel> GetSuppliers()
         {
-            using (var context = new PortfolioContext())
-            {
-                var response = new SupplierResponseModel()
-                {
-                    Suppliers = await context.Users
-                        .Where(u => u.AccessGroup.ViewKey == AccessGroupConstants.SupplierViewKey)
-                        .Select(s => s.UserName)
-                        .ToListAsync()
-                };
-                return response;
-            }
+            return await userService.GetSuppliersAsync();
         }
 
         // POST: api/Users/addsupplier
@@ -57,57 +52,23 @@ namespace FSAPortfolio.WebAPI.Controllers
         [Authorize]
         public async Task<AddSupplierResponseModel> AddSupplier([FromBody] AddSupplierModel model)
         {
-            using (var context = new PortfolioContext())
-            {
-                var provider = new PersonProvider(context);
-                return await provider.AddSupplierAsync(model.Portfolio, model.UserName, model.PasswordHash);
-            }
+            return await personService.AddSupplierAsync(model.Portfolio, model.UserName, model.PasswordHash);
         }
 
         // POST: api/Users/LegacyADUsers
         [AcceptVerbs("POST")]
         [Authorize]
-        public UserModel GetADUser(UserRequestModel userRequest)
+        public async Task<UserModel> GetADUser(UserRequestModel userRequest)
         {
-            UserModel result = null;
-            using (var context = new PortfolioContext())
-            {
-                var user = context.Users
-                    .Include(u => u.AccessGroup)
-                    .FirstOrDefault(u => u.UserName == userRequest.UserName);
-
-                if (user != null)
-                {
-                    result = new UserModel() { 
-                        UserName = user.UserName, 
-                        AccessGroup = user.AccessGroup.ViewKey 
-                    };
-                }
-            }
-            return result;
+            return await userService.GetADUserAsync(userRequest.UserName);
         }
 
         // POST: api/Users/legacy
         [AcceptVerbs("POST")]
         [Authorize]
-        public UserModel GetUser(UserRequestModel userRequest)
+        public async Task<UserModel> GetUser(UserRequestModel userRequest)
         {
-            UserModel result = null;
-            using (var context = new PortfolioContext())
-            {
-                var user = context.Users
-                    .Include(u => u.AccessGroup)
-                    .FirstOrDefault(u => u.UserName == userRequest.UserName && u.PasswordHash == userRequest.PasswordHash);
-
-                if (user != null)
-                {
-                    result = new UserModel() { 
-                        UserName = user.UserName, 
-                        AccessGroup = user.AccessGroup.ViewKey
-                    };
-                }
-            }
-            return result;
+            return await userService.GetUserAsync(userRequest.UserName, userRequest.PasswordHash);
         }
 
         [AcceptVerbs("GET")]
@@ -121,6 +82,7 @@ namespace FSAPortfolio.WebAPI.Controllers
             {
                 result = new IdentityResponseModel()
                 {
+                    UserId = principal.Identity.Name,
                     Roles = identity.Claims.Where(c => c.Type == identity.RoleClaimType).Select(c => c.Value.ToLower()).ToArray(),
                     AccessGroup = identity.Claims.SingleOrDefault(c => c.Type == ApplicationUser.AccessGroupClaimType)?.Value?.ToLower()
                 };
@@ -131,13 +93,27 @@ namespace FSAPortfolio.WebAPI.Controllers
         [AcceptVerbs("POST")]
         public async Task CreateUser([FromBody] AddUserModel model)
         {
-            using (var context = new PortfolioContext())
-            {
-                var sha256 = SHA256.Create();
-                var hash = BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(model.Password))).Replace("-", "");
-                var users = new UserProvider(context);
-                await users.CreateUser(model.UserName, hash, model.AccessGroup);
-            }
+            var sha256 = SHA256.Create();
+            var hash = BitConverter.ToString(sha256.ComputeHash(Encoding.UTF8.GetBytes(model.Password))).Replace("-", "");
+            await userService.CreateUser(model.UserName, hash, model.AccessGroup);
+        }
+
+        [HttpGet, Route("api/Users/ResetAD")]
+        public async Task<HttpResponseMessage> ResetADReferences()
+        {
+            await personService.ResetADReferencesAsync();
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StringContent("AD user references successfully reset.", Encoding.Unicode);
+            return response;
+        }
+
+        [HttpGet, Route("api/Users/RemoveDuplicates")]
+        public async Task<HttpResponseMessage> RemoveDuplicates()
+        {
+            await personService.RemoveDuplicatesAsync();
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new StringContent("User list cleared of duplicates.", Encoding.Unicode);
+            return response;
         }
     }
 }

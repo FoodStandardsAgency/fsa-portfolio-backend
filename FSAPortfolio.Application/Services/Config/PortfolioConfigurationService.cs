@@ -20,6 +20,7 @@ using System.Web.Http;
 using System.Data.Entity.Validation;
 using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.Common.Logging;
+using FSAPortfolio.Common;
 
 namespace FSAPortfolio.Application.Services.Config
 {

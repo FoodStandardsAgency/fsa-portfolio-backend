@@ -130,5 +130,18 @@ namespace FSAPortfolio.Entities.Projects
                 return priorityGroup;
             }
         }
+
+        public ProjectUserCategoryType GetUserCategory(string userName)
+        {
+            if (userName == null) return ProjectUserCategoryType.None;
+            if (userName == Lead?.ActiveDirectoryPrincipalName) return ProjectUserCategoryType.Lead;
+            if (
+                userName == KeyContact1?.ActiveDirectoryPrincipalName ||
+                userName == KeyContact2?.ActiveDirectoryPrincipalName ||
+                userName == KeyContact3?.ActiveDirectoryPrincipalName)
+                return ProjectUserCategoryType.Contact;
+            if (People.Any(p => p.ActiveDirectoryPrincipalName == userName)) return ProjectUserCategoryType.Team;
+            return ProjectUserCategoryType.None;
+        }
     }
 }

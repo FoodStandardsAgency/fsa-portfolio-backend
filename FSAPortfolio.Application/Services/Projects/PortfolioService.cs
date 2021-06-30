@@ -18,6 +18,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Net;
+using LinqKit;
+using System.Linq.Expressions;
+using FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries;
 
 namespace FSAPortfolio.Application.Services.Projects
 {
@@ -44,34 +47,85 @@ namespace FSAPortfolio.Application.Services.Projects
             return result;
         }
 
-        public async Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType)
+        public async Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType, string user, string projectType, bool includeKeyData = false)
         {
             PortfolioSummaryModel result = null;
             var context = ServiceContext.PortfolioContext;
-                var portfolio = await context.Portfolios
-                    .Include(p => p.Teams)
-                    .IncludeConfig()
-                    .IncludeProjects()
-                    .SingleOrDefaultAsync(p => p.ViewKey == viewKey);
+            var portfolio = await context.Portfolios
+                .Include(p => p.Teams)
+                .IncludeConfig()
+                .SingleOrDefaultAsync(p => p.ViewKey == viewKey);
 
-                if (portfolio == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+            if (portfolio == null) throw new HttpResponseException(HttpStatusCode.NotFound);
 
-                if (ServiceContext.HasPermission(portfolio))
-                {
-                    result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(
+            if (ServiceContext.HasPermission(portfolio))
+            {
+                var projectFilter = BuildProjectFilter(user, projectType);
+
+                await context.LoadProjectsIntoPortfolioAsync(portfolio, projectFilter);
+
+                result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(
                     portfolio,
                     opt =>
                     {
+                        opt.Items[ProjectIndexDateResolver.OptionKey] = includeKeyData;
+                        opt.Items[nameof(PortfolioContext)] = context;
+                        opt.Items[PortfolioPersonResolver.PersonKey] = user;
                         opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
                         opt.Items[nameof(PortfolioSummaryModel)] = summaryType;
                     });
+            }
+            else
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
+
+            return result;
+        }
+
+        private static Expression<Func<Project, bool>> BuildProjectFilter(string user, string projectType)
+        {
+
+            Expression<Func<Project, bool>> projectFilter = null;
+
+            if (!(string.IsNullOrWhiteSpace(user) && string.IsNullOrWhiteSpace(projectType)))
+            {
+                var projectTypePredicate = PredicateBuilder.New<Project>();
+                var userPredicate = PredicateBuilder.New<Project>();
+
+                // User predicates
+                if (!string.IsNullOrWhiteSpace(user))
+                {
+                    userPredicate = userPredicate.Start(p => p.Lead.ActiveDirectoryPrincipalName == user)
+                        .Or(p => p.KeyContact1.ActiveDirectoryPrincipalName == user)
+                        .Or(p => p.KeyContact2.ActiveDirectoryPrincipalName == user)
+                        .Or(p => p.KeyContact3.ActiveDirectoryPrincipalName == user)
+                        .Or(p => p.People.Any(pp => pp.ActiveDirectoryPrincipalName == user))
+                        ;
+                }
+
+                // ProjectType predicates
+                if (!string.IsNullOrWhiteSpace(projectType))
+                {
+                    projectTypePredicate = projectTypePredicate.Start(p => p.ProjectType == projectType);
+                }
+
+                // Combine predicates to build project filter
+                if (userPredicate.IsStarted && projectTypePredicate.IsStarted)
+                {
+                    projectFilter = userPredicate.And(projectTypePredicate);
                 }
                 else
                 {
-                    throw new HttpResponseException(HttpStatusCode.Forbidden);
+                    projectFilter = userPredicate.IsStarted ? 
+                        userPredicate : 
+                        projectTypePredicate.IsStarted ? 
+                            projectTypePredicate : 
+                            null;
                 }
-            
-            return result;
+            }
+
+            return projectFilter;
         }
 
         public async Task<PortfolioConfiguration> GetConfigAsync(string portfolioViewKey, bool includedOnly = false)

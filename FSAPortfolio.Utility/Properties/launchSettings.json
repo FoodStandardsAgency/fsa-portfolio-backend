@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FSAPortfolio.Utility": {
+      "commandName": "Project",
+      "commandLineArgs": "azlogs"
+    }
+  }
+}

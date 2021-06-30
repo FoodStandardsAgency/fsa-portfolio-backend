@@ -14,12 +14,12 @@ namespace FSAPortfolio.UnitTests.APIClients
     {
         internal static async Task<PortfolioConfigModel> GetPortfolioConfigurationAsync(string portfolio)
         {
-            return await BackendAPIClient.GetAsync<PortfolioConfigModel>($"api/PortfolioConfiguration/{portfolio}");
+            return await BackendAPIClient.GetAsync<PortfolioConfigModel>($"api/PortfolioConfiguration?portfolio={portfolio}");
         }
 
         internal static async Task UpdatePortfolioConfigurationAsync(PortfolioConfigUpdateRequest update)
         {
-            await BackendAPIClient.PatchAsync($"api/PortfolioConfiguration/{update.ViewKey}", update);
+            await BackendAPIClient.PatchAsync($"api/PortfolioConfiguration?portfolio={update.ViewKey}", update);
         }
         internal static async Task<string> UpdateCategoriesAsync(string portfolio, string categories)
         {

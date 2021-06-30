@@ -99,6 +99,7 @@
     <Compile Include="Projects\ProjectStatus.cs" />
     <Compile Include="Projects\ProjectStatusItem.cs" />
     <Compile Include="Projects\ProjectUpdateItem.cs" />
+    <Compile Include="Projects\ProjectUserCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Users\AccessGroup.cs" />
     <Compile Include="Users\Person.cs" />

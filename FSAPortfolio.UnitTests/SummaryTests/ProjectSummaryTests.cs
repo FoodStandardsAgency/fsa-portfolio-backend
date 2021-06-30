@@ -25,7 +25,10 @@ namespace FSAPortfolio.UnitTests.SummaryTests
             var ph2 = new ProjectPhase() { Id = 2, Name = "Phase2", ViewKey = "phase2", Order = 1 };
             var ph5 = new ProjectPhase() { Id = 5, Name = "Phase5", ViewKey = "phase5", Order = 2 };
 
-            PortfolioConfiguration config = new PortfolioConfiguration() { Phases = new List<ProjectPhase>() { ph1, ph2, ph5 } };
+            PortfolioConfiguration config = new PortfolioConfiguration() { 
+                Phases = new List<ProjectPhase>() { ph1, ph2, ph5 },
+                Labels = new List<PortfolioLabelConfig>()
+            };
             ph1.Configuration = config;
             ph2.Configuration = config;
             ph5.Configuration = config;
