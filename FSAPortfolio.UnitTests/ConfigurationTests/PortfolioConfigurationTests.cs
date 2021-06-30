@@ -8,6 +8,7 @@ using FSAPortfolio.WebAPI.DTO;
 using FSAPortfolio.Application.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
+using FSAPortfolio.Common;
 
 namespace FSAPortfolio.UnitTests.ConfigurationTests
 {

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using FSAPortfolio.Common;
 
 namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
 {
@@ -88,7 +89,9 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                     result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Teams.OrderBy(t => t.Order).Union(new Team[] { new Team() { Name = ProjectTeamConstants.NotSetName, Id = 0 } }));
                     break;
                 case PortfolioSummaryModel.ByUser:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(ProjectUserCategory.All());
+                    var userCategories = ProjectUserCategory.All(source.Configuration.Labels);
+                    var allUserCategories = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(userCategories);
+                    result = allUserCategories.Where(u => u.PhaseProjects.Any(pp => pp.Projects.Count() > 0)); // Only take categories with projects
                     break;
                 default:
                     throw new ArgumentException($"Unrecognised summary type: {summaryType}");

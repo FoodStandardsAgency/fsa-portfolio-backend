@@ -4,6 +4,7 @@ using FSAPortfolio.Application.Models.JsonConverters;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using FSAPortfolio.Common;
 
 namespace FSAPortfolio.Application.Models
 {

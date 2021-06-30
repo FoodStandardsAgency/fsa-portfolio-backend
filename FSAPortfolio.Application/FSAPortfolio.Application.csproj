@@ -248,7 +248,6 @@
     <Compile Include="Services\Projects\PortfolioService.cs" />
     <Compile Include="Services\Projects\ProjectDataService.cs" />
     <Compile Include="Services\Projects\ProjectDataValidationException.cs" />
-    <Compile Include="Services\Projects\ProjectPropertyConstants.cs" />
     <Compile Include="Services\Projects\ProjectService.cs" />
     <Compile Include="Services\Projects\ProjectSearchFilters.cs" />
     <Compile Include="Services\Projects\PropertyImporter.cs" />

@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Logging\AppLog.cs" />
+    <Compile Include="ProjectPropertyConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewKeyPrefix.cs" />
   </ItemGroup>

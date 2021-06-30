@@ -139,7 +139,7 @@ namespace FSAPortfolio.Entities.Projects
                 userName == KeyContact1?.ActiveDirectoryPrincipalName ||
                 userName == KeyContact2?.ActiveDirectoryPrincipalName ||
                 userName == KeyContact3?.ActiveDirectoryPrincipalName)
-                return ProjectUserCategoryType.Contact;
+                return ProjectUserCategoryType.Contact1;
             if (People.Any(p => p.ActiveDirectoryPrincipalName == userName)) return ProjectUserCategoryType.Team;
             return ProjectUserCategoryType.None;
         }
