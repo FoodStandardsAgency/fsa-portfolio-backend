@@ -48,10 +48,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.Common", "FSAP
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{4998EBD8-B5D8-49E3-85E9-7C1460895020}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\workInProgress_to_DEV.yml = .github\workflows\workInProgress_to_DEV.yml
+		.github\workflows\development_to_TEST.yml = .github\workflows\development_to_TEST.yml
+		.github\workflows\workInProgress_to_TEST.yml = .github\workflows\workInProgress_to_TEST.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.Utility", "FSAPortfolio.Utility\FSAPortfolio.Utility.csproj", "{93B0D739-F2A1-46F3-9C1D-7735C1C77DA7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSAPortfolio.Utility", "FSAPortfolio.Utility\FSAPortfolio.Utility.csproj", "{93B0D739-F2A1-46F3-9C1D-7735C1C77DA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
