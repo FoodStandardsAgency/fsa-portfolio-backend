@@ -11,6 +11,7 @@ using System.Web;
 using FSAPortfolio.Entities.Users;
 using System.Linq.Expressions;
 using FSAPortfolio.WebAPI.App.Users;
+using FSAPortfolio.Common;
 
 namespace FSAPortfolio.WebAPI.App.Identity
 {
@@ -66,17 +67,15 @@ namespace FSAPortfolio.WebAPI.App.Identity
                 };
 
                 // The roles added for the user in the store
-                var userRoleList = user.RoleList == null ? new string[0] : user.RoleList.Split(';', ',').Select(r => r.Trim()).ToArray();
+                var userRoleList = user.RoleList == null ? new Role[0] : user.RoleList.Split(';', ',').Select(r => new Role(r)).ToArray();
 
                 // Merge and take the intersection with required portfolio roles...
                 var isSupplier = result.AccessGroupViewKey == AccessGroupConstants.SupplierViewKey;
                 var roleList = await roleManager.GetFilteredRoleListAsync(userRoleList, isSupplier);
 
-                result.UserStoreRoleList = roleList
-                    .Select(r => new Role() { ViewKey = r.Trim() })
-                    .ToList();
+                result.UserStoreRoleList = roleList.ToList();
 
-                result.UserStoreRoleList.Add(new Role() { ViewKey = user.AccessGroup.ViewKey });
+                result.UserStoreRoleList.Add(new Role(user.AccessGroup.ViewKey));
             }
             return result;
         }

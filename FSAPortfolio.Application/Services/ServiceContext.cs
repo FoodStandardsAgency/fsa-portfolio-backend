@@ -13,6 +13,8 @@ using System.Web.Http;
 using System.Net;
 using System.Security.Claims;
 using FSAPortfolio.WebAPI.App.Identity;
+using FSAPortfolio.Entities.Users;
+using FSAPortfolio.Common;
 
 namespace FSAPortfolio.Application.Services
 {
@@ -43,11 +45,15 @@ namespace FSAPortfolio.Application.Services
         private IPrincipal User => HttpContext.Current.User;
         public string CurrentUserName => User?.Identity?.Name;
 
-        public bool HasPermission(Portfolio portfolio) => portfolio.RequiredRoles.Any(r => User.IsInRole(r));
-        public bool HasPermission(Portfolio portfolio, params string[] roles)
+        public bool HasPermission(Portfolio portfolio) => portfolio.RequiredRoles.Any(r => User.IsInRole(r.ViewKey));
+        public bool HasPermission(Portfolio portfolio, params string[] roleNames)
         {
-            var roleViewKeys = roles.Select(r => $"{portfolio.IDPrefix}.{r}").ToArray();
-            return roleViewKeys.Any(k => User.IsInRole(k) && portfolio.RequiredRoles.Contains(k));
+            var roles = roleNames.Select(r => new Role(portfolio.IDPrefix, r)).ToArray();
+            return HasPermission(portfolio, roles);
+        }
+        public bool HasPermission(Portfolio portfolio, Role[] roles)
+        {
+            return roles.Any(k => User.IsInRole(k.ViewKey) && portfolio.RequiredRoles.Contains(k));
         }
         public bool HasPermission(params string[] roles)
         {
@@ -63,15 +69,15 @@ namespace FSAPortfolio.Application.Services
         }
         public void AssertAdmin(Portfolio portfolio)
         {
-            if (!HasPermission(portfolio, "Admin", "Superuser")) ThrowResponseException(HttpStatusCode.Forbidden);
+            if (!HasPermission(portfolio, AccessGroupConstants.AdminViewKey, AccessGroupConstants.SuperuserViewKey)) ThrowResponseException(HttpStatusCode.Forbidden);
         }
         public void AssertAdmin()
         {
-            if (!HasPermission("Admin", "Superuser")) ThrowResponseException(HttpStatusCode.Forbidden);
+            if (!HasPermission(AccessGroupConstants.AdminViewKey, AccessGroupConstants.SuperuserViewKey)) ThrowResponseException(HttpStatusCode.Forbidden);
         }
         public void AssertEditor(Portfolio portfolio)
         {
-            if (!HasPermission(portfolio, "Admin", "Superuser", "Editor")) ThrowResponseException(HttpStatusCode.Forbidden);
+            if (!HasPermission(portfolio, AccessGroupConstants.AdminViewKey, AccessGroupConstants.SuperuserViewKey, AccessGroupConstants.EditorViewKey)) ThrowResponseException(HttpStatusCode.Forbidden);
         }
 
         public bool UserHasFSAClaim() => UserHasClaim(fsaClaims);

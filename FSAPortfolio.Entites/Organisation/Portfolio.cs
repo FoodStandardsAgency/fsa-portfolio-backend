@@ -1,4 +1,6 @@
-﻿using FSAPortfolio.Entities.Projects;
+﻿using FSAPortfolio.Common;
+using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.Entities.Users;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -34,23 +36,23 @@ namespace FSAPortfolio.Entities.Organisation
 
         public string RequiredRoleData { get; set; }
 
-        public string[] RequiredRoles
+        public Role[] RequiredRoles
         {
             get
             {
-                switch(RequiredRoleData)
+                switch(RequiredRoleData.ToLower())
                 {
-                    case "Superuser":
-                        return new string[] { $"{IDPrefix}.Superuser" };
-                    case "Admin":
-                        return new string[] { $"{IDPrefix}.Superuser", $"{IDPrefix}.Admin" };
-                    case "Editor":
-                        return new string[] { $"{IDPrefix}.Superuser", $"{IDPrefix}.Admin", $"{IDPrefix}.Editor" };
-                    case "FSA":
-                        return new string[] { $"{IDPrefix}.Superuser", $"{IDPrefix}.Admin", $"{IDPrefix}.Editor", $"{IDPrefix}.FSA" };
-                    case "Read":
+                    case "superuser":
+                        return new Role[] { new Role(IDPrefix, AccessGroupConstants.SuperuserViewKey) };
+                    case "admin":
+                        return new Role[] { new Role(IDPrefix, AccessGroupConstants.SuperuserViewKey), new Role(IDPrefix, AccessGroupConstants.AdminViewKey) };
+                    case "editor":
+                        return new Role[] { new Role(IDPrefix, AccessGroupConstants.SuperuserViewKey), new Role(IDPrefix, AccessGroupConstants.AdminViewKey), new Role(IDPrefix, AccessGroupConstants.EditorViewKey) };
+                    case "fsa":
+                        return new Role[] { new Role(IDPrefix, AccessGroupConstants.SuperuserViewKey), new Role(IDPrefix, AccessGroupConstants.AdminViewKey), new Role(IDPrefix, AccessGroupConstants.EditorViewKey), new Role(IDPrefix, AccessGroupConstants.FSAViewKey) };
+                    case "read":
                     default:
-                        return new string[] { $"{IDPrefix}.Superuser", $"{IDPrefix}.Admin", $"{IDPrefix}.Editor", $"{IDPrefix}.FSA", $"{IDPrefix}.Read" };
+                        return new Role[] { new Role(IDPrefix, AccessGroupConstants.SuperuserViewKey), new Role(IDPrefix, AccessGroupConstants.AdminViewKey), new Role(IDPrefix, AccessGroupConstants.EditorViewKey), new Role(IDPrefix, AccessGroupConstants.FSAViewKey), new Role(IDPrefix, "Read") };
                 }
             }
         }

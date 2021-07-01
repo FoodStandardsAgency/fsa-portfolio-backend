@@ -1,5 +1,6 @@
 ﻿using FSAPortfolio.Application.Models;
 using FSAPortfolio.Application.Services;
+using FSAPortfolio.Common;
 using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.WebAPI.App.Mapping;
@@ -81,11 +82,15 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         public async Task SeedAccessGroups()
         {
+            ServiceContext.AssertAdmin();
             var context = ServiceContext.PortfolioContext;
             context.AccessGroups.AddOrUpdate(ag => ag.ViewKey,
-                new AccessGroup() { ViewKey = "editor", Description = "editor" },
-                new AccessGroup() { ViewKey = "admin", Description = "admin" },
-                new AccessGroup() { ViewKey = "superuser", Description = "superuser" });
+                new AccessGroup() { ViewKey = AccessGroupConstants.FSAViewKey, Description = AccessGroupConstants.FSAViewKey },
+                new AccessGroup() { ViewKey = AccessGroupConstants.EditorViewKey, Description = AccessGroupConstants.EditorViewKey },
+                new AccessGroup() { ViewKey = AccessGroupConstants.AdminViewKey, Description = AccessGroupConstants.AdminViewKey },
+                new AccessGroup() { ViewKey = AccessGroupConstants.SupplierViewKey, Description = AccessGroupConstants.SupplierViewKey },
+                new AccessGroup() { ViewKey = AccessGroupConstants.SuperuserViewKey, Description = AccessGroupConstants.SuperuserViewKey }
+                );
             await context.SaveChangesAsync();
         }
 

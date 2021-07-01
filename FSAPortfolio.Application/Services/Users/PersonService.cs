@@ -22,6 +22,7 @@ using System.Web;
 using System.Web.Http;
 using System.Text.RegularExpressions;
 using FSAPortfolio.Application.Services;
+using FSAPortfolio.Common;
 
 namespace FSAPortfolio.WebAPI.App.Users
 {

@@ -262,7 +262,6 @@
     <Compile Include="Services\Sync\SERDSyncMaps.cs" />
     <Compile Include="Services\Sync\SyncMaps.cs" />
     <Compile Include="Services\Sync\SyncService.cs" />
-    <Compile Include="Services\Users\AccessGroupConstants.cs" />
     <Compile Include="Services\Users\IPersonService.cs" />
     <Compile Include="Services\Users\IUserService.cs" />
     <Compile Include="Services\Users\PersonService.cs" />

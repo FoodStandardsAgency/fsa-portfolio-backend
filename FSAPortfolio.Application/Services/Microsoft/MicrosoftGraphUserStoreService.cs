@@ -86,7 +86,7 @@ namespace FSAPortfolio.WebAPI.App.Microsoft
             var groupIds = groups.value.Select(g => g.Id);
             var roles = groupIds.Where(gid => GroupMembershipToRoleMap.GroupMap.ContainsKey(gid)).SelectMany(gid => GroupMembershipToRoleMap.GroupMap[gid]);
             var filteredRoles = await roleManager.GetFilteredRoleListAsync(roles, false);
-            return filteredRoles.Select(r => new Role() { ViewKey = r });
+            return filteredRoles;
         }
 
         private async Task<MicrosoftGraphGroupMemberListResponse> GetGroupMemberships(string userId)

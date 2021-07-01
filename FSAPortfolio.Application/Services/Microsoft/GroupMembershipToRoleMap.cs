@@ -40,7 +40,7 @@ namespace FSAPortfolio.WebAPI.App.Microsoft
                         roles = new List<Role>();
                         GroupMap[objectId] = roles;
                     }
-                    roles.Add(new Role() { ViewKey = roleKey });
+                    roles.Add(new Role(roleKey));
                 }
             }
         }

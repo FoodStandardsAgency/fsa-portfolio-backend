@@ -6,7 +6,7 @@ namespace FSAPortfolio.WebAPI.App.Identity
 {
     public interface IRoleService
     {
-        Task<string[]> GetFilteredRoleListAsync(IEnumerable<Role> userRoleList, bool isSupplier);
-        Task<string[]> GetFilteredRoleListAsync(string[] userRoleList, bool isSupplier);
+        Task<Role[]> GetFilteredRoleListAsync(IEnumerable<Role> userRoleList, bool isSupplier);
+        Task<Role[]> GetFilteredRoleListAsync(Role[] userRoleList, bool isSupplier);
     }
 }

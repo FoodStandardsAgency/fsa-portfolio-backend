@@ -1,5 +1,5 @@
 echo Initialising access groups...
-curl $apiUrl/AccessGroups/init -H "APIKey: $apiKey"
+curl $apiUrl/AccessGroups/init -H "APIKey: $apiKey" -H "Authorization: Bearer $access_token"
 echo Creating user...
 curl $apiUrl/Users/create -X POST -d userName=$apiUser -d password=$apiUserPassword -d accessgroup=$apiUserAccessGroup -H "APIKey: $apiKey" 
 source getToken.sh

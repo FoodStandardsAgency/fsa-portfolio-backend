@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessGroupConstants.cs" />
     <Compile Include="Logging\AppLog.cs" />
     <Compile Include="ProjectPropertyConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
