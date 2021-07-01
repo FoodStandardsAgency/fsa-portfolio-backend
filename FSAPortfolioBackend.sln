@@ -49,6 +49,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{4998EBD8-B5D8-49E3-85E9-7C1460895020}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\development_to_TEST.yml = .github\workflows\development_to_TEST.yml
+		.github\workflows\master_FSAPortfolioBackend.yml = .github\workflows\master_FSAPortfolioBackend.yml
 		.github\workflows\workInProgress_to_TEST.yml = .github\workflows\workInProgress_to_TEST.yml
 	EndProjectSection
 EndProject
