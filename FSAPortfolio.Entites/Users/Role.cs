@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FSAPortfolio.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,6 +33,21 @@ namespace FSAPortfolio.Entities.Users
         }
 
         public string ViewKey { get; set; }
+
+        public bool IsAllowedForSupplier
+        {
+            get
+            {
+                switch(Permission)
+                {
+                    case "read":
+                    case AccessGroupConstants.SupplierViewKey:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
 
         public override bool Equals(Object obj)
         {

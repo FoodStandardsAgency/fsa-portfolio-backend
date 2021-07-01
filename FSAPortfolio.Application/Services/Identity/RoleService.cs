@@ -28,6 +28,7 @@ namespace FSAPortfolio.WebAPI.App.Identity
                 .ToArray();
 
             // Default roles for anyone except suppliers
+            if (isSupplier) userRoleList = userRoleList.Where(r => r.IsAllowedForSupplier).ToArray();
             var defaultRoleList = (isSupplier ? new Role[0] : portfolios.Select(p => new Role(p.IDPrefix, "Read"))).ToArray();
 
             // Merge and take the intersection with required portfolio roles...

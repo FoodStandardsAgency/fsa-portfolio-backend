@@ -40,7 +40,7 @@ namespace FSAPortfolio.Entities.Organisation
         {
             get
             {
-                switch(RequiredRoleData.ToLower())
+                switch(RequiredRoleData?.ToLower())
                 {
                     case "superuser":
                         return new Role[] { new Role(IDPrefix, AccessGroupConstants.SuperuserViewKey) };
