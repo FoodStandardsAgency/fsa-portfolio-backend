@@ -41,6 +41,7 @@ namespace FSAPortfolio.Application.Services
         };
 
         private IPrincipal User => HttpContext.Current.User;
+        public string CurrentUserName => User?.Identity?.Name;
 
         public bool HasPermission(Portfolio portfolio) => portfolio.RequiredRoles.Any(r => User.IsInRole(r));
         public bool HasPermission(Portfolio portfolio, params string[] roles)

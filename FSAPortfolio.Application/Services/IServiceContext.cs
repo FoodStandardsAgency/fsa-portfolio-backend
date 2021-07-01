@@ -7,7 +7,7 @@ namespace FSAPortfolio.Application.Services
     public interface IServiceContext
     {
         PortfolioContext PortfolioContext { get; }
-
+        string CurrentUserName { get; }
         void AssertAdmin();
         void AssertAdmin(Portfolio portfolio);
         void AssertEditor(Portfolio portfolio);

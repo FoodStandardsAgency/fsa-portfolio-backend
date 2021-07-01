@@ -57,7 +57,6 @@ namespace FSAPortfolio.WebAPI.Controllers
                                                          [FromUri(Name = "projectType")] string projectType = null,
                                                          [FromUri(Name = "includeKeyData")] bool includeKeyData = false)
         {
-            // TODO: projectType parameter
             return await portfolioService.GetSummaryAsync(viewKey, summaryType, user, projectType, includeKeyData);
         }
 

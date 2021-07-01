@@ -21,6 +21,7 @@ using System.Net;
 using LinqKit;
 using System.Linq.Expressions;
 using FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries;
+using FSAPortfolio.Common.Logging;
 
 namespace FSAPortfolio.Application.Services.Projects
 {
@@ -47,7 +48,7 @@ namespace FSAPortfolio.Application.Services.Projects
             return result;
         }
 
-        public async Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType, string user, string projectType, bool includeKeyData = false)
+        public async Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType, string userFilter, string projectTypeFilter, bool includeKeyData = false)
         {
             PortfolioSummaryModel result = null;
             var context = ServiceContext.PortfolioContext;
@@ -60,7 +61,9 @@ namespace FSAPortfolio.Application.Services.Projects
 
             if (ServiceContext.HasPermission(portfolio))
             {
-                var projectFilter = BuildProjectFilter(user, projectType);
+                if (!string.IsNullOrEmpty(userFilter)) TraceSummaryQuery(viewKey, summaryType, userFilter, projectTypeFilter);
+
+                var projectFilter = BuildProjectFilter(userFilter, projectTypeFilter);
 
                 await context.LoadProjectsIntoPortfolioAsync(portfolio, projectFilter);
 
@@ -70,7 +73,7 @@ namespace FSAPortfolio.Application.Services.Projects
                     {
                         opt.Items[ProjectIndexDateResolver.OptionKey] = includeKeyData;
                         opt.Items[nameof(PortfolioContext)] = context;
-                        opt.Items[PortfolioPersonResolver.PersonKey] = user;
+                        opt.Items[PortfolioPersonResolver.PersonKey] = userFilter;
                         opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
                         opt.Items[nameof(PortfolioSummaryModel)] = summaryType;
                     });
@@ -81,6 +84,11 @@ namespace FSAPortfolio.Application.Services.Projects
             }
 
             return result;
+        }
+
+        private void TraceSummaryQuery(string viewKey, string summaryType, string userFilter, string projectTypeFilter)
+        {
+            AppLog.TraceWarning($"Portfolio={viewKey}, SummaryType={summaryType}, UserFilter={userFilter}, ProjectTypeFilter={projectTypeFilter}, CurrentUser={ServiceContext.CurrentUserName}");
         }
 
         private static Expression<Func<Project, bool>> BuildProjectFilter(string user, string projectType)
