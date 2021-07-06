@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FSAPortfolio.Entities.Users;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -18,12 +19,15 @@ namespace FSAPortfolio.Security.ApiKey
         private static string PowerBIRoles = ConfigurationManager.AppSettings["PowerBIRoles"];
         private static string AdminAPIKeyToCheck = ConfigurationManager.AppSettings["AdminAPIKey"];
         private static string AdminRoles = ConfigurationManager.AppSettings["AdminRoles"];
+        private static string TestAPIKeyToCheck = ConfigurationManager.AppSettings["TestAPIKey"];
+        private static string TestRoles = ConfigurationManager.AppSettings["TestRoles"];
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage httpRequestMessage, CancellationToken cancellationToken)
         {
             bool validKey = checkAPIKey(httpRequestMessage, "APIKey", APIKeyToCheck);
             validKey = validKey || checkAPIKey(httpRequestMessage, "PowerBIAPIKey", PowerBIAPIKeyToCheck, PowerBIRoles);
             validKey = validKey || checkAPIKey(httpRequestMessage, "AdminAPIKey", AdminAPIKeyToCheck, AdminRoles);
+            validKey = validKey || checkAPIKey(httpRequestMessage, "TestAPIKey", TestAPIKeyToCheck, TestRoles);
 
             if (!validKey)
             {
@@ -42,7 +46,7 @@ namespace FSAPortfolio.Security.ApiKey
             var checkApiKeyExists = !string.IsNullOrWhiteSpace(keyValue) && httpRequestMessage.Headers.TryGetValues(keyName, out apiRequestHeaders);
             if (checkApiKeyExists)
             {
-                if (apiRequestHeaders.FirstOrDefault().Equals(APIKeyToCheck))
+                if (apiRequestHeaders.FirstOrDefault().Equals(keyValue))
                 { 
                     validKey = true;
 
@@ -51,9 +55,10 @@ namespace FSAPortfolio.Security.ApiKey
                     {
                         var principal = Thread.CurrentPrincipal;
                         var identity = principal.Identity as ClaimsIdentity;
-                        foreach (var role in roles.Split(',', ';', '|'))
+                        var rolesToAdd = roles.Split(',', ';', '|').Select(r => new Role(r));
+                        foreach (var role in rolesToAdd)
                         {
-                            identity.AddClaim(new Claim(ClaimTypes.Role, role));
+                            identity.AddClaim(new Claim(ClaimTypes.Role, role.ViewKey));
                         }
                     }
                 }

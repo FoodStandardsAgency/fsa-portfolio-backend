@@ -57,5 +57,11 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FSAPortfolio.Entites\FSAPortfolio.Entities.csproj">
+      <Project>{d5026ba6-1eaf-43a5-8df0-1a560dba2460}</Project>
+      <Name>FSAPortfolio.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
