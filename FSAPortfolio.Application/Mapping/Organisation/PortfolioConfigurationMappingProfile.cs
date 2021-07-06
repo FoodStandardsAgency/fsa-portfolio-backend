@@ -45,6 +45,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.FieldTitle, o => o.MapFrom(s => s.FieldTitle))
                 .ForMember(d => d.Included, o => o.MapFrom(s => s.Included))
                 .ForMember(d => d.AdminOnly, o => o.MapFrom(s => s.AdminOnly))
+                .ForMember(d => d.EditorCanView, o => o.MapFrom(s => s.Flags.HasFlag(PortfolioFieldFlags.EditorCanView)))
                 .ForMember(d => d.IncludedLock, o => o.MapFrom(s => s.IncludedLock))
                 .ForMember(d => d.AdminOnlyLock, o => o.MapFrom(s => s.AdminOnlyLock))
                 .ForMember(d => d.Label, o => o.MapFrom(s => s.Label))

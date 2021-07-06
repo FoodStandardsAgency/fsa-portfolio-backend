@@ -36,6 +36,10 @@ namespace FSAPortfolio.Application.Models
         [JsonProperty("admin")]
         public bool AdminOnly { get; set; }
 
+        [JsonProperty("editorcanview")]
+        public bool EditorCanView { get; set; }
+
+
         [JsonProperty("included_lock")]
         public bool IncludedLock { get; set; }
 

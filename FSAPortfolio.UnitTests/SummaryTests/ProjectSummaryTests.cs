@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries;
 
 namespace FSAPortfolio.UnitTests.SummaryTests
 {
@@ -70,7 +71,7 @@ namespace FSAPortfolio.UnitTests.SummaryTests
             opt =>
             {
                 opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
-                opt.Items[nameof(PortfolioSummaryModel)] = summaryType;
+                opt.Items[PortfolioSummaryResolver.SummaryTypeKey] = summaryType;
             });
 
             // Check result

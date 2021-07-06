@@ -75,7 +75,7 @@ namespace FSAPortfolio.Application.Services.Projects
                         opt.Items[nameof(PortfolioContext)] = context;
                         opt.Items[PortfolioPersonResolver.PersonKey] = userFilter;
                         opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
-                        opt.Items[nameof(PortfolioSummaryModel)] = summaryType;
+                        opt.Items[PortfolioSummaryResolver.SummaryTypeKey] = summaryType;
                     });
             }
             else
@@ -85,6 +85,29 @@ namespace FSAPortfolio.Application.Services.Projects
 
             return result;
         }
+
+        public async Task<PortfolioSummaryModel> GetSummaryLabelsAsync(string viewKey)
+        {
+            PortfolioSummaryModel result = null;
+            var context = ServiceContext.PortfolioContext;
+            var portfolio = await context.Portfolios
+                .IncludeConfig()
+                .SingleOrDefaultAsync(p => p.ViewKey == viewKey);
+
+            if (portfolio == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            if (ServiceContext.HasPermission(portfolio))
+            {
+                result = PortfolioMapper.ConfigMapper.Map<PortfolioSummaryModel>(portfolio, opt => { });
+            }
+            else
+            {
+                throw new HttpResponseException(HttpStatusCode.Forbidden);
+            }
+
+            return result;
+        }
+
 
         private void TraceSummaryQuery(string viewKey, string summaryType, string userFilter, string projectTypeFilter)
         {

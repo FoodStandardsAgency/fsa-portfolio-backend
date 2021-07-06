@@ -37,7 +37,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
     {
         public int Resolve(ProjectPhase source, PhaseSummaryModel destination, int destMember, ResolutionContext context)
         {
-            var summaryType = context.Items[nameof(PortfolioSummaryModel)] as string;
+            var summaryType = context.Items[PortfolioSummaryResolver.SummaryTypeKey] as string;
             switch (summaryType)
             {
                 case PortfolioSummaryModel.NewProjectsByTeam:
@@ -52,49 +52,53 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
 
     public class PortfolioSummaryResolver : IValueResolver<Portfolio, PortfolioSummaryModel, IEnumerable<ProjectSummaryModel>>
     {
+        public static string SummaryTypeKey = $"{nameof(PortfolioSummaryResolver)}.SummaryTypeKey";
         public IEnumerable<ProjectSummaryModel> Resolve(Portfolio source, PortfolioSummaryModel destination, IEnumerable<ProjectSummaryModel> destMember, ResolutionContext context)
         {
-            IEnumerable<ProjectSummaryModel> result;
-            var summaryType = context.Items[nameof(PortfolioSummaryModel)] as string;
-            switch (summaryType)
+            IEnumerable<ProjectSummaryModel> result = null;
+            if (context.Items.ContainsKey(SummaryTypeKey))
             {
-                case PortfolioSummaryModel.ByCategory:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Categories.OrderBy(c => c.Name));
-                    break;
-                case PortfolioSummaryModel.ByPriorityGroup:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.PriorityGroups.OrderBy(c => c.Order));
-                    break;
-                case PortfolioSummaryModel.ByRagStatus:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.RAGStatuses.OrderBy(c => c.Order));
-                    break;
-                case PortfolioSummaryModel.ByPhase:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.Where(p => p.Id != source.Configuration.CompletedPhase.Id).OrderBy(c => c.Order));
-                    break;
-                case PortfolioSummaryModel.ByLead:
-                    var people = source.Configuration.Portfolio.Projects
-                        .Where(p => p.Lead_Id != null)
-                        .Select(p => p.Lead)
-                        .Distinct()
-                        .OrderBy(p => p.Firstname)
-                        .ThenBy(p => p.Surname)
-                        .ToList();
+                var summaryType = context.Items[SummaryTypeKey] as string;
+                switch (summaryType)
+                {
+                    case PortfolioSummaryModel.ByCategory:
+                        result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Categories.OrderBy(c => c.Name));
+                        break;
+                    case PortfolioSummaryModel.ByPriorityGroup:
+                        result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.PriorityGroups.OrderBy(c => c.Order));
+                        break;
+                    case PortfolioSummaryModel.ByRagStatus:
+                        result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.RAGStatuses.OrderBy(c => c.Order));
+                        break;
+                    case PortfolioSummaryModel.ByPhase:
+                        result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.Where(p => p.Id != source.Configuration.CompletedPhase.Id).OrderBy(c => c.Order));
+                        break;
+                    case PortfolioSummaryModel.ByLead:
+                        var people = source.Configuration.Portfolio.Projects
+                            .Where(p => p.Lead_Id != null)
+                            .Select(p => p.Lead)
+                            .Distinct()
+                            .OrderBy(p => p.Firstname)
+                            .ThenBy(p => p.Surname)
+                            .ToList();
 
-                    people.Insert(0, new Person() { Id = 0, ActiveDirectoryDisplayName = ProjectTeamConstants.NotSetName });
+                        people.Insert(0, new Person() { Id = 0, ActiveDirectoryDisplayName = ProjectTeamConstants.NotSetName });
 
-                    var allResults = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(people);
-                    result = allResults.Where(r => r.PhaseProjects.Any(pp => pp.Projects.Count() > 0)); // Only take leads with active projects
-                    break;
-                case PortfolioSummaryModel.ByTeam:
-                case PortfolioSummaryModel.NewProjectsByTeam:
-                    result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Teams.OrderBy(t => t.Order).Union(new Team[] { new Team() { Name = ProjectTeamConstants.NotSetName, Id = 0 } }));
-                    break;
-                case PortfolioSummaryModel.ByUser:
-                    var userCategories = ProjectUserCategory.All(source.Configuration.Labels);
-                    var allUserCategories = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(userCategories);
-                    result = allUserCategories.Where(u => u.PhaseProjects.Any(pp => pp.Projects.Count() > 0)); // Only take categories with projects
-                    break;
-                default:
-                    throw new ArgumentException($"Unrecognised summary type: {summaryType}");
+                        var allResults = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(people);
+                        result = allResults.Where(r => r.PhaseProjects.Any(pp => pp.Projects.Count() > 0)); // Only take leads with active projects
+                        break;
+                    case PortfolioSummaryModel.ByTeam:
+                    case PortfolioSummaryModel.NewProjectsByTeam:
+                        result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Teams.OrderBy(t => t.Order).Union(new Team[] { new Team() { Name = ProjectTeamConstants.NotSetName, Id = 0 } }));
+                        break;
+                    case PortfolioSummaryModel.ByUser:
+                        var userCategories = ProjectUserCategory.All(source.Configuration.Labels);
+                        var allUserCategories = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(userCategories);
+                        result = allUserCategories.Where(u => u.PhaseProjects.Any(pp => pp.Projects.Count() > 0)); // Only take categories with projects
+                        break;
+                    default:
+                        throw new ArgumentException($"Unrecognised summary type: {summaryType}");
+                }
             }
             return result;
         }
@@ -168,7 +172,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
         public IEnumerable<PhaseProjectsModel> Resolve(Team source, ProjectSummaryModel destination, IEnumerable<PhaseProjectsModel> destMember, ResolutionContext context)
         {
             var portfolioConfiguration = context.Items[nameof(PortfolioConfiguration)] as PortfolioConfiguration;
-            var summaryType = context.Items[nameof(PortfolioSummaryModel)] as string;
+            var summaryType = context.Items[PortfolioSummaryResolver.SummaryTypeKey] as string;
             IEnumerable<PhaseProjectsModel> result;
 
             switch(summaryType)

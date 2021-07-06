@@ -20,7 +20,11 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
             CreateMap<Portfolio, PortfolioSummaryModel>()
                 .ForMember(d => d.Person, o => o.MapFrom<PortfolioPersonResolver>())
                 .ForMember(d => d.Summaries, o => o.MapFrom<PortfolioSummaryResolver>())
-                .ForMember(d => d.Phases, o => o.MapFrom(s => s.Configuration.Phases.Where(p => p.Id != s.Configuration.CompletedPhase.Id).OrderBy(c => c.Order)))
+                .ForMember(d => d.Phases, o =>
+                {
+                    o.PreCondition((s, d, c) => { return c.Items.ContainsKey(PortfolioSummaryResolver.SummaryTypeKey); });
+                    o.MapFrom(s => s.Configuration.Phases.Where(p => p.Id != s.Configuration.CompletedPhase.Id).OrderBy(c => c.Order));
+                })
                 .ForMember(d => d.Labels, o => o.MapFrom<ProjectSummaryLabelResolver>())
                 .ForMember(d => d.ProjectTypes, o => o.MapFrom<ProjectSummaryProjectTypeResolver>())
                 ;

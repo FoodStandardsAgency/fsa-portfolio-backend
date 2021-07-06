@@ -60,6 +60,12 @@ namespace FSAPortfolio.WebAPI.Controllers
             return await portfolioService.GetSummaryAsync(viewKey, summaryType, user, projectType, includeKeyData);
         }
 
+        [HttpGet]
+        public async Task<PortfolioSummaryModel> SummaryLabels([FromUri(Name = "portfolio")] string viewKey)
+        {
+            return await portfolioService.GetSummaryLabelsAsync(viewKey);
+        }
+
 
         [HttpGet]
         public async Task<GetProjectQueryDTO> FilterOptionsAsync([FromUri(Name = "portfolio")] string viewKey)
