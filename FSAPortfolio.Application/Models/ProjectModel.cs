@@ -20,12 +20,21 @@ namespace FSAPortfolio.Application.Models
     {
         public string id { get; set; }
 
+        /// <summary>
+        /// The project identifier - the unique key for the project.
+        /// This is created automatically by the system when a new project is requested.
+        /// The format is: {portfolio abbreviation}
+        /// </summary>
         [JsonProperty(ProjectPropertyConstants.ProjectId)]
         public string project_id { get; set; }
 
+        [JsonProperty(ProjectPropertyConstants.project_name)]
         public string project_name { get; set; }
 
+        [JsonProperty(ProjectPropertyConstants.short_desc)]
         public string short_desc { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.phase)]
         public string phase { get; set; }
 
         [JsonProperty(ProjectPropertyConstants.category)]

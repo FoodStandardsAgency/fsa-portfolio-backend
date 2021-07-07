@@ -39,6 +39,8 @@ namespace FSAPortfolio.Application.Models
         [JsonProperty("editorcanview")]
         public bool EditorCanView { get; set; }
 
+        [JsonProperty("required")]
+        public bool Required { get; set; }
 
         [JsonProperty("included_lock")]
         public bool IncludedLock { get; set; }

@@ -344,3 +344,4 @@ healthchecksdb
 *connectionStrings.config
 *setSecrets.sh
 /FSAPortfolio.WebAPI/Properties/ServiceDependencies/fsa-portfoliodev-back - Web Deploy/profile.arm.json
+/FSAPortfolio.Application/FSAPortfolio.Application.xml
