@@ -15,12 +15,12 @@ namespace FSAPortfolio.UnitTests.APIClients
     {
         internal static async Task<PortfolioConfigModel> GetPortfolioConfigurationAsync(string portfolio)
         {
-            return await BackendAPIClient.GetAsync<PortfolioConfigModel>($"api/PortfolioConfiguration?portfolio={portfolio}");
+            return await TestBackendAPIClient.GetAsync<PortfolioConfigModel>($"api/PortfolioConfiguration?portfolio={portfolio}");
         }
 
         internal static async Task UpdatePortfolioConfigurationAsync(PortfolioConfigUpdateRequest update)
         {
-            await BackendAPIClient.PatchAsync($"api/PortfolioConfiguration?portfolio={update.ViewKey}", update);
+            await TestBackendAPIClient.PatchAsync($"api/PortfolioConfiguration?portfolio={update.ViewKey}", update);
         }
         internal static async Task<string> UpdateCategoriesAsync(string portfolio, string categories)
         {
@@ -43,7 +43,7 @@ namespace FSAPortfolio.UnitTests.APIClients
 
         internal static async Task<GetProjectQueryDTO> GetFilterOptionsAsync(string portfolio)
         {
-            return await BackendAPIClient.GetAsync<GetProjectQueryDTO>($"api/Portfolios/{portfolio}/filteroptions");
+            return await TestBackendAPIClient.GetAsync<GetProjectQueryDTO>($"api/Portfolios/{portfolio}/filteroptions");
         }
     }
 }

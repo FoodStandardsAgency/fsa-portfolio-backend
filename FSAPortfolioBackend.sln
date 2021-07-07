@@ -38,6 +38,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestScripts", "TestScripts"
 		TestScripts\getPortfolioProjects.sh = TestScripts\getPortfolioProjects.sh
 		TestScripts\getPortfolioSummaryConfig.sh = TestScripts\getPortfolioSummaryConfig.sh
 		TestScripts\getPortfolioUpdates.sh = TestScripts\getPortfolioUpdates.sh
+		TestScripts\getProjectForEdit.sh = TestScripts\getProjectForEdit.sh
 		TestScripts\getToken.sh = TestScripts\getToken.sh
 		TestScripts\setSecrets.sh = TestScripts\setSecrets.sh
 	EndProjectSection
@@ -54,6 +55,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSAPortfolio.Utility", "FSAPortfolio.Utility\FSAPortfolio.Utility.csproj", "{93B0D739-F2A1-46F3-9C1D-7735C1C77DA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.ApiClient", "FSAPortfolio.ApiClient\FSAPortfolio.ApiClient.csproj", "{4AB3F23E-9EBA-4D51-9802-363CACD18C31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -99,6 +102,10 @@ Global
 		{93B0D739-F2A1-46F3-9C1D-7735C1C77DA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93B0D739-F2A1-46F3-9C1D-7735C1C77DA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93B0D739-F2A1-46F3-9C1D-7735C1C77DA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AB3F23E-9EBA-4D51-9802-363CACD18C31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AB3F23E-9EBA-4D51-9802-363CACD18C31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AB3F23E-9EBA-4D51-9802-363CACD18C31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AB3F23E-9EBA-4D51-9802-363CACD18C31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -14,7 +14,7 @@ namespace FSAPortfolio.UnitTests.APIClients
     {
         internal static async Task<ArchiveResponse> ArchiveProjectsAsync(string portfolio)
         {
-            return await BackendAPIClient.GetAsync<ArchiveResponse>($"api/Portfolios/{portfolio}/archive");
+            return await TestBackendAPIClient.GetAsync<ArchiveResponse>($"api/Portfolios/{portfolio}/archive");
         }
     }
 }

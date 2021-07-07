@@ -20,7 +20,7 @@ namespace FSAPortfolio.UnitTests
     [TestClass]
     public class APITests
     {
-        private static HttpClient client => BackendAPIClient.client;
+        private static HttpClient client => TestBackendAPIClient.httpClient;
 
         private static void UpdateAndVerify(string formBody)
         {

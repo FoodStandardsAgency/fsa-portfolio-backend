@@ -70,7 +70,7 @@
     <Compile Include="APIClients\PortfolioConfigClient.cs" />
     <Compile Include="APIProjectTests.cs" />
     <Compile Include="APITests.cs" />
-    <Compile Include="APIClients\BackendAPIClient.cs" />
+    <Compile Include="APIClients\TestBackendAPIClient.cs" />
     <Compile Include="CompareUtil.cs" />
     <Compile Include="ConfigurationTests\PhaseTests.cs" />
     <Compile Include="ConfigurationTests\CategoryTests.cs" />
@@ -99,6 +99,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FSAPortfolio.ApiClient\FSAPortfolio.ApiClient.csproj">
+      <Project>{4ab3f23e-9eba-4d51-9802-363cacd18c31}</Project>
+      <Name>FSAPortfolio.ApiClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FSAPortfolio.Application\FSAPortfolio.Application.csproj">
       <Project>{fc96de85-fd34-4d6b-b627-b896e71fcf14}</Project>
       <Name>FSAPortfolio.Application</Name>

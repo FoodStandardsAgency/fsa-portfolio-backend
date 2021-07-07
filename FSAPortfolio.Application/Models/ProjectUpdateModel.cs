@@ -25,6 +25,8 @@ namespace FSAPortfolio.Application.Models
         public ProjectDateEditModel expend { get; set; }
         public ProjectDateEditModel hardend { get; set; }
         public ProjectDateEditModel actstart { get; set; }
+
+        [UpdateTracked]
         public ProjectDateEditModel expendp { get; set; }
         public ProjectDateEditModel actual_end_date { get; set; }
         public ProjectDateEditModel fsaproc_assurance_gatecompleted { get; set; }

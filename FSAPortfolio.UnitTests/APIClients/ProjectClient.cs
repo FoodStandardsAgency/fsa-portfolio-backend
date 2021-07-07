@@ -19,7 +19,7 @@ namespace FSAPortfolio.UnitTests.APIClients
             var queryParams = new Dictionary<string, string>() {
                     { "term", nameOrId }
             };
-            return await BackendAPIClient.GetAsync<IEnumerable<SelectItemModel>>("api/Projects/search", queryParams);
+            return await TestBackendAPIClient.GetAsync<IEnumerable<SelectItemModel>>("api/Projects/search", queryParams);
         }
 
         public static async Task CreateProjectAsync(string portfolio, string title)
@@ -33,9 +33,9 @@ namespace FSAPortfolio.UnitTests.APIClients
         }
         public static async Task CreateProjectAsync(string portfolio, ProjectUpdateModel project)
         {
-            var dto = await BackendAPIClient.GetAsync<GetProjectDTO<ProjectEditViewModel>>($"api/Projects/{portfolio}/newproject");
+            var dto = await TestBackendAPIClient.GetAsync<GetProjectDTO<ProjectEditViewModel>>($"api/Projects/{portfolio}/newproject");
             project.project_id = dto.Project.project_id;
-            await BackendAPIClient.PostAsync<ProjectUpdateModel>("api/Projects", project);
+            await TestBackendAPIClient.PostAsync<ProjectUpdateModel>("api/Projects", project);
         }
 
         internal static async Task UpdateProjectsAsync(List<ProjectUpdateModel> testProjects)
@@ -48,12 +48,12 @@ namespace FSAPortfolio.UnitTests.APIClients
 
         internal static async Task UpdateProjectAsync(ProjectUpdateModel update)
         {
-            await BackendAPIClient.PostAsync($"api/Projects", update);
+            await TestBackendAPIClient.PostAsync($"api/Projects", update);
         }
 
         internal static async Task<GetProjectDTO<ProjectEditViewModel>> GetProjectAsync(string projectId)
         {
-            return await BackendAPIClient.GetAsync<GetProjectDTO<ProjectEditViewModel>>($"api/Projects/{projectId}/edit");
+            return await TestBackendAPIClient.GetAsync<GetProjectDTO<ProjectEditViewModel>>($"api/Projects/{projectId}/edit");
         }
 
 
@@ -109,7 +109,7 @@ namespace FSAPortfolio.UnitTests.APIClients
 
         public static async Task DeleteProjectAsync(string projectId)
         {
-            await BackendAPIClient.DeleteAsync($"api/Projects/{projectId}");
+            await TestBackendAPIClient.DeleteAsync($"api/Projects/{projectId}");
         }
     }
 }
