@@ -140,6 +140,11 @@ namespace FSAPortfolio.Utility.AzureDiagnostics
                         var blobClient = containerClient.GetBlobClient(item.Name);
                         var download = await blobClient.DownloadContentAsync();
 
+                        if (!silent)
+                        {
+                            Console.WriteLine($"Dumping {item.Name}");
+                        }
+
                         using (var reader = new StreamReader(blobClient.DownloadStreaming().Value.Content))
                         using (var csv = new CsvReader(reader, config))
                         {

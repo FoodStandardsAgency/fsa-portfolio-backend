@@ -137,13 +137,13 @@ namespace FSAPortfolio.Entities
 
             modelBuilder.Entity<Project>().HasKey(p => p.ProjectReservation_Id);
             modelBuilder.Entity<Project>().HasMany(p => p.Updates).WithRequired(u => u.Project).HasForeignKey(u => u.Project_Id);
-            modelBuilder.Entity<Project>().HasMany(p => p.RelatedProjects).WithMany().Map(mc =>
+            modelBuilder.Entity<Project>().HasMany(p => p.RelatedProjects).WithMany(p => p.ParentRelatedProjects).Map(mc =>
             {
                 mc.MapLeftKey("Project_Id");
                 mc.MapRightKey("RelatedProject_Id");
                 mc.ToTable("RelatedProjects");
             });
-            modelBuilder.Entity<Project>().HasMany(p => p.DependantProjects).WithMany().Map(mc =>
+            modelBuilder.Entity<Project>().HasMany(p => p.DependantProjects).WithMany(p => p.ParentDependantProjects).Map(mc =>
             {
                 mc.MapLeftKey("Project_Id");
                 mc.MapRightKey("DependantProject_Id");

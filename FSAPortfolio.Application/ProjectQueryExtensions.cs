@@ -125,6 +125,8 @@ namespace FSAPortfolio.WebAPI.App
                 .Include(p => p.Subcategories)
                 .Include(p => p.RelatedProjects)
                 .Include(p => p.DependantProjects)
+                .Include(p => p.ParentRelatedProjects)
+                .Include(p => p.ParentDependantProjects)
                 .Include(p => p.Documents)
                 .Include(p => p.Milestones)
                 .Include(p => p.People)
@@ -139,6 +141,8 @@ namespace FSAPortfolio.WebAPI.App
             project.Subcategories.Clear();
             project.RelatedProjects.Clear();
             project.DependantProjects.Clear();
+            project.ParentRelatedProjects.Clear();
+            project.ParentDependantProjects.Clear();
 
             context.ProjectAuditLogs.RemoveRange(project.AuditLogs);
             project.AuditLogs.Clear();
