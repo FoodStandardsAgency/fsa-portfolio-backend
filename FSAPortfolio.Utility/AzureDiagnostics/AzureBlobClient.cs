@@ -20,13 +20,14 @@ namespace FSAPortfolio.Utility.AzureDiagnostics
         private string environment;
         private string connectionString;
         private string appServiceName;
-        private string dumpfile;
+        private string appServiceDumpfile;
+        private string webServerName;
+        private string webServerDumpfile;
         private string containerName;
         private bool todayOnly;
         private bool silent;
 
         private BlobServiceClient blobServiceClient;
-        private BlobContainerClient containerClient;
 
         private AzureBlobClient(bool todayOnly, string env)
         {
@@ -35,21 +36,21 @@ namespace FSAPortfolio.Utility.AzureDiagnostics
 
             connectionString = ConfigurationManager.AppSettings[$"AzureStorageConnectionString.{env}"];
             appServiceName = ConfigurationManager.AppSettings[$"AppServiceName.{env}"];
-            dumpfile = ConfigurationManager.AppSettings[$"DumpFile.{env}"];
-            silent = dumpfile == null;
-            containerName = ConfigurationManager.AppSettings["AzureStorageContainer"];
+            appServiceDumpfile = ConfigurationManager.AppSettings[$"AppServiceDumpFile.{env}"];
+            webServerName = ConfigurationManager.AppSettings[$"WebServerName.{env}"];
+            webServerDumpfile = ConfigurationManager.AppSettings[$"WebServerDumpFile.{env}"];
+            silent = appServiceDumpfile == null;
 
             blobServiceClient = new BlobServiceClient(connectionString);
-            containerClient = blobServiceClient.GetBlobContainerClient(containerName);
 
         }
 
-        public static async Task OutputBlobText(bool todayOnly, string env)
+        public static async Task OutputBlobText(bool todayOnly, bool web, string env)
         {
             try
             {
                 var client = new AzureBlobClient(todayOnly, env);
-                await client.Execute();
+                await client.Execute(web);
             }
             catch(IOException e)
             {
@@ -57,14 +58,61 @@ namespace FSAPortfolio.Utility.AzureDiagnostics
             }
         }
 
-        private async Task Execute()
-        { 
-            using (var writer = dumpfile == null ? new StreamWriter(Console.OpenStandardOutput()) : new StreamWriter(dumpfile))
+        private async Task Execute(bool webLogs)
+        {
+            if(webLogs)
+            {
+                await ExecuteWebServerDownloadAsync();
+            }
+            else
+            {
+                await ExecuteAppServiceDownloadAsync();
+            }
+        }
+
+        private async Task ExecuteWebServerDownloadAsync()
+        {
+            string containerName = ConfigurationManager.AppSettings["AzureWebServerStorageContainer"];
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+            using (var writer = webServerDumpfile == null ? new StreamWriter(Console.OpenStandardOutput()) : new StreamWriter(webServerDumpfile))
+            {
+                if (!silent)
+                {
+                    Console.WriteLine($"Getting Azure web server logs for {environment} environment...");
+                    Console.WriteLine($"Dumping logs to file: {webServerDumpfile}");
+                }
+
+                // App Service name is the prefix to filter on.
+                var x = containerClient.GetBlobs().ToList();
+                await foreach (var item in containerClient.GetBlobsAsync(prefix: webServerName))
+                {
+                    if (!silent)
+                    {
+                        Console.WriteLine($"Dumping {item.Name}");
+                    }
+                    var blobClient = containerClient.GetBlobClient(item.Name);
+                    var download = await blobClient.DownloadContentAsync();
+
+                    using (var reader = new StreamReader(blobClient.DownloadStreaming().Value.Content))
+                    {
+                        writer.Write(await reader.ReadToEndAsync());
+                    }
+                }
+
+            }
+        }
+
+        private async Task ExecuteAppServiceDownloadAsync()
+        {
+            string containerName = ConfigurationManager.AppSettings["AzureAppServiceStorageContainer"];
+            BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+
+            using (var writer = appServiceDumpfile == null ? new StreamWriter(Console.OpenStandardOutput()) : new StreamWriter(appServiceDumpfile))
             {
                 if (!silent)
                 {
                     Console.WriteLine($"Getting Azure diagnostic logs for {environment} environment...");
-                    Console.WriteLine($"Dumping logs to file: {dumpfile}");
+                    Console.WriteLine($"Dumping logs to file: {appServiceDumpfile}");
                 }
 
                 // Set up date check function (used if todayOnly is true)

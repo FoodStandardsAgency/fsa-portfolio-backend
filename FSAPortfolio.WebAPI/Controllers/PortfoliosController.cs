@@ -155,7 +155,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                 context.Portfolios.Add(portfolio);
                 await context.SaveChangesAsync();
 
-                portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == PhaseConstants.BacklogViewKey);
+                portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == PhaseConstants.CompletedViewKey);
                 portfolio.Configuration.ArchivePhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == PhaseConstants.ArchiveViewKey);
                 await context.SaveChangesAsync();
             }

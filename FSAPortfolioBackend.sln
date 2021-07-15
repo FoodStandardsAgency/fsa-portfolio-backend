@@ -17,6 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		BOOTSTRAPPING.md = BOOTSTRAPPING.md
 		README.md = README.md
+		SITTEST.md = SITTEST.md
 		UTILITY.md = UTILITY.md
 	EndProjectSection
 EndProject
@@ -27,6 +28,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bootstrapping", "Bootstrapp
 		Bootstrapping\bootstrapPortfolio.sh = Bootstrapping\bootstrapPortfolio.sh
 		Bootstrapping\getToken.sh = Bootstrapping\getToken.sh
 		Bootstrapping\setSecrets.sh = Bootstrapping\setSecrets.sh
+		Bootstrapping\setSecretsSIT.sh = Bootstrapping\setSecretsSIT.sh
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestScripts", "TestScripts", "{0A567BB7-327C-4D53-8729-54FA3E942E89}"
@@ -56,7 +58,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSAPortfolio.Utility", "FSAPortfolio.Utility\FSAPortfolio.Utility.csproj", "{93B0D739-F2A1-46F3-9C1D-7735C1C77DA7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.ApiClient", "FSAPortfolio.ApiClient\FSAPortfolio.ApiClient.csproj", "{4AB3F23E-9EBA-4D51-9802-363CACD18C31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FSAPortfolio.ApiClient", "FSAPortfolio.ApiClient\FSAPortfolio.ApiClient.csproj", "{4AB3F23E-9EBA-4D51-9802-363CACD18C31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

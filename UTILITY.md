@@ -19,7 +19,7 @@ This command requires an `appSettings.config` file in the `FSAPortfolio.Utility`
 ```
 <appSettings>
 	<add key="AzureStorageConnectionString" value="...Obtain this from the Storage configuration in the Azure Portal..."/>
-	<add key="AzureStorageContainer" value="appservice"/>
+	<add key="AzureAppServiceStorageContainer" value="appservice"/>
 	<add key="AppServiceName" value="FSAPortfolioBackend"/>
 </appSettings>
 ```

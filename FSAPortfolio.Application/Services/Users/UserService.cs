@@ -82,8 +82,10 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         public async Task SeedAccessGroups()
         {
-            ServiceContext.AssertAdmin();
             var context = ServiceContext.PortfolioContext;
+
+            // If it is not a fresh platform, make sure we are admin
+            if (context.Users.Count() > 0) ServiceContext.AssertAdmin();
             context.AccessGroups.AddOrUpdate(ag => ag.ViewKey,
                 new AccessGroup() { ViewKey = AccessGroupConstants.FSAViewKey, Description = AccessGroupConstants.FSAViewKey },
                 new AccessGroup() { ViewKey = AccessGroupConstants.EditorViewKey, Description = AccessGroupConstants.EditorViewKey },

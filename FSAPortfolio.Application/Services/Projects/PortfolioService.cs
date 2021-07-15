@@ -72,6 +72,7 @@ namespace FSAPortfolio.Application.Services.Projects
                     opt =>
                     {
                         opt.Items[ProjectIndexDateResolver.OptionKey] = includeKeyData;
+                        opt.Items[ProjectIndexPriorityResolver.OptionKey] = includeKeyData;
                         opt.Items[nameof(PortfolioContext)] = context;
                         opt.Items[PortfolioPersonResolver.PersonKey] = userFilter;
                         opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;

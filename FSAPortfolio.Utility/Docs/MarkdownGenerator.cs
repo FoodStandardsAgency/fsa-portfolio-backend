@@ -91,7 +91,7 @@ namespace FSAPortfolio.Utility.Docs
                     {
                         // Output markdown
                         //writer.WriteLine($"### `{p.Title}` ({p.Label.FieldTypeDescription})");
-                        writer.WriteLine($"### `{p.Title}`");
+                        writer.WriteLine($"### {p.Title}");
                         if (p.HasSummary)
                         {
                             writer.WriteLine(p.Summary);
@@ -108,12 +108,12 @@ namespace FSAPortfolio.Utility.Docs
                         if (p.Label.Required) notes.Add("required: projects must have a value set");
                         if (p.IsTracked) notes.Add("has changes explicitly tracked");
                         if (p.Label.IncludedLock) notes.Add("can't be excluded in the portfolio configuration and is always included in project views");
-                        if (!p.Label.AdminOnly && p.Label.AdminOnlyLock) notes.Add("can't be set to *Admin only*");
+                        //if (!p.Label.AdminOnly && p.Label.AdminOnlyLock) notes.Add("can't be set to *Admin only*");
                         if (p.Label.FSAOnly) notes.Add("is only visible to FSA employees");
                         if (p.Label.MasterField != null)
                         {
                             var masterLabel = config.Labels.Single(l => l.FieldName == p.Label.MasterField);
-                            notes.Add($"is dependent on `{masterLabel.FieldTitle}` and can only be included in project views if `{masterLabel.FieldTitle}` is included");
+                            notes.Add($"is dependent on `{masterLabel.FieldTitle}` and can only be included in project views if *{masterLabel.FieldTitle}* is included");
                         }
                         if (notes.Count > 0)
                         {

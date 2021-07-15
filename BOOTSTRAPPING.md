@@ -70,13 +70,15 @@ The scripts are SQL Server T-SQL and can be executed in SSMS queries.
 
 > :warning: Make sure you select the correct database and don't run these on the `master` database. I do this from time to time and is a pain in the neck to unwind!
 
-At the time of writing, there are 4 deployment scripts - the initial create and 3 migration scripts:
+At the time of writing, there are 6 deployment scripts - the initial create and 5 migration scripts:
 
 ```
 00_Create.sql
 01_GenericSettings.sql
 02_PortfolioRequiredRoles.sql
 03_Archive.sql
+04_NoDescriptionSizeLimit.sql
+05_Filters.sql
 ```
 
 Run these in order (in SSMS) to create an up-to-date database schema.

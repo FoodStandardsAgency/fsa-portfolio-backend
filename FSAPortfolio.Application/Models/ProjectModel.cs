@@ -22,8 +22,8 @@ namespace FSAPortfolio.Application.Models
 
         /// <summary>
         /// This is the project identifier and is the unique key for a project.
-        /// It is created automatically by the system when a new project is requested.
-        /// The format is: `{portfolio abbreviation}{yy}{mm}{3 digit index}`, for example: `ODD2007010`.
+        /// It is created automatically by the system when a new project is requested. It can't be changed or switched off.
+        /// The format is based on the current month, for example: `ODD2007010`.
         /// </summary>
         [JsonProperty(ProjectPropertyConstants.ProjectId)]
         public string project_id { get; set; }
