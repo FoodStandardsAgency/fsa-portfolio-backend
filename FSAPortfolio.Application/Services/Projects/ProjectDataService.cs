@@ -16,6 +16,7 @@ using System.Net.Http;
 using FSAPortfolio.WebAPI.App.Projects;
 using FSAPortfolio.WebAPI.App.Users;
 using AutoMapper;
+using FSAPortfolio.Common.Logging;
 
 namespace FSAPortfolio.Application.Services.Projects
 {
@@ -112,23 +113,33 @@ namespace FSAPortfolio.Application.Services.Projects
 
         public async Task<Project> DeleteProjectAsync(string projectId)
         {
-            var context = ServiceContext.PortfolioContext;
-            var project = await (from p in context.Projects.IncludeProjectForDelete()
-                                 where p.Reservation.ProjectId == projectId
-                                 select p).SingleOrDefaultAsync();
-            if (project != null)
+            var logMessage = new StringBuilder();
+            logMessage.AppendLine($"Beginning delete of {projectId}:");
+            try
             {
-                ServiceContext.AssertAdmin(project.Reservation.Portfolio);
+                var context = ServiceContext.PortfolioContext;
+                var project = await (from p in context.Projects.IncludeProjectForDelete()
+                                     where p.Reservation.ProjectId == projectId
+                                     select p).SingleOrDefaultAsync();
+                if (project != null)
+                {
+                    ServiceContext.AssertAdmin(project.Reservation.Portfolio);
 
-                project.DeleteCollections(context);
-                await context.SaveChangesAsync();
+                    logMessage.AppendLine("    - Deleting collections");
+                    project.DeleteCollections(context);
+                    await context.SaveChangesAsync();
 
-                project.Reservation.Portfolio.Projects.Remove(project);
-                context.ProjectReservations.Remove(project.Reservation);
-                context.Projects.Remove(project);
-                await context.SaveChangesAsync();
+                    logMessage.AppendLine("    - Deleting project");
+                    project.Reservation.Portfolio.Projects.Remove(project);
+                    context.ProjectReservations.Remove(project.Reservation);
+                    context.Projects.Remove(project);
+                    await context.SaveChangesAsync();
+                }
+                return project;
             }
-            return project;
+            finally {
+                AppLog.TraceWarning(logMessage.ToString());
+            }
         }
 
         public async Task ImportProjectsAsync(string viewKey, MultipartFormDataStreamProvider files)

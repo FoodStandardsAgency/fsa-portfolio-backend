@@ -160,13 +160,12 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
                 .ForMember(p => p.fsaproc_assurance_gatenumber, o => o.MapFrom(s => s.AssuranceGateNumber))
                 .ForMember(p => p.fsaproc_assurance_nextgate, o => o.MapFrom(s => s.NextAssuranceGateNumber))
                 .ForMember(p => p.fsaproc_assurance_gatecompleted, o => o.MapFrom(s => s.AssuranceGateCompletedDate))
+                .ForMember(p => p.business_case_number, o => o.MapFrom(s => s.BusinessCaseNumber))
+                .ForMember(p => p.fs_number, o => o.MapFrom(s => s.FSNumber))
+                .ForMember(p => p.risk_rating, o => o.MapFrom(s => s.RiskRating))
+                .ForMember(p => p.programme_description, o => o.MapFrom(s => s.ProgrammeDescription))
 
                 // Below this line are project data items
-                .ForMember(p => p.business_case_number, o => o.Ignore())
-                .ForMember(p => p.fs_number, o => o.Ignore())
-                .ForMember(p => p.risk_rating, o => o.Ignore())
-                .ForMember(p => p.programme_description, o => o.Ignore())
-
                 .ForMember(d => d.Properties, o => o.Ignore())
 
                 // TODO: need these after maps if want project data in export
