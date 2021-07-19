@@ -119,8 +119,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
                 .ForMember(p => p.phase, o => o.MapFrom(s => s.LatestUpdate.Phase.Name))
                 .ForMember(p => p.rag, o => o.MapFrom(s => s.LatestUpdate.RAGStatus.Name))
                 .ForMember(p => p.onhold, o => o.MapFrom(s => s.LatestUpdate.OnHoldStatus.Name))
-                //.ForMember(p => p.update, o => o.MapFrom<ExportUpdateTextResolver>())
-                .ForMember(p => p.update, o => o.Ignore())
+                .ForMember(p => p.update, o => o.MapFrom<ExportUpdateTextResolver>())
                 .ForMember(p => p.budget, o => o.MapFrom(s => Convert.ToInt32(s.LatestUpdate.Budget)))
                 .ForMember(p => p.spent, o => o.MapFrom(s => Convert.ToInt32(s.LatestUpdate.Spent)))
                 .ForMember(p => p.expendp, o => o.MapFrom(s => s.LatestUpdate.ExpectedCurrentPhaseEnd))
@@ -183,11 +182,15 @@ namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
     }
     public class ExportUpdateTextResolver : IValueResolver<Project, ProjectExportModel, string>
     {
+        public static string OnKey = nameof(ExportUpdateTextResolver);
         public string Resolve(Project source, ProjectExportModel destination, string destMember, ResolutionContext context)
         {
             string result = null;
-            var lastTextUpdate = source.Updates.Where(u => !string.IsNullOrWhiteSpace(u.Text)).OrderBy(u => u.Timestamp).FirstOrDefault();
-            result = lastTextUpdate?.Text;
+            if (source != null && context.Items.ContainsKey(OnKey) && Convert.ToBoolean(context.Items[OnKey]))
+            {
+                var lastTextUpdate = source.Updates.Where(u => !string.IsNullOrWhiteSpace(u.Text)).OrderBy(u => u.Timestamp).FirstOrDefault();
+                result = lastTextUpdate?.Text;
+            }
             return result;
         }
     }

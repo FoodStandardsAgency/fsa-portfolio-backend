@@ -17,6 +17,7 @@ using FSAPortfolio.WebAPI.App.Projects;
 using FSAPortfolio.WebAPI.App.Users;
 using AutoMapper;
 using FSAPortfolio.Common.Logging;
+using FSAPortfolio.WebAPI.App.Mapping.ImportExport;
 
 namespace FSAPortfolio.Application.Services.Projects
 {
@@ -33,8 +34,11 @@ namespace FSAPortfolio.Application.Services.Projects
         public async Task<ProjectCollectionModel> GetProjectDataAsync(string portfolio, string[] projectIds)
         {
             List<int> reservationIds = await getReservationIdsForPortfolio(portfolio, projectIds);
-            var projectData = await getProjectsAsArrayAsync(reservationIds);
-            var projectModel = PortfolioMapper.ExportMapper.Map<IEnumerable<ProjectExportModel>>(projectData);
+            var projectData = await getProjectsAsArrayWitUpdatesAsync(reservationIds);
+            var projectModel = PortfolioMapper.ExportMapper.Map<IEnumerable<ProjectExportModel>>(projectData, 
+                opts => {
+                    opts.Items[ExportUpdateTextResolver.OnKey] = true;
+                });
 
             return new ProjectCollectionModel() { Projects = projectModel };
         }
@@ -201,7 +205,18 @@ namespace FSAPortfolio.Application.Services.Projects
 
         private async Task<Project[]> getProjectsAsArrayAsync(List<int> reservationIds)
         {
-            var projectQuery = from p in ServiceContext.PortfolioContext.Projects.IncludeProject()
+            var projectQuery = from p in ServiceContext.PortfolioContext.Projects
+                                .IncludeProject()
+                               where reservationIds.Contains(p.ProjectReservation_Id)
+                               select p;
+            var projects = await projectQuery.OrderByDescending(p => p.Priority).ToArrayAsync();
+            return projects;
+        }
+        private async Task<Project[]> getProjectsAsArrayWitUpdatesAsync(List<int> reservationIds)
+        {
+            var projectQuery = from p in ServiceContext.PortfolioContext.Projects
+                                .IncludeProject()
+                                .Include(pr => pr.Updates)
                                where reservationIds.Contains(p.ProjectReservation_Id)
                                select p;
             var projects = await projectQuery.OrderByDescending(p => p.Priority).ToArrayAsync();

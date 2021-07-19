@@ -14,6 +14,7 @@ namespace FSAPortfolio.Utility
         {
             var logCommand = new Command("azlogs", "Download portfolio backend diagnostic log files from an Azure Blob Storage Container")
             {
+                new Option<int?>("--days", getDefaultValue: () => null, "Only output logs going back this number of days"),
                 new Option<bool>("--today", getDefaultValue: () => false, "Only output logs generated today"),
                 new Option<bool>("--web", getDefaultValue: () => false, "Get web server logs"),
                 new Option<string>("--env", getDefaultValue: () => "LIVE", "The environment to download from. Requires settings for each environment to be configured in appSettings e.g. AzureStorageConnectionString.LIVE & AzureStorageConnectionString.TEST.")
@@ -29,7 +30,7 @@ namespace FSAPortfolio.Utility
                 logCommand, fieldDocsCommand
             };
 
-            logCommand.Handler = CommandHandler.Create<bool, bool, string>(async (today, web, env) => await AzureBlobClient.OutputBlobText(today, web, env));
+            logCommand.Handler = CommandHandler.Create<int?, bool, bool, string>(async (days, today, web, env) => await AzureBlobClient.OutputBlobText(days, today, web, env));
             fieldDocsCommand.Handler = CommandHandler.Create<string>(async (file) => await MarkdownGenerator.OutputFile(file));
 
             return await rootCommand.InvokeAsync(args);

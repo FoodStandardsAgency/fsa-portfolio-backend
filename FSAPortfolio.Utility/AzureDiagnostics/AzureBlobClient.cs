@@ -23,15 +23,17 @@ namespace FSAPortfolio.Utility.AzureDiagnostics
         private string appServiceDumpfile;
         private string webServerName;
         private string webServerDumpfile;
-        private string containerName;
+        private DateTime? dateFilter;
         private bool todayOnly;
         private bool silent;
 
         private BlobServiceClient blobServiceClient;
 
-        private AzureBlobClient(bool todayOnly, string env)
+        private AzureBlobClient(int? days, bool todayOnly, string env)
         {
+            if(days.HasValue) this.dateFilter = DateTime.Today.Subtract(TimeSpan.FromDays(days.Value));
             this.todayOnly = todayOnly;
+            if(todayOnly) this.dateFilter = DateTime.Today;
             this.environment = env;
 
             connectionString = ConfigurationManager.AppSettings[$"AzureStorageConnectionString.{env}"];
@@ -45,11 +47,11 @@ namespace FSAPortfolio.Utility.AzureDiagnostics
 
         }
 
-        public static async Task OutputBlobText(bool todayOnly, bool web, string env)
+        public static async Task OutputBlobText(int? days, bool todayOnly, bool web, string env)
         {
             try
             {
-                var client = new AzureBlobClient(todayOnly, env);
+                var client = new AzureBlobClient(days, todayOnly, env);
                 await client.Execute(web);
             }
             catch(IOException e)
@@ -82,20 +84,52 @@ namespace FSAPortfolio.Utility.AzureDiagnostics
                     Console.WriteLine($"Dumping logs to file: {webServerDumpfile}");
                 }
 
+                var dateFilterPattern = @$"{webServerName}/(?<year>\d{{4}})/(?<month>\d{{2}})/(?<day>\d{{2}})/\d{{2}}/.*\.log";
+                Func<BlobItem, bool> dateCheck = (item) =>
+                {
+                    var match = Regex.Match(item.Name, dateFilterPattern);
+                    if (match.Success && dateFilter != null)
+                    {
+                        var date = new DateTime(
+                            int.Parse(match.Groups["year"].Value),
+                            int.Parse(match.Groups["month"].Value),
+                            int.Parse(match.Groups["day"].Value)
+                            );
+                        return date >= dateFilter;
+                    }
+                    else return match.Success;
+                };
+
                 // App Service name is the prefix to filter on.
                 var x = containerClient.GetBlobs().ToList();
+                bool first = true;
                 await foreach (var item in containerClient.GetBlobsAsync(prefix: webServerName))
                 {
-                    if (!silent)
+                    if (dateCheck(item))
                     {
-                        Console.WriteLine($"Dumping {item.Name}");
-                    }
-                    var blobClient = containerClient.GetBlobClient(item.Name);
-                    var download = await blobClient.DownloadContentAsync();
+                        if (!silent)
+                        {
+                            Console.WriteLine($"Dumping {item.Name}");
+                        }
+                        var blobClient = containerClient.GetBlobClient(item.Name);
+                        var download = await blobClient.DownloadContentAsync();
 
-                    using (var reader = new StreamReader(blobClient.DownloadStreaming().Value.Content))
-                    {
-                        writer.Write(await reader.ReadToEndAsync());
+                        using (var reader = new StreamReader(blobClient.DownloadStreaming().Value.Content))
+                        {
+                            var text = await reader.ReadToEndAsync();
+                            var lines = text.Split(Environment.NewLine);
+
+                            if(first)
+                            {
+                                writer.WriteLine(lines[1].Replace("#Fields:", "").TrimStart());
+                                first = false;
+                            }
+
+                            foreach (var line in lines.Skip(2))
+                            {
+                                if(!string.IsNullOrWhiteSpace(line)) writer.WriteLine(line);
+                            }
+                        }
                     }
                 }
 
@@ -118,10 +152,10 @@ namespace FSAPortfolio.Utility.AzureDiagnostics
                 // Set up date check function (used if todayOnly is true)
                 // File names are of the form...
                 // FSAPortfolioBackend/2021/06/28/08/2796f7-7260.applicationLog.csv
-                var pattern = @$"{appServiceName}/{today.Year}/{today.Month:D2}/{today.Day:D2}/\d{{2}}/.*\.applicationLog\.csv";
-                Func<BlobItem, bool> dateCheckFunc = (item) =>
+                var todayOnlyPattern = @$"{appServiceName}/{today.Year}/{today.Month:D2}/{today.Day:D2}/\d{{2}}/.*\.applicationLog\.csv";
+                Func<BlobItem, bool> todayCheck = (item) =>
                 {
-                    var match = Regex.Match(item.Name, pattern);
+                    var match = Regex.Match(item.Name, todayOnlyPattern);
                     return match.Success;
                 };
 
@@ -135,7 +169,7 @@ namespace FSAPortfolio.Utility.AzureDiagnostics
                 var x = containerClient.GetBlobs().ToList();
                 await foreach (var item in containerClient.GetBlobsAsync(prefix: appServiceName))
                 {
-                    if (!todayOnly || dateCheckFunc(item))
+                    if (!todayOnly || todayCheck(item))
                     {
                         var blobClient = containerClient.GetBlobClient(item.Name);
                         var download = await blobClient.DownloadContentAsync();
@@ -149,7 +183,14 @@ namespace FSAPortfolio.Utility.AzureDiagnostics
                         using (var csv = new CsvReader(reader, config))
                         {
                             var records = csv.GetRecords<entry>().ToList();
-                            outputLines.AddRange(records);
+                            if (dateFilter.HasValue)
+                            {
+                                outputLines.AddRange(records.Where(r => r.date >= dateFilter.Value).OrderBy(r => r.date));
+                            }
+                            else
+                            {
+                                outputLines.AddRange(records);
+                            }
                         }
                     }
                 }
