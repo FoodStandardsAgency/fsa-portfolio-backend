@@ -26,6 +26,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Bootstrapping", "Bootstrapping", "{D3941507-B7AE-49F5-92D1-1A563CD7A4CB}"
 	ProjectSection(SolutionItems) = preProject
 		Bootstrapping\bootstrapPortfolio.sh = Bootstrapping\bootstrapPortfolio.sh
+		Bootstrapping\bootstrapSIT.sh = Bootstrapping\bootstrapSIT.sh
 		Bootstrapping\getToken.sh = Bootstrapping\getToken.sh
 		Bootstrapping\setSecrets.sh = Bootstrapping\setSecrets.sh
 		Bootstrapping\setSecretsSIT.sh = Bootstrapping\setSecretsSIT.sh

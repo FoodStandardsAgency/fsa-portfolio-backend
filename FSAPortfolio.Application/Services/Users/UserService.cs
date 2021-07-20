@@ -98,21 +98,19 @@ namespace FSAPortfolio.WebAPI.App.Users
 
         public async Task CreateUser(string userName, string passwordHash, string accessGroupViewKey)
         {
-            // Only allow this for a fresh platform...
+            // Only allow this for a fresh platform or superusers...
             var context = ServiceContext.PortfolioContext;
-            if (context.Users.Count() == 0)
+            if (context.Users.Count() > 0) ServiceContext.AssertSuperuser();
+            var accessGroup = await context.AccessGroups.SingleAsync(ag => ag.ViewKey == accessGroupViewKey);
+            var user = new User()
             {
-                var accessGroup = await context.AccessGroups.SingleAsync(ag => ag.ViewKey == accessGroupViewKey);
-                var user = new User()
-                {
-                    Timestamp = DateTime.Now,
-                    UserName = userName,
-                    PasswordHash = passwordHash,
-                    AccessGroup = accessGroup
-                };
-                context.Users.Add(user);
-                await context.SaveChangesAsync();
-            }
+                Timestamp = DateTime.Now,
+                UserName = userName,
+                PasswordHash = passwordHash,
+                AccessGroup = accessGroup
+            };
+            context.Users.Add(user);
+            await context.SaveChangesAsync();
         }
 
     }

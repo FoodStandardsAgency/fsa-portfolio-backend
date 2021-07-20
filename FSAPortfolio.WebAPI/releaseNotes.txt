@@ -6,6 +6,7 @@
 - More filter options
 - User summary view
 - ProjectType filter in summary view
+- PowerBI API: projects include latest update text
 
 Azure Storage Account Connection string
 - Ensure a storage account exists - the connection string is required (under Access Keys).

@@ -8,6 +8,7 @@ namespace FSAPortfolio.Application.Services
     {
         PortfolioContext PortfolioContext { get; }
         string CurrentUserName { get; }
+        void AssertSuperuser();
         void AssertAdmin();
         void AssertAdmin(Portfolio portfolio);
         void AssertEditor(Portfolio portfolio);

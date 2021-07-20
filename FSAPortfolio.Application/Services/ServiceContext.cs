@@ -67,6 +67,10 @@ namespace FSAPortfolio.Application.Services
         {
             if (!HasPermission(portfolio, roles)) ThrowResponseException(HttpStatusCode.Forbidden);
         }
+        public void AssertSuperuser()
+        {
+            if (!HasPermission(AccessGroupConstants.SuperuserViewKey)) ThrowResponseException(HttpStatusCode.Forbidden);
+        }
         public void AssertAdmin(Portfolio portfolio)
         {
             if (!HasPermission(portfolio, AccessGroupConstants.AdminViewKey, AccessGroupConstants.SuperuserViewKey)) ThrowResponseException(HttpStatusCode.Forbidden);
