@@ -123,6 +123,9 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Projects
                 .ForMember(p => p.LatestUpdate, o => o.Ignore())
                 .ForMember(p => p.AuditLogs, o => o.Ignore())
                 .ForMember(p => p.Reservation, o => o.Ignore())
+                .ForMember(p => p.ParentRelatedProjects, o => o.Ignore())
+                .ForMember(p => p.ParentDependantProjects, o => o.Ignore())
+
 
                 // Ignore the keys
                 .ForMember(p => p.ProjectReservation_Id, o => o.Ignore())
