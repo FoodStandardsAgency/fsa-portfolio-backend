@@ -1,0 +1,3 @@
+echo Cleaning reservations...
+curl -s $apiUrl/Portfolios/$apiPortfolioKey/cleanreservations -X GET -H "TestAPIKey: $apiKey" -H "Authorization: Bearer $access_token"
+

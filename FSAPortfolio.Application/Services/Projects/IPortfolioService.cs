@@ -16,5 +16,8 @@ namespace FSAPortfolio.Application.Services.Projects
         Task<ProjectReservation> GetProjectReservationAsync(PortfolioConfiguration config);
         Task<PortfolioSummaryModel> GetSummaryAsync(string viewKey, string summaryType, string user, string projectType, bool includeKeyData = false);
         Task<PortfolioSummaryModel> GetSummaryLabelsAsync(string viewKey);
+
+        Task CleanReservations(string viewKey);
+        Task AddPermissionAsync(string viewKey, PortfolioPermissionModel model);
     }
 }

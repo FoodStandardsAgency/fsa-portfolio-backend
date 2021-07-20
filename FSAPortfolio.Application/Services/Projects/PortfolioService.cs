@@ -325,5 +325,30 @@ namespace FSAPortfolio.Application.Services.Projects
             return archivedIds;
         }
 
+        public async Task CleanReservations(string viewKey)
+        {
+            ServiceContext.AssertSuperuser();
+
+            // Make sure deleted reservations are at least 12 hours old.
+            var cutoff = DateTime.Now.AddHours(-12);
+
+            var reservations = from r in ServiceContext.PortfolioContext.ProjectReservations
+                               join p in ServiceContext.PortfolioContext.Projects on r.Id equals p.ProjectReservation_Id into pr
+                               from ur in pr.DefaultIfEmpty()
+                               where ur == null && r.ReservedAt < cutoff
+                               select r;
+            ServiceContext.PortfolioContext.ProjectReservations.RemoveRange(await reservations.ToListAsync());
+            await ServiceContext.PortfolioContext.SaveChangesAsync();
+        }
+
+        public async Task AddPermissionAsync(string viewKey, PortfolioPermissionModel model)
+        {
+            var context = ServiceContext.PortfolioContext;
+            var portfolio = await context.Portfolios.SingleAsync(p => p.ViewKey == viewKey);
+            var user = await context.Users.SingleAsync(u => u.UserName == model.UserName);
+            var role = $"{portfolio.IDPrefix}.{model.Permission}";
+            user.RoleList = (string.IsNullOrWhiteSpace(user.RoleList) ? role : $"{user.RoleList};{role}");
+            await context.SaveChangesAsync();
+        }
     }
 }

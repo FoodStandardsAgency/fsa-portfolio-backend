@@ -164,15 +164,16 @@ namespace FSAPortfolio.WebAPI.Controllers
         [AcceptVerbs("POST"), Authorize(Roles = "superuser")]
         public async Task AddPermissionAsync([FromUri(Name = "portfolio")] string viewKey, [FromBody] PortfolioPermissionModel model)
         {
-            using (var context = new PortfolioContext())
-            {
-                var portfolio = await context.Portfolios.SingleAsync(p => p.ViewKey == viewKey);
-                var user = await context.Users.SingleAsync(u => u.UserName == model.UserName);
-                var role = $"{portfolio.IDPrefix}.{model.Permission}";
-                user.RoleList = (string.IsNullOrWhiteSpace(user.RoleList) ? role : $"{user.RoleList};{role}");
-                await context.SaveChangesAsync();
-            }
+            await portfolioService.AddPermissionAsync(viewKey, model);
         }
+
+        [AcceptVerbs("GET"), Route("api/Portfolios/{portfolio}/cleanreservations")]
+        [OverrideAuthorization]
+        public async Task CleanReservationsAsync([FromUri(Name = "portfolio")] string viewKey)
+        {
+            await portfolioService.CleanReservations(viewKey);
+        }
+
     }
 
 
