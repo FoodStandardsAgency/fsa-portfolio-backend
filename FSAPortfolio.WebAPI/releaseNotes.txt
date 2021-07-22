@@ -8,22 +8,16 @@
 - ProjectType filter in summary view
 - PowerBI API: projects include latest update text
 
-Azure Storage Account Connection string
-- Ensure a storage account exists - the connection string is required (under Access Keys).
-- Ensure a file share for data dumps exists - the share name is required.
-
-New App Settings:
-- DataDumpStorageConnectionString - from the Azure portal/Storage Account/Access Keys
-- DataDumpStorageShareName - the name of the file share for data dumps
-- PowerBIAPIKey - key for PowerBI usage of API
-- PowerBIRoles - Roles required for data, e.g. ODD.Admin, SERD.Admin
-
 Database Changes
 - Run script 05_Filters.sql to update the field configurations for filterable fields.
 
 Version 0.1.9 - Released 24/06/2021
 ===================================
 - PowerBI Data API
+
+New App Settings:
+- PowerBIAPIKey - key for PowerBI usage of API
+- PowerBIRoles - Roles required for data, e.g. ODD.Admin, SERD.Admin
 
 Version 0.1.7 - Released 25/03/2021
 ===================================
