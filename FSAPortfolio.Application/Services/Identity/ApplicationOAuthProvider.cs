@@ -48,7 +48,7 @@ namespace FSAPortfolio.WebAPI.App.Identity
             context.Request.Context.Authentication.SignIn(cookiesIdentity);
 
             AppLog.TraceWarning($"OAuth identity created: { TraceUser(user, oAuthIdentity) }");
-            AppLog.TraceWarning($"Login succeeded for {nameof(context.UserName)}='{context.UserName}'.");
+            AppLog.TraceInformation($"Login succeeded for {nameof(context.UserName)}='{context.UserName}'.");
         }
 
         public override Task TokenEndpoint(OAuthTokenEndpointContext context)

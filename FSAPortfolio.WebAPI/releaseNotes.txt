@@ -1,5 +1,5 @@
-﻿Version 0.1.10 - Pending Release
-===================================
+﻿Version 0.1.10 - Released 23/07/2021
+====================================
 - Added diagnostics logging
 - Added dependency injection using Unity
 - Added data dumps to Azure File Share

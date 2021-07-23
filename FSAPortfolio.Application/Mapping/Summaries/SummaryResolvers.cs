@@ -74,6 +74,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                         result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Configuration.Phases.Where(p => p.Id != source.Configuration.CompletedPhase.Id).OrderBy(c => c.Order));
                         break;
                     case PortfolioSummaryModel.ByLead:
+
                         var people = source.Configuration.Portfolio.Projects
                             .Where(p => p.Lead_Id != null)
                             .Select(p => p.Lead)
@@ -81,26 +82,40 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                             .OrderBy(p => p.Firstname)
                             .ThenBy(p => p.Surname)
                             .ToList();
-
                         people.Insert(0, new Person() { Id = 0, ActiveDirectoryDisplayName = ProjectTeamConstants.NotSetName });
 
-                        var allResults = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(people);
-                        result = allResults.Where(r => r.PhaseProjects.Any(pp => pp.Projects.Count() > 0)); // Only take leads with active projects
+                        result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(people);
+
+                        result = RemoveEmptySummaries(result);
+
                         break;
                     case PortfolioSummaryModel.ByTeam:
                     case PortfolioSummaryModel.NewProjectsByTeam:
-                        result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(source.Teams.OrderBy(t => t.Order).Union(new Team[] { new Team() { Name = ProjectTeamConstants.NotSetName, Id = 0 } }));
+
+                        result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(
+                            source.Teams.OrderBy(t => t.Order)
+                            .Union(new Team[] { new Team() { Name = ProjectTeamConstants.NotSetName, Id = 0 } }));
+
+                        result = RemoveEmptySummaries(result);
+                        
                         break;
                     case PortfolioSummaryModel.ByUser:
-                        var userCategories = ProjectUserCategory.All(source.Configuration.Labels);
-                        var allUserCategories = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(userCategories);
-                        result = allUserCategories.Where(u => u.PhaseProjects.Any(pp => pp.Projects.Count() > 0)); // Only take categories with projects
+
+                        result = context.Mapper.Map<IEnumerable<ProjectSummaryModel>>(ProjectUserCategory.All(source.Configuration.Labels));
+
+                        result = RemoveEmptySummaries(result); 
+
                         break;
                     default:
                         throw new ArgumentException($"Unrecognised summary type: {summaryType}");
                 }
             }
             return result;
+        }
+
+        private IEnumerable<ProjectSummaryModel> RemoveEmptySummaries(IEnumerable<ProjectSummaryModel> summaries)
+        {
+            return summaries.Where(u => u.PhaseProjects.Any(pp => pp.Projects.Count() > 0));
         }
     }
 

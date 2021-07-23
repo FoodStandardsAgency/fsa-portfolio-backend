@@ -112,7 +112,7 @@ namespace FSAPortfolio.Application.Services.Projects
 
         private void TraceSummaryQuery(string viewKey, string summaryType, string userFilter, string projectTypeFilter)
         {
-            AppLog.TraceWarning($"Project Summary Query: Portfolio={viewKey}, SummaryType={summaryType}, UserFilter={userFilter}, ProjectTypeFilter={projectTypeFilter}, CurrentUser={ServiceContext.CurrentUserName}");
+            AppLog.TraceInformation($"Project Summary Query: Portfolio={viewKey}, SummaryType={summaryType}, UserFilter={userFilter}, ProjectTypeFilter={projectTypeFilter}, CurrentUser={ServiceContext.CurrentUserName}");
         }
 
         private static Expression<Func<Project, bool>> BuildProjectFilter(string user, string projectType)
