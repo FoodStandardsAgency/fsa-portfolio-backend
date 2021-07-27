@@ -119,6 +119,8 @@ namespace FSAPortfolio.WebAPI.Controllers
                                                                [FromUri] bool includeLastUpdate = false,
                                                                [FromUri] bool includeConfig = false)
         {
+            AppLog.TraceVerbose(Request.RequestUri.ToString());
+
             return await projectDataService.GetProjectAsync(projectId, includeOptions, includeHistory, includeLastUpdate, includeConfig);
         }
 
