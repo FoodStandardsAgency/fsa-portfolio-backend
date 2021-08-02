@@ -11,5 +11,6 @@ namespace FSAPortfolio.WebAPI.App.Users
         Task<SupplierResponseModel> GetSuppliersAsync();
         Task<UserModel> GetADUserAsync(string userName);
         Task<UserModel> GetUserAsync(string userName, string passwordHash);
+        IdentityResponseModel GetCurrentIdentity();
     }
 }

@@ -97,6 +97,12 @@ namespace FSAPortfolio.WebAPI.App.Projects
                         project.Updates.Add(projectUpdate);
                         project.LatestUpdate = projectUpdate;
                         project.LatestUpdate.Timestamp = DateTime.Now;
+
+                        // Set the person making the update
+                        if(!string.IsNullOrWhiteSpace(ServiceContext.ActiveDirectoryId))
+                        {
+                            projectUpdate.Person = await context.People.SingleOrDefaultAsync(p => p.ActiveDirectoryId == ServiceContext.ActiveDirectoryId);
+                        }
                     }
 
                     // Save

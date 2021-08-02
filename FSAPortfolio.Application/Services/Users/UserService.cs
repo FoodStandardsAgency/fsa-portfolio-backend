@@ -3,6 +3,7 @@ using FSAPortfolio.Application.Services;
 using FSAPortfolio.Common;
 using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Users;
+using FSAPortfolio.WebAPI.App.Identity;
 using FSAPortfolio.WebAPI.App.Mapping;
 using FSAPortfolio.WebAPI.App.Microsoft;
 using System;
@@ -113,5 +114,20 @@ namespace FSAPortfolio.WebAPI.App.Users
             await context.SaveChangesAsync();
         }
 
+        public IdentityResponseModel GetCurrentIdentity()
+        {
+            IdentityResponseModel result = null;
+            var identity = ServiceContext.Identity;
+            if (identity != null && identity.IsAuthenticated)
+            {
+                result = new IdentityResponseModel()
+                {
+                    UserId = ServiceContext.CurrentUserName,
+                    Roles = identity.Claims.Where(c => c.Type == identity.RoleClaimType).Select(c => c.Value.ToLower()).ToArray(),
+                    AccessGroup = identity.Claims.SingleOrDefault(c => c.Type == ApplicationUser.AccessGroupClaimType)?.Value?.ToLower()
+                };
+            }
+            return result;
+        }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Web;
 
 namespace FSAPortfolio.Application.Services
@@ -8,6 +10,8 @@ namespace FSAPortfolio.Application.Services
     {
         PortfolioContext PortfolioContext { get; }
         string CurrentUserName { get; }
+        ClaimsIdentity Identity { get; }
+        string ActiveDirectoryId { get; }
         void AssertSuperuser();
         void AssertAdmin();
         void AssertAdmin(Portfolio portfolio);

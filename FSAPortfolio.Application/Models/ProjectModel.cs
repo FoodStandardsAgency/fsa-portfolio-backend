@@ -71,8 +71,8 @@ namespace FSAPortfolio.Application.Models
 
         /// <summary>
         /// The selected RAG status. Depending on the configuration, the value is chosen from either:
-        /// - Red/Amber/Green (3 status options) or 
-        /// - Red/Red Amber/Amber/Amber Green/Green (5 status options)
+        /// - Red; Amber; Green (3 status options) or 
+        /// - Red; Red Amber; Amber; Amber Green; Green (5 status options)
         /// </summary>
         [UpdateTracked]
         public string rag { get; set; }

@@ -43,7 +43,10 @@ namespace FSAPortfolio.Application.Services
         };
 
         private IPrincipal User => HttpContext.Current.User;
-        public string CurrentUserName => User?.Identity?.Name;
+        public ClaimsIdentity Identity => HttpContext.Current.User?.Identity as ClaimsIdentity;
+        public string CurrentUserName => Identity?.Name;
+        public string ActiveDirectoryId => Identity?.Claims?.SingleOrDefault(c => c.Type == ApplicationUser.ActiveDirectoryClaimType)?.Value;
+
 
         public bool HasPermission(Portfolio portfolio) => portfolio.RequiredRoles.Any(r => User.IsInRole(r.ViewKey));
         public bool HasPermission(Portfolio portfolio, params string[] roleNames)
@@ -90,10 +93,9 @@ namespace FSAPortfolio.Application.Services
 
         public bool UserHasClaim(string[] claims)
         {
-            var identity = User?.Identity as ClaimsIdentity;
-            if (identity != null && identity.IsAuthenticated && identity.Claims != null)
+            if (Identity != null && Identity.IsAuthenticated && Identity.Claims != null)
             {
-                return identity.Claims.Any(c => c.Type == ApplicationUser.AccessGroupClaimType && claims.Contains(c.Value));
+                return Identity.Claims.Any(c => c.Type == ApplicationUser.AccessGroupClaimType && claims.Contains(c.Value));
             }
             return false;
         }
