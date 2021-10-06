@@ -121,13 +121,17 @@ namespace FSAPortfolio.WebAPI.Controllers
         {
             AppLog.TraceVerbose(Request.RequestUri.PathAndQuery);
 
-            return await projectDataService.GetProjectAsync(projectId, includeOptions, includeHistory, includeLastUpdate, includeConfig);
+            var project = await projectDataService.GetProjectAsync(projectId, includeOptions, includeHistory, includeLastUpdate, includeConfig);
+            if (project == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+            return project;
         }
 
         [HttpGet, Route("api/Projects/{projectId}/edit")]
         public async Task<GetProjectDTO<ProjectEditViewModel>> GetForEdit([FromUri] string projectId)
         {
-            return await projectDataService.GetProjectForEdit(projectId);
+            var project = await projectDataService.GetProjectForEdit(projectId);
+            if (project == null) throw new HttpResponseException(HttpStatusCode.NotFound);
+            return project;
         }
 
 

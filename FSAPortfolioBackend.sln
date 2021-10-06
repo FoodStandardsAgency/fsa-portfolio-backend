@@ -42,9 +42,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestScripts", "TestScripts"
 		TestScripts\getPortfolioProjects.sh = TestScripts\getPortfolioProjects.sh
 		TestScripts\getPortfolioSummaryConfig.sh = TestScripts\getPortfolioSummaryConfig.sh
 		TestScripts\getPortfolioUpdates.sh = TestScripts\getPortfolioUpdates.sh
+		TestScripts\getProject.sh = TestScripts\getProject.sh
 		TestScripts\getProjectForEdit.sh = TestScripts\getProjectForEdit.sh
 		TestScripts\getToken.sh = TestScripts\getToken.sh
+		TestScripts\indexCreate.sh = TestScripts\indexCreate.sh
+		TestScripts\indexProject.sh = TestScripts\indexProject.sh
+		TestScripts\indexRebuild.sh = TestScripts\indexRebuild.sh
+		TestScripts\indexSearch.sh = TestScripts\indexSearch.sh
 		TestScripts\setSecrets.sh = TestScripts\setSecrets.sh
+		TestScripts\updateADUsers.sh = TestScripts\updateADUsers.sh
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FSAPortfolio.Application", "FSAPortfolio.Application\FSAPortfolio.Application.csproj", "{FC96DE85-FD34-4D6B-B627-B896E71FCF14}"

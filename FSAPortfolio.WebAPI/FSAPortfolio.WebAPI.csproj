@@ -233,6 +233,7 @@
     <Compile Include="Controllers\PortfolioConfigurationController.cs" />
     <Compile Include="Controllers\DataDumpController.cs" />
     <Compile Include="Controllers\ProjectsController.cs" />
+    <Compile Include="Controllers\SearchIndexController.cs" />
     <Compile Include="Controllers\SyncController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">

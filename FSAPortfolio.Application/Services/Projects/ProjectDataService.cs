@@ -45,7 +45,7 @@ namespace FSAPortfolio.Application.Services.Projects
 
         public async Task<GetProjectDTO<ProjectEditViewModel>> GetProjectForEdit(string projectId)
         {
-            return await GetProject<ProjectEditViewModel>(projectId,
+            return await GetProjectAsync<ProjectEditViewModel>(projectId,
                                                           includeOptions: true,
                                                           includeHistory: false,
                                                           includeLastUpdate: true,
@@ -60,7 +60,7 @@ namespace FSAPortfolio.Application.Services.Projects
                                                                bool includeLastUpdate,
                                                                bool includeConfig)
         {
-            return await GetProject<ProjectViewModel>(projectId, includeOptions, includeHistory, includeLastUpdate, includeConfig);
+            return await GetProjectAsync<ProjectViewModel>(projectId, includeOptions, includeHistory, includeLastUpdate, includeConfig, permissionCallback: ServiceContext.AssertPermission);
         }
 
         public async Task<ProjectUpdateCollectionModel> GetProjectUpdateDataAsync(string portfolio, string[] projectIds)
@@ -248,7 +248,7 @@ namespace FSAPortfolio.Application.Services.Projects
             return await (from p in query select p.ProjectReservation_Id).ToListAsync();
         }
 
-        private async Task<GetProjectDTO<T>> GetProject<T>(string projectId,
+        public async Task<GetProjectDTO<T>> GetProjectAsync<T>(string projectId,
                                                                   bool includeOptions,
                                                                   bool includeHistory,
                                                                   bool includeLastUpdate,
@@ -258,48 +258,48 @@ namespace FSAPortfolio.Application.Services.Projects
             where T : ProjectModel, new()
         {
             string portfolio;
-            GetProjectDTO<T> result;
+            GetProjectDTO<T> result = null;
 
 
             var context = ServiceContext.PortfolioContext;
             var reservation = await context.ProjectReservations
                 .SingleOrDefaultAsync(r => r.ProjectId == projectId);
 
-            if (reservation == null) throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            var query = (from p in context.Projects
-                         .IncludeProject()
-                         .IncludeLabelConfigs() // Need label configs so can map project data fields
-                         where p.ProjectReservation_Id == reservation.Id
-                         select p);
-            if (includeHistory || includeLastUpdate) query = query.IncludeUpdates();
-
-            var project = await query.SingleOrDefaultAsync();
-            if (project == null) throw new HttpResponseException(HttpStatusCode.NotFound);
-            if (permissionCallback != null)
-                permissionCallback(project.Reservation.Portfolio);
-            else
-                ServiceContext.AssertPermission(project.Reservation.Portfolio);
-
-            portfolio = project.Reservation.Portfolio.ViewKey;
-
-            // Build the result
-            result = new GetProjectDTO<T>()
+            if (reservation != null)
             {
-                Project = ProjectModelFactory.GetProjectModel<T>(project, includeHistory, includeLastUpdate)
-            };
 
-            if (includeConfig)
-            {
-                var userIsFSA = ServiceContext.UserHasFSAClaim();
-                result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration, flags: flags, fsaOnly: !userIsFSA);
+                var query = (from p in context.Projects
+                             .IncludeProject()
+                             .IncludeLabelConfigs() // Need label configs so can map project data fields
+                             where p.ProjectReservation_Id == reservation.Id
+                             select p);
+                if (includeHistory || includeLastUpdate) query = query.IncludeUpdates();
+
+                var project = await query.SingleOrDefaultAsync();
+                if (project != null)
+                {
+                    if (permissionCallback != null) permissionCallback(project.Reservation.Portfolio);
+
+                    portfolio = project.Reservation.Portfolio.ViewKey;
+
+                    // Build the result
+                    result = new GetProjectDTO<T>()
+                    {
+                        Project = ProjectModelFactory.GetProjectModel<T>(project, includeHistory, includeLastUpdate)
+                    };
+
+                    if (includeConfig)
+                    {
+                        var userIsFSA = ServiceContext.UserHasFSAClaim();
+                        result.Config = PortfolioMapper.GetProjectLabelConfigModel(project.Reservation.Portfolio.Configuration, flags: flags, fsaOnly: !userIsFSA);
+                    }
+                    if (includeOptions)
+                    {
+                        var config = await portfolioService.GetConfigAsync(portfolio);
+                        result.Options = await portfolioService.GetNewProjectOptionsAsync(config, result.Project as ProjectEditViewModel);
+                    }
+                }
             }
-            if (includeOptions)
-            {
-                var config = await portfolioService.GetConfigAsync(portfolio);
-                result.Options = await portfolioService.GetNewProjectOptionsAsync(config, result.Project as ProjectEditViewModel);
-            }
-
             return result;
         }
 

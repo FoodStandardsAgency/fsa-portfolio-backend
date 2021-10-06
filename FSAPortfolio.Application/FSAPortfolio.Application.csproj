@@ -51,6 +51,9 @@
     <Reference Include="CsvHelper, Version=20.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.20.0.0\lib\net47\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="Elasticsearch.Net, Version=7.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elasticsearch.Net.7.15.0\lib\net461\Elasticsearch.Net.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -99,6 +102,12 @@
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.1.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.4.1.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
+    <Reference Include="Nest, Version=7.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEST.7.15.0\lib\net461\Nest.dll</HintPath>
+    </Reference>
+    <Reference Include="Nest.JsonNetSerializer, Version=7.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\NEST.JsonNetSerializer.7.15.0\lib\net461\Nest.JsonNetSerializer.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -112,8 +121,8 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.6.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=5.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.5.0.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
@@ -133,8 +142,8 @@
     <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Text.Encodings.Web, Version=4.0.5.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -168,6 +177,7 @@
     <Compile Include="DTO\GetProjectDTO.cs" />
     <Compile Include="DTO\GetProjectExportDTO.cs" />
     <Compile Include="DTO\GetProjectQueryDTO.cs" />
+    <Compile Include="Mapping\Indexing\ProjectIndexMappingProfile.cs" />
     <Compile Include="Models\Archive.cs" />
     <Compile Include="Models\IdentityResponseModel.cs" />
     <Compile Include="Models\IJsonProperties.cs" />
@@ -191,6 +201,7 @@
     <Compile Include="Models\ProjectQueryModel.cs" />
     <Compile Include="Models\ProjectQueryResultProjectModel.cs" />
     <Compile Include="Models\ProjectUpdateModel.cs" />
+    <Compile Include="Services\Index\Models\ProjectSearchIndexModel.cs" />
     <Compile Include="Models\ProjectViewModel.cs" />
     <Compile Include="Models\SyncRequestModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -236,6 +247,11 @@
     <Compile Include="Mapping\Projects\Resolvers\ProjectUpdateItemOptionsResolvers.cs" />
     <Compile Include="Mapping\Summaries\PortfolioSummariesMappingProfile.cs" />
     <Compile Include="Mapping\Summaries\SummaryResolvers.cs" />
+    <Compile Include="Services\Index\ISearchService.cs" />
+    <Compile Include="Services\Index\IIndexService.cs" />
+    <Compile Include="Services\Index\SearchService.cs" />
+    <Compile Include="Services\Index\IndexService.cs" />
+    <Compile Include="Services\Index\Nest\ProjectNestClient.cs" />
     <Compile Include="Services\IServiceContext.cs" />
     <Compile Include="Services\Microsoft\GroupMembershipToRoleMap.cs" />
     <Compile Include="Services\Microsoft\IMicrosoftGraphUserStoreService.cs" />
@@ -290,6 +306,7 @@
   <ItemGroup>
     <Content Include="FSAPortfolio.Application.xml" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

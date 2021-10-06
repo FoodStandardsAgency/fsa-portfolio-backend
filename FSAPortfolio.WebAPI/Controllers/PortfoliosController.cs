@@ -21,6 +21,7 @@ using FSAPortfolio.Application.Services.Projects;
 using FSAPortfolio.Common.Logging;
 using FSAPortfolio.Common;
 using FSAPortfolio.Entities.Projects;
+using FSAPortfolio.Application.Services;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -30,11 +31,14 @@ namespace FSAPortfolio.WebAPI.Controllers
         private readonly IPortfolioService portfolioService;
         private readonly IProjectDataService projectDataService;
         private readonly ISyncService syncService;
-        public PortfoliosController(IPortfolioService portfolioService, IProjectDataService projectDataService, ISyncService syncService)
+        private readonly ServiceContext serviceContext;
+
+        public PortfoliosController(ServiceContext serviceContext, IPortfolioService portfolioService, IProjectDataService projectDataService, ISyncService syncService)
         {
             this.portfolioService = portfolioService;
             this.projectDataService = projectDataService;
             this.syncService = syncService;
+            this.serviceContext = serviceContext;
 
 #if DEBUG
             AppLog.TraceVerbose($"{nameof(PortfoliosController)} created.");
@@ -167,11 +171,12 @@ namespace FSAPortfolio.WebAPI.Controllers
             await portfolioService.AddPermissionAsync(viewKey, model);
         }
 
-        [AcceptVerbs("GET"), Route("api/Portfolios/{portfolio}/cleanreservations")]
+        [AcceptVerbs("GET"), Route("api/Portfolios/cleanreservations")]
         [OverrideAuthorization]
-        public async Task CleanReservationsAsync([FromUri(Name = "portfolio")] string viewKey)
+        public async Task CleanReservationsAsync()
         {
-            await portfolioService.CleanReservations(viewKey);
+            serviceContext.AssertSuperuser();
+            await portfolioService.CleanReservationsAsync();
         }
 
     }

@@ -1,5 +1,6 @@
 using FSAPortfolio.Application.Services;
 using FSAPortfolio.Application.Services.Config;
+using FSAPortfolio.Application.Services.Index;
 using FSAPortfolio.Application.Services.Projects;
 using FSAPortfolio.Common.Logging;
 using FSAPortfolio.Entities;
@@ -68,6 +69,10 @@ namespace FSAPortfolio.WebAPI
             container.RegisterType<ISyncService, SyncService>(new HierarchicalLifetimeManager());
             container.RegisterType<IPersonService, PersonService>(new HierarchicalLifetimeManager());
             container.RegisterType<IUserService, UserService>(new HierarchicalLifetimeManager());
+            container.RegisterType<ISearchService, SearchService>(new HierarchicalLifetimeManager());
+
+            // Singletons
+            container.RegisterType<IIndexService, IndexService>(new SingletonLifetimeManager());
         }
     }
 }

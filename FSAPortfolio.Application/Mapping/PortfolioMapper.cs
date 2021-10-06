@@ -12,6 +12,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
+using FSAPortfolio.Application.Mapping.Indexing;
 
 namespace FSAPortfolio.WebAPI.App.Mapping
 {
@@ -22,12 +23,14 @@ namespace FSAPortfolio.WebAPI.App.Mapping
         internal static MapperConfiguration updateConfig;
         internal static MapperConfiguration exportConfig;
         internal static MapperConfiguration activeDirectoryConfig;
+        internal static MapperConfiguration indexConfig;
 
         public static IMapper ProjectMapper { get; private set; }
         public static IMapper ConfigMapper { get; private set; }
         public static IMapper UpdateMapper { get; private set; }
         public static IMapper ExportMapper { get; private set; }
         public static IMapper ActiveDirectoryMapper { get; private set; }
+        public static IMapper IndexMapper { get; private set; }
         public static void Configure()
         {
             AppLog.TraceInformation("Configuring mappers...");
@@ -77,6 +80,14 @@ namespace FSAPortfolio.WebAPI.App.Mapping
                 cfg.AddProfile<ProjectImportModelProfile>();
             });
             ExportMapper = exportConfig.CreateMapper();
+
+            AppLog.TraceInformation($"Creating {nameof(IndexMapper)}");
+            indexConfig = new MapperConfiguration(cfg =>
+            {
+                cfg.AllowNullCollections = true;
+                cfg.AddProfile<ProjectIndexMappingProfile>();
+            });
+            IndexMapper = indexConfig.CreateMapper();
 
             AppLog.Unindent();
             AppLog.TraceInformation("Mappers configured.");

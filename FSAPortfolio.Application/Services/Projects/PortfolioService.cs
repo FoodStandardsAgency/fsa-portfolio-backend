@@ -325,10 +325,8 @@ namespace FSAPortfolio.Application.Services.Projects
             return archivedIds;
         }
 
-        public async Task CleanReservations(string viewKey)
+        public async Task CleanReservationsAsync()
         {
-            ServiceContext.AssertSuperuser();
-
             // Make sure deleted reservations are at least 12 hours old.
             var cutoff = DateTime.Now.AddHours(-12);
 

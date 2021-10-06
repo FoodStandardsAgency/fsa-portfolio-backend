@@ -21,5 +21,6 @@ namespace FSAPortfolio.Application.Services.Projects
         Task<Project> DeleteProjectAsync(string projectId);
         Task ImportProjectsAsync(string viewKey, MultipartFormDataStreamProvider files);
         Task UpdateProjectAsync(ProjectUpdateModel update);
+        Task<GetProjectDTO<T>> GetProjectAsync<T>(string projectId, bool includeOptions, bool includeHistory, bool includeLastUpdate, bool includeConfig, PortfolioFieldFlags flags = PortfolioFieldFlags.Read, Action<Portfolio> permissionCallback = null) where T : ProjectModel, new();
     }
 }
