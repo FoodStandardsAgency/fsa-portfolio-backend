@@ -11,6 +11,10 @@ namespace FSAPortfolio.Application.Services.Index.Models
 {
     public class ProjectSearchIndexModel
     {
+        [JsonProperty("portfolio")]
+        public string PortfolioViewKey { get; set; }
+
+
         [JsonProperty(ProjectPropertyConstants.ProjectId)]
         public string project_id { get; set; }
 
@@ -19,6 +23,13 @@ namespace FSAPortfolio.Application.Services.Index.Models
         /// </summary>
         [JsonProperty(ProjectPropertyConstants.project_name)]
         public string project_name { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.priority_main)]
+        public int? Priority { get; set; }
+
+        [JsonProperty(ProjectPropertyConstants.pgroup)]
+        public string PriorityGroup { get; set; }
+
 
 
         [JsonProperty(ProjectPropertyConstants.short_desc)]

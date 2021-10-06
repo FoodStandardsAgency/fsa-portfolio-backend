@@ -22,6 +22,9 @@ namespace FSAPortfolio.Application.Models
         [JsonProperty(FilterFieldConstants.TeamMemberNameFilter)]
         public string TeamMemberName { get; set; }
 
+        [JsonProperty(FilterFieldConstants.TextSearchFilter)]
+        public string TextSearch { get; set; }
+
         [JsonProperty(ProjectPropertyConstants.phase)]
         public string[] Phases { get; set; }
 

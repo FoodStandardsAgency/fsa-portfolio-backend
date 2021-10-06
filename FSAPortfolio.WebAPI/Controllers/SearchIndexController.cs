@@ -1,4 +1,5 @@
 ﻿using FSAPortfolio.Application.Services.Index;
+using FSAPortfolio.Application.Services.Index.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace FSAPortfolio.WebAPI.Controllers
     [Authorize]
     public class SearchIndexController : ApiController
     {
-        private IIndexService indexService;
-        private ISearchService searchService;
-        public SearchIndexController(IIndexService indexService, ISearchService searchService)
+        private readonly IIndexManagerService indexManagerService;
+        private readonly IIndexService indexService;
+        private readonly ISearchService searchService;
+        public SearchIndexController(IIndexManagerService indexManagerService, IIndexService indexService, ISearchService searchService)
         {
+            this.indexManagerService = indexManagerService;
             this.indexService = indexService;
             this.searchService = searchService;
         }
@@ -28,20 +31,25 @@ namespace FSAPortfolio.WebAPI.Controllers
         [HttpGet, Route("api/SearchIndex/create")]
         public async Task CreateProjectIndexAsync()
         {
-            await indexService.CreateIndexAsync();
+            await indexManagerService.CreateIndexAsync();
         }
 
         [HttpGet, Route("api/SearchIndex/rebuild")]
         public async Task RebuildProjectIndexAsync()
         {
-            await indexService.RebuildIndexAsync();
+            await indexManagerService.RebuildIndexAsync();
         }
 
         [HttpPost, Route("api/SearchIndex/search")]
-        public async Task SearchProjectIndexAsync()
+        public async Task<IEnumerable<ProjectSearchIndexModel>> SearchProjectIndexAsync(SearchTerm term)
         {
-            await searchService.SearchProjectIndexAsync();
+            return await searchService.SearchProjectIndexAsync(term.term);
         }
 
+    }
+
+    public class SearchTerm
+    {
+        public string term { get; set; }
     }
 }

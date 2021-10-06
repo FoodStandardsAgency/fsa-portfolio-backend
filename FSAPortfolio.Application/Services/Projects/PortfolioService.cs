@@ -221,6 +221,14 @@ namespace FSAPortfolio.Application.Services.Projects
                     new PortfolioLabelConfig()
                     {
                         Included = true,
+                        Group = new PortfolioLabelGroup(){ Order = -1, Name = "Project text" },
+                        Label = FilterFieldConstants.TextSearchName,
+                        FieldName = FilterFieldConstants.TextSearchFilter,
+                        FieldType = PortfolioFieldType.FreeText
+                    },
+                    new PortfolioLabelConfig()
+                    {
+                        Included = true,
                         Group = config.LabelGroups.SingleOrDefault(g => g.Name == FieldGroupConstants.FieldGroupName_Updates),
                         Label = FilterFieldConstants.LastUpdateName,
                         FieldName = FilterFieldConstants.LastUpdateFilter,

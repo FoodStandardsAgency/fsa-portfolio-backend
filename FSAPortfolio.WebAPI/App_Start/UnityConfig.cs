@@ -69,10 +69,11 @@ namespace FSAPortfolio.WebAPI
             container.RegisterType<ISyncService, SyncService>(new HierarchicalLifetimeManager());
             container.RegisterType<IPersonService, PersonService>(new HierarchicalLifetimeManager());
             container.RegisterType<IUserService, UserService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IIndexService, IndexService>(new HierarchicalLifetimeManager());
             container.RegisterType<ISearchService, SearchService>(new HierarchicalLifetimeManager());
 
             // Singletons
-            container.RegisterType<IIndexService, IndexService>(new SingletonLifetimeManager());
+            container.RegisterType<IIndexManagerService, IndexManagerService>(new SingletonLifetimeManager());
         }
     }
 }

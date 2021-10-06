@@ -1,5 +1,6 @@
 ﻿using Elasticsearch.Net;
 using FSAPortfolio.Application.Models;
+using FSAPortfolio.Application.Services.Index.Models;
 using FSAPortfolio.Application.Services.Index.Nest;
 using FSAPortfolio.Application.Services.Projects;
 using FSAPortfolio.Entities.Projects;
@@ -28,10 +29,10 @@ namespace FSAPortfolio.Application.Services.Index
             this.projectDataService = projectDataService;
         }
 
-        public async Task SearchProjectIndexAsync()
+        public async Task<IEnumerable<ProjectSearchIndexModel>> SearchProjectIndexAsync(string term)
         {
             var nestClient = new ProjectNestClient();
-            await nestClient.SearchProjectIndex();
+            return await nestClient.SearchProjectIndex(term);
         }
     }
 

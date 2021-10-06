@@ -201,6 +201,8 @@
     <Compile Include="Models\ProjectQueryModel.cs" />
     <Compile Include="Models\ProjectQueryResultProjectModel.cs" />
     <Compile Include="Models\ProjectUpdateModel.cs" />
+    <Compile Include="Services\Index\IIndexManagerService.cs" />
+    <Compile Include="Services\Index\IndexManagerService.cs" />
     <Compile Include="Services\Index\Models\ProjectSearchIndexModel.cs" />
     <Compile Include="Models\ProjectViewModel.cs" />
     <Compile Include="Models\SyncRequestModel.cs" />

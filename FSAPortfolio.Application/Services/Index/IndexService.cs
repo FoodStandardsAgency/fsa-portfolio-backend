@@ -18,54 +18,27 @@ namespace FSAPortfolio.Application.Services.Index
 {
     public class IndexService : IIndexService
     {
-        private static volatile bool operationInProgress = false;
-        private static object indexLock = new object();
-
         private Lazy<PortfolioContext> lazyPortfolioContext;
-        private readonly IPortfolioService portfolioService;
         private ProjectNestClient nestClient = new ProjectNestClient();
 
 
-        public IndexService(Lazy<PortfolioContext> lazyPortfolioContext, IPortfolioService portfolioService)
+        public IndexService(Lazy<PortfolioContext> lazyPortfolioContext)
         {
             this.lazyPortfolioContext = lazyPortfolioContext;
-            this.portfolioService = portfolioService;
         }
 
-        public bool OperationInProgress => operationInProgress;
-
-        public async Task CreateIndexAsync()
+        public async Task DeleteProjectAsync(string projectId)
         {
-            ExecuteIndexOperation(async (ct) => {
-                await nestClient.CreateProjectIndexAsync();
-            });
+            await nestClient.DeleteProjectAsync(projectId);
+        }
+        public async Task ReindexProjectAsync(string projectId)
+        {
+            await IndexProjectImplAsync(projectId);
         }
 
         public async Task IndexProjectAsync(string projectId)
         {
-            ExecuteIndexOperation(async (ct) =>
-            {
-                await IndexProjectImplAsync(projectId);
-            });
-        }
-
-        public async Task RebuildIndexAsync()
-        {
-            ExecuteIndexOperation(async (ct) => {
-
-                await IndexAllProjectsImplAsync();
-            });
-        }
-
-        private async Task IndexAllProjectsImplAsync()
-        {
-            await this.portfolioService.CleanReservationsAsync();
-            var context = lazyPortfolioContext.Value;
-            var reservations = await context.ProjectReservations.ToListAsync();
-            foreach(var r in reservations)
-            {
-                await IndexProjectImplAsync(r.ProjectId);
-            }
+            await IndexProjectImplAsync(projectId);
         }
 
         private async Task<bool> IndexProjectImplAsync(string projectId)
@@ -82,43 +55,6 @@ namespace FSAPortfolio.Application.Services.Index
                 await nestClient.DeleteProjectAsync(projectId);
             }
             return projectExists;
-        }
-
-
-        private bool ExecuteIndexOperation(Func<CancellationToken, Task> operation)
-        {
-            bool operationQueued = false;
-            if (!operationInProgress) 
-            {
-                lock(indexLock)
-                {
-                    if (!operationInProgress)
-                    {
-                        try
-                        {
-                            operationInProgress = true;
-                            operationQueued = true;
-                            HostingEnvironment.QueueBackgroundWorkItem((ct) => {
-                                try
-                                {
-                                    operation(ct);
-                                }
-                                finally
-                                {
-                                    operationInProgress = false;
-                                }
-                            });
-                        }
-                        catch(Exception e)
-                        {
-                            operationInProgress = false;
-                            operationQueued = false;
-                            throw e;
-                        }
-                    }
-                }
-            }
-            return operationQueued;
         }
 
         private async Task<ProjectSearchIndexModel> GetProjectAsync(string projectId)

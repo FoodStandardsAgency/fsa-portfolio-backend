@@ -10,6 +10,9 @@ namespace FSAPortfolio.WebAPI.App
         internal const string TeamMemberNameName = "Project team";
         internal const string TeamMemberNameFilter = "projectname_filter";
 
+        internal const string TextSearchName = "Search for";
+        internal const string TextSearchFilter = "text_search";
+
         internal const string NoUpdatesName = "Show projects with no updates";
         internal const string NoUpdatesFilter = "noupdates_filter";
 

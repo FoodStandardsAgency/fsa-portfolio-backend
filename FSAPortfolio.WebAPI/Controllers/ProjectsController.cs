@@ -1,27 +1,16 @@
-﻿using FSAPortfolio.Entities;
-using FSAPortfolio.Application.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Data.Entity;
-using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.App.Mapping;
-using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.PostgreSQL.Projects;
-using System.Text;
-using FSAPortfolio.WebAPI.DTO;
-using FSAPortfolio.WebAPI.App.Projects;
-using FSAPortfolio.WebAPI.App.Mapping.Projects;
-using FSAPortfolio.Entities.Organisation;
-using System.Linq.Expressions;
-using AutoMapper;
-using FSAPortfolio.WebAPI.App.Users;
+﻿using FSAPortfolio.Application.Models;
+using FSAPortfolio.Application.Services.Index;
 using FSAPortfolio.Application.Services.Projects;
 using FSAPortfolio.Common.Logging;
+using FSAPortfolio.Entities;
+using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.WebAPI.DTO;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -30,11 +19,13 @@ namespace FSAPortfolio.WebAPI.Controllers
     {
         private readonly IPortfolioService portfolioService;
         private readonly IProjectDataService projectDataService;
+        private readonly IIndexService indexService;
 
-        public ProjectsController(IPortfolioService provider, IProjectDataService projectDataService)
+        public ProjectsController(IPortfolioService provider, IProjectDataService projectDataService, IIndexService indexService)
         {
             this.portfolioService = provider;
             this.projectDataService = projectDataService;
+            this.indexService = indexService;
 
 #if DEBUG
             AppLog.TraceVerbose($"{nameof(ProjectsController)} created.");
@@ -47,6 +38,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         public async Task Post([FromBody] ProjectUpdateModel update)
         {
             await projectDataService.UpdateProjectAsync(update);
+            await indexService.ReindexProjectAsync(update.project_id);
         }
 
 
@@ -139,6 +131,7 @@ namespace FSAPortfolio.WebAPI.Controllers
         public async Task<IHttpActionResult> DeleteProject([FromUri] string projectId)
         {
             var project = await projectDataService.DeleteProjectAsync(projectId);
+            await indexService.DeleteProjectAsync(projectId);
             if (project == null) return NotFound();
             else return Ok();
         }

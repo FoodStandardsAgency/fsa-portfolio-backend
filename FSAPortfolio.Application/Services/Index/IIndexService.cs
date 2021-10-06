@@ -5,7 +5,7 @@ namespace FSAPortfolio.Application.Services.Index
     public interface IIndexService
     {
         Task IndexProjectAsync(string projectId);
-        Task CreateIndexAsync();
-        Task RebuildIndexAsync();
+        Task DeleteProjectAsync(string projectId);
+        Task ReindexProjectAsync(string projectId);
     }
 }

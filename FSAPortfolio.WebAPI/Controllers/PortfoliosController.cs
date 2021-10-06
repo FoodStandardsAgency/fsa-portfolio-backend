@@ -22,6 +22,8 @@ using FSAPortfolio.Common.Logging;
 using FSAPortfolio.Common;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Application.Services;
+using FSAPortfolio.Application.Services.Index;
+using FSAPortfolio.Application.Services.Index.Models;
 
 namespace FSAPortfolio.WebAPI.Controllers
 {
@@ -31,13 +33,15 @@ namespace FSAPortfolio.WebAPI.Controllers
         private readonly IPortfolioService portfolioService;
         private readonly IProjectDataService projectDataService;
         private readonly ISyncService syncService;
+        private readonly ISearchService searchService;
         private readonly ServiceContext serviceContext;
 
-        public PortfoliosController(ServiceContext serviceContext, IPortfolioService portfolioService, IProjectDataService projectDataService, ISyncService syncService)
+        public PortfoliosController(ServiceContext serviceContext, IPortfolioService portfolioService, IProjectDataService projectDataService, ISyncService syncService, ISearchService searchService)
         {
             this.portfolioService = portfolioService;
             this.projectDataService = projectDataService;
             this.syncService = syncService;
+            this.searchService = searchService;
             this.serviceContext = serviceContext;
 
 #if DEBUG
@@ -94,18 +98,59 @@ namespace FSAPortfolio.WebAPI.Controllers
         [HttpPost]
         public async Task<ProjectQueryResultModel> GetFilteredProjectsAsync([FromBody] ProjectQueryModel searchTerms)
         {
-            using (var context = new PortfolioContext())
-            {
-                ProjectQueryResultModel result = null;
-                var filteredQuery = from p in context.Projects.IncludeQueryResult() where p.Reservation.Portfolio.ViewKey == searchTerms.PortfolioViewKey select p;
-                var config = await context.PortfolioConfigurations.SingleAsync(p => p.Portfolio.ViewKey == searchTerms.PortfolioViewKey);
-                var filterBuilder = new ProjectSearchFilters(searchTerms, filteredQuery, config);
-                filterBuilder.BuildFilters();
-                filteredQuery = filterBuilder.Query;
+            ProjectQueryResultModel result = null;
+            IEnumerable<ProjectQueryResultProjectModel> textSearchResults = null;
+            IEnumerable<ProjectQueryResultProjectModel> queryResults = null;
 
-                result = PortfolioMapper.ProjectMapper.Map<ProjectQueryResultModel>(await filteredQuery.OrderByDescending(p => p.Priority).ToArrayAsync());
-                return result;
+            bool hasFilterTerms = checkForFilterTerms(searchTerms);
+            bool hasTextSearchTerm = !string.IsNullOrWhiteSpace(searchTerms.TextSearch);
+
+            if (hasTextSearchTerm)
+            {
+                var indexResults = await searchService.SearchProjectIndexAsync(searchTerms.TextSearch);
+                if(indexResults.Count() > 0)
+                {
+                    textSearchResults = PortfolioMapper.ProjectMapper.Map<IEnumerable<ProjectQueryResultProjectModel>>(indexResults);
+
+                }
             }
+
+
+            if (hasFilterTerms || !hasTextSearchTerm)
+            {
+                using (var context = new PortfolioContext())
+                {
+                    var filteredQuery = from p in context.Projects.IncludeQueryResult() where p.Reservation.Portfolio.ViewKey == searchTerms.PortfolioViewKey select p;
+                    var config = await context.PortfolioConfigurations.SingleAsync(p => p.Portfolio.ViewKey == searchTerms.PortfolioViewKey);
+                    var filterBuilder = new ProjectSearchFilters(searchTerms, filteredQuery, config);
+                    filterBuilder.BuildFilters();
+                    filteredQuery = filterBuilder.Query;
+                    queryResults = PortfolioMapper.ProjectMapper.Map<IEnumerable<ProjectQueryResultProjectModel>>(await filteredQuery.ToArrayAsync());
+                }
+            }
+            if (queryResults != null && textSearchResults != null) queryResults = queryResults.Union(textSearchResults);
+            else if (queryResults == null && textSearchResults != null) queryResults = textSearchResults;
+
+            if (queryResults != null)
+            {
+                result = PortfolioMapper.ProjectMapper.Map<ProjectQueryResultModel>(queryResults.OrderByDescending(p => p.Priority));
+            }
+            return result;
+        }
+
+        private bool checkForFilterTerms(ProjectQueryModel searchTerms)
+        {
+            var t = searchTerms.GetType();
+            var properties = t.GetProperties();
+            foreach(var property in properties.Where(p => p.Name != nameof(ProjectQueryModel.TextSearch) && p.Name != nameof(ProjectQueryModel.PortfolioViewKey)))
+            {
+                var objValue = property.GetValue(searchTerms);
+
+                // This is a filter term if the property has a value and is not an empty string
+                if (objValue != null && !(property.PropertyType == typeof(string) && string.IsNullOrWhiteSpace((string)objValue)))
+                    return true;
+            }
+            return false;
         }
 
         [HttpGet]

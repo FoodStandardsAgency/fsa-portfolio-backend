@@ -36,12 +36,21 @@ namespace FSAPortfolio.Application.Services.Index.Nest
             var response = await elasticClient.IndexDocumentAsync(project);
         }
 
-        public async Task SearchProjectIndex()
+        public async Task<IEnumerable<ProjectSearchIndexModel>> SearchProjectIndex(string term)
         {
             var elasticClient = new ElasticClient(getConnectionSettings(indexServerUri.Value));
             var searchResponse = await elasticClient.SearchAsync<ProjectSearchIndexModel>(s => s
-            .Query(q => q.MatchAll())
+            .Query(q => q.MultiMatch(c => c.Fields(f => f
+                .Field(p => p.project_name)
+                .Field(p => p.short_desc)
+                .Field(p => p.forward_look)
+                .Field(p => p.rag)
+                )
+            .Query(term)
+            ))
             );
+
+            return searchResponse.Documents;
         }
 
         internal async Task DeleteProjectAsync(string projectId)
@@ -118,9 +127,12 @@ namespace FSAPortfolio.Application.Services.Index.Nest
         private Func<PropertiesDescriptor<ProjectSearchIndexModel>, IPromise<IProperties>> getProjectViewModelProperties()
         {
             return ps => ps
+                .Keyword(s => s.Name(e => e.PortfolioViewKey).Norms(false))
                 .Text(s => s.Name(e => e.project_name).Boost(3).Analyzer("synonymAnalyser"))
                 .Text(s => s.Name(e => e.short_desc).Boost(2))
                 .Text(s => s.Name(e => e.forward_look).Boost(1))
+                .Keyword(s => s.Name(e => e.Priority).Norms(false))
+                .Keyword(s => s.Name(e => e.PriorityGroup).Norms(false))
                 .Keyword(s => s.Name(e => e.rag).Norms(false))
                 ;
         }
@@ -151,8 +163,11 @@ namespace FSAPortfolio.Application.Services.Index.Nest
     public class ProjectContractResolver : ConnectionSettingsAwareContractResolver
     {
         private static Dictionary<string, string> includedProperties = new Dictionary<string, string>() {
+            { nameof(ProjectSearchIndexModel.PortfolioViewKey), null },
             { nameof(ProjectSearchIndexModel.project_id), null },
             { nameof(ProjectSearchIndexModel.project_name), null },
+            { nameof(ProjectSearchIndexModel.Priority), null },
+            { nameof(ProjectSearchIndexModel.PriorityGroup), null },
             { nameof(ProjectSearchIndexModel.short_desc), null },
             { nameof(ProjectSearchIndexModel.forward_look), null },
             { nameof(ProjectSearchIndexModel.rag), null }
