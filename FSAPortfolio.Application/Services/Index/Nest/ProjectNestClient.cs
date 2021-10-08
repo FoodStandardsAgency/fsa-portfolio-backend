@@ -40,15 +40,14 @@ namespace FSAPortfolio.Application.Services.Index.Nest
         {
             var elasticClient = new ElasticClient(getConnectionSettings(indexServerUri.Value));
             var searchResponse = await elasticClient.SearchAsync<ProjectSearchIndexModel>(s => s
-            .Query(q => q.MultiMatch(c => c.Fields(f => f
-                .Field(p => p.project_name)
-                .Field(p => p.short_desc)
-                .Field(p => p.forward_look)
-                .Field(p => p.rag)
-                )
-            .Query(term)
-            ))
-            );
+            .Query(q => q.MultiMatch(c => c
+                .Fields(f => f
+                    .Field(p => p.project_name)
+                    .Field(p => p.short_desc)
+                    .Field(p => p.forward_look)
+                    .Field(p => p.rag))
+                .Query(term).Fuzziness(Fuzziness.EditDistance(1)) // TODO: configure fuzziness
+            )));
 
             return searchResponse.Documents;
         }
@@ -59,45 +58,9 @@ namespace FSAPortfolio.Application.Services.Index.Nest
             var deleteResponse = elasticClient.DeleteAsync<ProjectSearchIndexModel>(projectId);
         }
 
-        private Func<CreateIndexDescriptor, ICreateIndexRequest> getIndexDescriptor(Dictionary<string, List<string>> synonyms)
-        {
-            var synonymList = synonyms.Select(s => $"{s.Key} => {s.Key},{string.Join(",", s.Value)}").ToList();
-            return c => c
-            .Map<ProjectSearchIndexModel>(m => m
-                .Properties(getProjectViewModelProperties())
-                )
-            .Settings(s => s
-            .Analysis(a => a
-                .Analyzers(an => an
-                    .Custom("synonymAnalyser", sa => sa
-                        .Tokenizer("whitespace")
-                        .Filters("lowercase", "synonym"))
-                    )
-                .TokenFilters(tf => tf
-                    .Synonym("synonym", sn => sn
-                        .Synonyms(synonymList)
-                        )
-                    )
-                )
-            )
-            ;
-        }
         private Func<CreateIndexDescriptor, ICreateIndexRequest> getIndexDescriptor()
         {
-            return c => c
-            .Map<ProjectSearchIndexModel>(m => m
-                .Properties(getProjectViewModelProperties())
-                )
-            .Settings(s => s
-            .Analysis(a => a
-                .Analyzers(an => an
-                    .Custom("synonymAnalyser", sa => sa
-                        .Tokenizer("whitespace")
-                        .Filters("lowercase", "synonym"))
-                    )
-                )
-            )
-            ;
+            return c => c.Map<ProjectSearchIndexModel>(m => m.Properties(getProjectViewModelProperties()));
         }
 
 
@@ -128,7 +91,7 @@ namespace FSAPortfolio.Application.Services.Index.Nest
         {
             return ps => ps
                 .Keyword(s => s.Name(e => e.PortfolioViewKey).Norms(false))
-                .Text(s => s.Name(e => e.project_name).Boost(3).Analyzer("synonymAnalyser"))
+                .Text(s => s.Name(e => e.project_name).Boost(3))
                 .Text(s => s.Name(e => e.short_desc).Boost(2))
                 .Text(s => s.Name(e => e.forward_look).Boost(1))
                 .Keyword(s => s.Name(e => e.Priority).Norms(false))
@@ -136,7 +99,7 @@ namespace FSAPortfolio.Application.Services.Index.Nest
                 .Keyword(s => s.Name(e => e.rag).Norms(false))
                 ;
         }
-
+               
     }
 
     public class IgnoreDataMemberPropertyMappingProvider : IPropertyMappingProvider
