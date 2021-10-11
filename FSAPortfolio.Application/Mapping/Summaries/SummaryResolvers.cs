@@ -32,7 +32,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
         }
     }
 
-
     public class ProjectCountByPhaseResolver : IValueResolver<ProjectPhase, PhaseSummaryModel, int>
     {
         public int Resolve(ProjectPhase source, PhaseSummaryModel destination, int destMember, ResolutionContext context)
@@ -48,7 +47,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
             }
         }
     }
-
 
     public class PortfolioSummaryResolver : IValueResolver<Portfolio, PortfolioSummaryModel, IEnumerable<ProjectSummaryModel>>
     {
@@ -316,5 +314,116 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
         }
     }
 
+    public class ProjectActionsResolver : IValueResolver<Project, object, ProjectActionsModel>
+    {
+        private static Dictionary<ProjectActionItemModel.ActionItemType, string> actionTypeMap 
+            = new Dictionary<ProjectActionItemModel.ActionItemType, string>() 
+            {
+                { ProjectActionItemModel.ActionItemType.Update, "Updates" },
+                { ProjectActionItemModel.ActionItemType.Date, "Dates" }
+            };
 
+        public ProjectActionsModel Resolve(Project source, object destination, ProjectActionsModel destMember, ResolutionContext context)
+        {
+            ProjectActionsModel result = null;
+            List<ProjectActionItemModel> actions = new List<ProjectActionItemModel>();
+
+            Func<string[], bool> isInPhases = (a) => { return a.Contains(source.LatestUpdate.Phase.ViewKey); };
+
+            if(isInPhases(PortfolioSettings.ProjectActivePhaseViewKeys))
+            {
+                // Check if updates are overdue
+                if ((DateTime.Now - source.LatestUpdate.Timestamp).TotalDays > PortfolioSettings.ProjectUpdateOverdueDays)
+                {
+                    actions.Add(new ProjectActionItemModel()
+                    {
+                        ActionType = ProjectActionItemModel.ActionItemType.Update,
+                        Action = "An update is overdue"
+                    });
+                }
+
+                // Check if phase end date is in past (ignore if not set)
+                var phaseEnd = source.LatestUpdate.ExpectedCurrentPhaseEnd.Date;
+                if (phaseEnd.HasValue && phaseEnd.Value < DateTime.Now)
+                {
+                    actions.Add(new ProjectActionItemModel()
+                    {
+                        ActionType = ProjectActionItemModel.ActionItemType.Date,
+                        Action = "The current phase end date has expired"
+                    });
+                }
+
+                // Check if end dates are empty or have expired 
+                var endDate = source.ExpectedEndDate.Date;
+                if (!endDate.HasValue)
+                {
+                    actions.Add(new ProjectActionItemModel()
+                    {
+                        ActionType = ProjectActionItemModel.ActionItemType.Date,
+                        Action = "The project end date is missing"
+                    });
+                }
+                else if (endDate.Value < DateTime.Now)
+                {
+                    actions.Add(new ProjectActionItemModel()
+                    {
+                        ActionType = ProjectActionItemModel.ActionItemType.Date,
+                        Action = "The project completion date has expired"
+                    });
+                }
+
+                // Check if hard deadline expired 
+                var deadline = source.HardEndDate.Date;
+                if (deadline.HasValue && deadline.Value < DateTime.Now)
+                {
+                    actions.Add(new ProjectActionItemModel()
+                    {
+                        ActionType = ProjectActionItemModel.ActionItemType.Date,
+                        Action = "The project hard deadline has expired"
+                    });
+                }
+            }
+
+            // Check if start dates have expired
+            if (isInPhases(PortfolioSettings.ProjectBacklogPhaseViewKeys))
+            {
+                // Get the latest out of the two start dates
+                var date = source.StartDate.Date.HasValue ?
+                        (source.ActualStartDate.Date.HasValue ?
+                            (source.StartDate.Date.Value > source.ActualStartDate.Date.Value ?
+                                source.StartDate.Date
+                                : source.ActualStartDate.Date)
+                            : source.StartDate.Date)
+                    : source.ActualStartDate.Date;
+
+                if(date.HasValue && date.Value < DateTime.Now)
+                {
+                    actions.Add(new ProjectActionItemModel()
+                    {
+                        ActionType = ProjectActionItemModel.ActionItemType.Date,
+                        Action = "The project start date has expired"
+                    });
+                }
+            }
+
+            // Build the model
+            if(actions.Count > 0)
+            {
+                result = new ProjectActionsModel() { ActionItems = actions };
+                var types = actions.Select(a => a.ActionType).Distinct().OrderBy(t => t).Select(t => actionTypeMap[t]).ToArray();
+                switch(types.Length)
+                {
+                    case 1:
+                        result.Summary = types[0];
+                        break;
+                    default:
+                        result.Summary = string.Join(", ", types, 0, types.Length - 1);
+                        result.Summary += " and " + types.Last();
+                        break;
+                }
+
+            }
+            return result;
+        }
+    }
 }

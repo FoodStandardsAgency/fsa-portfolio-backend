@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 using FSAPortfolio.WebAPI.App.Mapping.Projects;
+using FSAPortfolio.Entities;
 
 namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
 {
@@ -93,6 +94,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.ProjectId, o => o.MapFrom(s => s.Reservation.ProjectId))
                 .ForMember(d => d.Name, o => o.MapFrom(s => string.IsNullOrWhiteSpace(s.Name) ? s.Reservation.ProjectId : s.Name))
                 .ForMember(d => d.IsNew, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
+                .ForMember(d => d.Actions, o => o.MapFrom<ProjectActionsResolver>())
                 .ForMember(d => d.Deadline, o => o.MapFrom<ProjectIndexDateResolver>())
                 .ForMember(d => d.Priority, o => o.MapFrom<ProjectIndexPriorityResolver>())
                 ;

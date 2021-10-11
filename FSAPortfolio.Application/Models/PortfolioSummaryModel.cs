@@ -1,6 +1,7 @@
 ﻿using FSAPortfolio.Common;
 using FSAPortfolio.WebAPI.App;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -91,6 +92,9 @@ namespace FSAPortfolio.Application.Models
         [JsonProperty("new_flag")]
         public string IsNew { get; set; }
 
+        [JsonProperty("actions")]
+        public ProjectActionsModel Actions { get; set; }
+
         [JsonProperty("date")]
         public ProjectDateIndexModel Deadline { get; set; }
 
@@ -116,4 +120,27 @@ namespace FSAPortfolio.Application.Models
         public string Value { get; set; }
 
     }
+
+    public class ProjectActionsModel
+    {
+        [JsonProperty("summary")]
+        public string Summary { get; set; }
+
+        [JsonProperty("items")]
+        public IEnumerable<ProjectActionItemModel> ActionItems { get; set; }
+    }
+
+    public class ProjectActionItemModel
+    {
+        public enum ActionItemType
+        {
+            Update,
+            Date
+        }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public ActionItemType ActionType { get; set; }
+        public string Action { get; set; }
+    }
+
 }
