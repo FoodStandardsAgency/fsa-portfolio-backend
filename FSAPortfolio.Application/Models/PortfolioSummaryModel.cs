@@ -52,6 +52,8 @@ namespace FSAPortfolio.Application.Models
         [JsonProperty("phases")]
         public IEnumerable<PhaseProjectsModel> PhaseProjects { get; set; }
 
+        [JsonProperty("actions")]
+        public bool Actions { get; set; }
     }
 
     public class PhaseSummaryModel
