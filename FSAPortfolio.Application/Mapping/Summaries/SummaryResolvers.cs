@@ -404,6 +404,15 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                         Action = "The project start date has expired"
                     });
                 }
+                else
+                {
+                    // No start date provided
+                    actions.Add(new ProjectActionItemModel()
+                    {
+                        ActionType = ProjectActionItemModel.ActionItemType.Date,
+                        Action = "The project has no start date"
+                    });
+                }
             }
 
             // Build the model
