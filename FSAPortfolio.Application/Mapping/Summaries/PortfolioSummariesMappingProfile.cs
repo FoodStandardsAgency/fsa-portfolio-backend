@@ -44,7 +44,11 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
                 .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByUserCategoryResolver>())
-                .ForMember(d => d.Actions, o => o.MapFrom(s => s.CategoryType == ProjectUserCategoryType.Lead))
+                .ForMember(d => d.Actions, o => o.MapFrom(s => 
+                    s.CategoryType == ProjectUserCategoryType.Lead ||
+                    s.CategoryType == ProjectUserCategoryType.Contact1 ||
+                    s.CategoryType == ProjectUserCategoryType.Contact2 ||
+                    s.CategoryType == ProjectUserCategoryType.Contact3))
                 ;
 
             CreateMap<PriorityGroup, ProjectSummaryModel>()
