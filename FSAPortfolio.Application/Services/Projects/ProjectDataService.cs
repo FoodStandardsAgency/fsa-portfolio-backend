@@ -91,7 +91,7 @@ namespace FSAPortfolio.Application.Services.Projects
                 Config = PortfolioMapper.GetProjectLabelConfigModel(config, includedOnly: true),
                 Projects = PortfolioMapper.ExportMapper.Map<IEnumerable<ProjectExportModel>>(projects,
                 opts => {
-                    opts.Items[ExportUpdateTextResolver.OnKey] = false;
+                    opts.Items[ExportUpdateTextResolver.OnKey] = true;
                 })
             };
             return result;
