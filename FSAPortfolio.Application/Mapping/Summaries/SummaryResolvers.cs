@@ -354,7 +354,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                 }
 
                 // Check if end dates are empty or have expired 
-                var endDate = source.ExpectedEndDate?.Date;
+                var endDate = source.ActualEndDate?.Date ?? source.ExpectedEndDate?.Date;
                 if (!endDate.HasValue)
                 {
                     actions.Add(new ProjectActionItemModel()

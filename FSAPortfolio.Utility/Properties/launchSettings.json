@@ -2,7 +2,7 @@
   "profiles": {
     "FSAPortfolio.Utility": {
       "commandName": "Project",
-      "commandLineArgs": "azlogs --days 3"
+      "commandLineArgs": "azlogs --today --env TEST"
     }
   }
 }

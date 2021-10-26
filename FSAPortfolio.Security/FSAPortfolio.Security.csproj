@@ -58,6 +58,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FSAPortfolio.Common\FSAPortfolio.Common.csproj">
+      <Project>{c57b446e-77de-4a79-87c3-523ec2e8a9f7}</Project>
+      <Name>FSAPortfolio.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FSAPortfolio.Entites\FSAPortfolio.Entities.csproj">
       <Project>{d5026ba6-1eaf-43a5-8df0-1a560dba2460}</Project>
       <Name>FSAPortfolio.Entities</Name>

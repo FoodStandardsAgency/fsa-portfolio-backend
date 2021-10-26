@@ -44,6 +44,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestScripts", "TestScripts"
 		TestScripts\getPortfolioUpdates.sh = TestScripts\getPortfolioUpdates.sh
 		TestScripts\getProjectForEdit.sh = TestScripts\getProjectForEdit.sh
 		TestScripts\getProjectSummary.sh = TestScripts\getProjectSummary.sh
+		TestScripts\getProjectSummaryForUser.sh = TestScripts\getProjectSummaryForUser.sh
 		TestScripts\getToken.sh = TestScripts\getToken.sh
 		TestScripts\setSecrets.sh = TestScripts\setSecrets.sh
 	EndProjectSection
