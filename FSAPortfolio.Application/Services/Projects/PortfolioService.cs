@@ -81,6 +81,7 @@ namespace FSAPortfolio.Application.Services.Projects
             }
             else
             {
+                AppLog.TraceWarning($"Request rejected due to permissions");
                 throw new HttpResponseException(HttpStatusCode.Forbidden);
             }
 

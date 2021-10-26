@@ -1,4 +1,9 @@
-﻿Version 0.1.10 - Released 22/07/2021
+﻿Version 0.1.11 - Pending
+========================
+- Added flags for overdue updates and incomplete project planning dates
+- Include latest update in exported projects
+
+Version 0.1.10 - Released 22/07/2021
 ====================================
 - Added diagnostics logging
 - Added dependency injection using Unity

@@ -343,7 +343,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                 }
 
                 // Check if phase end date is in past (ignore if not set)
-                var phaseEnd = source.LatestUpdate.ExpectedCurrentPhaseEnd.Date;
+                var phaseEnd = source.LatestUpdate?.ExpectedCurrentPhaseEnd?.Date;
                 if (phaseEnd.HasValue && phaseEnd.Value < DateTime.Now)
                 {
                     actions.Add(new ProjectActionItemModel()
@@ -354,7 +354,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                 }
 
                 // Check if end dates are empty or have expired 
-                var endDate = source.ExpectedEndDate.Date;
+                var endDate = source.ExpectedEndDate?.Date;
                 if (!endDate.HasValue)
                 {
                     actions.Add(new ProjectActionItemModel()
@@ -373,7 +373,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                 }
 
                 // Check if hard deadline expired 
-                var deadline = source.HardEndDate.Date;
+                var deadline = source.HardEndDate?.Date;
                 if (deadline.HasValue && deadline.Value < DateTime.Now)
                 {
                     actions.Add(new ProjectActionItemModel()
