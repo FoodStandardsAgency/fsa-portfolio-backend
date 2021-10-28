@@ -1,5 +1,5 @@
-﻿Version 0.1.11 - Pending
-========================
+﻿Version 0.1.11 - Release 28/10/2021
+===================================
 - Added flags for overdue updates and incomplete project planning dates
 - Include latest update in exported projects
 
