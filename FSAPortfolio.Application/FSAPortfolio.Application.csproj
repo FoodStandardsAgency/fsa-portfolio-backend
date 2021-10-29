@@ -168,6 +168,7 @@
     <Compile Include="DTO\GetProjectDTO.cs" />
     <Compile Include="DTO\GetProjectExportDTO.cs" />
     <Compile Include="DTO\GetProjectQueryDTO.cs" />
+    <Compile Include="Mapping\Summaries\ProjectActionsResolver.cs" />
     <Compile Include="Models\Archive.cs" />
     <Compile Include="Models\IdentityResponseModel.cs" />
     <Compile Include="Models\IJsonProperties.cs" />
