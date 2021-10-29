@@ -344,13 +344,16 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
 
                 // Check if phase end date is in past (ignore if not set)
                 var phaseEnd = source.LatestUpdate?.ExpectedCurrentPhaseEnd?.Date;
-                if (phaseEnd.HasValue && phaseEnd.Value < DateTime.Now)
+                if (phaseEnd.HasValue)
                 {
-                    actions.Add(new ProjectActionItemModel()
+                    if (phaseEnd.Value < DateTime.Now)
                     {
-                        ActionType = ProjectActionItemModel.ActionItemType.Date,
-                        Action = "The current phase end date has expired"
-                    });
+                        actions.Add(new ProjectActionItemModel()
+                        {
+                            ActionType = ProjectActionItemModel.ActionItemType.Date,
+                            Action = "The current phase end date has expired"
+                        });
+                    }
                 }
 
                 // Check if end dates are empty or have expired 
@@ -374,13 +377,16 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
 
                 // Check if hard deadline expired 
                 var deadline = source.HardEndDate?.Date;
-                if (deadline.HasValue && deadline.Value < DateTime.Now)
+                if (deadline.HasValue)
                 {
-                    actions.Add(new ProjectActionItemModel()
+                    if (deadline.Value < DateTime.Now)
                     {
-                        ActionType = ProjectActionItemModel.ActionItemType.Date,
-                        Action = "The project hard deadline has expired"
-                    });
+                        actions.Add(new ProjectActionItemModel()
+                        {
+                            ActionType = ProjectActionItemModel.ActionItemType.Date,
+                            Action = "The project hard deadline has expired"
+                        });
+                    }
                 }
             }
 
@@ -396,13 +402,16 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                             : source.StartDate.Date)
                     : source.ActualStartDate.Date;
 
-                if(date.HasValue && date.Value < DateTime.Now)
+                if (date.HasValue)
                 {
-                    actions.Add(new ProjectActionItemModel()
+                    if (date.Value < DateTime.Now)
                     {
-                        ActionType = ProjectActionItemModel.ActionItemType.Date,
-                        Action = "The project start date has expired"
-                    });
+                        actions.Add(new ProjectActionItemModel()
+                        {
+                            ActionType = ProjectActionItemModel.ActionItemType.Date,
+                            Action = "The project start date has expired"
+                        });
+                    }
                 }
                 else
                 {
