@@ -18,6 +18,8 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
         public const string ProjectCompletionExpiredAction = "The project completion date has expired";
         public const string ProjectHardDeadlineExpiredAction = "The project hard deadline has expired";
 
+        public const string CheckBacklogKey = "CheckBacklog";
+
         private static Dictionary<ProjectActionItemModel.ActionItemType, string> actionTypeMap 
             = new Dictionary<ProjectActionItemModel.ActionItemType, string>() 
             {
@@ -32,7 +34,75 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
 
             Func<string[], bool> isInPhases = (a) => { return a.Contains(source.LatestUpdate.Phase.ViewKey); };
 
-            if(isInPhases(PortfolioSettings.ProjectActivePhaseViewKeys))
+
+            CheckActivePhases(source, actions, isInPhases);
+
+            // Check if start dates have expired
+            if (context.Items != null && context.Items.TryGetValue(CheckBacklogKey, out object checkBacklogValue) && (bool)checkBacklogValue)
+            {
+                CheckBacklogPhase(source, actions, isInPhases);
+            }
+
+            // Build the model
+            if (actions.Count > 0)
+            {
+                result = new ProjectActionsModel() { ActionItems = actions };
+                var types = actions.Select(a => a.ActionType).Distinct().OrderBy(t => t).Select(t => actionTypeMap[t]).ToArray();
+                switch (types.Length)
+                {
+                    case 1:
+                        result.Summary = types[0];
+                        break;
+                    default:
+                        result.Summary = string.Join(", ", types, 0, types.Length - 1);
+                        result.Summary += " and " + types.Last();
+                        break;
+                }
+
+            }
+            return result;
+        }
+
+        private static void CheckBacklogPhase(Project source, List<ProjectActionItemModel> actions, Func<string[], bool> isInPhases)
+        {
+            if (isInPhases(PortfolioSettings.ProjectBacklogPhaseViewKeys))
+            {
+                // Get the latest out of the two start dates
+                Func<ProjectDate, bool> dateHasValue = (d) => d?.Date != null;
+                var date = dateHasValue(source.StartDate) ?
+                        (dateHasValue(source.ActualStartDate) ?
+                            (source.StartDate.Date.Value > source.ActualStartDate.Date.Value ?
+                                source.StartDate.Date
+                                : source.ActualStartDate.Date)
+                            : source.StartDate?.Date)
+                    : source.ActualStartDate?.Date;
+
+                if (date.HasValue)
+                {
+                    if (date.Value < DateTime.Today)
+                    {
+                        actions.Add(new ProjectActionItemModel()
+                        {
+                            ActionType = ProjectActionItemModel.ActionItemType.Date,
+                            Action = StartDateExpiredAction
+                        });
+                    }
+                }
+                else
+                {
+                    // No start date provided
+                    actions.Add(new ProjectActionItemModel()
+                    {
+                        ActionType = ProjectActionItemModel.ActionItemType.Date,
+                        Action = NoStartDateAction
+                    });
+                }
+            }
+        }
+
+        private static void CheckActivePhases(Project source, List<ProjectActionItemModel> actions, Func<string[], bool> isInPhases)
+        {
+            if (isInPhases(PortfolioSettings.ProjectActivePhaseViewKeys))
             {
                 // Check if updates are overdue
                 if ((DateTime.Now - source.LatestUpdate.Timestamp).TotalDays > PortfolioSettings.ProjectUpdateOverdueDays)
@@ -91,60 +161,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
                     }
                 }
             }
-
-            // Check if start dates have expired
-            if (isInPhases(PortfolioSettings.ProjectBacklogPhaseViewKeys))
-            {
-                // Get the latest out of the two start dates
-                Func<ProjectDate, bool> dateHasValue = (d) => d?.Date != null;
-                var date = dateHasValue(source.StartDate) ?
-                        (dateHasValue(source.ActualStartDate) ?
-                            (source.StartDate.Date.Value > source.ActualStartDate.Date.Value ?
-                                source.StartDate.Date
-                                : source.ActualStartDate.Date)
-                            : source.StartDate?.Date)
-                    : source.ActualStartDate?.Date;
-
-                if (date.HasValue)
-                {
-                    if (date.Value < DateTime.Today)
-                    {
-                        actions.Add(new ProjectActionItemModel()
-                        {
-                            ActionType = ProjectActionItemModel.ActionItemType.Date,
-                            Action = StartDateExpiredAction
-                        });
-                    }
-                }
-                else
-                {
-                    // No start date provided
-                    actions.Add(new ProjectActionItemModel()
-                    {
-                        ActionType = ProjectActionItemModel.ActionItemType.Date,
-                        Action = NoStartDateAction
-                    });
-                }
-            }
-
-            // Build the model
-            if(actions.Count > 0)
-            {
-                result = new ProjectActionsModel() { ActionItems = actions };
-                var types = actions.Select(a => a.ActionType).Distinct().OrderBy(t => t).Select(t => actionTypeMap[t]).ToArray();
-                switch(types.Length)
-                {
-                    case 1:
-                        result.Summary = types[0];
-                        break;
-                    default:
-                        result.Summary = string.Join(", ", types, 0, types.Length - 1);
-                        result.Summary += " and " + types.Last();
-                        break;
-                }
-
-            }
-            return result;
         }
     }
 }

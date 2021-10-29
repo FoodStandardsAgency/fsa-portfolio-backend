@@ -17,11 +17,31 @@ namespace FSAPortfolio.UnitTests.SummaryTests
     [TestClass]
     public class ProjectFlaggingTests
     {
+        private static bool checkRuleB = false;
+        static ProjectFlaggingTests()
+        {
+            PortfolioMapper.Configure();
+        }
+
+        // The mapping function
+        Func<Project, ProjectIndexModel> map = (p) =>
+        {
+            return PortfolioMapper.ConfigMapper.Map<ProjectIndexModel>(p, opt => {
+                opt.Items[PortfolioSummaryResolver.SummaryTypeKey] = PortfolioSummaryModel.ByUser;
+                opt.Items[ProjectActionsResolver.CheckBacklogKey] = checkRuleB; // Controls rule B
+            });
+        };
+
+        // Check actions 
+        Func<ProjectIndexModel, ProjectActionItemModel.ActionItemType, string, ProjectActionItemModel> getAction = (p, t, a) => {
+            return p.Actions?.ActionItems?.SingleOrDefault(i => i.ActionType == t && i.Action == a);
+        };
+
         [TestMethod]
-        public void ProjectFlaggingMappingTest()
+        public void ProjectFlaggingMappingTest_RuleA()
         {
             ProjectIndexModel result;
-            var project = new Project()
+            Project project = new Project()
             {
                 LatestUpdate = new ProjectUpdateItem()
                 {
@@ -30,20 +50,6 @@ namespace FSAPortfolio.UnitTests.SummaryTests
                         ViewKey = "phase1"
                     }
                 }
-            };
-            PortfolioMapper.Configure();
-
-            // The mapping function
-            Func<Project, ProjectIndexModel> map = (p) =>
-            {
-                return PortfolioMapper.ConfigMapper.Map<ProjectIndexModel>(p, opt => {
-                    opt.Items[PortfolioSummaryResolver.SummaryTypeKey] = PortfolioSummaryModel.ByUser;
-                });
-            };
-
-            // Check actions 
-            Func<ProjectIndexModel, ProjectActionItemModel.ActionItemType, string, ProjectActionItemModel> getAction = (p, t, a) => {
-                return p.Actions?.ActionItems?.SingleOrDefault(i => i.ActionType == t && i.Action == a);
             };
             Action<string, ProjectActionItemModel.ActionItemType, string> assertAction = (phase, t, a) => {
                 project.LatestUpdate.Phase.ViewKey = phase;
@@ -56,11 +62,6 @@ namespace FSAPortfolio.UnitTests.SummaryTests
                 Assert.IsNull(getAction(result, t, a));
             };
 
-
-            // No dates
-            result = map(project);
-            Assert.IsNotNull(getAction(result, ProjectActionItemModel.ActionItemType.Update, ProjectActionsResolver.UpdateOverdueAction));
-            Assert.IsNotNull(getAction(result, ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.ProjectEndDateMissingAction));
 
             // A.	Project is in ‘discovery, alpha or beta’ and latest update is older than 14 days
             project.LatestUpdate.Timestamp = DateTime.Today.Subtract(TimeSpan.FromDays(13));
@@ -78,6 +79,32 @@ namespace FSAPortfolio.UnitTests.SummaryTests
             assertAction("phase3", ProjectActionItemModel.ActionItemType.Update, ProjectActionsResolver.UpdateOverdueAction);
             assertNoAction("phase4", ProjectActionItemModel.ActionItemType.Update, ProjectActionsResolver.UpdateOverdueAction);
             assertNoAction("phase5", ProjectActionItemModel.ActionItemType.Update, ProjectActionsResolver.UpdateOverdueAction);
+        }
+
+        [TestMethod]
+        public void ProjectFlaggingMappingTest_RuleB()
+        {
+            ProjectIndexModel result;
+            Project project = new Project()
+            {
+                LatestUpdate = new ProjectUpdateItem()
+                {
+                    Phase = new ProjectPhase()
+                    {
+                        ViewKey = "phase1"
+                    }
+                }
+            };
+            Action<string, ProjectActionItemModel.ActionItemType, string> assertAction = (phase, t, a) => {
+                project.LatestUpdate.Phase.ViewKey = phase;
+                result = map(project);
+                Assert.IsNotNull(getAction(result, t, a));
+            };
+            Action<string, ProjectActionItemModel.ActionItemType, string> assertNoAction = (phase, t, a) => {
+                project.LatestUpdate.Phase.ViewKey = phase;
+                result = map(project);
+                Assert.IsNull(getAction(result, t, a));
+            };
 
             // B.	Project is in ‘backlog’ and the greater of intended start date or start date is in the past, or intended start date or start date are not provided
             project.ActualStartDate = null;
@@ -85,7 +112,14 @@ namespace FSAPortfolio.UnitTests.SummaryTests
             assertNoAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
             assertNoAction("phase1", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
             project.StartDate.Date = DateTime.Today.Subtract(TimeSpan.FromDays(1));
-            assertAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
+            if(checkRuleB)
+            {
+                assertAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
+            }
+            else
+            {
+                assertNoAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
+            }
             assertNoAction("phase1", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
 
             project.StartDate.Date = null;
@@ -93,11 +127,18 @@ namespace FSAPortfolio.UnitTests.SummaryTests
             assertNoAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
             assertNoAction("phase1", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
             project.ActualStartDate.Date = DateTime.Today.Subtract(TimeSpan.FromDays(1));
-            assertAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
+            if (checkRuleB)
+            {
+                assertAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
+            }
+            else
+            {
+                assertNoAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
+            }
             assertNoAction("phase1", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
 
             // Both dates set - current
-            project.StartDate = new ProjectDate() { Date = DateTime.Today }; 
+            project.StartDate = new ProjectDate() { Date = DateTime.Today };
             project.ActualStartDate = new ProjectDate() { Date = DateTime.Today };
             assertNoAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
 
@@ -107,13 +148,55 @@ namespace FSAPortfolio.UnitTests.SummaryTests
 
             // Both dates set - both in past
             project.StartDate.Date = DateTime.Today.Subtract(TimeSpan.FromDays(2));
-            assertAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
+            if (checkRuleB)
+            {
+                assertAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
+            }
+            else
+            {
+                assertNoAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.StartDateExpiredAction);
+            }
 
             // Dates not provided
             project.ActualStartDate.Date = null;
             project.StartDate.Date = null;
-            assertAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.NoStartDateAction);
+            if (checkRuleB)
+            {
+                assertAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.NoStartDateAction);
+            }
+            else
+            {
+                assertNoAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.NoStartDateAction);
+            }
             assertNoAction("phase1", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.NoStartDateAction);
+
+        }
+
+        [TestMethod]
+        public void ProjectFlaggingMappingTest_RuleC()
+        {
+            ProjectIndexModel result;
+            Project project = new Project()
+            {
+                LatestUpdate = new ProjectUpdateItem()
+                {
+                    Phase = new ProjectPhase()
+                    {
+                        ViewKey = "phase1"
+                    }
+                }
+            };
+            Action<string, ProjectActionItemModel.ActionItemType, string> assertAction = (phase, t, a) => {
+                project.LatestUpdate.Phase.ViewKey = phase;
+                result = map(project);
+                Assert.IsNotNull(getAction(result, t, a));
+            };
+            Action<string, ProjectActionItemModel.ActionItemType, string> assertNoAction = (phase, t, a) => {
+                project.LatestUpdate.Phase.ViewKey = phase;
+                result = map(project);
+                Assert.IsNull(getAction(result, t, a));
+            };
+
 
             // C.	Project is in ‘discovery, alpha or beta’ and phase completion is in the past, or phase completion date in not provided
             // Current
@@ -135,6 +218,43 @@ namespace FSAPortfolio.UnitTests.SummaryTests
             assertNoAction("phase5", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.PhaseCompletionExpiredAction);
 
             // Not provided - this is being cut from spec
+            project.LatestUpdate.ExpectedCurrentPhaseEnd = new ProjectDate() { Date = null };
+            assertNoAction("phase0", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.PhaseCompletionExpiredAction);
+            assertNoAction("phase1", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.PhaseCompletionExpiredAction);
+            assertNoAction("phase2", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.PhaseCompletionExpiredAction);
+            assertNoAction("phase3", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.PhaseCompletionExpiredAction);
+            assertNoAction("phase4", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.PhaseCompletionExpiredAction);
+            assertNoAction("phase5", ProjectActionItemModel.ActionItemType.Date, ProjectActionsResolver.PhaseCompletionExpiredAction);
+
+
+
+        }
+
+        [TestMethod]
+        public void ProjectFlaggingMappingTest_RuleD()
+        {
+            ProjectIndexModel result;
+            Project project = new Project()
+            {
+                LatestUpdate = new ProjectUpdateItem()
+                {
+                    Phase = new ProjectPhase()
+                    {
+                        ViewKey = "phase1"
+                    }
+                }
+            };
+            Action<string, ProjectActionItemModel.ActionItemType, string> assertAction = (phase, t, a) => {
+                project.LatestUpdate.Phase.ViewKey = phase;
+                result = map(project);
+                Assert.IsNotNull(getAction(result, t, a));
+            };
+            Action<string, ProjectActionItemModel.ActionItemType, string> assertNoAction = (phase, t, a) => {
+                project.LatestUpdate.Phase.ViewKey = phase;
+                result = map(project);
+                Assert.IsNull(getAction(result, t, a));
+            };
+
 
             // D.	Project is in ‘discovery, alpha or beta’ and project completion or hard deadline is in the past, or end date is not provided (hard deadline is not needed for all projects).
             // Current

@@ -77,6 +77,7 @@ namespace FSAPortfolio.Application.Services.Projects
                         opt.Items[PortfolioPersonResolver.PersonKey] = userFilter;
                         opt.Items[nameof(PortfolioConfiguration)] = portfolio.Configuration;
                         opt.Items[PortfolioSummaryResolver.SummaryTypeKey] = summaryType;
+                        opt.Items[ProjectActionsResolver.CheckBacklogKey] = false;
                     });
             }
             else
