@@ -1,4 +1,8 @@
-﻿Version 0.1.11 - Release 28/10/2021
+﻿Version 0.1.12 - Released 04/11/2021
+====================================
+- No flagging of backlog projects
+
+Version 0.1.11 - Released 28/10/2021
 ===================================
 - Added flags for overdue updates and incomplete project planning dates
 - Include latest update in exported projects
