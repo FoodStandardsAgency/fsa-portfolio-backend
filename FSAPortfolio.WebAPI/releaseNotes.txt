@@ -1,4 +1,8 @@
-﻿Version 0.1.12 - Released 04/11/2021
+﻿Version 0.1.13 - Release pending
+====================================
+- Extra error logging for AD person lookups
+
+Version 0.1.12 - Released 04/11/2021
 ====================================
 - No flagging of backlog projects
 
