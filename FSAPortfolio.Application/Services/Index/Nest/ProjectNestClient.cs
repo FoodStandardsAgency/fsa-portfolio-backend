@@ -31,7 +31,7 @@ namespace FSAPortfolio.Application.Services.Index.Nest
 
             using(HttpClient client = new HttpClient())
             {
-                var response = await client.GetAsync("https://10.30.2.4:9200/_cluster/health");
+                var response = await client.GetAsync($"{indexServerUri.Value}/_cluster/health");
                 return response;
             }
         }
