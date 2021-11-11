@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,8 +26,14 @@ namespace FSAPortfolio.Application.Services.Index.Nest
 
         public async Task<object> GetStatusAsync()
         {
-            var elasticClient = new ElasticClient(getConnectionSettings(indexServerUri.Value));
-            return await elasticClient.Cluster.HealthAsync();
+            //var elasticClient = new ElasticClient(getConnectionSettings(indexServerUri.Value));
+            //return await elasticClient.Cluster.HealthAsync();
+
+            using(HttpClient client = new HttpClient())
+            {
+                var response = await client.GetAsync("https://10.30.2.4:9200/_cluster/health");
+                return response;
+            }
         }
 
         public async Task<CreateIndexResponse> CreateProjectIndexAsync()
