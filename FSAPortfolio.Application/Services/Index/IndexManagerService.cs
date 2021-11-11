@@ -34,15 +34,14 @@ namespace FSAPortfolio.Application.Services.Index
 
         public bool OperationInProgress => operationInProgress;
 
-        public async Task<IndexOperationResult> CreateIndexAsync()
+        public async Task<object> CreateIndexAsync()
         {
             //return ExecuteIndexOperation(async (ct) => {
             //    await nestClient.CreateProjectIndexAsync();
             //    await IndexAllProjectsImplAsync();
             //});
-            await nestClient.CreateProjectIndexAsync();
-            await IndexAllProjectsImplAsync();
-            return new IndexOperationResult() { Message = "Index created" };
+            return await nestClient.CreateProjectIndexAsync();
+            //await IndexAllProjectsImplAsync();
         }
 
         public async Task<IndexOperationResult> RebuildIndexAsync()

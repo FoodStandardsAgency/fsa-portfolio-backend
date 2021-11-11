@@ -4,8 +4,8 @@ namespace FSAPortfolio.Application.Services.Index
 {
     public interface IIndexService
     {
-        Task IndexProjectAsync(string projectId);
-        Task DeleteProjectAsync(string projectId);
-        Task ReindexProjectAsync(string projectId);
+        Task<object> IndexProjectAsync(string projectId);
+        Task<object> DeleteProjectAsync(string projectId);
+        Task<object> ReindexProjectAsync(string projectId);
     }
 }

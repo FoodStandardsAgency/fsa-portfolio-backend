@@ -29,17 +29,18 @@ namespace FSAPortfolio.Application.Services.Index.Nest
             return await elasticClient.Cluster.HealthAsync();
         }
 
-        public async Task CreateProjectIndexAsync()
+        public async Task<CreateIndexResponse> CreateProjectIndexAsync()
         {
             var elasticClient = new ElasticClient(getConnectionSettings(indexServerUri.Value));
             await elasticClient.Indices.DeleteAsync("projects");
-            await elasticClient.Indices.CreateAsync("projects", getIndexDescriptor());
+            return await elasticClient.Indices.CreateAsync("projects", getIndexDescriptor());
         }
 
-        public async Task IndexProjectAsync(ProjectSearchIndexModel project)
+        public async Task<IndexResponse> IndexProjectAsync(ProjectSearchIndexModel project)
         {
             var elasticClient = new ElasticClient(getConnectionSettings(indexServerUri.Value));
             var response = await elasticClient.IndexDocumentAsync(project);
+            return response;
         }
 
         public async Task<IEnumerable<ProjectSearchIndexModel>> SearchProjectIndex(string term)
@@ -58,10 +59,11 @@ namespace FSAPortfolio.Application.Services.Index.Nest
             return searchResponse.Documents;
         }
 
-        internal async Task DeleteProjectAsync(string projectId)
+        internal async Task<DeleteResponse> DeleteProjectAsync(string projectId)
         {
             var elasticClient = new ElasticClient(getConnectionSettings(indexServerUri.Value));
-            var deleteResponse = elasticClient.DeleteAsync<ProjectSearchIndexModel>(projectId);
+            var deleteResponse = await elasticClient.DeleteAsync<ProjectSearchIndexModel>(projectId);
+            return deleteResponse;
         }
 
         private Func<CreateIndexDescriptor, ICreateIndexRequest> getIndexDescriptor()

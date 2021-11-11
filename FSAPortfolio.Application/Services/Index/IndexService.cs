@@ -27,34 +27,33 @@ namespace FSAPortfolio.Application.Services.Index
             this.lazyPortfolioContext = lazyPortfolioContext;
         }
 
-        public async Task DeleteProjectAsync(string projectId)
+        public async Task<object> DeleteProjectAsync(string projectId)
         {
-            await nestClient.DeleteProjectAsync(projectId);
+            return await nestClient.DeleteProjectAsync(projectId);
         }
-        public async Task ReindexProjectAsync(string projectId)
+        public async Task<object> ReindexProjectAsync(string projectId)
         {
-            await IndexProjectImplAsync(projectId);
-        }
-
-        public async Task IndexProjectAsync(string projectId)
-        {
-            await IndexProjectImplAsync(projectId);
+            return await IndexProjectImplAsync(projectId);
         }
 
-        private async Task<bool> IndexProjectImplAsync(string projectId)
+        public async Task<object> IndexProjectAsync(string projectId)
         {
-            bool projectExists = false;
+            return await IndexProjectImplAsync(projectId);
+        }
+
+        private async Task<object> IndexProjectImplAsync(string projectId)
+        {
+            object response = null;
             var project = await GetProjectAsync(projectId);
             if (project != null)
             {
-                projectExists = true;
-                await nestClient.IndexProjectAsync(project);
+                response = await nestClient.IndexProjectAsync(project);
             }
             else
             {
-                await nestClient.DeleteProjectAsync(projectId);
+                response = await nestClient.DeleteProjectAsync(projectId);
             }
-            return projectExists;
+            return response;
         }
 
         private async Task<ProjectSearchIndexModel> GetProjectAsync(string projectId)
