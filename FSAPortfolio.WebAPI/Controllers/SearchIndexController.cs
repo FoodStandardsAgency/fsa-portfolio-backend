@@ -46,6 +46,11 @@ namespace FSAPortfolio.WebAPI.Controllers
             return await searchService.SearchProjectIndexAsync(term.term);
         }
 
+        [HttpGet, Route("api/SearchIndex/health")]
+        public async Task<object> GetIndexHealthAsync()
+        {
+            return await indexManagerService.GetHealthAsync();
+        }
     }
 
     public class SearchTerm

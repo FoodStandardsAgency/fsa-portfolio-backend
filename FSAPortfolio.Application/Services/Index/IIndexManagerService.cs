@@ -6,5 +6,6 @@ namespace FSAPortfolio.Application.Services.Index
     {
         Task<IndexOperationResult> CreateIndexAsync();
         Task<IndexOperationResult> RebuildIndexAsync();
+        Task<object> GetHealthAsync();
     }
 }

@@ -48,6 +48,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestScripts", "TestScripts"
 		TestScripts\getProjectSummaryForUser.sh = TestScripts\getProjectSummaryForUser.sh
 		TestScripts\getToken.sh = TestScripts\getToken.sh
 		TestScripts\indexCreate.sh = TestScripts\indexCreate.sh
+		TestScripts\indexHealth.sh = TestScripts\indexHealth.sh
 		TestScripts\indexProject.sh = TestScripts\indexProject.sh
 		TestScripts\indexRebuild.sh = TestScripts\indexRebuild.sh
 		TestScripts\indexSearch.sh = TestScripts\indexSearch.sh

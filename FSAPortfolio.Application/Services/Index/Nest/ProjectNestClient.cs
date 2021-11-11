@@ -23,6 +23,12 @@ namespace FSAPortfolio.Application.Services.Index.Nest
             indexServerUri = new Lazy<string>(() => ConfigurationManager.AppSettings[$"elasticsearch.{nameof(indexServerUri)}"] ?? "http://localhost:9200");
         }
 
+        public async Task<object> GetStatusAsync()
+        {
+            var elasticClient = new ElasticClient(getConnectionSettings(indexServerUri.Value));
+            return await elasticClient.Cluster.HealthAsync();
+        }
+
         public async Task CreateProjectIndexAsync()
         {
             var elasticClient = new ElasticClient(getConnectionSettings(indexServerUri.Value));

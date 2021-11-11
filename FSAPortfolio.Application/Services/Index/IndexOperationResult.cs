@@ -10,4 +10,5 @@ namespace FSAPortfolio.Application.Services.Index
     {
         public string Message { get; set; }
     }
+
 }

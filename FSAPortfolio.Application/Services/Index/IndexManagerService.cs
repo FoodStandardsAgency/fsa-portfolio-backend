@@ -145,7 +145,10 @@ namespace FSAPortfolio.Application.Services.Index
             return result;
         }
 
-
+        public Task<object> GetHealthAsync()
+        {
+            return nestClient.GetStatusAsync();
+        }
     }
 
 }
