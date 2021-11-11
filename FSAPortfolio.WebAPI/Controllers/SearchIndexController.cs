@@ -29,15 +29,15 @@ namespace FSAPortfolio.WebAPI.Controllers
         }
 
         [HttpGet, Route("api/SearchIndex/create")]
-        public async Task CreateProjectIndexAsync()
+        public async Task<IndexOperationResult> CreateProjectIndexAsync()
         {
-            await indexManagerService.CreateIndexAsync();
+            return await indexManagerService.CreateIndexAsync();
         }
 
         [HttpGet, Route("api/SearchIndex/rebuild")]
-        public async Task RebuildProjectIndexAsync()
+        public async Task<IndexOperationResult> RebuildProjectIndexAsync()
         {
-            await indexManagerService.RebuildIndexAsync();
+            return await indexManagerService.RebuildIndexAsync();
         }
 
         [HttpPost, Route("api/SearchIndex/search")]

@@ -34,17 +34,20 @@ namespace FSAPortfolio.Application.Services.Index
 
         public bool OperationInProgress => operationInProgress;
 
-        public async Task CreateIndexAsync()
+        public async Task<IndexOperationResult> CreateIndexAsync()
         {
-            ExecuteIndexOperation(async (ct) => {
-                await nestClient.CreateProjectIndexAsync();
-                await IndexAllProjectsImplAsync();
-            });
+            //return ExecuteIndexOperation(async (ct) => {
+            //    await nestClient.CreateProjectIndexAsync();
+            //    await IndexAllProjectsImplAsync();
+            //});
+            await nestClient.CreateProjectIndexAsync();
+            await IndexAllProjectsImplAsync();
+            return new IndexOperationResult() { Message = "Index created" };
         }
 
-        public async Task RebuildIndexAsync()
+        public async Task<IndexOperationResult> RebuildIndexAsync()
         {
-            ExecuteIndexOperation(async (ct) => {
+            return ExecuteIndexOperation(async (ct) => {
                 await IndexAllProjectsImplAsync();
             });
         }
@@ -77,7 +80,7 @@ namespace FSAPortfolio.Application.Services.Index
         }
 
 
-        private bool ExecuteIndexOperation(Func<CancellationToken, Task> operation)
+        private IndexOperationResult ExecuteIndexOperation(Func<CancellationToken, Task> operation)
         {
             bool operationQueued = false;
             if (!operationInProgress) 
@@ -110,7 +113,7 @@ namespace FSAPortfolio.Application.Services.Index
                     }
                 }
             }
-            return operationQueued;
+            return new IndexOperationResult { Message = operationQueued ? "Index Operation Queued" : "Index Busy" };
         }
 
         private async Task<ProjectSearchIndexModel> GetProjectAsync(string projectId)
