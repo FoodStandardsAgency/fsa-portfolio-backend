@@ -1,0 +1,2 @@
+#curl -G "$apiUrl/Portfolios/$apiPortfolioKey/summary" --data-urlencode "user=sally.barber@food.gov.uk" -X GET -H "AdminAPIKey: $apiKeyAdmin" -H "Authorization: Bearer $access_token" 
+curl -G "$apiUrl/Portfolios/$apiPortfolioKey/summary" --data-urlencode "user=sally.barber@food.gov.uk" -X GET -H "APIKey: $apiKey" -H "Authorization: Bearer $access_token" > "${outputDir}/${apiPortfolioKey}_summary.json"

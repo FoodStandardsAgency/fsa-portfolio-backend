@@ -1,4 +1,5 @@
-﻿using FSAPortfolio.Entities.Users;
+﻿using FSAPortfolio.Common.Logging;
+using FSAPortfolio.Entities.Users;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -31,6 +32,7 @@ namespace FSAPortfolio.Security.ApiKey
 
             if (!validKey)
             {
+                AppLog.TraceWarning("Request rejected: no valid API key");
                 return httpRequestMessage.CreateResponse(HttpStatusCode.Forbidden);
             }
             else

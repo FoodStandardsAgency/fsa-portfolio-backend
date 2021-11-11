@@ -177,6 +177,7 @@
     <Compile Include="DTO\GetProjectDTO.cs" />
     <Compile Include="DTO\GetProjectExportDTO.cs" />
     <Compile Include="DTO\GetProjectQueryDTO.cs" />
+    <Compile Include="Mapping\Summaries\ProjectActionsResolver.cs" />
     <Compile Include="Mapping\Indexing\ProjectIndexMappingProfile.cs" />
     <Compile Include="Models\Archive.cs" />
     <Compile Include="Models\IdentityResponseModel.cs" />

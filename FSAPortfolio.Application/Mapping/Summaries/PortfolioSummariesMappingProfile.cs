@@ -10,6 +10,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
 using FSAPortfolio.WebAPI.App.Mapping.Projects;
+using FSAPortfolio.Entities;
 
 namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
 {
@@ -35,6 +36,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
                 .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByCategoryResolver>())
+                .ForMember(d => d.Actions, o => o.MapFrom(s => false))
                 ;
 
             CreateMap<ProjectUserCategory, ProjectSummaryModel>()
@@ -42,6 +44,11 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
                 .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByUserCategoryResolver>())
+                .ForMember(d => d.Actions, o => o.MapFrom(s => 
+                    s.CategoryType == ProjectUserCategoryType.Lead ||
+                    s.CategoryType == ProjectUserCategoryType.Contact1 ||
+                    s.CategoryType == ProjectUserCategoryType.Contact2 ||
+                    s.CategoryType == ProjectUserCategoryType.Contact3))
                 ;
 
             CreateMap<PriorityGroup, ProjectSummaryModel>()
@@ -49,6 +56,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
                 .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByPriorityGroupResolver>())
+                .ForMember(d => d.Actions, o => o.MapFrom(s => false))
                 ;
 
             CreateMap<ProjectRAGStatus, ProjectSummaryModel>()
@@ -56,6 +64,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
                 .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByRAGResolver>())
+                .ForMember(d => d.Actions, o => o.MapFrom(s => false))
                 ;
 
             CreateMap<ProjectPhase, ProjectSummaryModel>()
@@ -63,6 +72,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
                 .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByPhaseResolver>())
+                .ForMember(d => d.Actions, o => o.MapFrom(s => false))
                 ;
 
             CreateMap<Team, ProjectSummaryModel>()
@@ -70,6 +80,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Order, o => o.MapFrom(s => s.Order))
                 .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByTeamResolver>())
+                .ForMember(d => d.Actions, o => o.MapFrom(s => false))
                 ;
 
             CreateMap<Person, ProjectSummaryModel>()
@@ -77,6 +88,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.DisplayName ?? ProjectTeamConstants.NotSetName))
                 .ForMember(d => d.Order, o => o.MapFrom(s => 0))
                 .ForMember(d => d.PhaseProjects, o => o.MapFrom<PhaseProjectsByTeamLeadResolver>())
+                .ForMember(d => d.Actions, o => o.MapFrom(s => false))
                 ;
 
 
@@ -93,6 +105,7 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
                 .ForMember(d => d.ProjectId, o => o.MapFrom(s => s.Reservation.ProjectId))
                 .ForMember(d => d.Name, o => o.MapFrom(s => string.IsNullOrWhiteSpace(s.Name) ? s.Reservation.ProjectId : s.Name))
                 .ForMember(d => d.IsNew, o => o.MapFrom(s => s.IsNew ? "Y" : "N"))
+                .ForMember(d => d.Actions, o => o.MapFrom<ProjectActionsResolver>())
                 .ForMember(d => d.Deadline, o => o.MapFrom<ProjectIndexDateResolver>())
                 .ForMember(d => d.Priority, o => o.MapFrom<ProjectIndexPriorityResolver>())
                 ;

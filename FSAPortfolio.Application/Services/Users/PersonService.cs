@@ -23,6 +23,7 @@ using System.Web.Http;
 using System.Text.RegularExpressions;
 using FSAPortfolio.Application.Services;
 using FSAPortfolio.Common;
+using FSAPortfolio.Common.Logging;
 
 namespace FSAPortfolio.WebAPI.App.Users
 {
@@ -160,84 +161,94 @@ namespace FSAPortfolio.WebAPI.App.Users
             Person person = null;
             if (!string.IsNullOrWhiteSpace(name))
             {
-                var context = ServiceContext.PortfolioContext;
-                MicrosoftGraphUserModel user = null;
-                person =
-                    context.People.Local.SingleOrDefault(p => p.ActiveDirectoryPrincipalName == name || p.Email == name) ??
-                    await context.People.SingleOrDefaultAsync(p => p.ActiveDirectoryPrincipalName == name || p.Email == name);
-                if (person == null || person.ActiveDirectoryId == null)
+                try
                 {
-                    if (name.Contains("@"))
+                    var context = ServiceContext.PortfolioContext;
+                    MicrosoftGraphUserModel user = null;
+                    person =
+                        context.People.Local.SingleOrDefault(p => p.ActiveDirectoryPrincipalName == name || p.Email == name) ??
+                        await context.People.SingleOrDefaultAsync(p => p.ActiveDirectoryPrincipalName == name || p.Email == name);
+                    if (person == null || person.ActiveDirectoryId == null)
                     {
-                        user = await msgraphService.GetUserForPrincipalNameAsync(name);
-                    }
-                    else
-                    {
-                        var result = await msgraphService.GetUsersAsync(name);
-                        var users = result.value.Where(u => u.companyName == "Food Standards Agency" && u.department != null).ToList();
-                        if(users.Count == 1)
+                        if (name.Contains("@"))
                         {
-                            user = users[0];
+                            user = await msgraphService.GetUserForPrincipalNameAsync(name);
                         }
-                    }
-
-                    if (user != null)
-                    {
-                        if (person == null)
+                        else
                         {
-                            // Assume an email was passed in
-                            person = new Person() { Email = name };
-                            person.Timestamp = DateTime.Now;
-                            context.People.Add(person);
-                        }
-                        PortfolioMapper.ActiveDirectoryMapper.Map(user, person);
-                    }
-                }
-
-                // Set the team
-                if (person.Team_Id == null)
-                {
-                    // Get the AD user if haven't already
-                    if (user == null && !string.IsNullOrWhiteSpace(person.ActiveDirectoryId))
-                    {
-                        user = await msgraphService.GetUserForPrincipalNameAsync(name);
-                    }
-
-                    // Look up the team from the user's department
-                    if (user != null && user.department != null)
-                    {
-                        // Get the viewkey from the map (or create one from the department)
-                        string teamViewKey;
-                        if (!lazyTeamViewKeyMap.Value.TryGetValue(user.department, out teamViewKey))
-                        {
-                            // Strip none alpha characters from dept to get a viewkey, and lowercase it
-                            Regex rgx = new Regex("[^a-zA-Z0-9]");
-                            teamViewKey = rgx.Replace(user.department, "").ToLower();
-                        }
-
-                        // Find the team (or create one)
-                        var team = await GetExistingTeamAsync(teamViewKey);
-                        if (team == null)
-                        {
-                            int order = await GetNextOrderAsync();
-                            team = new Team()
+                            var result = await msgraphService.GetUsersAsync(name);
+                            var users = result.value.Where(u => u.companyName == "Food Standards Agency" && u.department != null).ToList();
+                            if (users.Count == 1)
                             {
-                                ViewKey = teamViewKey,
-                                Name = user.department,
-                                Order = order
-                            };
+                                user = users[0];
+                            }
                         }
 
-                        person.Team = team;
-                        if (portfolio?.Teams != null)
+                        if (user != null)
                         {
-                            if (!portfolio.Teams.Contains(team))
+                            if (person == null)
                             {
-                                portfolio.Teams.Add(team);
+                                // Assume an email was passed in
+                                person = new Person() { Email = name };
+                                person.Timestamp = DateTime.Now;
+                                context.People.Add(person);
+                            }
+                            PortfolioMapper.ActiveDirectoryMapper.Map(user, person);
+                        }
+                    }
+
+                    // Set the team
+                    if (person.Team_Id == null)
+                    {
+                        // Get the AD user if haven't already
+                        if (user == null && !string.IsNullOrWhiteSpace(person.ActiveDirectoryId))
+                        {
+                            user = await msgraphService.GetUserForPrincipalNameAsync(name);
+                        }
+
+                        // Look up the team from the user's department
+                        if (user != null && user.department != null)
+                        {
+                            // Get the viewkey from the map (or create one from the department)
+                            string teamViewKey;
+                            if (!lazyTeamViewKeyMap.Value.TryGetValue(user.department, out teamViewKey))
+                            {
+                                // Strip none alpha characters from dept to get a viewkey, and lowercase it
+                                Regex rgx = new Regex("[^a-zA-Z0-9]");
+                                teamViewKey = rgx.Replace(user.department, "").ToLower();
+                            }
+
+                            // Find the team (or create one)
+                            var team = await GetExistingTeamAsync(teamViewKey);
+                            if (team == null)
+                            {
+                                int order = await GetNextOrderAsync();
+                                team = new Team()
+                                {
+                                    ViewKey = teamViewKey,
+                                    Name = user.department,
+                                    Order = order
+                                };
+                            }
+
+                            person.Team = team;
+                            if (portfolio?.Teams != null)
+                            {
+                                if (!portfolio.Teams.Contains(team))
+                                {
+                                    portfolio.Teams.Add(team);
+                                }
                             }
                         }
                     }
                 }
+                catch (Exception e)
+                {
+                    AppLog.TraceError($"Exception ensuring Person record for '{name}'");
+                    AppLog.Trace(e);
+                    throw e;
+                }
+
             }
             return person;
         }

@@ -32,7 +32,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
         }
     }
 
-
     public class ProjectCountByPhaseResolver : IValueResolver<ProjectPhase, PhaseSummaryModel, int>
     {
         public int Resolve(ProjectPhase source, PhaseSummaryModel destination, int destMember, ResolutionContext context)
@@ -48,7 +47,6 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
             }
         }
     }
-
 
     public class PortfolioSummaryResolver : IValueResolver<Portfolio, PortfolioSummaryModel, IEnumerable<ProjectSummaryModel>>
     {
@@ -315,6 +313,4 @@ namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
             return result;
         }
     }
-
-
 }

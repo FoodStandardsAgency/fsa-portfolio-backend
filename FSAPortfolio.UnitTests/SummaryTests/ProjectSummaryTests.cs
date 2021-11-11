@@ -16,7 +16,6 @@ namespace FSAPortfolio.UnitTests.SummaryTests
     [TestClass]
     public class ProjectSummaryTests
     {
-
         [TestMethod]
         public void NoLeadSummaryTest()
         {
