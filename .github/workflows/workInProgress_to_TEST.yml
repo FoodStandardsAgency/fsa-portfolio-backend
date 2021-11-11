@@ -6,7 +6,7 @@ name: Backend topic/statusflags branch to TEST environment
 on:
   push:
     branches:
-      - topic/statusflags
+      - topic/elasticsearchPOC
   workflow_dispatch:
 
 jobs:
