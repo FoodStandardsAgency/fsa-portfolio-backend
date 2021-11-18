@@ -26,14 +26,14 @@ namespace FSAPortfolio.Application.Services.Index.Nest
 
         public async Task<object> GetStatusAsync()
         {
-            //var elasticClient = new ElasticClient(getConnectionSettings(indexServerUri.Value));
-            //return await elasticClient.Cluster.HealthAsync();
+            var elasticClient = new ElasticClient(getConnectionSettings(indexServerUri.Value));
+            return await elasticClient.Cluster.HealthAsync();
 
-            using(HttpClient client = new HttpClient())
-            {
-                var response = await client.GetAsync($"{indexServerUri.Value}/_cluster/health");
-                return response;
-            }
+            //using (HttpClient client = new HttpClient())
+            //{
+            //    var response = await client.GetAsync($"{indexServerUri.Value}/_cluster/health");
+            //    return response;
+            //}
         }
 
         public async Task<CreateIndexResponse> CreateProjectIndexAsync()
