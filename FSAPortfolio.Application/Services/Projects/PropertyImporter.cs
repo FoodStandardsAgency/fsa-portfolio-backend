@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CsvHelper;
 using FSAPortfolio.Entities.Organisation;
-using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.Application.Mapping;
 using FSAPortfolio.Application.Models;
 using Newtonsoft.Json;
 using System;
@@ -14,7 +14,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Projects
+namespace FSAPortfolio.Application.Services.Projects
 {
     public class PropertyImporter
     {

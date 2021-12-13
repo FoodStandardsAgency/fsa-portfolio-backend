@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace FSAPortfolio.Application.Services.Projects
 {
-    public interface IProjectDataService
+    public interface IProjectDataService : IBaseService
     {
         Task<GetProjectExportDTO> GetProjectExportDTOAsync(string viewKey);
         Task<ProjectCollectionModel> GetProjectDataAsync(string portfolio, string[] projectIds);

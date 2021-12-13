@@ -1,6 +1,6 @@
 ﻿using FSAPortfolio.Common;
 using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.WebAPI.App;
+using FSAPortfolio.Application.Services;
 using FSAPortfolio.Application.Models.JsonConverters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

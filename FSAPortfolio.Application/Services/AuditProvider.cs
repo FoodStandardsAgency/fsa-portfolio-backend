@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App
+namespace FSAPortfolio.Application.Services
 {
     public class AuditProvider
     {

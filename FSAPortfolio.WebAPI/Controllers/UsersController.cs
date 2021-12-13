@@ -1,9 +1,9 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.PostgreSQL;
-using FSAPortfolio.WebAPI.App.Identity;
-using FSAPortfolio.WebAPI.App.Microsoft;
-using FSAPortfolio.WebAPI.App.Users;
-using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.Application.Services.Identity;
+using FSAPortfolio.Application.Services.Microsoft;
+using FSAPortfolio.Application.Services.Users;
+using FSAPortfolio.Application.Mapping;
 using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;

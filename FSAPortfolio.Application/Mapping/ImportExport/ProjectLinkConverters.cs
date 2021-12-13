@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
+namespace FSAPortfolio.Application.Mapping.ImportExport
 {
     public class ProjectLinkExportConverter : ITypeConverter<ProjectLink, string>
     {

@@ -1,25 +1,12 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.Application.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Data.Entity;
-using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.App.Mapping;
-using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.PostgreSQL.Projects;
-using System.Text;
+using FSAPortfolio.Application.Mapping;
 using FSAPortfolio.WebAPI.DTO;
-using FSAPortfolio.WebAPI.App.Projects;
-using FSAPortfolio.WebAPI.App.Mapping.Projects;
-using FSAPortfolio.Entities.Organisation;
-using System.Linq.Expressions;
-using AutoMapper;
-using FSAPortfolio.WebAPI.App.Users;
 using FSAPortfolio.Application.Services.Projects;
 using FSAPortfolio.Common.Logging;
 
@@ -119,7 +106,7 @@ namespace FSAPortfolio.WebAPI.Controllers
                                                                [FromUri] bool includeLastUpdate = false,
                                                                [FromUri] bool includeConfig = false)
         {
-            AppLog.TraceVerbose(Request.RequestUri.PathAndQuery);
+            projectDataService.TraceVerbose(Request.RequestUri.PathAndQuery);
 
             return await projectDataService.GetProjectAsync(projectId, includeOptions, includeHistory, includeLastUpdate, includeConfig);
         }

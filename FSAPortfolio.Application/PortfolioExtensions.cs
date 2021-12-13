@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App
+namespace FSAPortfolio.Application
 {
     public static class PortfolioExtensions
     {

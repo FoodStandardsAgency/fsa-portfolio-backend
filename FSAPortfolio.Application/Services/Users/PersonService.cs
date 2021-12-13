@@ -2,8 +2,8 @@
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.App.Microsoft;
-using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.Application.Services.Microsoft;
+using FSAPortfolio.Application.Mapping;
 using FSAPortfolio.Application.Models;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
@@ -25,7 +25,7 @@ using FSAPortfolio.Application.Services;
 using FSAPortfolio.Common;
 using FSAPortfolio.Common.Logging;
 
-namespace FSAPortfolio.WebAPI.App.Users
+namespace FSAPortfolio.Application.Services.Users
 {
     public class PersonService : BaseService, IPersonService
     {

@@ -10,7 +10,7 @@ using System.Linq;
 using System.Web;
 using FSAPortfolio.Common;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
+namespace FSAPortfolio.Application.Mapping.Organisation.Resolvers.Summaries
 {
     public class PortfolioPersonResolver : IValueResolver<Portfolio, PortfolioSummaryModel, string>
     {

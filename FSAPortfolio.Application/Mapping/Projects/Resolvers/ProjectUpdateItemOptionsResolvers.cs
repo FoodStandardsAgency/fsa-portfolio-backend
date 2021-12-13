@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using FSAPortfolio.Application.Services.Config;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers
+namespace FSAPortfolio.Application.Mapping.Projects.Resolvers
 {
     public abstract class BaseProjectUpdateOptionResolver<T> : IMemberValueResolver<object, ProjectUpdateItem, string, T>
         where T : class, IProjectOption, new()

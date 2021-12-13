@@ -1,23 +1,15 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration.Annotations;
 using FSAPortfolio.Entities;
-using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.App.Sync;
 using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Web;
 using System.Data.Entity;
-using System.Reflection;
-using Newtonsoft.Json;
-using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
-using FSAPortfolio.WebAPI.App.Projects;
+using FSAPortfolio.Application.Mapping.Projects.Resolvers;
+using FSAPortfolio.Application.Services.Projects;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Projects
+namespace FSAPortfolio.Application.Mapping.Projects
 {
     public class ProjectUpdateModelProfile : Profile
     {

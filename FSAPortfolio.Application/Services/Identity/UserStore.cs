@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 using System.Web;
 using FSAPortfolio.Entities.Users;
 using System.Linq.Expressions;
-using FSAPortfolio.WebAPI.App.Users;
+using FSAPortfolio.Application.Services.Users;
 using FSAPortfolio.Common;
 
-namespace FSAPortfolio.WebAPI.App.Identity
+namespace FSAPortfolio.Application.Services.Identity
 {
     public class UserStore : IUserStore<ApplicationUser>, IUserStore<ApplicationUser, string>
     {

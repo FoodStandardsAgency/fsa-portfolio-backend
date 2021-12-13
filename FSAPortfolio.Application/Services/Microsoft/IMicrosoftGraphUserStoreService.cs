@@ -3,7 +3,7 @@ using FSAPortfolio.Entities.Users;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace FSAPortfolio.WebAPI.App.Microsoft
+namespace FSAPortfolio.Application.Services.Microsoft
 {
     public interface IMicrosoftGraphUserStoreService
     {

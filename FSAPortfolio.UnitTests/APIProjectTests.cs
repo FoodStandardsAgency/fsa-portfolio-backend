@@ -5,11 +5,7 @@ using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using FSAPortfolio.UnitTests.TestMappings;
-using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.Application.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
 
 namespace FSAPortfolio.UnitTests.ConfigurationTests
 {

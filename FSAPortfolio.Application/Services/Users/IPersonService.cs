@@ -2,7 +2,7 @@
 using FSAPortfolio.Entities.Projects;
 using System.Threading.Tasks;
 
-namespace FSAPortfolio.WebAPI.App.Users
+namespace FSAPortfolio.Application.Services.Users
 {
     public interface IPersonService
     {

@@ -4,9 +4,9 @@ using FSAPortfolio.Entities.Projects;
 using System;
 using System.Threading.Tasks;
 
-namespace FSAPortfolio.WebAPI.App.Projects
+namespace FSAPortfolio.Application.Services.Projects
 {
-    public interface IProjectService
+    public interface IProjectService : IBaseService
     {
         Project CreateNewProject(ProjectReservation reservation);
         Task<ProjectReservation> GetProjectReservationAsync(string projectId);

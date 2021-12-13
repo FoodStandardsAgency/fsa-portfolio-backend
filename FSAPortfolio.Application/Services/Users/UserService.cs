@@ -3,9 +3,9 @@ using FSAPortfolio.Application.Services;
 using FSAPortfolio.Common;
 using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.App.Identity;
-using FSAPortfolio.WebAPI.App.Mapping;
-using FSAPortfolio.WebAPI.App.Microsoft;
+using FSAPortfolio.Application.Services.Identity;
+using FSAPortfolio.Application.Mapping;
+using FSAPortfolio.Application.Services.Microsoft;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Users
+namespace FSAPortfolio.Application.Services.Users
 {
     public class UserService : BaseService, IUserService
     {

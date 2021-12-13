@@ -2,17 +2,17 @@
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries;
+using FSAPortfolio.Application.Mapping.Organisation.Resolvers.Summaries;
 using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Web;
-using FSAPortfolio.WebAPI.App.Mapping.Projects;
+using FSAPortfolio.Application.Mapping.Projects;
 using FSAPortfolio.Entities;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
+namespace FSAPortfolio.Application.Mapping.Organisation
 {
     public class PortfolioSummariesMappingProfile : Profile
     {

@@ -3,7 +3,7 @@ using FSAPortfolio.Entities.Organisation;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace FSAPortfolio.WebAPI.App.Sync
+namespace FSAPortfolio.Application.Services.Sync
 {
     public interface ISyncService
     {

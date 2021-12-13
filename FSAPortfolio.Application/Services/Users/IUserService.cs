@@ -1,7 +1,7 @@
 ﻿using FSAPortfolio.Application.Models;
 using System.Threading.Tasks;
 
-namespace FSAPortfolio.WebAPI.App.Users
+namespace FSAPortfolio.Application.Services.Users
 {
     public interface IUserService
     {

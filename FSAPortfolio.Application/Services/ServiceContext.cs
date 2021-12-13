@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using FSAPortfolio.WebAPI.App.Users;
+using FSAPortfolio.Application.Services.Users;
 using System.Security.Principal;
 using FSAPortfolio.Entities.Organisation;
 using System.Web.Http;
 using System.Net;
 using System.Security.Claims;
-using FSAPortfolio.WebAPI.App.Identity;
+using FSAPortfolio.Application.Services.Identity;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.Common;
 

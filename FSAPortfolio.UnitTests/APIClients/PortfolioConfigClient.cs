@@ -1,5 +1,4 @@
 ﻿using FSAPortfolio.UnitTests.ConfigurationTests;
-using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.DTO;
 using FSAPortfolio.Application.Models;
 using System;

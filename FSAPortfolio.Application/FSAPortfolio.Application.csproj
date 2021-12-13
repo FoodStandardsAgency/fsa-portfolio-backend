@@ -204,6 +204,7 @@
     <Compile Include="Services\Config\PortfolioConfigurationException.cs" />
     <Compile Include="FieldGroupConstants.cs" />
     <Compile Include="FilterFieldConstants.cs" />
+    <Compile Include="Services\IBaseService.cs" />
     <Compile Include="Services\Identity\ApplicationOAuthProvider.cs" />
     <Compile Include="Services\Identity\ApplicationUser.cs" />
     <Compile Include="Services\Identity\ApplicationUserManager.cs" />

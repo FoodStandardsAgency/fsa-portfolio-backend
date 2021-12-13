@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Microsoft
+namespace FSAPortfolio.Application.Services.Microsoft
 {
     public static class GroupMembershipToRoleMap
     {

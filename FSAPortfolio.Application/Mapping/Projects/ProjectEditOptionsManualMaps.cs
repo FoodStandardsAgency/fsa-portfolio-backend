@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Projects
+namespace FSAPortfolio.Application.Mapping.Projects
 {
     public class ProjectEditOptionsManualMaps
     {

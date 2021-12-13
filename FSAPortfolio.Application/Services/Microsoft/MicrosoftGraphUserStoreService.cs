@@ -1,5 +1,5 @@
 ﻿using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.App.Identity;
+using FSAPortfolio.Application.Services.Identity;
 using FSAPortfolio.Application.Models;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using FSAPortfolio.Application.Services;
 
-namespace FSAPortfolio.WebAPI.App.Microsoft
+namespace FSAPortfolio.Application.Services.Microsoft
 {
     public class MicrosoftGraphUserStoreService : IMicrosoftGraphUserStoreService
     {

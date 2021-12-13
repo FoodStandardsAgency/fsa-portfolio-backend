@@ -2,7 +2,7 @@
 
 namespace FSAPortfolio.Application.Services.Projects
 {
-    public interface IDataDumpService
+    public interface IDataDumpService : IBaseService
     {
         Task DumpPortfolioConfig(string portfolio);
         Task DumpPortfolioProjects(string portfolio, string[] id = null);

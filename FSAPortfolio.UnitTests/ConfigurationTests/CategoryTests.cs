@@ -1,5 +1,4 @@
 ﻿using FSAPortfolio.UnitTests.APIClients;
-using FSAPortfolio.WebAPI.App;
 using FSAPortfolio.WebAPI.DTO;
 using FSAPortfolio.Application.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

@@ -8,7 +8,7 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers
+namespace FSAPortfolio.Application.Mapping.Projects.Resolvers
 {
     public class ProjectDataOptionsOutboundMapper : IMappingAction<PortfolioConfiguration, ProjectEditOptionsModel>
     {

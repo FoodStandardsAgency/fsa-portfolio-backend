@@ -2,8 +2,8 @@
 using FSAPortfolio.Common;
 using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.App.Microsoft;
-using FSAPortfolio.WebAPI.App.Users;
+using FSAPortfolio.Application.Services.Microsoft;
+using FSAPortfolio.Application.Services.Users;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -16,7 +16,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Identity
+namespace FSAPortfolio.Application.Services.Identity
 {
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {

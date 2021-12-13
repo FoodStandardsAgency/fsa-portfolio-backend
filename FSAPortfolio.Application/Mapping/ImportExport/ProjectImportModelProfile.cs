@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
+namespace FSAPortfolio.Application.Mapping.ImportExport
 {
     public class ProjectImportModelProfile : Profile
     {

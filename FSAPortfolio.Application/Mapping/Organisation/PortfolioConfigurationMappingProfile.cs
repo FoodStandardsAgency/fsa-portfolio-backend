@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Organisation;
-using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.App.Sync;
-using FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers;
+using FSAPortfolio.Application.Services;
+using FSAPortfolio.Application.Services.Sync;
+using FSAPortfolio.Application.Mapping.Organisation.Resolvers;
 using FSAPortfolio.Application.Models;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
+namespace FSAPortfolio.Application.Mapping.Organisation
 {
     public class PortfolioConfigurationMappingProfile : Profile
     {

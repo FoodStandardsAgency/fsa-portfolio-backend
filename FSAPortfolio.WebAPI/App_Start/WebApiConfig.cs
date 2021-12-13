@@ -1,6 +1,6 @@
 ﻿using FSAPortfolio.Application.Services;
 using FSAPortfolio.Application.Services.Projects;
-using FSAPortfolio.WebAPI.App;
+using FSAPortfolio.Application.Services;
 using FSAPortfolio.WebAPI.Controllers;
 using FSAPortfolio.Application.Models;
 using Microsoft.Owin.Security.OAuth;

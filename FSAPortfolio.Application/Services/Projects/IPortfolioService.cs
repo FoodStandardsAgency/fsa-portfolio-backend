@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace FSAPortfolio.Application.Services.Projects
 {
-    public interface IPortfolioService
+    public interface IPortfolioService : IBaseService
     {
         Task<string[]> ArchiveProjectsAsync(string portfolioViewKey);
         Task<PortfolioConfiguration> GetConfigAsync(string portfolioViewKey, bool includedOnly = false);

@@ -2,8 +2,8 @@
 using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.WebAPI.App.Mapping;
-using FSAPortfolio.WebAPI.App.Users;
+using FSAPortfolio.Application.Mapping;
+using FSAPortfolio.Application.Services.Users;
 using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ using System.Web.Http;
 using FSAPortfolio.Application.Services.Config;
 using FSAPortfolio.Application.Services;
 
-namespace FSAPortfolio.WebAPI.App.Projects
+namespace FSAPortfolio.Application.Services.Projects
 {
     public class ProjectService : BaseService, IProjectService
     {

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries
+namespace FSAPortfolio.Application.Mapping.Organisation.Resolvers.Summaries
 {
     public class ProjectActionsResolver : IValueResolver<Project, object, ProjectActionsModel>
     {

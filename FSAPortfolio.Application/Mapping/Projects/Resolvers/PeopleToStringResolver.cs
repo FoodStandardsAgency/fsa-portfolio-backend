@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers
+namespace FSAPortfolio.Application.Mapping.Projects.Resolvers
 {
     public class PeopleToStringResolver : IMemberValueResolver<object, object, ICollection<Person>, string>
     {

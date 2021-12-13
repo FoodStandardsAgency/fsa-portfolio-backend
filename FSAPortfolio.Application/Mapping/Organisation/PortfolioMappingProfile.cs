@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
+namespace FSAPortfolio.Application.Mapping.Organisation
 {
     public class PortfolioMappingProfile : Profile
     {

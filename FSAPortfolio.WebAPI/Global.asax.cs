@@ -1,6 +1,6 @@
 using FSAPortfolio.Security.ApiKey;
 using FSAPortfolio.Common.Logging;
-using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.Application.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;

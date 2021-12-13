@@ -1,14 +1,10 @@
-﻿using FSAPortfolio.Application.Services;
-using FSAPortfolio.Entities;
-using FSAPortfolio.Entities.Users;
-using System;
+﻿using FSAPortfolio.Entities.Users;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Identity
+namespace FSAPortfolio.Application.Services.Identity
 {
     public class RoleService : BaseService, IRoleService
     {

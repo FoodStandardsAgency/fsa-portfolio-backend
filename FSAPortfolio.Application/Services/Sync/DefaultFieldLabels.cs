@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using static FSAPortfolio.Entities.Organisation.PortfolioFieldFlags;
-using static FSAPortfolio.WebAPI.App.FieldGroupConstants;
+using static FSAPortfolio.Application.FieldGroupConstants;
 
-namespace FSAPortfolio.WebAPI.App.Sync
+namespace FSAPortfolio.Application.Services.Sync
 {
     public class DefaultFieldLabels
     {

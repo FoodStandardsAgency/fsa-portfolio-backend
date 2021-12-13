@@ -9,7 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using FSAPortfolio.WebAPI.DTO;
-using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.Application.Mapping;
 using FSAPortfolio.Application.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;

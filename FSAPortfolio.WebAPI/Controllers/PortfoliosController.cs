@@ -1,11 +1,10 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
-using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.App.Projects;
+using FSAPortfolio.Application;
+using FSAPortfolio.Application.Services.Projects;
 using FSAPortfolio.WebAPI.DTO;
-using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.Application.Mapping;
 using FSAPortfolio.Application.Models;
-using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -13,9 +12,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using FSAPortfolio.WebAPI.App.Sync;
+using FSAPortfolio.Application.Services.Sync;
 using System.IO;
-using FSAPortfolio.Application.Services.Projects;
 using FSAPortfolio.Common.Logging;
 using FSAPortfolio.Entities.Projects;
 

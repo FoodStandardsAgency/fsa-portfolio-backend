@@ -1,7 +1,7 @@
 ﻿using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.WebAPI.App.Sync;
+using FSAPortfolio.Application.Services.Sync;
 using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
@@ -13,12 +13,12 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using FSAPortfolio.Application.Services;
-using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.Application.Mapping;
 using System.Net.Http;
 using System.Net;
 using System.Web.Http;
 using System.Data.Entity.Validation;
-using FSAPortfolio.WebAPI.App;
+using FSAPortfolio.Application;
 using FSAPortfolio.Common.Logging;
 using FSAPortfolio.Common;
 

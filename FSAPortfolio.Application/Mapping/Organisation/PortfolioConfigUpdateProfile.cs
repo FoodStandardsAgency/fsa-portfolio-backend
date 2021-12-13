@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Organisation
+namespace FSAPortfolio.Application.Mapping.Organisation
 {
     /// <summary>
     /// This controls which fields can be updated for a given object - hence the mappings are from type to the same type.

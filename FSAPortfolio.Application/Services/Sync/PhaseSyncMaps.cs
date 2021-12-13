@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Sync
+namespace FSAPortfolio.Application.Services.Sync
 {
     public partial class SyncMaps
     {

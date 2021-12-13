@@ -2,16 +2,16 @@
 using FSAPortfolio.Common;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.App.Sync;
-using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
+using FSAPortfolio.Application.Services;
+using FSAPortfolio.Application.Services.Sync;
+using FSAPortfolio.Application.Mapping.Projects.Resolvers;
 using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Projects
+namespace FSAPortfolio.Application.Mapping.Projects
 {
     public class ProjectEditOptionsMappingProfile : Profile
     {

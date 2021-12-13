@@ -2,14 +2,14 @@
 using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.App.Users;
+using FSAPortfolio.Application.Services.Users;
 using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers
+namespace FSAPortfolio.Application.Mapping.Projects.Resolvers
 {
     public class PostgresPersonFromEmailResolver : IMemberValueResolver<object, object, string, Person>
     {

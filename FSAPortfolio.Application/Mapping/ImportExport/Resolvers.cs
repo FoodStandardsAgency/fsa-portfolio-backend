@@ -5,7 +5,7 @@ using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.ImportExport
+namespace FSAPortfolio.Application.Mapping.ImportExport
 {
     public class ProjectExportDateConverter : ITypeConverter<ProjectDate, string>
     {

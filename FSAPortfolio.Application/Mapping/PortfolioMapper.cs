@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Common.Logging;
-using FSAPortfolio.WebAPI.App.Mapping.ActiveDirectory;
-using FSAPortfolio.WebAPI.App.Mapping.ImportExport;
-using FSAPortfolio.WebAPI.App.Mapping.Organisation;
-using FSAPortfolio.WebAPI.App.Mapping.Projects;
+using FSAPortfolio.Application.Mapping.ActiveDirectory;
+using FSAPortfolio.Application.Mapping.ImportExport;
+using FSAPortfolio.Application.Mapping.Organisation;
+using FSAPortfolio.Application.Mapping.Projects;
 using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Mapping
+namespace FSAPortfolio.Application.Mapping
 {
     public class PortfolioMapper
     {

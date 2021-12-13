@@ -1,5 +1,5 @@
 ﻿using FSAPortfolio.Entities;
-using FSAPortfolio.WebAPI.App.Identity;
+using FSAPortfolio.Application.Services.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Owin;

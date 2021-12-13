@@ -2,13 +2,13 @@
 using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
+using FSAPortfolio.Application.Mapping.Projects.Resolvers;
 using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Projects
+namespace FSAPortfolio.Application.Mapping.Projects
 {
     public class ProjectViewModelProfile : Profile
     {

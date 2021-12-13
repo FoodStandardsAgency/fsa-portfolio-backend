@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace FSAPortfolio.WebAPI.App.Identity
+namespace FSAPortfolio.Application.Services.Identity
 {
     public class ApplicationUser : IUser
     {

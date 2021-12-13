@@ -5,7 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App
+namespace FSAPortfolio.Application
 {
     public static class ConfigurationExtensions
     {

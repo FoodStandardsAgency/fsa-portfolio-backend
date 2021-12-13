@@ -8,7 +8,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App
+namespace FSAPortfolio.Application
 {
     public static class ProjectQueryExtensions
     {

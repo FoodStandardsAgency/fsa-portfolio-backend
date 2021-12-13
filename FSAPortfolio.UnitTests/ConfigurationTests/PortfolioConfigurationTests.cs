@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FSAPortfolio.UnitTests.APIClients;
-using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.DTO;
-using FSAPortfolio.Application.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using FSAPortfolio.Common;

@@ -5,28 +5,27 @@ using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
 using FSAPortfolio.PostgreSQL;
 using FSAPortfolio.PostgreSQL.Projects;
-using FSAPortfolio.WebAPI.App.Microsoft;
-using FSAPortfolio.WebAPI.App.Users;
-using FSAPortfolio.WebAPI.App.Mapping;
-using FSAPortfolio.WebAPI.App.Mapping.Organisation;
-using FSAPortfolio.WebAPI.App.Mapping.Projects;
+using FSAPortfolio.Application.Services.Microsoft;
+using FSAPortfolio.Application.Services.Users;
+using FSAPortfolio.Application.Mapping;
+using FSAPortfolio.Application.Mapping.Organisation;
+using FSAPortfolio.Application.Mapping.Projects;
 using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Data.Entity.Validation;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Text.RegularExpressions;
-using FSAPortfolio.WebAPI.App.Identity;
+using FSAPortfolio.Application.Services.Identity;
 using FSAPortfolio.Application.Services;
 using FSAPortfolio.Common;
 
-namespace FSAPortfolio.WebAPI.App.Sync
+namespace FSAPortfolio.Application.Services.Sync
 {
     public class SyncService : BaseService, ISyncService
     {

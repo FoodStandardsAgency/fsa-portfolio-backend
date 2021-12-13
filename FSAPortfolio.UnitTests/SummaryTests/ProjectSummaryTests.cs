@@ -1,7 +1,7 @@
 ﻿using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
 using FSAPortfolio.Entities.Users;
-using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.Application.Mapping;
 using FSAPortfolio.Application.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries;
+using FSAPortfolio.Application.Mapping.Organisation.Resolvers.Summaries;
 
 namespace FSAPortfolio.UnitTests.SummaryTests
 {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.ActiveDirectory
+namespace FSAPortfolio.Application.Mapping.ActiveDirectory
 {
     public class ADUserMappingProfile : Profile
     {

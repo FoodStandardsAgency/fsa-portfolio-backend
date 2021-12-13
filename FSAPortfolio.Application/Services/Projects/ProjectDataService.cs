@@ -1,6 +1,6 @@
 ﻿using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.Application.Services;
+using FSAPortfolio.Application.Mapping;
 using FSAPortfolio.WebAPI.DTO;
 using FSAPortfolio.Application.Models;
 using System;
@@ -13,11 +13,11 @@ using FSAPortfolio.Entities.Organisation;
 using System.Web.Http;
 using System.Net;
 using System.Net.Http;
-using FSAPortfolio.WebAPI.App.Projects;
-using FSAPortfolio.WebAPI.App.Users;
+using FSAPortfolio.Application.Services.Projects;
+using FSAPortfolio.Application.Services.Users;
 using AutoMapper;
 using FSAPortfolio.Common.Logging;
-using FSAPortfolio.WebAPI.App.Mapping.ImportExport;
+using FSAPortfolio.Application.Mapping.ImportExport;
 
 namespace FSAPortfolio.Application.Services.Projects
 {

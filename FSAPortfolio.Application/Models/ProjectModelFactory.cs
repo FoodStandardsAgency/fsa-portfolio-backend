@@ -1,5 +1,5 @@
 ﻿using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.WebAPI.App.Mapping;
+using FSAPortfolio.Application.Mapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -9,10 +9,10 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
-using FSAPortfolio.WebAPI.App.Sync;
-using FSAPortfolio.WebAPI.App.Mapping.Projects.Resolvers;
+using FSAPortfolio.Application.Services.Sync;
+using FSAPortfolio.Application.Mapping.Projects.Resolvers;
 
-namespace FSAPortfolio.WebAPI.App.Mapping.Projects
+namespace FSAPortfolio.Application.Mapping.Projects
 {
     public class PostgresSERDProjectMappingProfile : Profile
     {

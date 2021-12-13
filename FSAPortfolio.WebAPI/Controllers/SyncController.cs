@@ -11,8 +11,8 @@ using System.Web.UI.WebControls;
 using System.Data.Entity;
 using FSAPortfolio.Application.Models;
 using System.Net;
-using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.App.Sync;
+using FSAPortfolio.Application.Services;
+using FSAPortfolio.Application.Services.Sync;
 using System.Threading.Tasks;
 
 namespace FSAPortfolio.WebAPI.Controllers

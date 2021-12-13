@@ -1,12 +1,11 @@
 ﻿using FSAPortfolio.UnitTests.ConfigurationTests;
-using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.DTO;
-using FSAPortfolio.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FSAPortfolio.Application.Models;
+
 
 namespace FSAPortfolio.UnitTests.APIClients
 {

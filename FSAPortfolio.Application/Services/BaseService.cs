@@ -1,7 +1,7 @@
 ﻿using FSAPortfolio.Common.Logging;
 using FSAPortfolio.Entities.Organisation;
-using FSAPortfolio.WebAPI.App.Identity;
-using FSAPortfolio.WebAPI.App.Users;
+using FSAPortfolio.Application.Services.Identity;
+using FSAPortfolio.Application.Services.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using System.Web.Http;
 
 namespace FSAPortfolio.Application.Services
 {
-    public abstract class BaseService
+    public abstract class BaseService : IBaseService
     {
         private readonly IServiceContext serviceContext;
         public IServiceContext ServiceContext => serviceContext;
@@ -27,9 +27,13 @@ namespace FSAPortfolio.Application.Services
             this.serviceContext = context;
         }
 
+        public void TraceVerbose(string message)
+        {
+            if (serviceContext.CurrentUserName != null)
+                AppLog.TraceVerbose($"{serviceContext.CurrentUserName}: {message}");
+            else
+                AppLog.TraceVerbose(message);
 
-
-
-
+        }
     }
 }

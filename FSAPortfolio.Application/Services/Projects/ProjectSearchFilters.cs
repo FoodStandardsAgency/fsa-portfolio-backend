@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Web;
 using LinqKit;
 
-namespace FSAPortfolio.WebAPI.App.Projects
+namespace FSAPortfolio.Application.Services.Projects
 {
     public class ProjectSearchFilters
     {

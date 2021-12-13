@@ -2,9 +2,9 @@
 using FSAPortfolio.Entities;
 using FSAPortfolio.Entities.Organisation;
 using FSAPortfolio.Entities.Projects;
-using FSAPortfolio.WebAPI.App;
-using FSAPortfolio.WebAPI.App.Mapping;
-using FSAPortfolio.WebAPI.App.Mapping.Projects;
+using FSAPortfolio.Application.Services;
+using FSAPortfolio.Application.Mapping;
+using FSAPortfolio.Application.Mapping.Projects;
 using FSAPortfolio.Application.Models;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -20,7 +20,7 @@ using System.Web.Http;
 using System.Net;
 using LinqKit;
 using System.Linq.Expressions;
-using FSAPortfolio.WebAPI.App.Mapping.Organisation.Resolvers.Summaries;
+using FSAPortfolio.Application.Mapping.Organisation.Resolvers.Summaries;
 using FSAPortfolio.Common.Logging;
 
 namespace FSAPortfolio.Application.Services.Projects
