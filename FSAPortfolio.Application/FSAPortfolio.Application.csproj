@@ -196,6 +196,7 @@
     <Compile Include="Models\SyncRequestModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Models\UserSearchResponseModel.cs" />
+    <Compile Include="PortfolioUserException.cs" />
     <Compile Include="Services\AuditProvider.cs" />
     <Compile Include="ConfigurationExtensions.cs" />
     <Compile Include="Services\BaseService.cs" />

@@ -161,94 +161,94 @@ namespace FSAPortfolio.Application.Services.Users
             Person person = null;
             if (!string.IsNullOrWhiteSpace(name))
             {
-                try
+                var context = ServiceContext.PortfolioContext;
+                MicrosoftGraphUserModel user = null;
+                person =
+                    context.People.Local.SingleOrDefault(p => p.ActiveDirectoryPrincipalName == name || p.Email == name) ??
+                    await context.People.SingleOrDefaultAsync(p => p.ActiveDirectoryPrincipalName == name || p.Email == name);
+                if (person == null || person.ActiveDirectoryId == null)
                 {
-                    var context = ServiceContext.PortfolioContext;
-                    MicrosoftGraphUserModel user = null;
-                    person =
-                        context.People.Local.SingleOrDefault(p => p.ActiveDirectoryPrincipalName == name || p.Email == name) ??
-                        await context.People.SingleOrDefaultAsync(p => p.ActiveDirectoryPrincipalName == name || p.Email == name);
-                    if (person == null || person.ActiveDirectoryId == null)
+                    if (name.Contains("@"))
                     {
-                        if (name.Contains("@"))
+                        if (name.Contains("#EXT#"))
                         {
-                            user = await msgraphService.GetUserForPrincipalNameAsync(name);
-                        }
-                        else
-                        {
-                            var result = await msgraphService.GetUsersAsync(name);
-                            var users = result.value.Where(u => u.companyName == "Food Standards Agency" && u.department != null).ToList();
-                            if (users.Count == 1)
-                            {
-                                user = users[0];
-                            }
+                            name = name.Substring(0, name.IndexOf("#EXT#"));
+                            throw new PortfolioUserException($"Cannot add external user, {name}, to the project. If you are trying to add a supplier as a team member, consider using the 'Supplier' field.");
                         }
 
-                        if (user != null)
+                        user = await msgraphService.GetUserForPrincipalNameAsync(name);
+                        if(user == null)
                         {
-                            if (person == null)
-                            {
-                                // Assume an email was passed in
-                                person = new Person() { Email = name };
-                                person.Timestamp = DateTime.Now;
-                                context.People.Add(person);
-                            }
-                            PortfolioMapper.ActiveDirectoryMapper.Map(user, person);
+                            throw new PortfolioUserException($"User not found: {name}");
+                        }
+                    }
+                    else
+                    {
+                        var result = await msgraphService.GetUsersAsync(name);
+                        var users = result.value.Where(u => u.companyName == "Food Standards Agency" && u.department != null).ToList();
+                        if (users.Count == 1)
+                        {
+                            user = users[0];
                         }
                     }
 
-                    // Set the team
-                    if (person.Team_Id == null)
+                    if (user != null)
                     {
-                        // Get the AD user if haven't already
-                        if (user == null && !string.IsNullOrWhiteSpace(person.ActiveDirectoryId))
+                        if (person == null)
                         {
-                            user = await msgraphService.GetUserForPrincipalNameAsync(name);
+                            // Assume an email was passed in
+                            person = new Person() { Email = name };
+                            person.Timestamp = DateTime.Now;
+                            context.People.Add(person);
+                        }
+                        PortfolioMapper.ActiveDirectoryMapper.Map(user, person);
+                    }
+                }
+
+                // Set the team
+                if (person != null && person.Team_Id == null)
+                {
+                    // Get the AD user if haven't already
+                    if (user == null && !string.IsNullOrWhiteSpace(person.ActiveDirectoryId))
+                    {
+                        user = await msgraphService.GetUserForPrincipalNameAsync(name);
+                    }
+
+                    // Look up the team from the user's department
+                    if (user != null && user.department != null)
+                    {
+                        // Get the viewkey from the map (or create one from the department)
+                        string teamViewKey;
+                        if (!lazyTeamViewKeyMap.Value.TryGetValue(user.department, out teamViewKey))
+                        {
+                            // Strip none alpha characters from dept to get a viewkey, and lowercase it
+                            Regex rgx = new Regex("[^a-zA-Z0-9]");
+                            teamViewKey = rgx.Replace(user.department, "").ToLower();
                         }
 
-                        // Look up the team from the user's department
-                        if (user != null && user.department != null)
+                        // Find the team (or create one)
+                        var team = await GetExistingTeamAsync(teamViewKey);
+                        if (team == null)
                         {
-                            // Get the viewkey from the map (or create one from the department)
-                            string teamViewKey;
-                            if (!lazyTeamViewKeyMap.Value.TryGetValue(user.department, out teamViewKey))
+                            int order = await GetNextOrderAsync();
+                            team = new Team()
                             {
-                                // Strip none alpha characters from dept to get a viewkey, and lowercase it
-                                Regex rgx = new Regex("[^a-zA-Z0-9]");
-                                teamViewKey = rgx.Replace(user.department, "").ToLower();
-                            }
+                                ViewKey = teamViewKey,
+                                Name = user.department,
+                                Order = order
+                            };
+                        }
 
-                            // Find the team (or create one)
-                            var team = await GetExistingTeamAsync(teamViewKey);
-                            if (team == null)
+                        person.Team = team;
+                        if (portfolio?.Teams != null)
+                        {
+                            if (!portfolio.Teams.Contains(team))
                             {
-                                int order = await GetNextOrderAsync();
-                                team = new Team()
-                                {
-                                    ViewKey = teamViewKey,
-                                    Name = user.department,
-                                    Order = order
-                                };
-                            }
-
-                            person.Team = team;
-                            if (portfolio?.Teams != null)
-                            {
-                                if (!portfolio.Teams.Contains(team))
-                                {
-                                    portfolio.Teams.Add(team);
-                                }
+                                portfolio.Teams.Add(team);
                             }
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    AppLog.TraceError($"Exception ensuring Person record for '{name}'");
-                    AppLog.Trace(e);
-                    throw e;
-                }
-
             }
             return person;
         }

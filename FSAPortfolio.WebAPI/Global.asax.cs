@@ -8,6 +8,9 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Routing;
 using System.Web.Http.Filters;
+using FSAPortfolio.Application;
+using System.Net.Http;
+using System.Net;
 
 namespace FSAPortfolio.WebAPI
 {
@@ -36,6 +39,15 @@ namespace FSAPortfolio.WebAPI
         public override void OnException(HttpActionExecutedContext context)
         {
             AppLog.Trace(context.Exception);
+            if(context.Exception is PortfolioUserException)
+            {
+                var resp = new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    ReasonPhrase = context.Exception.Message
+                };
+                throw new HttpResponseException(resp);
+
+            }
         }
     }
 }

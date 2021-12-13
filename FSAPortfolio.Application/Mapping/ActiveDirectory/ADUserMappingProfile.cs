@@ -46,11 +46,11 @@ namespace FSAPortfolio.Application.Mapping.ActiveDirectory
 
                 var duplicates = from r in results
                                  where !string.IsNullOrWhiteSpace(r.Email)
-                                 group r by new { r.GivenName, r.Surname } into dupes
+                                 group r by new { r.DisplayName } into dupes
                                  where dupes.Count() > 1
                                  select dupes;
 
-                foreach(var duplicate in duplicates)
+                foreach (var duplicate in duplicates)
                 {
                     foreach(var d in duplicate)
                     {
