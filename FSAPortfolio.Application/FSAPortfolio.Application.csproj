@@ -168,7 +168,10 @@
     <Compile Include="DTO\GetProjectDTO.cs" />
     <Compile Include="DTO\GetProjectExportDTO.cs" />
     <Compile Include="DTO\GetProjectQueryDTO.cs" />
+    <Compile Include="Mapping\Summaries\PhaseProjectsResolvers.cs" />
+    <Compile Include="Mapping\Summaries\PortfolioSummaryResolver.cs" />
     <Compile Include="Mapping\Summaries\ProjectActionsResolver.cs" />
+    <Compile Include="Mapping\Summaries\SummaryLinqQuery.cs" />
     <Compile Include="Models\Archive.cs" />
     <Compile Include="Models\IdentityResponseModel.cs" />
     <Compile Include="Models\IJsonProperties.cs" />
@@ -238,7 +241,7 @@
     <Compile Include="Mapping\Projects\Resolvers\ProjectStatusOptionsResolvers.cs" />
     <Compile Include="Mapping\Projects\Resolvers\ProjectUpdateItemOptionsResolvers.cs" />
     <Compile Include="Mapping\Summaries\PortfolioSummariesMappingProfile.cs" />
-    <Compile Include="Mapping\Summaries\SummaryResolvers.cs" />
+    <Compile Include="Mapping\Summaries\SummaryDataResolvers.cs" />
     <Compile Include="Services\IServiceContext.cs" />
     <Compile Include="Services\Microsoft\GroupMembershipToRoleMap.cs" />
     <Compile Include="Services\Microsoft\IMicrosoftGraphUserStoreService.cs" />
