@@ -209,12 +209,12 @@ namespace FSAPortfolio.Application.Services.Users
                         }
                         PortfolioMapper.ActiveDirectoryMapper.Map(user, person);
                     }
+                    else
+                    {
+                        throw new PortfolioUserException($"User not found: {name}");
+                    }
                 }
 
-                if (user == null)
-                {
-                    throw new PortfolioUserException($"User not found: {name}");
-                }
 
                 // Set the team
                 if (person != null && person.Team_Id == null)
