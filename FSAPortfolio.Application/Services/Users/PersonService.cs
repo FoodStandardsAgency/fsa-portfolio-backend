@@ -162,14 +162,19 @@ namespace FSAPortfolio.Application.Services.Users
             if (!string.IsNullOrWhiteSpace(name))
             {
                 var context = ServiceContext.PortfolioContext;
+
+                // Check if there is already a matching person
                 MicrosoftGraphUserModel user = null;
                 person =
                     context.People.Local.SingleOrDefault(p => p.ActiveDirectoryPrincipalName == name || p.Email == name) ??
                     await context.People.SingleOrDefaultAsync(p => p.ActiveDirectoryPrincipalName == name || p.Email == name);
+
+                // There is no person with a AD Id, so we need to find the AD user
                 if (person == null || person.ActiveDirectoryId == null)
                 {
                     if (name.Contains("@"))
                     {
+                        // Assume this is an email address: error if it is an external entry
                         if (name.Contains("#EXT#"))
                         {
                             name = name.Substring(0, name.IndexOf("#EXT#"));
@@ -177,10 +182,6 @@ namespace FSAPortfolio.Application.Services.Users
                         }
 
                         user = await msgraphService.GetUserForPrincipalNameAsync(name);
-                        if(user == null)
-                        {
-                            throw new PortfolioUserException($"User not found: {name}");
-                        }
                     }
                     else
                     {
@@ -194,6 +195,11 @@ namespace FSAPortfolio.Application.Services.Users
 
                     if (user != null)
                     {
+                        // Need to check for an existing person with the same ActiveDirectory Id (this happens when the user has a name change).
+                        person =
+                            context.People.Local.SingleOrDefault(p => p.ActiveDirectoryId == user.id) ??
+                            await context.People.SingleOrDefaultAsync(p => p.ActiveDirectoryId == user.id);
+
                         if (person == null)
                         {
                             // Assume an email was passed in
@@ -203,6 +209,11 @@ namespace FSAPortfolio.Application.Services.Users
                         }
                         PortfolioMapper.ActiveDirectoryMapper.Map(user, person);
                     }
+                }
+
+                if (user == null)
+                {
+                    throw new PortfolioUserException($"User not found: {name}");
                 }
 
                 // Set the team
