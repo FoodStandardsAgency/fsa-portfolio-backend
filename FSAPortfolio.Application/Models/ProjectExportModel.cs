@@ -109,6 +109,7 @@ namespace FSAPortfolio.Application.Models
         public string budget_option1 { get; set; }
         public string budget_option2 { get; set; }
 
+        public string forecasts { get; set; }
         public string processes_setting1 { get; set; }
         public string processes_setting2 { get; set; }
         public string processes_option1 { get; set; }

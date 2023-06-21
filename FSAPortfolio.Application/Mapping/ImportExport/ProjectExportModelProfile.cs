@@ -145,6 +145,7 @@ namespace FSAPortfolio.Application.Mapping.ImportExport
                 .ForMember(p => p.budget_field2, o => o.MapFrom(s => s.BudgetSettings.Setting2))
                 .ForMember(p => p.budget_option1, o => o.MapFrom(s => s.BudgetSettings.Option1))
                 .ForMember(p => p.budget_option2, o => o.MapFrom(s => s.BudgetSettings.Option2))
+                .ForMember(p => p.forecasts, o => o.MapFrom(s => s.Forecasts))
 
                 .ForMember(p => p.processes_setting1, o => o.MapFrom(s => s.ProcessSettings.Setting1))
                 .ForMember(p => p.processes_setting2, o => o.MapFrom(s => s.ProcessSettings.Setting2))
@@ -175,6 +176,8 @@ namespace FSAPortfolio.Application.Mapping.ImportExport
             CreateMap<ProjectLink, string>().ConvertUsing<ProjectLinkExportConverter>();
             CreateMap<ICollection<Document>, string>().ConvertUsing<DocumentCollectionExportConverter>();
             CreateMap<Document, string>().ConvertUsing<DocumentExportConverter>();
+            CreateMap<ICollection<Forecast>, string>().ConvertUsing<ForecastCollectionExportConverter>();
+            CreateMap<Forecast, string>().ConvertUsing<ForecastExportConverter>();
 
         }
 

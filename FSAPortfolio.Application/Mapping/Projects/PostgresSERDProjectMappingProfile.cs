@@ -52,6 +52,7 @@ namespace FSAPortfolio.Application.Mapping.Projects
                 .ForMember(p => p.ProjectType, o => o.MapFrom(s => SyncMaps.serdProjectTypeMaps[s.project_type ?? string.Empty])) // TODO: SERD
                 .ForMember(p => p.ChannelLink, o => o.MapFrom<PostgresLinkResolver, string>(s => s.link))
                 .ForMember(p => p.Documents, o => o.MapFrom<PostgresDocumentResolver, string>(s => s.documents))
+                .ForMember(p => p.Forecasts, o => o.MapFrom<PostgresForecastResolver, string>(s => s.forecasts))
                 .ForMember(p => p.LeadRole, o => o.Ignore()) // Isn't one!?
 
                 .ForMember(p => p.TeamSettings, o => new ProjectGenericSettings())

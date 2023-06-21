@@ -183,6 +183,8 @@ namespace FSAPortfolio.Application.Models
         [JsonProperty(ProjectPropertyConstants.processes_option2)]
         public string processes_option2 { get; set; }
 
+        [JsonProperty(PropertyName = ProjectPropertyConstants.forecasts)]
+        public ForecastModel[] forecasts { get; set; }
 
         [JsonProperty(PropertyName = ProjectPropertyConstants.theme)]
         public string theme { get; set; }
@@ -218,6 +220,15 @@ namespace FSAPortfolio.Application.Models
 
         [JsonProperty("link")]
         public string Link { get; set; }
+    }
+
+    public class ForecastModel
+    {
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("amount")]
+        public string Amount { get; set; }
     }
 
     public class UpdateHistoryModel
