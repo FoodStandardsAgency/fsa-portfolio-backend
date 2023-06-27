@@ -15,7 +15,7 @@ namespace FSAPortfolio.Application.Mapping.ImportExport
     {
         public ProjectExportModelProfile()
         {
-            CreateMap<string, string>().ConvertUsing(s => s != null ? s.Replace(",", "") : null);
+            CreateMap<string, string>().ConvertUsing(s => s != null ? s.Replace(",", ";") : null);
             CreateMap<ProjectDate, string>().ConvertUsing<ProjectExportDateConverter>();
             CreateMap<Person, string>().ConvertUsing(s => s != null ? s.DisplayName : null);
             // Outbound
