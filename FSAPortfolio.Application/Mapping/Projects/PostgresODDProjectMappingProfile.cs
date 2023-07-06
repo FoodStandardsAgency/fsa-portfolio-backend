@@ -50,6 +50,7 @@ namespace FSAPortfolio.Application.Mapping.Projects
                 .ForMember(p => p.BudgetType, o => o.MapFrom<ConfigBudgetTypeResolver, string>(s => SyncMaps.odd_budgetTypeKeyMap[s.budgettype ?? "none"]))
                 .ForMember(p => p.ChannelLink, o => o.MapFrom<PostgresLinkResolver, string>(s => s.link))
                 .ForMember(p => p.Documents, o => o.MapFrom<PostgresDocumentResolver, string>(s => s.documents))
+                .ForMember(p => p.Forecasts, o => o.MapFrom<PostgresForecastResolver, string>(s => s.forecasts))
                 .ForMember(p => p.LeadRole, o => {
                     o.PreCondition(s => SyncMaps.oddLeadRoleMap.ContainsKey(s.oddlead_role));
                     o.MapFrom(s => SyncMaps.oddLeadRoleMap[s.oddlead_role]);
@@ -281,6 +282,30 @@ namespace FSAPortfolio.Application.Mapping.Projects
         }
     }
 
+    public class PostgresForecastResolver : IMemberValueResolver<object, Project, string, ICollection<Forecast>>
+    {
+        public ICollection<Forecast> Resolve(object source, Project destination, string sourceMember, ICollection<Forecast> destMember, ResolutionContext context)
+        {
+            List<Forecast> forecasts = new List<Forecast>(destMember);
+            if (!string.IsNullOrWhiteSpace(sourceMember))
+            {
+                forecasts = new List<Forecast>();
+                var parts = sourceMember.Split(',');
+                for (int i = 0; i < parts.Length; i += 2)
+                {
+                    var name = parts[i];
+                    var amount = (i + 1 < parts.Length) ? parts[i + 1] : null;
+
+                    if (!forecasts.Any(d => d.Name == name && d.Amount == amount))
+                    {
+                        var forecast = new Forecast() { Name = name, Amount = amount };
+                        forecasts.Add(forecast);
+                    }
+                }
+            }
+            return forecasts;
+        }
+    }
     public class PostgresLinkResolver : IMemberValueResolver<object, Project, string, ProjectLink>
     {
         public ProjectLink Resolve(object source, Project destination, string sourceMember, ProjectLink destMember, ResolutionContext context)

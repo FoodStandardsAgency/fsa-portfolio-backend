@@ -87,6 +87,8 @@ namespace FSAPortfolio.Application.Mapping.Projects
                 .ForPath(p => p.BudgetSettings.Option1, o => o.MapFrom(s => s.budget_option1))
                 .ForPath(p => p.BudgetSettings.Option2, o => o.MapFrom(s => s.budget_option2))
 
+                .ForMember(p => p.Forecasts, o => o.MapFrom(s => s.forecasts))
+
                 .ForPath(p => p.ProcessSettings.Setting1, o => o.MapFrom(s => s.processes_setting1))
                 .ForPath(p => p.ProcessSettings.Setting2, o => o.MapFrom(s => s.processes_setting2))
                 .ForPath(p => p.ProcessSettings.Option1, o => o.MapFrom(s => s.processes_option1))
@@ -133,6 +135,13 @@ namespace FSAPortfolio.Application.Mapping.Projects
             CreateMap<LinkModel, Document>()
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Link, o => o.MapFrom(s => s.Link))
+                .ForMember(p => p.Id, o => o.Ignore())
+                .ForMember(p => p.Order, o => o.Ignore())
+                ;
+
+            CreateMap<ForecastModel, Forecast>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Amount, o => o.MapFrom(s => s.Amount))
                 .ForMember(p => p.Id, o => o.Ignore())
                 .ForMember(p => p.Order, o => o.Ignore())
                 ;

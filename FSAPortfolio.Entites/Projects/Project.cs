@@ -56,6 +56,7 @@ namespace FSAPortfolio.Entities.Projects
         public virtual ICollection<Project> DependantProjects { get; set; }
         public virtual ICollection<Project> ParentDependantProjects { get; set; }
         public virtual ICollection<Document> Documents { get; set; }
+        public virtual ICollection<Forecast> Forecasts { get; set; }
         public virtual ICollection<Milestone> Milestones { get; set; }
         public virtual ICollection<ProjectDataItem> ProjectData { get; set; }
 
