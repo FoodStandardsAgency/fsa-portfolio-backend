@@ -224,11 +224,11 @@ namespace FSAPortfolio.Application.Services.Sync
                 }
                 context.SaveChanges();
 
-                foreach (var portfolio in context.Portfolios.Where(p => p.ViewKey == "dev"))
-                {
-                    portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == PhaseConstants.CompletedViewKey);
-                }
-                context.SaveChanges();
+                // foreach (var portfolio in context.Portfolios.Where(p => p.ViewKey == "dev"))
+                //{
+                //    portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == PhaseConstants.CompletedViewKey);
+                //
+                // context.SaveChanges();
 
             }
 
