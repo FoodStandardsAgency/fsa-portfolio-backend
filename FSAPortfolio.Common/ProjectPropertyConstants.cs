@@ -60,6 +60,7 @@ namespace FSAPortfolio.Common
         public const string forward_look = "forward_look";
         public const string emerging_issues = "emerging_issues";
         public const string budget = "budget";
+        public const string forecasts = "forecasts";
         public const string spent = "spent";
         public const string forecast_spend = "forecast_spend";
         public const string cost_centre = "cost_centre";

@@ -224,11 +224,11 @@ namespace FSAPortfolio.Application.Services.Sync
                 }
                 context.SaveChanges();
 
-                foreach (var portfolio in context.Portfolios.Where(p => p.ViewKey == "dev"))
-                {
-                    portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == PhaseConstants.CompletedViewKey);
-                }
-                context.SaveChanges();
+                // foreach (var portfolio in context.Portfolios.Where(p => p.ViewKey == "dev"))
+                //{
+                //    portfolio.Configuration.CompletedPhase = portfolio.Configuration.Phases.Single(p => p.ViewKey == PhaseConstants.CompletedViewKey);
+                //
+                // context.SaveChanges();
 
             }
 
@@ -579,6 +579,7 @@ namespace FSAPortfolio.Application.Services.Sync
                     .Include(p => p.RelatedProjects)
                     .Include(p => p.DependantProjects)
                     .Include(p => p.Documents)
+                    .Include(p => p.Forecasts)
                     .Include(p => p.Milestones)
                     .Include(p => p.People)
                     .SingleOrDefault(p => p.Reservation.ProjectId == latestSourceUpdate.project_id);
@@ -605,6 +606,7 @@ namespace FSAPortfolio.Application.Services.Sync
                         Updates = new List<ProjectUpdateItem>(),
                         Portfolios = new List<Portfolio>(),
                         Documents = new List<Document>(),
+                        Forecasts = new List<Forecast>(),
                         Milestones = new List<Milestone>()
                     };
                     dest.Projects.Add(destProject);

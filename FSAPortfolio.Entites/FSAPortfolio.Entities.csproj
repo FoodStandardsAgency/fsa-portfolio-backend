@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Projects\Forecast.cs" />
     <Compile Include="Migrations\202012011129348_Create.cs" />
     <Compile Include="Migrations\202012011129348_Create.designer.cs">
       <DependentUpon>202012011129348_Create.cs</DependentUpon>
@@ -73,6 +74,10 @@
     <Compile Include="Migrations\202103221543431_04_NoDescriptionSizeLimit.cs" />
     <Compile Include="Migrations\202103221543431_04_NoDescriptionSizeLimit.designer.cs">
       <DependentUpon>202103221543431_04_NoDescriptionSizeLimit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202306071507491_05_Forecast.cs" />
+    <Compile Include="Migrations\202306071507491_05_Forecast.designer.cs">
+      <DependentUpon>202306071507491_05_Forecast.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Organisation\Directorate.cs" />
@@ -120,12 +125,16 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202012161324577_02_PortfolioRequiredRoles.resx">
       <DependentUpon>202012161324577_02_PortfolioRequiredRoles.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101061329228_03_Archive.resx">
       <DependentUpon>202101061329228_03_Archive.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202103221543431_04_NoDescriptionSizeLimit.resx">
       <DependentUpon>202103221543431_04_NoDescriptionSizeLimit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202306071507491_05_Forecast.resx">
+      <DependentUpon>202306071507491_05_Forecast.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -143,4 +152,4 @@
     <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
   </Target>
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
-</Project>
+</Project>  

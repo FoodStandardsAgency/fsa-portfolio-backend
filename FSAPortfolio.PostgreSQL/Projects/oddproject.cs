@@ -77,6 +77,9 @@ namespace FSAPortfolio.PostgreSQL.Projects
         [StringLength(2000)]
         public string documents { get; set; }
 
+        [StringLength(2000)]
+        public string forecasts{ get; set; }
+
         [Key]
         [Column(Order = 1)]
         public DateTime timestamp { get; set; }

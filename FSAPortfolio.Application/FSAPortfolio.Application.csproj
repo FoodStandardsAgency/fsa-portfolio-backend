@@ -168,6 +168,7 @@
     <Compile Include="DTO\GetProjectDTO.cs" />
     <Compile Include="DTO\GetProjectExportDTO.cs" />
     <Compile Include="DTO\GetProjectQueryDTO.cs" />
+    <Compile Include="Mapping\ImportExport\ForecastConverters.cs" />
     <Compile Include="Mapping\Summaries\PhaseProjectsResolvers.cs" />
     <Compile Include="Mapping\Summaries\PortfolioSummaryResolver.cs" />
     <Compile Include="Mapping\Summaries\ProjectActionsResolver.cs" />

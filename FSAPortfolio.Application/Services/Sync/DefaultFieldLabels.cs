@@ -196,6 +196,7 @@ namespace FSAPortfolio.Application.Services.Sync
                 Factory(FieldGroupName_Budget, $"{FieldGroupName_Budget} field 2", ProjectPropertyConstants.budget_field2, false, false, false, PortfolioFieldType.Budget),
                 Factory(FieldGroupName_Budget, $"{FieldGroupName_Budget} option 1", ProjectPropertyConstants.budget_option1, false, false, false, PortfolioFieldType.OptionList),
                 Factory(FieldGroupName_Budget, $"{FieldGroupName_Budget} option 2", ProjectPropertyConstants.budget_option2, false, false, false, PortfolioFieldType.OptionList),
+                Factory(FieldGroupName_Budget, "Future forecasts", ProjectPropertyConstants.forecasts, true, false, false, PortfolioFieldType.LinkedItemList),
 
                 Factory(FieldGroupName_FSAProcesses, "Assurance gate number", ProjectPropertyConstants.fsaproc_assurance_gatenumber, false, false, false, PortfolioFieldType.FreeText),
                 Factory(FieldGroupName_FSAProcesses, "Assurance gate completed", ProjectPropertyConstants.fsaproc_assurance_gatecompleted, false, false, false, PortfolioFieldType.ProjectDate),

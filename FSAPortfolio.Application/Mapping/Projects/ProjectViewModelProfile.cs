@@ -119,6 +119,8 @@ namespace FSAPortfolio.Application.Mapping.Projects
                 .ForMember(p => p.budget_option1, o => o.MapFrom(s => s.BudgetSettings.Option1))
                 .ForMember(p => p.budget_option2, o => o.MapFrom(s => s.BudgetSettings.Option2))
 
+                .ForMember(p => p.forecasts, o => o.MapFrom(s => s.Forecasts.OrderBy(d => d.Order)))
+
                 .ForMember(p => p.processes_setting1, o => o.MapFrom(s => s.ProcessSettings.Setting1))
                 .ForMember(p => p.processes_setting2, o => o.MapFrom(s => s.ProcessSettings.Setting2))
                 .ForMember(p => p.processes_option1, o => o.MapFrom(s => s.ProcessSettings.Option1))
@@ -221,6 +223,11 @@ namespace FSAPortfolio.Application.Mapping.Projects
             CreateMap<Document, LinkModel>()
                 .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
                 .ForMember(d => d.Link, o => o.MapFrom(s => s.Link))
+                ;
+
+            CreateMap<Forecast, ForecastModel>()
+                .ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+                .ForMember(d => d.Amount, o => o.MapFrom(s => s.Amount))
                 ;
 
             CreateMap<Milestone, MilestoneViewModel>()
