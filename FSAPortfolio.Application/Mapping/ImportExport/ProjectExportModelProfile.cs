@@ -88,7 +88,7 @@ namespace FSAPortfolio.Application.Mapping.ImportExport
 
                 .ForMember(p => p.theme, o => o.MapFrom(s => s.Theme))
                 .ForMember(p => p.project_type, o => o.MapFrom(s => s.ProjectType))
-                .ForMember(p => p.strategic_objectives, o => o.MapFrom(s => s.StrategicObjectives))
+                .ForMember(p => p.strategic_objectives, o => o.MapFrom<StrategicObjectiveResolver, string>(s => s.StrategicObjectives))
                 .ForMember(p => p.programme, o => o.MapFrom(s => s.Programme))
                 .ForMember(p => p.supplier, o => o.MapFrom(s => s.Supplier))
 
